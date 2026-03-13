@@ -811,27 +811,6 @@ const TOPIC_STRUCTURE = {
 const MONTHS_IT = ['Gen','Feb','Mar','Apr','Mag','Giu','Lug','Ago','Set','Ott','Nov','Dic'];
 
 // ══════════════════════════════════════════════
-//  MOCK DATA (usato se localStorage gl_dma è vuoto)
-// ══════════════════════════════════════════════
-const MOCK_DMA = {
-  m1:{ragione:'Gruppo Acme S.p.A.',nace:[{code:'C22',name:'Gomma e plastica',sector:'C'}],size:'medium',employees:120,year:2024,geo:['IT','EU'],bizDesc:'Imballaggi in plastica riciclata per il settore alimentare B2B.',hq:'Milano, Lombardia',piva:'IT12345678901',revenue:28.5},
-  materialTopics:[
-    {id:'E1',name:'Cambiamenti climatici',emoji:'🌡️',pillar:'E',color:'#065F46',bg:'#ECFDF5',impactScore:3.8,financialScore:4.1,class:'double'},
-    {id:'E3',name:'Risorse idriche e marine',emoji:'💧',pillar:'E',color:'#1E40AF',bg:'#EFF6FF',impactScore:2.9,financialScore:2.1,class:'impact'},
-    {id:'E5',name:'Economia circolare',emoji:'♻️',pillar:'E',color:'#4D7C0F',bg:'#F7FEE7',impactScore:3.5,financialScore:3.2,class:'double'},
-    {id:'S1',name:'Forza lavoro propria',emoji:'👷',pillar:'S',color:'#7C2D12',bg:'#FFF7ED',impactScore:3.1,financialScore:2.8,class:'double'},
-    {id:'G1',name:'Condotta aziendale',emoji:'⚖️',pillar:'G',color:'#374151',bg:'#F9FAFB',impactScore:2.7,financialScore:3.0,class:'financial'},
-    {id:'E2',name:'Inquinamento',emoji:'🏭',pillar:'E',color:'#92400E',bg:'#FFFBEB',impactScore:1.8,financialScore:1.5,class:'none'},
-    {id:'E4',name:'Biodiversità ed ecosistemi',emoji:'🌿',pillar:'E',color:'#065F46',bg:'#F0FDF4',impactScore:1.2,financialScore:1.0,class:'none'},
-    {id:'S2',name:'Lavoratori value chain',emoji:'🌐',pillar:'S',color:'#831843',bg:'#FFF1F2',impactScore:2.1,financialScore:1.6,class:'none'},
-    {id:'S3',name:'Comunità interessate',emoji:'🏘️',pillar:'S',color:'#7E22CE',bg:'#FAF5FF',impactScore:1.9,financialScore:1.3,class:'none'},
-    {id:'S4',name:'Consumatori e utenti',emoji:'👤',pillar:'S',color:'#0E7490',bg:'#ECFEFF',impactScore:1.7,financialScore:2.0,class:'none'},
-  ],
-  m4:{threshold:2.5,stkWeight:0.30,counts:{double:3,impact:1,financial:1,none:5}},
-  exportedAt:new Date().toISOString(),
-};
-
-// ══════════════════════════════════════════════
 //  STATE MANAGEMENT
 // ══════════════════════════════════════════════
 let dmaData = null;
@@ -841,11 +820,15 @@ let currentTab = 'gov';
 let apiKey = '';
 
 function loadState(){
-  // Load DMA data
+  // Load DMA data — ONLY from localStorage (real data from greenledger.html)
   try {
     const raw = localStorage.getItem('gl_dma');
-    dmaData = raw ? JSON.parse(raw) : MOCK_DMA;
-  } catch(e){ dmaData = MOCK_DMA; }
+    if(raw) {
+      dmaData = JSON.parse(raw);
+    } else {
+      dmaData = null; // no mock — show error state
+    }
+  } catch(e){ dmaData = null; }
 
   // Load CSRD state
   try {
@@ -977,7 +960,23 @@ function openTopic(topicId){
 //  HUB RENDERING
 // ══════════════════════════════════════════════
 function renderHub(){
-  if(!dmaData) return;
+  if(!dmaData){
+    document.getElementById('vHub').innerHTML = `
+      <div style="max-width:560px;margin:80px auto;padding:0 36px;text-align:center">
+        <div style="font-size:3rem;margin-bottom:20px">📋</div>
+        <h2 style="font-family:'Playfair Display',serif;font-size:1.5rem;color:var(--g900);margin-bottom:12px">Nessun dato DMA trovato</h2>
+        <p style="font-size:.88rem;color:var(--inks);line-height:1.7;margin-bottom:28px">
+          Per avviare il modulo CSRD devi prima completare la <strong>Double Materiality Assessment</strong> in GreenLedger e poi cliccare su <strong>"Avvia CSRD Reporting →"</strong> nel Modulo 6.<br><br>
+          Il sistema trasferirà automaticamente i topic materiali identificati in questa pagina.
+        </p>
+        <a href="greenledger.html" style="display:inline-flex;align-items:center;gap:8px;padding:12px 24px;background:var(--g800);color:white;border-radius:10px;font-weight:600;font-size:.88rem;text-decoration:none;transition:all .2s">
+          <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M11 7H3M7 3l-4 4 4 4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Torna a GreenLedger DMA
+        </a>
+        <p style="margin-top:20px;font-size:.74rem;color:var(--inkm)">Se hai già i dati e vedi questo messaggio, controlla che il file sia aperto dallo stesso browser dove hai completato la DMA.</p>
+      </div>`;
+    return;
+  }
   const m1 = dmaData.m1 || {};
   const materialTopics = dmaData.materialTopics || [];
   const matIds = getMaterialTopicIds();
@@ -1049,7 +1048,7 @@ function renderHub(){
         <div class="tc-meta">
           <div class="tc-code" style="background:${meta.bg};color:${meta.color}">${id}</div>
           <div class="tc-name">${meta.name}</div>
-          <div class="tc-sub">${meta.sub}</div>
+          <div class="tc-sub">${(topicData && topicData.sub) || meta.sub}</div>
         </div>
         <div class="tc-right">
           ${badgeHtml}
@@ -1908,7 +1907,7 @@ Rispondi SOLO con il JSON puro, senza markdown, senza testo aggiuntivo.`,
       ? [{type:'image',source:{type:'base64',media_type:mediaType,data:base64}},{type:'text',text:prompts[uploadType]}]
       : [{type:'document',source:{type:'base64',media_type:'application/pdf',data:base64}},{type:'text',text:prompts[uploadType]}];
 
-    const response = await fetch('/api/extract', {
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: {'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01'},
       body: JSON.stringify({

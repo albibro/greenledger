@@ -1011,11 +1011,11 @@ input.wslider::-webkit-slider-thumb{-webkit-appearance:none;width:13px;height:13
   <div class="out-card">
     <div class="out-hd"><div class="out-hd-ic"><svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M7 2v8M4 7l3 3 3-3" stroke="white" stroke-width="1.3" stroke-linecap="round"/><path d="M2 12h10" stroke="white" stroke-width="1.3" stroke-linecap="round"/></svg></div><h3>Esporta documenti</h3></div>
     <div class="out-actions">
-      <button class="btn-out primary" onclick="showToast('Export PDF in preparazione — funzione disponibile nella versione live.')">
+      <button class="btn-out primary" onclick="window.print()">
         <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M7 2v8M4 7l3 3 3-3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><path d="M2 12h10" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
         Matrice PDF
       </button>
-      <button class="btn-out" onclick="showToast('Export Excel in preparazione — funzione disponibile nella versione live.')">
+      <button class="btn-out" onclick="exportDMAJson()">
         <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><rect x="1" y="1" width="12" height="12" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M4 5l6 4M10 5l-6 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
         Dati Excel
       </button>
@@ -1039,10 +1039,14 @@ input.wslider::-webkit-slider-thumb{-webkit-appearance:none;width:13px;height:13
 <div class="bbar">
   <div class="bbar-stats">
     <div class="bstat"><span class="bstat-l">Assessment</span><span class="bstat-v" style="color:var(--g600)">Completato ✓</span></div>
+    <div class="bstat"><span class="bstat-l">Topic materiali</span><span class="bstat-v" id="m6MatCount">—</span></div>
   </div>
   <div class="bbar-acts">
     <button class="btn btn-gh" id="m6Back">← Modulo 5</button>
-    <button class="btn btn-pri" onclick="showToast('Nuovo assessment — funzione disponibile nella versione live.')">Nuovo Assessment</button>
+    <button class="btn btn-pri" id="m6CsrdBtn" onclick="exportToCsrd()">
+      <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M7 1l4 4H8v5H6V5H3L7 1z" fill="white"/><path d="M1 11v1a1 1 0 001 1h10a1 1 0 001-1v-1" stroke="white" stroke-width="1.2" stroke-linecap="round"/></svg>
+      Avvia CSRD Reporting →
+    </button>
   </div>
 </div>
 </div>
@@ -2265,7 +2269,7 @@ document.getElementById('genKeyBtn').addEventListener('click',()=>{
 });
 
 document.getElementById('addStkBtn').addEventListener('click',()=>{
-  showToast('Funzione di invito singolo disponibile nella versione live con backend.');
+  showToast('Inserisci email stakeholder e condividi il link sessione generato.');
 });
 
 function renderStkList(){
@@ -2628,9 +2632,63 @@ function initM6(){
 
   // Mini matrix
   renderMatrix('miniMatrixSvg', 380, 280);
+
+  // Mat count for bottom bar
+  const mc6 = document.getElementById('m6MatCount');
+  if(mc6) mc6.textContent = matTopics.length + ' / ' + total;
 }
 
 document.getElementById('m6Back').addEventListener('click',()=>goToModule(5));
+
+// ═══════════════════════════════════════════
+//  EXPORT DMA → CSRD REPORTING
+// ═══════════════════════════════════════════
+function exportToCsrd(){
+  // Serializza appState reale + materialTopics calcolati
+  const materialTopics = TOPICS.map(t => {
+    const {impact, financial} = getConsolidatedScore(t.id);
+    const cls = classifyTopic(impact, financial, m4Threshold);
+    return {
+      id: t.id,
+      name: t.name,
+      emoji: t.emoji,
+      pillar: t.pillar,
+      color: t.color,
+      bg: t.bg,
+      sub: t.sub,
+      impactScore: +impact.toFixed(2),
+      financialScore: +financial.toFixed(2),
+      class: cls,
+    };
+  });
+
+  const matCount = materialTopics.filter(t => t.class !== 'none').length;
+
+  const payload = {
+    m1: { ...appState.m1 },
+    materialTopics,
+    m3: appState.m3 || null,
+    m4: {
+      threshold: m4Threshold,
+      stkWeight,
+      counts: appState.m4?.counts || {},
+    },
+    m5: appState.m5 || {},
+    exportedAt: new Date().toISOString(),
+  };
+
+  try {
+    localStorage.setItem('gl_dma', JSON.stringify(payload));
+  } catch(e) {
+    showToast('Errore nel salvataggio — localStorage pieno o non disponibile.');
+    return;
+  }
+
+  showToast(`DMA esportata: ${matCount} topic materiali → apertura CSRD Reporting...`);
+  setTimeout(() => {
+    window.open('greenledger-csrd.html', '_blank');
+  }, 800);
+}
 
 // ═══ INIT ═══
 goToModule(1);
