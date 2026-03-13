@@ -1866,7 +1866,7 @@ function handleDrop(event, topicId, drId, uploadType){
 }
 
 async function processUploadedFile(file, topicId, drId, uploadType){
-  if(!apiKey){
+  if(false){
     showToast('API Key non configurata — imposta la chiave AI nelle impostazioni');
     openApiModal();
     return;
@@ -1907,9 +1907,9 @@ Rispondi SOLO con il JSON puro, senza markdown, senza testo aggiuntivo.`,
       ? [{type:'image',source:{type:'base64',media_type:mediaType,data:base64}},{type:'text',text:prompts[uploadType]}]
       : [{type:'document',source:{type:'base64',media_type:'application/pdf',data:base64}},{type:'text',text:prompts[uploadType]}];
 
-    const response = await fetch('https://api.anthropic.com/v1/messages', {
+    const response = await fetch('/api/extract', {
       method: 'POST',
-      headers: {'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01'},
+      headers: {'Content-Type':'application/json'},
       body: JSON.stringify({
         model: 'claude-sonnet-4-20250514',
         max_tokens: 1000,
