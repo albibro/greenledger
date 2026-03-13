@@ -1,0 +1,2049 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GreenLedger — CSRD Reporting Module</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ── NOTE: per il collegamento da greenledger.html, aggiungere nel pulsante M6:
+   const d={m1:appState.m1, materialTopics: TOPICS.map(t=>{const {impact,financial}=getConsolidatedScore(t.id);
+   return{id:t.id,name:t.name,emoji:t.emoji,pillar:t.pillar,color:t.color,bg:t.bg,
+   impactScore:impact,financialScore:financial,class:classifyTopic(impact,financial,m4Threshold)};
+   }), m4:appState.m4, m3:appState.m3, exportedAt:new Date().toISOString()};
+   localStorage.setItem('gl_dma',JSON.stringify(d)); window.open('greenledger-csrd.html','_blank');
+*/
+
+/* ══ TOKENS (identici a greenledger.html) ══ */
+:root{
+  --g900:#0D3D25;--g800:#1A7A4A;--g700:#1E8F56;--g600:#22A463;
+  --g200:#A8DBBF;--g100:#D4EFE0;--g50:#EEF8F3;
+  --cream:#F7F4EE;--cd:#EDE9DF;--cdd:#DDD8CC;
+  --ink:#0F1C14;--inks:#3A4D40;--inkm:#6B7F72;
+  --white:#fff;
+  --amber:#D97706;--ambg:#FFFBEB;--ambb:#FDE68A;
+  --ic:#1A7A4A;--rc:#C2410C;--oc:#1D4ED8;
+  --ibg:#EEF8F3;--rbg:#FFF7ED;--obg:#EFF6FF;
+  --ibd:#A8DBBF;--rbd:#FED7AA;--obd:#BFDBFE;
+  --red:#DC2626;--redbg:#FEF2F2;
+  --sh1:0 1px 3px rgba(15,28,20,.07);
+  --sh2:0 4px 16px rgba(15,28,20,.10),0 2px 6px rgba(15,28,20,.06);
+  --sh3:0 16px 48px rgba(15,28,20,.14),0 4px 12px rgba(15,28,20,.08);
+  --r:12px;--rs:8px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--ink);min-height:100vh;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 80% 50% at 5% 10%,rgba(26,122,74,.05) 0%,transparent 60%),radial-gradient(ellipse 50% 40% at 95% 90%,rgba(29,78,216,.03) 0%,transparent 55%);pointer-events:none;z-index:0}
+
+/* ══ SHARED HEADER ══ */
+.hdr{position:sticky;top:0;z-index:200;background:rgba(247,244,238,.94);backdrop-filter:blur(12px);border-bottom:1px solid var(--cd)}
+.hdr-in{max-width:1260px;margin:0 auto;padding:0 36px;height:64px;display:flex;align-items:center;justify-content:space-between}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;cursor:pointer}
+.lmark{width:34px;height:34px;background:var(--g800);border-radius:10px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;flex-shrink:0}
+.lmark::before{content:'';position:absolute;bottom:-4px;left:-4px;width:26px;height:26px;background:rgba(255,255,255,.15);border-radius:50%}
+.lmark svg{position:relative;z-index:1}
+.ltxt{font-family:'Playfair Display',serif;font-weight:700;font-size:1.2rem;color:var(--g900);letter-spacing:-.02em}
+.ltxt span{color:var(--g800)}
+.hdr-r{display:flex;align-items:center;gap:14px}
+.ctx-pill{display:flex;align-items:center;gap:7px;background:var(--g50);border:1px solid var(--g200);border-radius:100px;padding:4px 12px;max-width:360px;overflow:hidden}
+.ctx-dot{width:7px;height:7px;border-radius:50%;background:var(--g600);flex-shrink:0;animation:pulse 2s ease-in-out infinite}
+.ctx-co{font-size:.78rem;font-weight:600;color:var(--g800);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ctx-nc{font-size:.72rem;color:var(--inkm);white-space:nowrap}
+.hdr-usr{width:34px;height:34px;border-radius:50%;background:var(--g100);border:2px solid var(--g200);display:flex;align-items:center;justify-content:center;font-size:.78rem;font-weight:600;color:var(--g800);cursor:pointer;flex-shrink:0}
+.hdr-actions{display:flex;align-items:center;gap:8px}
+.btn-api{display:flex;align-items:center;gap:5px;padding:5px 11px;border-radius:7px;border:1.5px solid var(--cd);background:var(--white);font-size:.74rem;font-weight:600;color:var(--inks);cursor:pointer;transition:all .15s;font-family:'DM Sans',sans-serif}
+.btn-api:hover{border-color:var(--g200);background:var(--g50);color:var(--g800)}
+.btn-api.configured{border-color:var(--g200);color:var(--g700);background:var(--g50)}
+
+/* ══ PHASE BAR (2 macro-fasi) ══ */
+.pbar{background:var(--white);border-bottom:1px solid var(--cd);box-shadow:var(--sh1)}
+.pbar-in{max-width:1260px;margin:0 auto;padding:0 36px;display:flex;height:48px;align-items:center;gap:0}
+.phase{display:flex;align-items:center;gap:8px;padding:0 20px;height:100%;position:relative;font-size:.8rem}
+.phase:not(:last-child)::after{content:'›';position:absolute;right:-2px;color:var(--cdd);font-size:1rem}
+.phase-num{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.65rem;font-weight:700;font-family:'DM Mono',monospace;flex-shrink:0}
+.phase.done .phase-num{background:var(--g900);color:var(--white)}
+.phase.active .phase-num{background:var(--g800);color:var(--white);box-shadow:0 0 0 3px var(--g100)}
+.phase.pending .phase-num{background:var(--cdd);color:var(--inkm)}
+.phase-label{font-weight:600;color:var(--inkm)}
+.phase.done .phase-label{color:var(--inks)}
+.phase.active .phase-label{color:var(--g800)}
+.phase-sub{font-size:.68rem;color:var(--inkm);margin-left:4px}
+.phase-badge{font-size:.62rem;font-weight:700;padding:1px 6px;border-radius:3px;background:var(--g50);color:var(--g700);border:1px solid var(--g200);margin-left:6px}
+
+/* ══ BUTTONS ══ */
+.btn{display:inline-flex;align-items:center;gap:7px;padding:10px 20px;border-radius:9px;font-family:'DM Sans',sans-serif;font-size:.86rem;font-weight:600;cursor:pointer;border:none;transition:all .18s;text-decoration:none}
+.btn-pri{background:var(--g800);color:var(--white);box-shadow:0 2px 8px rgba(26,122,74,.3)}
+.btn-pri:hover{background:var(--g700);box-shadow:0 4px 14px rgba(26,122,74,.4);transform:translateY(-1px)}
+.btn-gh{background:transparent;color:var(--inks);border:1.5px solid var(--cd)}
+.btn-gh:hover{background:var(--cd)}
+.btn-sm{padding:6px 14px;font-size:.78rem;border-radius:7px}
+.btn-xs{padding:4px 10px;font-size:.72rem;border-radius:5px}
+
+/* ══ HUB VIEW ══ */
+.hub-wrap{max-width:1260px;margin:0 auto;padding:40px 36px 80px;position:relative;z-index:1}
+.hub-hero{margin-bottom:32px;animation:fadeUp .45s ease both}
+.hub-eyebrow{display:inline-flex;align-items:center;gap:6px;background:var(--g50);border:1px solid var(--g200);border-radius:100px;padding:4px 12px;font-size:.7rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--g700);margin-bottom:14px}
+.edot{width:6px;height:6px;border-radius:50%;background:var(--g600);animation:pulse 2s ease-in-out infinite}
+.hub-hero h1{font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;color:var(--g900);letter-spacing:-.03em;line-height:1.15;margin-bottom:6px}
+.hub-hero p{font-size:.88rem;color:var(--inks);max-width:560px;line-height:1.65}
+.hub-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:24px;margin-bottom:32px;animation:fadeUp .45s .06s ease both}
+.hstat{background:var(--white);border:1px solid var(--cd);border-radius:12px;padding:16px 18px;box-shadow:var(--sh1)}
+.hstat-v{font-family:'DM Mono',monospace;font-size:1.6rem;font-weight:700;color:var(--g800);display:block;line-height:1}
+.hstat-l{font-size:.74rem;color:var(--inkm);display:block;margin-top:4px}
+.hstat-bar{height:3px;background:var(--cdd);border-radius:2px;margin-top:10px;overflow:hidden}
+.hstat-fill{height:100%;background:linear-gradient(90deg,var(--g700),var(--g600));border-radius:2px;transition:width .6s ease}
+
+/* Global progress strip */
+.global-prog{background:var(--white);border:1px solid var(--cd);border-radius:12px;padding:16px 22px;margin-bottom:28px;display:flex;align-items:center;gap:16px;box-shadow:var(--sh1);animation:fadeUp .45s .1s ease both}
+.gp-label{font-size:.8rem;font-weight:600;color:var(--inks);white-space:nowrap}
+.gp-bar{flex:1;height:8px;background:var(--cdd);border-radius:4px;overflow:hidden}
+.gp-fill{height:100%;background:linear-gradient(90deg,var(--g700),var(--g600));border-radius:4px;transition:width .6s ease}
+.gp-pct{font-family:'DM Mono',monospace;font-size:.8rem;font-weight:600;color:var(--g800);white-space:nowrap}
+
+/* ESRS2 card */
+.esrs2-card{background:linear-gradient(135deg,var(--g900) 0%,#0a2e1a 100%);border-radius:16px;padding:20px 24px;display:flex;align-items:center;gap:20px;margin-bottom:24px;cursor:pointer;transition:transform .2s,box-shadow .2s;animation:fadeUp .45s .12s ease both;position:relative;overflow:hidden}
+.esrs2-card::before{content:'';position:absolute;top:-30px;right:-30px;width:120px;height:120px;background:rgba(255,255,255,.04);border-radius:50%}
+.esrs2-card:hover{transform:translateY(-2px);box-shadow:0 12px 32px rgba(13,61,37,.25)}
+.esrs2-ic{width:48px;height:48px;background:rgba(255,255,255,.12);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex-shrink:0}
+.esrs2-body{flex:1}
+.esrs2-body h3{font-family:'Playfair Display',serif;font-size:1rem;color:var(--white);margin-bottom:3px}
+.esrs2-body p{font-size:.76rem;color:rgba(255,255,255,.6);line-height:1.5}
+.esrs2-tags{display:flex;gap:5px;margin-top:8px;flex-wrap:wrap}
+.esrs2-tag{font-size:.62rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;padding:2px 7px;border-radius:4px;background:rgba(255,255,255,.1);color:var(--g200);border:1px solid rgba(255,255,255,.12)}
+.esrs2-prog{display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0}
+.esrs2-pct{font-family:'DM Mono',monospace;font-size:1.2rem;font-weight:700;color:var(--white)}
+.esrs2-pct-l{font-size:.68rem;color:rgba(255,255,255,.5)}
+.esrs2-arrow{color:rgba(255,255,255,.5);font-size:1.2rem;margin-left:8px;flex-shrink:0}
+
+/* Topics grid */
+.topics-section-title{font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--inkm);margin-bottom:14px}
+.topics-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+@media(max-width:1100px){.topics-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:700px){.topics-grid{grid-template-columns:1fr}}
+
+/* Topic hub card */
+.tc{background:var(--white);border:1.5px solid var(--cd);border-radius:14px;box-shadow:var(--sh1);overflow:hidden;transition:all .2s;animation:fadeUp .35s ease both;cursor:pointer;position:relative}
+.tc:hover{box-shadow:var(--sh2);border-color:var(--g200);transform:translateY(-2px)}
+.tc.material{border-color:var(--g200)}
+.tc.non-material{opacity:.55;cursor:default}
+.tc.non-material:hover{transform:none;box-shadow:var(--sh1);border-color:var(--cd)}
+.tc-head{padding:16px 18px;display:flex;align-items:center;gap:12px}
+.tc-pill{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0}
+.tc-meta{flex:1;min-width:0}
+.tc-code{font-family:'DM Mono',monospace;font-size:.68rem;font-weight:600;padding:2px 6px;border-radius:4px;margin-bottom:3px;display:inline-block}
+.tc-name{font-size:.88rem;font-weight:700;color:var(--ink)}
+.tc-sub{font-size:.72rem;color:var(--inkm);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tc-right{display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0}
+.tc-badge{font-size:.62rem;font-weight:700;padding:2px 7px;border-radius:4px;white-space:nowrap}
+.tc-badge.double{background:var(--g50);color:var(--g700);border:1px solid var(--g200)}
+.tc-badge.impact{background:#EFF6FF;color:#1D4ED8;border:1px solid #BFDBFE}
+.tc-badge.financial{background:#FFF7ED;color:#C2410C;border:1px solid #FED7AA}
+.tc-badge.none{background:var(--cream);color:var(--inkm);border:1px solid var(--cd)}
+.tc-pct{font-family:'DM Mono',monospace;font-size:.72rem;color:var(--inkm)}
+.tc-foot{padding:10px 18px;border-top:1px solid var(--cream);display:flex;align-items:center;justify-content:space-between}
+.tc-prog{display:flex;align-items:center;gap:8px;flex:1;min-width:0}
+.tc-prog-bar{flex:1;height:4px;background:var(--cdd);border-radius:2px;overflow:hidden;max-width:120px}
+.tc-prog-fill{height:100%;background:linear-gradient(90deg,var(--g700),var(--g600));border-radius:2px;transition:width .4s ease}
+.tc-prog-lbl{font-size:.68rem;font-family:'DM Mono',monospace;color:var(--inkm);white-space:nowrap}
+.tc-arrow{width:24px;height:24px;background:var(--g800);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:transform .2s}
+.tc:hover .tc-arrow{transform:translateX(2px)}
+.tc.non-material .tc-arrow{display:none}
+.tc-nm-lbl{font-size:.7rem;color:var(--inkm);font-style:italic}
+
+/* ══ TOPIC PAGE VIEW ══ */
+.tp-wrap{max-width:1260px;margin:0 auto;padding:24px 36px 80px;position:relative;z-index:1}
+
+/* Breadcrumb */
+.breadcrumb{display:flex;align-items:center;gap:8px;margin-bottom:24px;animation:fadeUp .3s ease both}
+.bc-back{display:inline-flex;align-items:center;gap:6px;font-size:.8rem;font-weight:600;color:var(--inks);background:var(--white);border:1.5px solid var(--cd);border-radius:8px;padding:6px 12px;cursor:pointer;transition:all .15s;font-family:'DM Sans',sans-serif}
+.bc-back:hover{border-color:var(--g200);background:var(--g50);color:var(--g800)}
+.bc-sep{color:var(--cdd);font-size:.9rem}
+.bc-cur{font-size:.8rem;color:var(--inkm)}
+
+/* Topic header */
+.tp-hdr{background:var(--white);border:1px solid var(--cd);border-radius:16px;padding:24px 28px;margin-bottom:24px;display:flex;align-items:flex-start;gap:20px;box-shadow:var(--sh1);animation:fadeUp .35s ease both}
+.tp-emoji{width:56px;height:56px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.6rem;flex-shrink:0}
+.tp-info{flex:1}
+.tp-info h2{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;color:var(--g900);margin-bottom:4px}
+.tp-info p{font-size:.84rem;color:var(--inks);line-height:1.6;max-width:600px}
+.tp-badges{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+.tp-mat-badge{font-size:.68rem;font-weight:700;padding:3px 9px;border-radius:5px}
+.tp-scores{margin-left:auto;display:flex;flex-direction:column;gap:8px;align-items:flex-end;flex-shrink:0}
+.tp-score-row{display:flex;align-items:center;gap:8px}
+.tp-score-lbl{font-size:.72rem;color:var(--inkm);font-weight:500}
+.tp-score-val{font-family:'DM Mono',monospace;font-size:.88rem;font-weight:700}
+.tp-score-val.high{color:var(--g700)}
+.tp-score-val.med{color:var(--amber)}
+.tp-score-val.low{color:var(--inkm)}
+.tp-completion{text-align:right}
+.tp-comp-pct{font-family:'DM Mono',monospace;font-size:1.4rem;font-weight:700;color:var(--g800);display:block}
+.tp-comp-l{font-size:.7rem;color:var(--inkm);display:block}
+
+/* Tab bar */
+.tab-bar{display:flex;gap:2px;background:var(--white);border:1px solid var(--cd);border-radius:12px;padding:4px;margin-bottom:24px;box-shadow:var(--sh1);animation:fadeUp .35s .04s ease both;position:sticky;top:116px;z-index:100}
+.tab-btn{flex:1;display:flex;align-items:center;justify-content:center;gap:7px;padding:10px 16px;border-radius:8px;border:none;background:transparent;font-family:'DM Sans',sans-serif;font-size:.82rem;font-weight:600;color:var(--inkm);cursor:pointer;transition:all .18s;position:relative}
+.tab-btn:hover{background:var(--cream);color:var(--inks)}
+.tab-btn.active{background:var(--g800);color:var(--white);box-shadow:0 2px 6px rgba(26,122,74,.25)}
+.tab-btn .tab-count{font-family:'DM Mono',monospace;font-size:.64rem;padding:1px 5px;border-radius:3px;background:rgba(255,255,255,.2);color:rgba(255,255,255,.8)}
+.tab-btn:not(.active) .tab-count{background:var(--cream);color:var(--inkm)}
+.tab-btn .tab-done{font-size:.6rem;font-weight:700;padding:1px 5px;border-radius:3px;background:var(--g50);color:var(--g700);border:1px solid var(--g200)}
+
+/* Tab content */
+.tab-panel{display:none}
+.tab-panel.active{display:block;animation:fadeUp .3s ease both}
+.tab-grid{display:grid;gap:14px}
+
+/* DR (Disclosure Requirement) card */
+.dr-card{background:var(--white);border:1.5px solid var(--cd);border-radius:14px;box-shadow:var(--sh1);overflow:hidden;transition:border-color .2s}
+.dr-card.compiled{border-color:var(--g200)}
+.dr-head{display:flex;align-items:center;gap:12px;padding:16px 22px;cursor:pointer;user-select:none}
+.dr-head:hover{background:var(--cream)}
+.dr-code{font-family:'DM Mono',monospace;font-size:.72rem;font-weight:600;padding:3px 8px;border-radius:5px;background:var(--g50);color:var(--g700);border:1px solid var(--g200);flex-shrink:0}
+.dr-label{font-size:.88rem;font-weight:600;color:var(--ink);flex:1}
+.dr-mandatory{font-size:.62rem;font-weight:700;padding:2px 6px;border-radius:3px;background:#FEF2F2;color:var(--red);border:1px solid #FECACA;flex-shrink:0}
+.dr-optional{font-size:.62rem;font-weight:600;padding:2px 6px;border-radius:3px;background:var(--cream);color:var(--inkm);flex-shrink:0}
+.dr-status{width:22px;height:22px;border-radius:50%;border:2px solid var(--cdd);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s}
+.dr-card.compiled .dr-status{background:var(--g800);border-color:var(--g800)}
+.dr-tog{width:24px;height:24px;border-radius:50%;background:var(--cream);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:transform .3s}
+.dr-card.open .dr-tog{transform:rotate(180deg)}
+.dr-body{display:none;border-top:1px solid var(--cd);padding:22px}
+.dr-card.open .dr-body{display:block}
+.dr-ref{font-size:.7rem;color:var(--inkm);margin-bottom:14px;display:flex;align-items:center;gap:6px}
+.dr-ref-chip{font-family:'DM Mono',monospace;font-size:.66rem;font-weight:500;background:var(--g50);color:var(--g700);border:1px solid var(--g200);padding:1px 6px;border-radius:3px}
+.dr-hint{font-size:.8rem;color:var(--inks);line-height:1.6;background:var(--cream);border-radius:8px;padding:12px 14px;margin-bottom:16px;border-left:3px solid var(--g200)}
+
+/* Narrative textarea */
+.narr-ta{width:100%;border:1.5px solid var(--cd);border-radius:8px;padding:12px 15px;font-family:'DM Sans',sans-serif;font-size:.83rem;color:var(--ink);background:var(--cream);resize:vertical;min-height:110px;line-height:1.65;outline:none;transition:border-color .2s,background .2s}
+.narr-ta:focus{border-color:var(--g700);background:var(--white);box-shadow:0 0 0 3px rgba(26,122,74,.08)}
+.ta-footer{display:flex;align-items:center;justify-content:space-between;margin-top:6px}
+.ta-wc{font-size:.68rem;color:var(--inkm);font-family:'DM Mono',monospace}
+.ta-save{font-size:.7rem;color:var(--g700);font-weight:600;display:flex;align-items:center;gap:4px}
+
+/* Field groups */
+.fg{display:grid;gap:14px}
+.fg.c2{grid-template-columns:1fr 1fr}
+.fg.c3{grid-template-columns:1fr 1fr 1fr}
+.f{display:flex;flex-direction:column;gap:5px}
+.f label{font-size:.76rem;font-weight:600;color:var(--inks)}
+.f .hint{font-size:.72rem;font-weight:400;color:var(--inkm);margin-top:1px}
+.inp{width:100%;border:1.5px solid var(--cd);border-radius:8px;padding:8px 12px;font-family:'DM Sans',sans-serif;font-size:.84rem;color:var(--ink);background:var(--cream);outline:none;transition:border-color .2s,background .2s}
+.inp:focus{border-color:var(--g700);background:var(--white);box-shadow:0 0 0 3px rgba(26,122,74,.08)}
+select.inp{cursor:pointer}
+
+/* Action list */
+.action-list{display:flex;flex-direction:column;gap:10px;margin-bottom:12px}
+.action-item{background:var(--cream);border:1.5px solid var(--cd);border-radius:10px;padding:14px 16px}
+.action-item-head{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.action-num{width:22px;height:22px;background:var(--g800);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.65rem;font-weight:700;color:var(--white);font-family:'DM Mono',monospace;flex-shrink:0}
+.action-title-inp{flex:1;border:1.5px solid var(--cd);border-radius:7px;padding:6px 10px;font-family:'DM Sans',sans-serif;font-size:.83rem;font-weight:600;color:var(--ink);background:var(--white);outline:none;transition:border-color .2s}
+.action-title-inp:focus{border-color:var(--g700)}
+.action-del{width:24px;height:24px;border-radius:50%;border:1.5px solid var(--cdd);background:var(--white);cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--inkm);transition:all .15s;flex-shrink:0}
+.action-del:hover{border-color:var(--red);background:var(--redbg);color:var(--red)}
+.action-status-sel{border:1.5px solid var(--cd);border-radius:7px;padding:4px 8px;font-family:'DM Sans',sans-serif;font-size:.76rem;color:var(--ink);background:var(--white);outline:none;cursor:pointer}
+.btn-add-item{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:8px;border:1.5px dashed var(--g200);background:var(--g50);font-family:'DM Sans',sans-serif;font-size:.78rem;font-weight:600;color:var(--g700);cursor:pointer;transition:all .15s;width:100%;justify-content:center}
+.btn-add-item:hover{background:var(--g100);border-color:var(--g700)}
+
+/* Target list */
+.target-item{background:var(--cream);border:1.5px solid var(--cd);border-radius:10px;padding:14px 16px;margin-bottom:10px}
+.target-progress-wrap{margin-top:10px}
+.target-progress-bar{height:6px;background:var(--cdd);border-radius:3px;overflow:hidden;margin-top:4px}
+.target-progress-fill{height:100%;background:linear-gradient(90deg,var(--g700),var(--g600));border-radius:3px;transition:width .4s ease}
+
+/* Metric table */
+.metric-table-wrap{margin-top:4px}
+.metric-table{width:100%;border-collapse:collapse;font-size:.82rem}
+.metric-table th{background:var(--cream);padding:8px 12px;text-align:left;font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--inkm);border-bottom:2px solid var(--cd)}
+.metric-table td{padding:8px 12px;border-bottom:1px solid var(--cream);vertical-align:middle}
+.metric-table tr:last-child td{border-bottom:none}
+.metric-table tr:hover td{background:var(--cream)}
+.metric-row-fixed td:first-child{font-weight:600;color:var(--ink)}
+.metric-row-computed td:first-child{color:var(--inkm);font-style:italic}
+.metric-row-custom td:first-child input{width:100%;border:none;background:transparent;font-family:'DM Sans',sans-serif;font-size:.82rem;color:var(--ink);outline:none}
+.metric-inp{width:120px;border:1.5px solid var(--cd);border-radius:6px;padding:5px 8px;font-family:'DM Mono',monospace;font-size:.82rem;color:var(--ink);background:var(--cream);outline:none;text-align:right;transition:border-color .2s}
+.metric-inp:focus{border-color:var(--g700);background:var(--white)}
+.metric-unit{font-size:.72rem;color:var(--inkm);font-family:'DM Mono',monospace;white-space:nowrap}
+.metric-val-computed{font-family:'DM Mono',monospace;font-size:.82rem;color:var(--g700);font-weight:600}
+.metric-add-row{display:inline-flex;align-items:center;gap:5px;margin-top:10px;padding:5px 12px;border-radius:6px;border:1.5px dashed var(--cdd);background:transparent;font-family:'DM Sans',sans-serif;font-size:.74rem;font-weight:600;color:var(--inkm);cursor:pointer;transition:all .15s}
+.metric-add-row:hover{border-color:var(--g200);color:var(--g700);background:var(--g50)}
+.metric-del-row{width:20px;height:20px;border-radius:50%;border:1.5px solid var(--cdd);background:var(--white);cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--inkm);transition:all .15s;flex-shrink:0}
+.metric-del-row:hover{border-color:var(--red);background:var(--redbg);color:var(--red)}
+
+/* Methodology note */
+.method-note{background:var(--obg);border:1px solid var(--obd);border-radius:8px;padding:12px 14px;margin-top:12px}
+.method-note label{font-size:.72rem;font-weight:600;color:var(--oc);display:block;margin-bottom:5px}
+.method-note textarea{width:100%;border:1.5px solid var(--obd);border-radius:6px;padding:8px 10px;font-family:'DM Sans',sans-serif;font-size:.78rem;color:var(--ink);background:var(--white);resize:vertical;min-height:60px;outline:none;transition:border-color .2s}
+.method-note textarea:focus{border-color:var(--oc)}
+
+/* ══ UPLOAD ZONE ══ */
+.upload-section{background:var(--ambg);border:1.5px solid var(--ambb);border-radius:12px;padding:18px;margin-bottom:16px}
+.upload-section-title{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.upload-section-title .ust-ic{width:26px;height:26px;background:var(--amber);border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.upload-section-title h4{font-size:.82rem;font-weight:700;color:#78350F}
+.upload-section-title span{font-size:.72rem;color:#92400E}
+.upload-zone{border:2px dashed var(--ambb);border-radius:10px;padding:20px;text-align:center;cursor:pointer;transition:all .2s;background:rgba(255,255,255,.5)}
+.upload-zone:hover,.upload-zone.dragover{border-color:var(--amber);background:rgba(251,191,36,.08)}
+.upload-zone input[type=file]{display:none}
+.upload-zone-ic{font-size:1.8rem;margin-bottom:6px}
+.upload-zone p{font-size:.78rem;color:#92400E;line-height:1.5}
+.upload-zone strong{font-weight:700;color:#78350F}
+.btn-upload{display:inline-flex;align-items:center;gap:6px;margin-top:10px;padding:7px 14px;border-radius:7px;background:var(--amber);color:var(--white);border:none;font-family:'DM Sans',sans-serif;font-size:.78rem;font-weight:600;cursor:pointer;transition:all .15s}
+.btn-upload:hover{background:#B45309;transform:translateY(-1px)}
+
+/* Uploaded files list */
+.uploads-list{display:flex;flex-direction:column;gap:6px;margin-top:10px}
+.upload-item{background:var(--white);border:1px solid var(--ambb);border-radius:8px;padding:10px 12px;display:flex;align-items:center;gap:10px}
+.upload-item-ic{font-size:.9rem;flex-shrink:0}
+.upload-item-info{flex:1;min-width:0}
+.upload-item-name{font-size:.76rem;font-weight:600;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.upload-item-meta{font-size:.68rem;color:var(--inkm);margin-top:1px}
+.upload-item-val{font-family:'DM Mono',monospace;font-size:.8rem;font-weight:700;color:var(--g700);flex-shrink:0}
+.upload-item-del{width:20px;height:20px;border-radius:50%;border:1.5px solid var(--cdd);background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--inkm);transition:all .15s;flex-shrink:0}
+.upload-item-del:hover{border-color:var(--red);color:var(--red)}
+.upload-extracting{display:flex;align-items:center;gap:8px;font-size:.76rem;color:var(--amber);padding:8px 12px;background:var(--ambg);border-radius:7px;margin-top:6px}
+.spinner{width:14px;height:14px;border:2px solid var(--ambb);border-top-color:var(--amber);border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0}
+
+/* Monthly accumulator table */
+.monthly-table{width:100%;border-collapse:collapse;font-size:.78rem;margin-top:10px}
+.monthly-table th{background:var(--cream);padding:6px 10px;text-align:center;font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--inkm);border-bottom:1.5px solid var(--cd)}
+.monthly-table th:first-child{text-align:left}
+.monthly-table td{padding:6px 10px;border-bottom:1px solid var(--cream);text-align:center;vertical-align:middle}
+.monthly-table td:first-child{text-align:left;font-weight:500;color:var(--inks)}
+.monthly-table .total-row td{background:var(--g50);font-weight:700;color:var(--g800);font-family:'DM Mono',monospace;border-top:2px solid var(--g200)}
+.month-val-inp{width:80px;border:1.5px solid var(--cd);border-radius:5px;padding:4px 6px;font-family:'DM Mono',monospace;font-size:.76rem;color:var(--ink);background:var(--cream);outline:none;text-align:right;transition:border-color .2s}
+.month-val-inp:focus{border-color:var(--g700);background:var(--white)}
+.month-status{width:8px;height:8px;border-radius:50%;display:inline-block}
+.month-status.ok{background:var(--g600)}
+.month-status.partial{background:var(--amber)}
+.month-status.empty{background:var(--cdd)}
+.btn-month-upload{width:24px;height:24px;border-radius:4px;border:1.5px solid var(--ambb);background:var(--ambg);cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--amber);transition:all .15s;flex-shrink:0}
+.btn-month-upload:hover{background:var(--amber);color:var(--white)}
+
+/* S1 headcount special table */
+.headcount-table{width:100%;border-collapse:collapse;font-size:.8rem}
+.headcount-table th{background:var(--g50);padding:8px 12px;font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--g700);border-bottom:2px solid var(--g200);text-align:center}
+.headcount-table th:first-child{text-align:left}
+.headcount-table td{padding:8px 12px;border-bottom:1px solid var(--cream);text-align:center}
+.headcount-table td:first-child{text-align:left;font-weight:600;color:var(--ink)}
+.headcount-table .subtotal{background:var(--cream);font-weight:600}
+.headcount-table .grand-total{background:var(--g50);font-weight:700;color:var(--g800);font-family:'DM Mono',monospace;border-top:2px solid var(--g200)}
+.hc-inp{width:60px;border:1.5px solid var(--cd);border-radius:5px;padding:4px 6px;font-family:'DM Mono',monospace;font-size:.8rem;color:var(--ink);background:var(--cream);outline:none;text-align:center}
+.hc-inp:focus{border-color:var(--g700);background:var(--white)}
+
+/* ══ API MODAL ══ */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(15,28,20,.5);backdrop-filter:blur(4px);z-index:500;align-items:center;justify-content:center}
+.modal-overlay.open{display:flex}
+.modal-box{background:var(--white);border-radius:18px;padding:28px;width:480px;max-width:90vw;box-shadow:var(--sh3);animation:fadeUp .25s ease}
+.modal-box h3{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:600;color:var(--g900);margin-bottom:6px}
+.modal-box p{font-size:.8rem;color:var(--inks);line-height:1.6;margin-bottom:18px}
+.modal-warn{background:#FFF7ED;border:1px solid #FED7AA;border-radius:8px;padding:10px 14px;font-size:.76rem;color:#92400E;line-height:1.55;margin-bottom:16px}
+.modal-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:18px}
+
+/* ══ TOAST ══ */
+.toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--g900);color:var(--white);padding:11px 22px;border-radius:100px;font-size:.82rem;font-weight:500;white-space:nowrap;z-index:600;opacity:0;transition:all .3s ease;box-shadow:var(--sh3)}
+.toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+
+/* ══ ANIMATIONS ══ */
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulse{0%,100%{opacity:.7}50%{opacity:1}}
+@keyframes spin{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+
+<!-- ═══ HEADER ═══ -->
+<header class="hdr">
+  <div class="hdr-in">
+    <div class="logo" onclick="showHub()">
+      <div class="lmark">
+        <svg width="17" height="17" viewBox="0 0 18 18" fill="none">
+          <path d="M9 2C9 2 4 5 4 9.5C4 12.5 6.24 15 9 15C11.76 15 14 12.5 14 9.5C14 5 9 2 9 2Z" fill="white" opacity=".9"/>
+          <path d="M9 6V12M6.5 9.5H11.5" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <span class="ltxt">Green<span>Ledger</span></span>
+    </div>
+    <div class="hdr-r">
+      <div class="ctx-pill">
+        <div class="ctx-dot"></div>
+        <span class="ctx-co" id="ctxCo">Caricamento...</span>
+        <span class="ctx-nc" id="ctxNc"></span>
+      </div>
+      <div class="hdr-actions">
+        <button class="btn-api" id="apiBtn" onclick="openApiModal()">
+          <svg width="11" height="11" viewBox="0 0 12 12" fill="none"><path d="M6 1a3 3 0 110 6 3 3 0 010-6zM2 11c0-2.21 1.79-4 4-4s4 1.79 4 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+          API Key
+        </button>
+      </div>
+      <div class="hdr-usr" id="hdrUsr">GL</div>
+    </div>
+  </div>
+</header>
+
+<!-- ═══ PHASE BAR ═══ -->
+<div class="pbar">
+  <div class="pbar-in">
+    <div class="phase done">
+      <div class="phase-num">✓</div>
+      <span class="phase-label">Double Materiality</span>
+      <span class="phase-badge">Completata</span>
+    </div>
+    <div class="phase active">
+      <div class="phase-num">2</div>
+      <span class="phase-label">CSRD Reporting</span>
+      <span class="phase-sub" id="phaseProgress">— Disclosure quantitative</span>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ HUB VIEW ═══ -->
+<div id="vHub">
+  <div class="hub-wrap">
+    <div class="hub-hero">
+      <div class="hub-eyebrow"><div class="edot"></div>CSRD Reporting Module</div>
+      <h1 id="hubTitle">Disclosure quantitative ESRS</h1>
+      <p id="hubSub">Carica i documenti aziendali e compila le disclosure obbligatorie per i topic materiali emersi dalla Double Materiality Assessment.</p>
+    </div>
+    <div class="hub-stats" id="hubStats"></div>
+    <div class="global-prog">
+      <span class="gp-label">Completamento globale</span>
+      <div class="gp-bar"><div class="gp-fill" id="globalProgFill" style="width:0%"></div></div>
+      <span class="gp-pct" id="globalProgPct">0%</span>
+    </div>
+    <div id="esrs2CardWrap"></div>
+    <div class="topics-section-title" id="topicsSectionLbl"></div>
+    <div class="topics-grid" id="topicsGrid"></div>
+  </div>
+</div>
+
+<!-- ═══ TOPIC PAGE VIEW ═══ -->
+<div id="vTopic" style="display:none">
+  <div class="tp-wrap">
+    <div class="breadcrumb">
+      <button class="bc-back" onclick="showHub()">
+        <svg width="11" height="9" viewBox="0 0 12 10" fill="none"><path d="M11 5H1M5 1L1 5L5 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Hub CSRD
+      </button>
+      <span class="bc-sep">›</span>
+      <span class="bc-cur" id="breadcrumbCur"></span>
+    </div>
+    <div id="topicHeaderWrap"></div>
+    <div class="tab-bar" id="tabBar"></div>
+    <div id="tabContent"></div>
+  </div>
+</div>
+
+<!-- ═══ API KEY MODAL ═══ -->
+<div class="modal-overlay" id="apiModal">
+  <div class="modal-box">
+    <h3>Configurazione API Key</h3>
+    <p>Inserisci la tua Anthropic API Key per abilitare l'estrazione automatica dei dati da bollette e cedolini tramite AI.</p>
+    <div class="modal-warn">⚠️ <strong>Solo per demo/sviluppo.</strong> In produzione l'API Key deve essere gestita lato server. Non condividere questa configurazione con terzi.</div>
+    <div class="f">
+      <label>Anthropic API Key</label>
+      <input type="password" class="inp" id="apiKeyInput" placeholder="sk-ant-...">
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-gh btn-sm" onclick="closeApiModal()">Annulla</button>
+      <button class="btn btn-pri btn-sm" onclick="saveApiKey()">Salva e chiudi</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ TOAST ═══ -->
+<div class="toast" id="toast"><span id="toastMsg"></span></div>
+
+<script>
+'use strict';
+
+// ══════════════════════════════════════════════
+//  CONSTANTS — TOPICS CONFIG
+// ══════════════════════════════════════════════
+const TOPICS_META = {
+  E1:{emoji:'🌡️',name:'Cambiamenti climatici',sub:'Mitigazione, adattamento, energia',pillar:'E',color:'#065F46',bg:'#ECFDF5'},
+  E2:{emoji:'🏭',name:'Inquinamento',sub:'Aria, acqua, suolo, sostanze pericolose',pillar:'E',color:'#92400E',bg:'#FFFBEB'},
+  E3:{emoji:'💧',name:'Risorse idriche e marine',sub:'Prelievo, consumo, ecosistemi acquatici',pillar:'E',color:'#1E40AF',bg:'#EFF6FF'},
+  E4:{emoji:'🌿',name:'Biodiversità ed ecosistemi',sub:'Specie, habitat, uso del territorio',pillar:'E',color:'#065F46',bg:'#F0FDF4'},
+  E5:{emoji:'♻️',name:'Economia circolare',sub:'Materiali, rifiuti, prodotti, fine vita',pillar:'E',color:'#4D7C0F',bg:'#F7FEE7'},
+  S1:{emoji:'👷',name:'Forza lavoro propria',sub:'Dipendenti, condizioni, salute, inclusione',pillar:'S',color:'#7C2D12',bg:'#FFF7ED'},
+  S2:{emoji:'🌐',name:'Lavoratori value chain',sub:'Fornitori, subfornitori, downstream',pillar:'S',color:'#831843',bg:'#FFF1F2'},
+  S3:{emoji:'🏘️',name:'Comunità interessate',sub:'Comunità locali, popolazioni, territorio',pillar:'S',color:'#7E22CE',bg:'#FAF5FF'},
+  S4:{emoji:'👤',name:'Consumatori e utenti',sub:'Sicurezza prodotti, privacy, accesso',pillar:'S',color:'#0E7490',bg:'#ECFEFF'},
+  G1:{emoji:'⚖️',name:'Condotta aziendale',sub:'Etica, anticorruzione, fornitori, fisco',pillar:'G',color:'#374151',bg:'#F9FAFB'},
+};
+
+const ALL_TOPIC_IDS = ['E1','E2','E3','E4','E5','S1','S2','S3','S4','G1'];
+
+// ══ DISCLOSURE REQUIREMENTS CATALOG ══
+const DR_CATALOG = {
+  // ── ESRS 2 ──
+  'GOV-1':{label:'Ruolo degli organi di amministrazione nella governance della sostenibilità',mandatory:true,ref:'ESRS 2 GOV-1, §21-26',
+    hint:'Descrivere la struttura di governance per la sostenibilità: organi responsabili (CdA, Comitato Sostenibilità, ESG Committee), frequenza di review delle tematiche ESG, competenze presenti, meccanismi di escalation e supervisione.',
+    placeholder:'Il Consiglio di Amministrazione del Gruppo supervisiona le tematiche di sostenibilità mediante il Comitato per il Controllo e i Rischi. Le riunioni dedicate alla sostenibilità si tengono almeno [N] volte l\'anno...'},
+  'GOV-2':{label:'Informazioni fornite agli organi di amministrazione su sostenibilità e due diligence',mandatory:true,ref:'ESRS 2 GOV-2, §27-30',
+    hint:'Indicare quali informazioni su sostenibilità, rischi ESG e due diligence vengono trasmesse agli organi di amministrazione, con quale frequenza e tramite quali meccanismi.',
+    placeholder:'Gli organi di amministrazione ricevono informazioni periodiche su: principali IRO materiali, avanzamento degli obiettivi ESG, risultati dei processi di engagement stakeholder, eventuali violazioni...'},
+  'GOV-3':{label:'Integrazione della performance di sostenibilità nella remunerazione',mandatory:false,ref:'ESRS 2 GOV-3, §31-33',
+    hint:'Indicare se e come la performance ESG è integrata nei meccanismi di remunerazione del management (CEO, C-suite, board). Se sì, specificare KPI utilizzati e peso percentuale.',
+    placeholder:'Il Gruppo [ha/non ha] integrato indicatori di performance ESG nella remunerazione variabile del management. [Se sì: I KPI ESG utilizzati includono... con un peso del X%...]'},
+  'GOV-4':{label:'Statement sulla due diligence (CS3D)',mandatory:false,ref:'ESRS 2 GOV-4, §34',
+    hint:'Indicare se il Gruppo è soggetto alla Corporate Sustainability Due Diligence Directive (CS3D) e descrivere il processo di due diligence adottato per identificare, prevenire e mitigare impatti negativi su persone e ambiente.',
+    placeholder:'Il Gruppo [è/non è] soggetto alla Direttiva CS3D in virtù del proprio fatturato e numero di dipendenti. Il processo di due diligence adottato prevede...'},
+  'GOV-5':{label:'Gestione dei rischi e controllo interno in materia di sostenibilità',mandatory:true,ref:'ESRS 2 GOV-5, §35-38',
+    hint:'Descrivere come i rischi di sostenibilità (ESG) sono integrati nel sistema di gestione del rischio aziendale (ERM) e nel sistema di controllo interno.',
+    placeholder:'I rischi di sostenibilità sono integrati nel sistema ERM del Gruppo. Il processo di identificazione e valutazione dei rischi ESG prevede...'},
+  'SBM-1':{label:'Strategia, modello di business e catena del valore',mandatory:true,ref:'ESRS 2 SBM-1, §40-46',
+    hint:'Descrivere strategia di sostenibilità, modello di business (come genera valore il Gruppo), posizione nella catena del valore (upstream/downstream), dipendenze dalle risorse naturali e sociali.',
+    placeholder:'Il Gruppo opera nel settore [settore] con un modello di business basato su [descrizione]. La catena del valore include [upstream: fornitori chiave...] e [downstream: clienti, distributori...].'},
+  'SBM-2':{label:'Interessi e opinioni degli stakeholder',mandatory:true,ref:'ESRS 2 SBM-2, §47-50',
+    hint:'Descrivere il processo di identificazione e coinvolgimento degli stakeholder, come le loro opinioni influenzano la strategia. Rimanda ai risultati del Modulo 3 — Stakeholder Engagement del DMA.',
+    placeholder:'Il Gruppo ha identificato i seguenti gruppi di stakeholder rilevanti: [lista]. Il processo di engagement si è svolto mediante [modalità: survey, interviste, focus group...]. Le principali aspettative emerse riguardano...'},
+  'SBM-3':{label:'IRO materiali e interazione con strategia e business model',mandatory:true,ref:'ESRS 2 SBM-3, §51-55',
+    hint:'Descrivere gli IRO materiali identificati nel DMA e come si relazionano alla strategia e al modello di business del Gruppo. Rimanda alla matrice di doppia materialità (Modulo 4).',
+    placeholder:'La Double Materiality Assessment ha identificato [N] topic materiali. Gli IRO più rilevanti per il Gruppo comprendono [impatti principali], [rischi principali], [opportunità principali]. Questi interagiscono con la strategia attraverso...'},
+  'IRO-1':{label:'Descrizione dei processi per l\'identificazione e valutazione degli IRO materiali',mandatory:true,ref:'ESRS 2 IRO-1, §53',
+    hint:'Descrivere la metodologia del processo DMA: fonti informative, criteri di valutazione, coinvolgimento degli esperti interni, ruolo degli stakeholder, soglie di materialità utilizzate.',
+    placeholder:'Il Gruppo ha condotto la Double Materiality Assessment secondo la metodologia EFRAG. Il processo ha coinvolto [N] stakeholder chiave, valutato [N] IRO per ciascuno dei 10 topic ESRS, utilizzando una scala 1-5 per impatto e rischio/opportunità...'},
+  'IRO-2':{label:'Mappa delle disclosure ESRS coperte dal report',mandatory:true,ref:'ESRS 2 IRO-2, §56-58',
+    hint:'Elencare tutte le disclosure requirements (DR) degli standard ESRS applicabili, indicando per ciascuna se è stata coperta nel report, omessa con giustificazione, o non applicabile.',
+    placeholder:'La tabella seguente riporta tutte le DR degli standard ESRS applicati nel report di sostenibilità [anno]...'},
+
+  // ── E1 ──
+  'E1-1':{label:'Piano di transizione per la mitigazione climatica',mandatory:true,ref:'ESRS E1-1, §14-19',
+    hint:'Descrivere il piano di transizione del Gruppo verso la decarbonizzazione: obiettivi di lungo periodo (es. net-zero), traguardi intermedi, tecnologie chiave, CapEx pianificato, allineamento con la tassonomia UE e scenari climatici.',
+    placeholder:'Il Gruppo ha adottato un piano di transizione climatica allineato con l\'Accordo di Parigi (scenario 1,5°C). Il piano prevede i seguenti obiettivi intermedi: riduzione Scope 1+2 del X% entro [anno]...'},
+  'E1-2':{label:'Politiche su mitigazione e adattamento ai cambiamenti climatici',mandatory:true,ref:'ESRS E1-2, §20-22',
+    hint:'Descrivere le politiche aziendali formali in materia di mitigazione (riduzione emissioni GHG) e adattamento (gestione rischi fisici). Indicare organo responsabile, scope di applicazione, revisione periodica.',
+    placeholder:'Il Gruppo ha adottato la Politica Climatica [data adozione], approvata dal CdA. La politica copre tutte le entità del Gruppo e si articola in: [sezione mitigazione], [sezione adattamento]...'},
+  'E1-3':{label:'Azioni e risorse allocate per il clima',mandatory:true,ref:'ESRS E1-3, §23-25',type:'action_list',
+    hint:'Elencare le azioni concrete avviate o pianificate per la mitigazione/adattamento climatica, con risorse finanziarie allocate, responsabile interno, timeline e stato di avanzamento.',
+    placeholder:''},
+  'E1-4':{label:'Target di mitigazione e adattamento climatico',mandatory:true,ref:'ESRS E1-4, §26-31',type:'target_list',
+    hint:'Definire gli obiettivi misurabili di riduzione GHG e adattamento ai rischi climatici, con baseline, anno target, metodo di calcolo e stato di avanzamento.',
+    placeholder:''},
+  'E1-5':{label:'Consumo e mix energetico',mandatory:true,ref:'ESRS E1-5, §37-38',type:'metric',uploadType:'energy',
+    hint:'Dati quantitativi su consumo totale di energia, ripartizione per fonte (rinnovabile/non rinnovabile), intensità energetica. Carica le bollette energetiche per l\'estrazione automatica mensile.',
+    rows:[
+      {id:'e1_5_total',label:'Consumo energetico totale',unit:'MWh',fixed:true},
+      {id:'e1_5_renewable',label:'di cui da fonti rinnovabili',unit:'MWh',fixed:true},
+      {id:'e1_5_nonrenewable',label:'di cui da fonti non rinnovabili',unit:'MWh',fixed:true},
+      {id:'e1_5_pct',label:'% energia da fonti rinnovabili',unit:'%',fixed:true,computed:true,formula:'pct:e1_5_renewable:e1_5_total'},
+      {id:'e1_5_intensity',label:'Intensità energetica (per €M fatturato)',unit:'MWh/€M',fixed:true},
+    ],monthly:true,monthlyMetric:'e1_5_total',monthlyUnit:'MWh'},
+  'E1-6':{label:'Emissioni di gas a effetto serra (Scope 1, 2, 3)',mandatory:true,ref:'ESRS E1-6, §39-41',type:'metric',uploadType:null,
+    hint:'Emissioni GHG totali per scope (tCO₂eq), metodologia di calcolo, fattori di emissione utilizzati. Scope 1 = dirette, Scope 2 = energia acquistata, Scope 3 = catena del valore.',
+    rows:[
+      {id:'e1_6_scope1',label:'Scope 1 — Emissioni dirette',unit:'tCO₂eq',fixed:true},
+      {id:'e1_6_scope2_lb',label:'Scope 2 — Location-based',unit:'tCO₂eq',fixed:true},
+      {id:'e1_6_scope2_mb',label:'Scope 2 — Market-based',unit:'tCO₂eq',fixed:true},
+      {id:'e1_6_scope3',label:'Scope 3 — Emissioni indirette (totale)',unit:'tCO₂eq',fixed:true},
+      {id:'e1_6_total',label:'Totale emissioni GHG (Scope 1+2+3)',unit:'tCO₂eq',fixed:true,computed:true,formula:'sum:e1_6_scope1:e1_6_scope2_mb:e1_6_scope3'},
+      {id:'e1_6_intensity',label:'Intensità GHG (per €M fatturato)',unit:'tCO₂eq/€M',fixed:true},
+    ],monthly:false,showMethodology:true},
+  'E1-7':{label:'Rimozioni GHG e carbon credits',mandatory:false,ref:'ESRS E1-7, §42',type:'metric',
+    hint:'GHG rimossi dall\'atmosfera tramite tecnologie di rimozione (BECCS, DAC, ecc.) e carbon credits acquistati. Distinguere tra rimozioni proprie e crediti di compensazione.',
+    rows:[
+      {id:'e1_7_removals',label:'GHG rimosse dall\'atmosfera',unit:'tCO₂eq',fixed:true},
+      {id:'e1_7_credits',label:'Carbon credits acquistati',unit:'tCO₂eq',fixed:true},
+      {id:'e1_7_credit_cost',label:'Costo carbon credits',unit:'€',fixed:true},
+    ],monthly:false},
+  'E1-8':{label:'Carbon pricing interno',mandatory:false,ref:'ESRS E1-8, §43',
+    hint:'Indicare se il Gruppo utilizza un prezzo interno del carbonio come strumento di decision-making. Se sì, specificare il valore (€/tCO₂), perimetro di applicazione e meccanismo (shadow price, ETS interno, tassa interna).',
+    placeholder:'Il Gruppo [utilizza/non utilizza] un carbon price interno. [Se sì: Il prezzo ombra del carbonio è fissato a €X/tCO₂eq, utilizzato per valutare investimenti e progetti con emissioni superiori a...]'},
+  'E1-9':{label:'Effetti finanziari attesi da rischi fisici e di transizione',mandatory:false,ref:'ESRS E1-9, §44',type:'metric',
+    hint:'Stima degli effetti finanziari materiali attesi derivanti da rischi fisici climatici (calore estremo, alluvioni, siccità) e rischi di transizione (carbon tax, normativa, mercato).',
+    rows:[
+      {id:'e1_9_phys_assets',label:'Attività esposte a rischi fisici acuti e cronici',unit:'€M',fixed:true},
+      {id:'e1_9_trans_assets',label:'Attività esposte a rischi di transizione',unit:'€M',fixed:true},
+      {id:'e1_9_capex_green',label:'CapEx sostenibili pianificati',unit:'€M',fixed:true},
+      {id:'e1_9_opex_green',label:'OpEx sostenibili correnti',unit:'€M',fixed:true},
+    ],monthly:false},
+
+  // ── E2 ──
+  'E2-1':{label:'Politiche in materia di inquinamento',mandatory:true,ref:'ESRS E2-1',
+    hint:'Politiche aziendali adottate per prevenire, mitigare e rimediare all\'inquinamento di aria, acqua e suolo.',
+    placeholder:'Il Gruppo ha adottato la Politica Ambientale [data], certificata ISO 14001. Le politiche specifiche sull\'inquinamento prevedono...'},
+  'E2-2':{label:'Azioni per la gestione dell\'inquinamento',mandatory:true,ref:'ESRS E2-2',type:'action_list',hint:'Azioni concrete per ridurre le emissioni inquinanti.',placeholder:''},
+  'E2-3':{label:'Target relativi all\'inquinamento',mandatory:true,ref:'ESRS E2-3',type:'target_list',hint:'Obiettivi misurabili di riduzione degli inquinanti.',placeholder:''},
+  'E2-4':{label:'Emissioni inquinanti nell\'aria, acqua e suolo',mandatory:true,ref:'ESRS E2-4',type:'metric',
+    hint:'Emissioni di sostanze inquinanti per tipologia di media (aria, acqua, suolo) e per tipo di sostanza.',
+    rows:[
+      {id:'e2_4_nox',label:'NOx emessi in aria',unit:'kg',fixed:true},
+      {id:'e2_4_sox',label:'SOx emessi in aria',unit:'kg',fixed:true},
+      {id:'e2_4_pm',label:'Particolato PM10/PM2.5',unit:'kg',fixed:true},
+      {id:'e2_4_voc',label:'Composti organici volatili (COV)',unit:'kg',fixed:true},
+      {id:'e2_4_water',label:'Scarichi idrici totali',unit:'m³',fixed:true},
+      {id:'e2_4_hazard_water',label:'di cui con sostanze pericolose',unit:'m³',fixed:true},
+    ],monthly:false},
+  'E2-5':{label:'Sostanze SVHC e di grande preoccupazione',mandatory:false,ref:'ESRS E2-5',
+    hint:'Produzione, utilizzo o commercializzazione di sostanze soggette a restrizioni (REACH, SVHC, PFAS). Quantità utilizzate e misure adottate per la sostituzione.',
+    placeholder:'Il Gruppo [utilizza/non utilizza] sostanze soggette a restrizioni REACH. [Elenco sostanze con quantità annua in kg e misure di sostituzione in atto...]'},
+  'E2-6':{label:'Effetti finanziari attesi da rischi di inquinamento',mandatory:false,ref:'ESRS E2-6',type:'metric',
+    rows:[{id:'e2_6_liab',label:'Passività ambientali stimate',unit:'€M',fixed:true},{id:'e2_6_remediaz',label:'Costi di bonifica stimati',unit:'€M',fixed:true}],monthly:false},
+
+  // ── E3 ──
+  'E3-1':{label:'Politiche in materia di risorse idriche',mandatory:true,ref:'ESRS E3-1',
+    hint:'Politiche aziendali per la gestione responsabile dell\'acqua, conservazione delle risorse idriche, riduzione degli scarichi.',
+    placeholder:'Il Gruppo ha adottato la Water Policy [data]. La politica prevede obiettivi di riduzione del prelievo idrico nelle aree water-stressed...'},
+  'E3-2':{label:'Azioni per la gestione delle risorse idriche',mandatory:true,ref:'ESRS E3-2',type:'action_list',hint:'Azioni per ridurre prelievo idrico e migliorare la qualità degli scarichi.',placeholder:''},
+  'E3-3':{label:'Target relativi alle risorse idriche',mandatory:true,ref:'ESRS E3-3',type:'target_list',hint:'Obiettivi misurabili su consumo idrico e water stress.',placeholder:''},
+  'E3-4':{label:'Consumo idrico e intensità',mandatory:true,ref:'ESRS E3-4',type:'metric',uploadType:'water',
+    hint:'Dati quantitativi su prelievo e consumo idrico totale, per fonte e per aree water-stressed. Carica le bollette idriche per l\'estrazione mensile automatica.',
+    rows:[
+      {id:'e3_4_prelievo',label:'Prelievo idrico totale',unit:'m³',fixed:true},
+      {id:'e3_4_stressed',label:'di cui in aree water-stressed',unit:'m³',fixed:true},
+      {id:'e3_4_consumo',label:'Consumo idrico (prelievo − scarichi)',unit:'m³',fixed:true},
+      {id:'e3_4_scarichi',label:'Scarichi idrici totali',unit:'m³',fixed:true},
+      {id:'e3_4_intensity',label:'Intensità idrica (per €M fatturato)',unit:'m³/€M',fixed:true},
+    ],monthly:true,monthlyMetric:'e3_4_prelievo',monthlyUnit:'m³'},
+  'E3-5':{label:'Effetti finanziari attesi da rischi idrici',mandatory:false,ref:'ESRS E3-5',type:'metric',
+    rows:[{id:'e3_5_assets',label:'Attività esposte a water stress',unit:'€M',fixed:true},{id:'e3_5_cost',label:'Costi aggiuntivi stimati per scarsità idrica',unit:'€M',fixed:true}],monthly:false},
+
+  // ── E4 ──
+  'E4-1':{label:'Piano di transizione per la biodiversità',mandatory:false,ref:'ESRS E4-1',
+    hint:'Piano aziendale per mitigare gli impatti sulla biodiversità e ripristinare gli ecosistemi degradati, incluso l\'impegno "no net loss" o "nature positive".',
+    placeholder:'Il Gruppo ha sviluppato / si impegna a sviluppare entro [anno] un piano di transizione per la biodiversità allineato al Kunming-Montreal Framework...'},
+  'E4-2':{label:'Politiche in materia di biodiversità ed ecosistemi',mandatory:true,ref:'ESRS E4-2',
+    hint:'Politiche aziendali per proteggere la biodiversità e gestire responsabilmente l\'uso del territorio.',
+    placeholder:'Il Gruppo ha adottato la Politica per la Biodiversità [data], che include l\'impegno a non deforestare, preservare le aree protette e valutare gli impatti sui servizi ecosistemici...'},
+  'E4-3':{label:'Azioni per la tutela della biodiversità',mandatory:true,ref:'ESRS E4-3',type:'action_list',hint:'Azioni concrete per la tutela degli habitat e delle specie.',placeholder:''},
+  'E4-4':{label:'Target relativi a biodiversità ed ecosistemi',mandatory:true,ref:'ESRS E4-4',type:'target_list',hint:'Obiettivi misurabili di ripristino e protezione della biodiversità.',placeholder:''},
+  'E4-5':{label:'Metriche impatto su biodiversità',mandatory:true,ref:'ESRS E4-5',type:'metric',
+    rows:[
+      {id:'e4_5_ha',label:'Superficie di habitat impattata / ripristinata',unit:'ha',fixed:true},
+      {id:'e4_5_species',label:'Specie a rischio identificate nelle aree operative',unit:'n°',fixed:true},
+      {id:'e4_5_protected',label:'Siti operativi in/adiacenti ad aree protette',unit:'n°',fixed:true},
+    ],monthly:false},
+  'E4-6':{label:'Effetti finanziari da rischi biodiversità',mandatory:false,ref:'ESRS E4-6',type:'metric',
+    rows:[{id:'e4_6_dep',label:'Dipendenza stimata dai servizi ecosistemici',unit:'€M',fixed:true}],monthly:false},
+
+  // ── E5 ──
+  'E5-1':{label:'Politiche di economia circolare',mandatory:true,ref:'ESRS E5-1',
+    hint:'Politiche per la riduzione del consumo di risorse vergini, riuso, riciclo, design for circularity e gestione dei rifiuti.',
+    placeholder:'Il Gruppo ha adottato la Politica per l\'Economia Circolare [data], con l\'obiettivo di raggiungere il X% di materiali riciclati entro [anno]...'},
+  'E5-2':{label:'Azioni per la circolarità',mandatory:true,ref:'ESRS E5-2',type:'action_list',hint:'Azioni per ridurre i rifiuti, aumentare il riciclo e promuovere la circolarità.',placeholder:''},
+  'E5-3':{label:'Target di circolarità',mandatory:true,ref:'ESRS E5-3',type:'target_list',hint:'Obiettivi misurabili di riduzione rifiuti, aumento materiali riciclati, circolarità dei prodotti.',placeholder:''},
+  'E5-4':{label:'Afflusso di risorse (materiali vergini vs riciclati)',mandatory:true,ref:'ESRS E5-4',type:'metric',
+    rows:[
+      {id:'e5_4_total',label:'Materiali totali utilizzati',unit:'ton',fixed:true},
+      {id:'e5_4_virgin',label:'di cui materiali vergini',unit:'ton',fixed:true},
+      {id:'e5_4_recycled',label:'di cui materiali riciclati/recuperati',unit:'ton',fixed:true},
+      {id:'e5_4_pct',label:'% materiali riciclati/recuperati',unit:'%',fixed:true,computed:true,formula:'pct:e5_4_recycled:e5_4_total'},
+      {id:'e5_4_renewable',label:'di cui materiali rinnovabili bio-based',unit:'ton',fixed:true},
+    ],monthly:false},
+  'E5-5':{label:'Deflusso di risorse (rifiuti e prodotti a fine vita)',mandatory:true,ref:'ESRS E5-5',type:'metric',
+    rows:[
+      {id:'e5_5_total',label:'Rifiuti prodotti totali',unit:'ton',fixed:true},
+      {id:'e5_5_hazard',label:'di cui rifiuti pericolosi',unit:'ton',fixed:true},
+      {id:'e5_5_recicl',label:'Rifiuti avviati a riciclo/recupero',unit:'ton',fixed:true},
+      {id:'e5_5_discarica',label:'Rifiuti in discarica',unit:'ton',fixed:true},
+      {id:'e5_5_incener',label:'Rifiuti inceneriti',unit:'ton',fixed:true},
+      {id:'e5_5_pct_recovery',label:'% rifiuti avviati a recupero',unit:'%',fixed:true,computed:true,formula:'pct:e5_5_recicl:e5_5_total'},
+    ],monthly:false},
+  'E5-6':{label:'Effetti finanziari attesi dalla transizione a economia circolare',mandatory:false,ref:'ESRS E5-6',type:'metric',
+    rows:[{id:'e5_6_savings',label:'Risparmi stimati da economia circolare',unit:'€M',fixed:true},{id:'e5_6_invest',label:'Investimenti per circolarità',unit:'€M',fixed:true}],monthly:false},
+
+  // ── S1 ──
+  'S1-1':{label:'Politiche relative alla forza lavoro propria',mandatory:true,ref:'ESRS S1-1',
+    hint:'Politiche per la gestione delle risorse umane: condizioni di lavoro, salute e sicurezza, diversity & inclusion, sviluppo professionale, dialogo sociale.',
+    placeholder:'Il Gruppo adotta le seguenti politiche per la forza lavoro propria: [Politica H&S - data], [Politica D&I - data], [Politica di sviluppo professionale - data]...'},
+  'S1-2':{label:'Processi di engagement e dialogo con la forza lavoro',mandatory:true,ref:'ESRS S1-2',
+    hint:'Meccanismi formali di coinvolgimento dei lavoratori (sindacati, RSU, comitati, survey, ecc.) e loro influenza sulle decisioni aziendali.',
+    placeholder:'Il Gruppo mantiene un dialogo strutturato con le rappresentanze sindacali attraverso [meccanismi]. La copertura da contrattazione collettiva è pari al X% della forza lavoro. Le modalità di engagement includono...'},
+  'S1-3':{label:'Processi di remediation per impatti negativi sulla forza lavoro',mandatory:true,ref:'ESRS S1-3',
+    hint:'Meccanismi di reclamo e segnalazione a disposizione dei lavoratori, processi di remediation per violazioni dei diritti dei lavoratori.',
+    placeholder:'Il Gruppo dispone di un sistema di whistleblowing [certificato/conforme a D.Lgs. 24/2023]. Il canale è accessibile a tutti i dipendenti e garantisce l\'anonimato. I reclami vengono gestiti entro [N] giorni...'},
+  'S1-4':{label:'Azioni per la gestione degli impatti sulla forza lavoro',mandatory:true,ref:'ESRS S1-4',type:'action_list',hint:'Azioni concrete per migliorare le condizioni di lavoro, la sicurezza e l\'inclusione.',placeholder:''},
+  'S1-5':{label:'Target relativi alla forza lavoro propria',mandatory:true,ref:'ESRS S1-5',type:'target_list',hint:'Obiettivi misurabili su salute/sicurezza, diversity, formazione, pay equity.',placeholder:''},
+  'S1-6':{label:'Caratteristiche della forza lavoro (headcount per categoria)',mandatory:true,ref:'ESRS S1-6',type:'headcount',uploadType:'personnel',
+    hint:'Tabella strutturata del personale per genere, tipo di contratto, part/full time, fascia professionale. Carica i cedolini/LUL per l\'estrazione automatica.'},
+  'S1-7':{label:'Lavoratori non dipendenti',mandatory:true,ref:'ESRS S1-7',type:'metric',
+    rows:[
+      {id:'s1_7_interim',label:'Lavoratori interinali (somministrazione)',unit:'n°',fixed:true},
+      {id:'s1_7_appalto',label:'Lavoratori in appalto (c/o sedi)',unit:'n°',fixed:true},
+      {id:'s1_7_total',label:'Totale lavoratori non dipendenti',unit:'n°',fixed:true,computed:true,formula:'sum:s1_7_interim:s1_7_appalto'},
+    ],monthly:false},
+  'S1-8':{label:'Copertura contrattazione collettiva',mandatory:true,ref:'ESRS S1-8',type:'metric',
+    rows:[
+      {id:'s1_8_fte_ccnl',label:'FTE coperti da CCNL',unit:'n°',fixed:true},
+      {id:'s1_8_pct_ccnl',label:'% FTE coperti da CCNL',unit:'%',fixed:true},
+      {id:'s1_8_ccnl_name',label:'CCNL applicato (codice/nome)',unit:'',fixed:true,type:'text'},
+    ],monthly:false},
+  'S1-9':{label:'Indicatori di diversity (genere nel management e board)',mandatory:true,ref:'ESRS S1-9',type:'metric',
+    rows:[
+      {id:'s1_9_women_tot',label:'% donne sul totale dipendenti',unit:'%',fixed:true},
+      {id:'s1_9_women_mgmt',label:'% donne nel management (quadri/dirigenti)',unit:'%',fixed:true},
+      {id:'s1_9_women_board',label:'% donne nel board/CdA',unit:'%',fixed:true},
+      {id:'s1_9_under30',label:'% dipendenti sotto i 30 anni',unit:'%',fixed:true},
+      {id:'s1_9_over50',label:'% dipendenti sopra i 50 anni',unit:'%',fixed:true},
+    ],monthly:false},
+  'S1-10':{label:'Salario adeguato',mandatory:false,ref:'ESRS S1-10',type:'metric',
+    rows:[
+      {id:'s1_10_above_living',label:'% dipendenti con salario ≥ living wage locale',unit:'%',fixed:true},
+      {id:'s1_10_min_ratio',label:'Rapporto salario minimo interno / salario minimo legale',unit:'×',fixed:true},
+    ],monthly:false},
+  'S1-11':{label:'Protezione sociale',mandatory:false,ref:'ESRS S1-11',type:'metric',
+    rows:[
+      {id:'s1_11_pension',label:'% dipendenti con fondo pensione complementare',unit:'%',fixed:true},
+      {id:'s1_11_health',label:'% dipendenti con copertura sanitaria integrativa',unit:'%',fixed:true},
+      {id:'s1_11_disability',label:'% dipendenti con copertura inabilità temporanea',unit:'%',fixed:true},
+    ],monthly:false},
+  'S1-13':{label:'Formazione e sviluppo delle competenze',mandatory:true,ref:'ESRS S1-13',type:'metric',
+    rows:[
+      {id:'s1_13_avg',label:'Ore medie di formazione per dipendente/anno',unit:'ore',fixed:true},
+      {id:'s1_13_mgmt',label:'di cui manager/dirigenti',unit:'ore',fixed:true},
+      {id:'s1_13_emp',label:'di cui impiegati',unit:'ore',fixed:true},
+      {id:'s1_13_oper',label:'di cui operai/produzione',unit:'ore',fixed:true},
+      {id:'s1_13_budget',label:'Budget formazione annuo',unit:'€',fixed:true},
+    ],monthly:false},
+  'S1-14':{label:'Salute e sicurezza sul lavoro',mandatory:true,ref:'ESRS S1-14',type:'metric',
+    rows:[
+      {id:'s1_14_ltif',label:'LTIF — Lost Time Injury Frequency',unit:'per mln ore lav.',fixed:true},
+      {id:'s1_14_trir',label:'TRIR — Total Recordable Incident Rate',unit:'per mln ore lav.',fixed:true},
+      {id:'s1_14_days',label:'Giornate lavorative perse per infortuni',unit:'giorni',fixed:true},
+      {id:'s1_14_fatal',label:'Infortuni mortali',unit:'n°',fixed:true},
+      {id:'s1_14_malprof',label:'Casi di malattia professionale riconosciuti',unit:'n°',fixed:true},
+    ],monthly:false},
+  'S1-16':{label:'Pay gap e distribuzione retributiva',mandatory:true,ref:'ESRS S1-16',type:'metric',
+    rows:[
+      {id:'s1_16_gap_tot',label:'Gender pay gap totale (RAL media)',unit:'%',fixed:true},
+      {id:'s1_16_gap_mgmt',label:'Gender pay gap management',unit:'%',fixed:true},
+      {id:'s1_16_gap_emp',label:'Gender pay gap impiegati',unit:'%',fixed:true},
+      {id:'s1_16_ceo_ratio',label:'Rapporto retribuzione CEO / mediana dipendenti',unit:'×',fixed:true},
+    ],monthly:false},
+  'S1-17':{label:'Reclami e violazioni dei diritti HR',mandatory:true,ref:'ESRS S1-17',type:'metric',
+    rows:[
+      {id:'s1_17_reclami',label:'Reclami HR ricevuti nel periodo',unit:'n°',fixed:true},
+      {id:'s1_17_risolti',label:'di cui risolti nel periodo',unit:'n°',fixed:true},
+      {id:'s1_17_violaz',label:'Violazioni accertate dei diritti dei lavoratori',unit:'n°',fixed:true},
+      {id:'s1_17_sanzioni',label:'Sanzioni lavoristiche ricevute',unit:'€',fixed:true},
+    ],monthly:false},
+
+  // ── S2 ──
+  'S2-1':{label:'Politiche per i lavoratori della catena del valore',mandatory:true,ref:'ESRS S2-1',hint:'Politiche per la tutela dei lavoratori nei fornitori e nella catena del valore (due diligence HR fornitori, codice di condotta fornitori).',
+    placeholder:'Il Gruppo ha adottato il Codice di Condotta Fornitori [data], che include requisiti minimi su diritti del lavoro, sicurezza, discriminazione e lavoro forzato/minorile...'},
+  'S2-2':{label:'Processi di engagement con lavoratori value chain',mandatory:true,ref:'ESRS S2-2',hint:'Meccanismi per raccogliere informazioni sulle condizioni di lavoro nella supply chain e coinvolgere i lavoratori dei fornitori.',
+    placeholder:'Il Gruppo raccoglie informazioni sulle condizioni di lavoro nella catena del valore tramite: [audit fornitori, questionari ESG, visite in loco]...'},
+  'S2-3':{label:'Processi di remediation supply chain',mandatory:true,ref:'ESRS S2-3',type:'action_list',hint:'Azioni correttive attivate a seguito di non conformità rilevate presso i fornitori.',placeholder:''},
+  'S2-4':{label:'Target relativi ai lavoratori value chain',mandatory:true,ref:'ESRS S2-4',type:'target_list',hint:'Obiettivi misurabili per la tutela dei lavoratori nella catena del valore.',placeholder:''},
+  'S2-5':{label:'KPI lavoratori value chain',mandatory:true,ref:'ESRS S2-5',type:'metric',
+    rows:[
+      {id:'s2_5_audit',label:'N° audit fornitori condotti',unit:'n°',fixed:true},
+      {id:'s2_5_pct_code',label:'% fornitori strategici con codice etica firmato',unit:'%',fixed:true},
+      {id:'s2_5_nonconf',label:'N° non conformità rilevate presso fornitori',unit:'n°',fixed:true},
+      {id:'s2_5_reclami',label:'N° reclami HR ricevuti dalla supply chain',unit:'n°',fixed:true},
+    ],monthly:false},
+
+  // ── S3 ──
+  'S3-1':{label:'Politiche per le comunità interessate',mandatory:true,ref:'ESRS S3-1',hint:'Politiche per la gestione degli impatti sulle comunità locali e per il mantenimento della licenza sociale ad operare.',
+    placeholder:'Il Gruppo ha adottato la Politica per le Comunità [data]. Essa prevede processi strutturati di consultazione delle comunità locali prima di nuovi insediamenti o espansioni significative...'},
+  'S3-2':{label:'Processi di engagement con le comunità',mandatory:true,ref:'ESRS S3-2',hint:'Meccanismi di coinvolgimento e consultazione delle comunità locali (assemblee pubbliche, tavoli di lavoro, ecc.).',
+    placeholder:'Il Gruppo si impegna con le comunità attraverso [meccanismi formali e informali]. Le modalità di consultazione includono...'},
+  'S3-3':{label:'Processi di remediation per le comunità',mandatory:true,ref:'ESRS S3-3',type:'action_list',hint:'Meccanismi di reclamo a disposizione delle comunità e azioni correttive.',placeholder:''},
+  'S3-4':{label:'Target relativi alle comunità',mandatory:true,ref:'ESRS S3-4',type:'target_list',hint:'Obiettivi misurabili per la riduzione degli impatti sulle comunità.',placeholder:''},
+  'S3-5':{label:'KPI comunità interessate',mandatory:true,ref:'ESRS S3-5',type:'metric',
+    rows:[
+      {id:'s3_5_reclami',label:'N° reclami community ricevuti',unit:'n°',fixed:true},
+      {id:'s3_5_risolti',label:'di cui risolti nel periodo',unit:'n°',fixed:true},
+      {id:'s3_5_invest',label:'Investimento sociale nella comunità',unit:'€',fixed:true},
+      {id:'s3_5_prog',label:'N° programmi community attivi',unit:'n°',fixed:true},
+    ],monthly:false},
+
+  // ── S4 ──
+  'S4-1':{label:'Politiche per consumatori e utenti finali',mandatory:true,ref:'ESRS S4-1',hint:'Politiche per la sicurezza dei prodotti/servizi, la protezione dei dati e dei consumatori, l\'accessibilità.',
+    placeholder:'Il Gruppo ha adottato la Politica per la Sicurezza dei Prodotti [data] e la Politica Privacy/GDPR [data]. La sicurezza dei prodotti è garantita mediante [processi di testing, certificazioni]...'},
+  'S4-2':{label:'Processi di engagement con consumatori e utenti',mandatory:true,ref:'ESRS S4-2',hint:'Meccanismi di ascolto e coinvolgimento dei consumatori/utenti finali.',
+    placeholder:'Il Gruppo raccoglie feedback dai consumatori attraverso [NPS, customer satisfaction, portale reclami, focus group]. La frequenza di rilevazione è [periodica/continuativa]...'},
+  'S4-3':{label:'Processi di remediation per consumatori',mandatory:true,ref:'ESRS S4-3',type:'action_list',hint:'Meccanismi di gestione dei reclami e azioni correttive per consumatori.',placeholder:''},
+  'S4-4':{label:'Target relativi a consumatori e utenti',mandatory:true,ref:'ESRS S4-4',type:'target_list',hint:'Obiettivi misurabili su sicurezza prodotti, soddisfazione clienti, privacy.',placeholder:''},
+  'S4-5':{label:'KPI consumatori e utenti',mandatory:true,ref:'ESRS S4-5',type:'metric',
+    rows:[
+      {id:'s4_5_recall',label:'N° richiami prodotto (product recall)',unit:'n°',fixed:true},
+      {id:'s4_5_cert',label:'% prodotti con certificazione sicurezza riconosciuta',unit:'%',fixed:true},
+      {id:'s4_5_gdpr',label:'Violazioni GDPR accertate',unit:'n°',fixed:true},
+      {id:'s4_5_nps',label:'Net Promoter Score (NPS)',unit:'score',fixed:true},
+      {id:'s4_5_reclami',label:'N° reclami consumatori ricevuti',unit:'n°',fixed:true},
+    ],monthly:false},
+
+  // ── G1 ──
+  'G1-1':{label:'Politiche su cultura aziendale e anticorruzione',mandatory:true,ref:'ESRS G1-1',hint:'Politiche per promuovere una cultura aziendale etica, integrità, anticorruzione, anti-bribery.',
+    placeholder:'Il Gruppo ha adottato il Codice Etico [data] e la Politica Anticorruzione/Anti-bribery [data], conformi al D.Lgs. 231/2001. Il Modello 231 è aggiornato periodicamente dall\'Organismo di Vigilanza...'},
+  'G1-2':{label:'Gestione dei fornitori e pratiche di pagamento',mandatory:true,ref:'ESRS G1-2',hint:'Politiche per la selezione responsabile dei fornitori, criteri ESG nella qualifica, pratiche di pagamento eque.',
+    placeholder:'Il Gruppo adotta criteri ESG nella selezione e qualifica dei fornitori. La policy di pagamento prevede termini medi di [N] giorni, in linea con la normativa sui ritardi di pagamento (Dir. 2011/7/UE)...'},
+  'G1-3':{label:'Prevenzione corruzione, bribery e altre violazioni',mandatory:true,ref:'ESRS G1-3',type:'action_list',hint:'Azioni per prevenire corruzione, conflitti di interesse, frode e violazioni etiche.',placeholder:''},
+  'G1-4':{label:'Incidenti di corruzione e violazioni etiche accertate',mandatory:true,ref:'ESRS G1-4',type:'metric',
+    rows:[
+      {id:'g1_4_formati',label:'% personale formato su anticorruzione',unit:'%',fixed:true},
+      {id:'g1_4_casi',label:'N° casi di corruzione/frode accertati',unit:'n°',fixed:true},
+      {id:'g1_4_sanzioni',label:'Sanzioni comminate per corruzione',unit:'€',fixed:true},
+      {id:'g1_4_proc',label:'N° procedimenti legali in corso per corruzione',unit:'n°',fixed:true},
+    ],monthly:false},
+  'G1-5':{label:'Lobbying e influenza politica',mandatory:false,ref:'ESRS G1-5',type:'metric',
+    rows:[
+      {id:'g1_5_spese',label:'Spese per lobbying/relazioni istituzionali',unit:'€',fixed:true},
+      {id:'g1_5_donaz',label:'Donazioni politiche',unit:'€',fixed:true},
+      {id:'g1_5_assoc',label:'N° associazioni di categoria con adesione',unit:'n°',fixed:true},
+    ],monthly:false},
+  'G1-6':{label:'Pratiche di pagamento ai fornitori',mandatory:true,ref:'ESRS G1-6',type:'metric',
+    rows:[
+      {id:'g1_6_gg_avg',label:'Giorni medi di pagamento ai fornitori (DSO)',unit:'giorni',fixed:true},
+      {id:'g1_6_pct_late',label:'% fatture pagate oltre i termini contrattuali',unit:'%',fixed:true},
+      {id:'g1_6_disputes',label:'N° controversie contrattuali con fornitori',unit:'n°',fixed:true},
+    ],monthly:false},
+};
+
+// ══ TOPIC → TAB → DR MAPPING ══
+const TOPIC_STRUCTURE = {
+  ESRS2:{gov:['GOV-1','GOV-2','GOV-3','GOV-4','GOV-5'],actions:['SBM-1','SBM-2','SBM-3'],targets:['IRO-1'],metrics:['IRO-2']},
+  E1:{gov:['E1-1','E1-2','E1-8'],actions:['E1-3'],targets:['E1-4'],metrics:['E1-5','E1-6','E1-7','E1-9']},
+  E2:{gov:['E2-1'],actions:['E2-2'],targets:['E2-3'],metrics:['E2-4','E2-5','E2-6']},
+  E3:{gov:['E3-1'],actions:['E3-2'],targets:['E3-3'],metrics:['E3-4','E3-5']},
+  E4:{gov:['E4-1','E4-2'],actions:['E4-3'],targets:['E4-4'],metrics:['E4-5','E4-6']},
+  E5:{gov:['E5-1'],actions:['E5-2'],targets:['E5-3'],metrics:['E5-4','E5-5','E5-6']},
+  S1:{gov:['S1-1','S1-2','S1-3'],actions:['S1-4'],targets:['S1-5'],metrics:['S1-6','S1-7','S1-8','S1-9','S1-10','S1-11','S1-13','S1-14','S1-16','S1-17']},
+  S2:{gov:['S2-1','S2-2'],actions:['S2-3'],targets:['S2-4'],metrics:['S2-5']},
+  S3:{gov:['S3-1','S3-2'],actions:['S3-3'],targets:['S3-4'],metrics:['S3-5']},
+  S4:{gov:['S4-1','S4-2'],actions:['S4-3'],targets:['S4-4'],metrics:['S4-5']},
+  G1:{gov:['G1-1','G1-2'],actions:['G1-3'],targets:[],metrics:['G1-4','G1-5','G1-6']},
+};
+
+const MONTHS_IT = ['Gen','Feb','Mar','Apr','Mag','Giu','Lug','Ago','Set','Ott','Nov','Dic'];
+
+// ══════════════════════════════════════════════
+//  MOCK DATA (usato se localStorage gl_dma è vuoto)
+// ══════════════════════════════════════════════
+const MOCK_DMA = {
+  m1:{ragione:'Gruppo Acme S.p.A.',nace:[{code:'C22',name:'Gomma e plastica',sector:'C'}],size:'medium',employees:120,year:2024,geo:['IT','EU'],bizDesc:'Imballaggi in plastica riciclata per il settore alimentare B2B.',hq:'Milano, Lombardia',piva:'IT12345678901',revenue:28.5},
+  materialTopics:[
+    {id:'E1',name:'Cambiamenti climatici',emoji:'🌡️',pillar:'E',color:'#065F46',bg:'#ECFDF5',impactScore:3.8,financialScore:4.1,class:'double'},
+    {id:'E3',name:'Risorse idriche e marine',emoji:'💧',pillar:'E',color:'#1E40AF',bg:'#EFF6FF',impactScore:2.9,financialScore:2.1,class:'impact'},
+    {id:'E5',name:'Economia circolare',emoji:'♻️',pillar:'E',color:'#4D7C0F',bg:'#F7FEE7',impactScore:3.5,financialScore:3.2,class:'double'},
+    {id:'S1',name:'Forza lavoro propria',emoji:'👷',pillar:'S',color:'#7C2D12',bg:'#FFF7ED',impactScore:3.1,financialScore:2.8,class:'double'},
+    {id:'G1',name:'Condotta aziendale',emoji:'⚖️',pillar:'G',color:'#374151',bg:'#F9FAFB',impactScore:2.7,financialScore:3.0,class:'financial'},
+    {id:'E2',name:'Inquinamento',emoji:'🏭',pillar:'E',color:'#92400E',bg:'#FFFBEB',impactScore:1.8,financialScore:1.5,class:'none'},
+    {id:'E4',name:'Biodiversità ed ecosistemi',emoji:'🌿',pillar:'E',color:'#065F46',bg:'#F0FDF4',impactScore:1.2,financialScore:1.0,class:'none'},
+    {id:'S2',name:'Lavoratori value chain',emoji:'🌐',pillar:'S',color:'#831843',bg:'#FFF1F2',impactScore:2.1,financialScore:1.6,class:'none'},
+    {id:'S3',name:'Comunità interessate',emoji:'🏘️',pillar:'S',color:'#7E22CE',bg:'#FAF5FF',impactScore:1.9,financialScore:1.3,class:'none'},
+    {id:'S4',name:'Consumatori e utenti',emoji:'👤',pillar:'S',color:'#0E7490',bg:'#ECFEFF',impactScore:1.7,financialScore:2.0,class:'none'},
+  ],
+  m4:{threshold:2.5,stkWeight:0.30,counts:{double:3,impact:1,financial:1,none:5}},
+  exportedAt:new Date().toISOString(),
+};
+
+// ══════════════════════════════════════════════
+//  STATE MANAGEMENT
+// ══════════════════════════════════════════════
+let dmaData = null;
+let csrdState = {};
+let currentTopicId = null;
+let currentTab = 'gov';
+let apiKey = '';
+
+function loadState(){
+  // Load DMA data
+  try {
+    const raw = localStorage.getItem('gl_dma');
+    dmaData = raw ? JSON.parse(raw) : MOCK_DMA;
+  } catch(e){ dmaData = MOCK_DMA; }
+
+  // Load CSRD state
+  try {
+    const raw = localStorage.getItem('gl_csrd');
+    csrdState = raw ? JSON.parse(raw) : {};
+  } catch(e){ csrdState = {}; }
+
+  // Load API key
+  apiKey = localStorage.getItem('gl_apikey') || '';
+}
+
+function saveState(){
+  try {
+    csrdState._saved = new Date().toISOString();
+    localStorage.setItem('gl_csrd', JSON.stringify(csrdState));
+  } catch(e){ console.warn('Save failed', e); }
+}
+
+function getTopicState(topicId){
+  if(!csrdState[topicId]) csrdState[topicId] = {};
+  return csrdState[topicId];
+}
+
+function getDRState(topicId, drId){
+  const ts = getTopicState(topicId);
+  if(!ts[drId]) ts[drId] = {};
+  return ts[drId];
+}
+
+function setDRValue(topicId, drId, key, value){
+  const st = getDRState(topicId, drId);
+  st[key] = value;
+  saveState();
+  updateGlobalProgress();
+}
+
+// ══ PROGRESS CALCULATION ══
+function calcDRCompletion(topicId, drId){
+  const dr = DR_CATALOG[drId];
+  if(!dr) return false;
+  const st = getDRState(topicId, drId);
+  const type = dr.type || 'narrative';
+  if(type === 'narrative') return (st.narrative || '').trim().length > 30;
+  if(type === 'action_list') return (st.actions || []).some(a => a.title && a.title.trim().length > 3);
+  if(type === 'target_list') return (st.targets || []).some(t => t.name && t.name.trim().length > 3);
+  if(type === 'metric' || type === 'headcount') {
+    const rows = dr.rows || [];
+    const fixedRows = rows.filter(r => r.fixed && !r.computed);
+    const filledAny = fixedRows.some(r => {
+      const v = (st.metrics || {})[r.id];
+      return v !== undefined && v !== '' && v !== null && v !== 0;
+    });
+    return filledAny;
+  }
+  return (st.narrative || '').trim().length > 30;
+}
+
+function calcTabCompletion(topicId, tab){
+  const struct = TOPIC_STRUCTURE[topicId];
+  if(!struct) return {done:0, total:0};
+  const drIds = struct[tab] || [];
+  const total = drIds.length;
+  const done = drIds.filter(id => calcDRCompletion(topicId, id)).length;
+  return {done, total};
+}
+
+function calcTopicCompletion(topicId){
+  const struct = TOPIC_STRUCTURE[topicId];
+  if(!struct) return {done:0, total:0, pct:0};
+  const tabs = ['gov','actions','targets','metrics'];
+  let done=0, total=0;
+  tabs.forEach(tab=>{
+    const drIds = struct[tab] || [];
+    total += drIds.length;
+    done += drIds.filter(id => calcDRCompletion(topicId, id)).length;
+  });
+  const pct = total > 0 ? Math.round(done/total*100) : 0;
+  return {done, total, pct};
+}
+
+function calcGlobalCompletion(){
+  const materialIds = getMaterialTopicIds();
+  const allIds = ['ESRS2', ...materialIds];
+  let done=0, total=0;
+  allIds.forEach(id=>{
+    const c = calcTopicCompletion(id);
+    done += c.done; total += c.total;
+  });
+  return total > 0 ? Math.round(done/total*100) : 0;
+}
+
+function getMaterialTopicIds(){
+  if(!dmaData || !dmaData.materialTopics) return [];
+  return dmaData.materialTopics.filter(t => t.class !== 'none').map(t => t.id);
+}
+
+function updateGlobalProgress(){
+  const pct = calcGlobalCompletion();
+  const fill = document.getElementById('globalProgFill');
+  const label = document.getElementById('globalProgPct');
+  if(fill) fill.style.width = pct + '%';
+  if(label) label.textContent = pct + '%';
+  // Update phase bar
+  const ps = document.getElementById('phaseProgress');
+  if(ps) ps.textContent = `— ${pct}% completato`;
+}
+
+// ══════════════════════════════════════════════
+//  NAVIGATION
+// ══════════════════════════════════════════════
+function showHub(){
+  document.getElementById('vHub').style.display = '';
+  document.getElementById('vTopic').style.display = 'none';
+  currentTopicId = null;
+  renderHub();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function openTopic(topicId){
+  currentTopicId = topicId;
+  currentTab = 'gov';
+  document.getElementById('vHub').style.display = 'none';
+  document.getElementById('vTopic').style.display = '';
+  renderTopicPage(topicId);
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// ══════════════════════════════════════════════
+//  HUB RENDERING
+// ══════════════════════════════════════════════
+function renderHub(){
+  if(!dmaData) return;
+  const m1 = dmaData.m1 || {};
+  const materialTopics = dmaData.materialTopics || [];
+  const matIds = getMaterialTopicIds();
+  const year = m1.year || 2024;
+
+  // Header context
+  document.getElementById('ctxCo').textContent = m1.ragione || 'Nuova valutazione';
+  document.getElementById('ctxNc').textContent = m1.nace ? '· ' + m1.nace.map(n=>n.code).join(', ') : '';
+  document.getElementById('hdrUsr').textContent = (m1.ragione || 'GL').substring(0,2).toUpperCase();
+  document.getElementById('hubTitle').textContent = `Disclosure CSRD ${year} — ${m1.ragione || 'Azienda'}`;
+  document.getElementById('hubSub').textContent = `Carica documenti e compila le disclosure obbligatorie per i ${matIds.length} topic materiali emersi dalla Double Materiality Assessment.`;
+
+  // Stats
+  const esrs2Compl = calcTopicCompletion('ESRS2');
+  const matCompl = matIds.map(id => calcTopicCompletion(id));
+  const globalDone = matCompl.reduce((a,c)=>a+c.done, 0) + esrs2Compl.done;
+  const globalTotal = matCompl.reduce((a,c)=>a+c.total, 0) + esrs2Compl.total;
+
+  document.getElementById('hubStats').innerHTML = `
+    <div class="hstat"><span class="hstat-v">${matIds.length}</span><span class="hstat-l">Topic materiali da rendicontare</span><div class="hstat-bar"><div class="hstat-fill" style="width:100%"></div></div></div>
+    <div class="hstat"><span class="hstat-v">${globalDone}</span><span class="hstat-l">Disclosure compilate su ${globalTotal}</span><div class="hstat-bar"><div class="hstat-fill" style="width:${globalTotal?Math.round(globalDone/globalTotal*100):0}%"></div></div></div>
+    <div class="hstat"><span class="hstat-v">${materialTopics.filter(t=>t.class==='double').length}</span><span class="hstat-l">Topic doppiamente materiali</span><div class="hstat-bar"><div class="hstat-fill" style="width:100%"></div></div></div>
+    <div class="hstat"><span class="hstat-v">${(dmaData.m3?.stakeholders||[]).filter(s=>s.status==='done').length || 0}</span><span class="hstat-l">Stakeholder coinvolti nel DMA</span><div class="hstat-bar"><div class="hstat-fill" style="width:75%"></div></div></div>
+  `;
+
+  updateGlobalProgress();
+
+  // ESRS2 card
+  const e2c = calcTopicCompletion('ESRS2');
+  document.getElementById('esrs2CardWrap').innerHTML = `
+    <div class="esrs2-card" onclick="openTopic('ESRS2')">
+      <div class="esrs2-ic">📋</div>
+      <div class="esrs2-body">
+        <h3>ESRS 2 — Requisiti generali trasversali</h3>
+        <p>Governance, strategia, gestione degli IRO e stakeholder engagement. Obbligatorio indipendentemente dalla materialità.</p>
+        <div class="esrs2-tags">
+          <span class="esrs2-tag">GOV 1-5</span>
+          <span class="esrs2-tag">SBM 1-3</span>
+          <span class="esrs2-tag">IRO 1-2</span>
+          <span class="esrs2-tag">Sempre obbligatorio</span>
+        </div>
+      </div>
+      <div class="esrs2-prog">
+        <span class="esrs2-pct">${e2c.pct}%</span>
+        <span class="esrs2-pct-l">${e2c.done}/${e2c.total} DR</span>
+      </div>
+      <span class="esrs2-arrow">›</span>
+    </div>
+  `;
+
+  // Topics grid label
+  document.getElementById('topicsSectionLbl').textContent = `Topic materiali (${matIds.length}) — disclosure obbligatorie`;
+
+  // Topics grid
+  const allTopicIds = ['E1','E2','E3','E4','E5','S1','S2','S3','S4','G1'];
+  document.getElementById('topicsGrid').innerHTML = allTopicIds.map((id,i) => {
+    const topicData = materialTopics.find(t => t.id === id);
+    const meta = TOPICS_META[id];
+    const isMaterial = topicData && topicData.class !== 'none';
+    const cls = topicData ? topicData.class : 'none';
+    const comp = isMaterial ? calcTopicCompletion(id) : {done:0,total:0,pct:0};
+
+    const badgeLabels = {double:'Doppiamente materiale',impact:'Mat. Impatto',financial:'Mat. Finanziario',none:'Non materiale'};
+    const badgeHtml = `<span class="tc-badge ${cls}">${badgeLabels[cls]||'Non materiale'}</span>`;
+
+    return `<div class="tc ${isMaterial?'material':'non-material'}" data-id="${id}" style="animation-delay:${i*0.04}s" ${isMaterial?`onclick="openTopic('${id}')"`:''}> 
+      <div class="tc-head">
+        <div class="tc-pill" style="background:${meta.bg}">${meta.emoji}</div>
+        <div class="tc-meta">
+          <div class="tc-code" style="background:${meta.bg};color:${meta.color}">${id}</div>
+          <div class="tc-name">${meta.name}</div>
+          <div class="tc-sub">${meta.sub}</div>
+        </div>
+        <div class="tc-right">
+          ${badgeHtml}
+          ${isMaterial && topicData ? `<div style="display:flex;gap:6px;margin-top:3px">
+            <span style="font-size:.65rem;padding:1px 5px;border-radius:3px;background:${topicData.class!=='none'?'#EEF8F3':'var(--cream)'};color:${topicData.class!=='none'?'#1A7A4A':'var(--inkm)'};font-family:'DM Mono',monospace">IMP ${topicData.impactScore.toFixed(1)}</span>
+            <span style="font-size:.65rem;padding:1px 5px;border-radius:3px;background:#FFF7ED;color:#C2410C;font-family:'DM Mono',monospace">FIN ${topicData.financialScore.toFixed(1)}</span>
+          </div>` : ''}
+        </div>
+      </div>
+      <div class="tc-foot">
+        ${isMaterial ? `
+          <div class="tc-prog">
+            <div class="tc-prog-bar"><div class="tc-prog-fill" style="width:${comp.pct}%"></div></div>
+            <span class="tc-prog-lbl">${comp.done}/${comp.total} DR compilate</span>
+          </div>
+          <div class="tc-arrow"><svg width="8" height="10" viewBox="0 0 8 12" fill="none"><path d="M1 1L7 6L1 11" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        ` : `<span class="tc-nm-lbl">Non materiale — escluso dalla rendicontazione</span>`}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ══════════════════════════════════════════════
+//  TOPIC PAGE RENDERING
+// ══════════════════════════════════════════════
+function renderTopicPage(topicId){
+  const isESRS2 = topicId === 'ESRS2';
+  const meta = isESRS2 ? null : TOPICS_META[topicId];
+  const topicData = isESRS2 ? null : (dmaData.materialTopics || []).find(t => t.id === topicId);
+  const struct = TOPIC_STRUCTURE[topicId];
+  const comp = calcTopicCompletion(topicId);
+
+  // Breadcrumb
+  document.getElementById('breadcrumbCur').textContent = isESRS2 ? 'ESRS 2 — Requisiti generali' : `${topicId} — ${meta.name}`;
+
+  // Topic header
+  const clsLabels = {double:'Doppiamente materiale',impact:'Materiale per impatto',financial:'Materiale per rischio finanziario',none:'Non materiale'};
+  const clsColors = {double:'#1A7A4A',impact:'#1D4ED8',financial:'#C2410C',none:'#6B7F72'};
+  const clsBgs = {double:'#EEF8F3',impact:'#EFF6FF',financial:'#FFF7ED',none:'#F3F4F6'};
+  const cls = topicData ? topicData.class : 'none';
+
+  document.getElementById('topicHeaderWrap').innerHTML = `
+    <div class="tp-hdr">
+      <div class="tp-emoji" style="background:${isESRS2?'#1A7A4A':meta.bg}">
+        ${isESRS2 ? '📋' : meta.emoji}
+      </div>
+      <div class="tp-info">
+        <h2>${isESRS2 ? 'ESRS 2 — Requisiti Generali' : `${topicId} — ${meta.name}`}</h2>
+        <p>${isESRS2 ? 'Disclosure trasversali obbligatorie per tutti i soggetti CSRD: governance della sostenibilità, strategia, business model, stakeholder, identificazione e valutazione degli IRO.' : meta.sub}</p>
+        <div class="tp-badges">
+          ${!isESRS2 ? `<span class="tp-mat-badge" style="background:${clsBgs[cls]};color:${clsColors[cls]};border:1px solid ${clsColors[cls]}33">${clsLabels[cls]}</span>` : ''}
+          <span class="tp-mat-badge" style="background:var(--g50);color:var(--g700);border:1px solid var(--g200)">Anno: ${dmaData.m1?.year||2024}</span>
+          <span class="tp-mat-badge" style="background:var(--cream);color:var(--inkm);border:1px solid var(--cd)">${comp.total} Disclosure Requirements</span>
+        </div>
+      </div>
+      ${topicData ? `
+      <div class="tp-scores">
+        <div class="tp-score-row">
+          <span class="tp-score-lbl">Materialità impatto</span>
+          <span class="tp-score-val ${topicData.impactScore>=3.5?'high':topicData.impactScore>=2?'med':'low'}">${topicData.impactScore.toFixed(1)}/5</span>
+        </div>
+        <div class="tp-score-row">
+          <span class="tp-score-lbl">Materialità finanziaria</span>
+          <span class="tp-score-val ${topicData.financialScore>=3.5?'high':topicData.financialScore>=2?'med':'low'}">${topicData.financialScore.toFixed(1)}/5</span>
+        </div>
+        <div style="height:1px;background:var(--cd);margin:4px 0"></div>
+        <div class="tp-completion">
+          <span class="tp-comp-pct">${comp.pct}%</span>
+          <span class="tp-comp-l">${comp.done}/${comp.total} DR</span>
+        </div>
+      </div>
+      ` : `<div class="tp-completion"><span class="tp-comp-pct">${comp.pct}%</span><span class="tp-comp-l">${comp.done}/${comp.total} DR</span></div>`}
+    </div>
+  `;
+
+  // Tab bar
+  const tabs = [
+    {id:'gov',label:'Governance & Policy',icon:'🏛'},
+    {id:'actions',label:'Azioni & Piani',icon:'⚡'},
+    {id:'targets',label:'Target & KPI',icon:'🎯'},
+    {id:'metrics',label:'Metriche',icon:'📊'},
+  ];
+
+  document.getElementById('tabBar').innerHTML = tabs.map(t=>{
+    const c = calcTabCompletion(topicId, t.id);
+    const hasDRs = (struct[t.id]||[]).length > 0;
+    if(!hasDRs) return '';
+    const isActive = t.id === currentTab;
+    return `<button class="tab-btn ${isActive?'active':''}" onclick="switchTab('${t.id}')" data-tab="${t.id}">
+      ${t.icon} ${t.label}
+      <span class="${isActive?'tab-count':'tab-count'}">${c.done}/${c.total}</span>
+    </button>`;
+  }).join('');
+
+  renderTabContent();
+}
+
+function switchTab(tabId){
+  currentTab = tabId;
+  document.querySelectorAll('.tab-btn').forEach(b=>{
+    b.classList.toggle('active', b.dataset.tab === tabId);
+  });
+  renderTabContent();
+  window.scrollTo({top:200,behavior:'smooth'});
+}
+
+function renderTabContent(){
+  const struct = TOPIC_STRUCTURE[currentTopicId];
+  if(!struct) return;
+  const drIds = struct[currentTab] || [];
+
+  const html = `<div class="tab-panel active tab-grid">
+    ${drIds.map((drId, idx) => renderDRCard(currentTopicId, drId, idx)).join('')}
+    ${drIds.length === 0 ? '<div style="text-align:center;padding:40px;color:var(--inkm);font-size:.85rem">Nessuna disclosure requirement per questa tab.</div>' : ''}
+  </div>`;
+
+  document.getElementById('tabContent').innerHTML = html;
+  attachDREvents();
+}
+
+function renderDRCard(topicId, drId, idx){
+  const dr = DR_CATALOG[drId];
+  if(!dr) return '';
+  const isDone = calcDRCompletion(topicId, drId);
+  const type = dr.type || 'narrative';
+
+  return `<div class="dr-card ${isDone?'compiled':''}" data-drid="${drId}" data-topicid="${topicId}" style="animation-delay:${idx*0.05}s">
+    <div class="dr-head" onclick="toggleDR('${drId}')">
+      <span class="dr-code">${drId}</span>
+      <span class="dr-label">${dr.label}</span>
+      ${dr.mandatory ? '<span class="dr-mandatory">Obbligatorio</span>' : '<span class="dr-optional">Volontario</span>'}
+      <div class="dr-status">${isDone?'<svg width="9" height="7" viewBox="0 0 10 8"><path d="M1 4L4 7L9 1" stroke="white" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>':''}</div>
+      <div class="dr-tog"><svg width="11" height="7" viewBox="0 0 12 8" fill="none"><path d="M1 1.5L6 6.5L11 1.5" stroke="var(--inkm)" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+    </div>
+    <div class="dr-body">
+      <div class="dr-ref">
+        <span>Riferimento normativo:</span>
+        <span class="dr-ref-chip">${dr.ref||drId}</span>
+      </div>
+      <div class="dr-hint">${dr.hint||''}</div>
+      ${renderDRContent(topicId, drId, dr)}
+    </div>
+  </div>`;
+}
+
+function renderDRContent(topicId, drId, dr){
+  const type = dr.type || 'narrative';
+  const st = getDRState(topicId, drId);
+
+  switch(type){
+    case 'narrative': return renderNarrative(topicId, drId, dr, st);
+    case 'action_list': return renderActionList(topicId, drId, dr, st);
+    case 'target_list': return renderTargetList(topicId, drId, dr, st);
+    case 'metric': return renderMetricTable(topicId, drId, dr, st);
+    case 'headcount': return renderHeadcount(topicId, drId, dr, st);
+    default: return renderNarrative(topicId, drId, dr, st);
+  }
+}
+
+function renderNarrative(topicId, drId, dr, st){
+  const val = st.narrative || '';
+  const words = val.trim() ? val.trim().split(/\s+/).length : 0;
+  return `<div>
+    <label style="font-size:.76rem;font-weight:600;color:var(--inks);display:block;margin-bottom:6px">Testo della disclosure</label>
+    <textarea class="narr-ta" data-topicid="${topicId}" data-drid="${drId}" data-field="narrative" rows="6" placeholder="${dr.placeholder||'Inserire il testo della disclosure...'}">${val}</textarea>
+    <div class="ta-footer">
+      <span class="ta-wc" id="wc-${drId}">${words} parole</span>
+      <span class="ta-save" id="saved-${drId}" style="opacity:0">✓ Salvato</span>
+    </div>
+  </div>`;
+}
+
+function renderActionList(topicId, drId, dr, st){
+  const actions = st.actions || [];
+  const statusOpts = ['Pianificata','In corso','Completata','Sospesa'].map(s=>
+    `<option value="${s}" ${(s===st)}>s</option>`).join('');
+
+  const actionsHtml = actions.map((a,i)=>`
+    <div class="action-item" data-action="${i}">
+      <div class="action-item-head">
+        <div class="action-num">${i+1}</div>
+        <input class="action-title-inp" data-topicid="${topicId}" data-drid="${drId}" data-idx="${i}" data-afield="title" value="${escHtml(a.title||'')}" placeholder="Titolo dell'azione...">
+        <select class="action-status-sel" data-topicid="${topicId}" data-drid="${drId}" data-idx="${i}" data-afield="status">
+          <option value="Pianificata" ${a.status==='Pianificata'?'selected':''}>🟡 Pianificata</option>
+          <option value="In corso" ${a.status==='In corso'?'selected':''}>🔵 In corso</option>
+          <option value="Completata" ${a.status==='Completata'?'selected':''}>🟢 Completata</option>
+          <option value="Sospesa" ${a.status==='Sospesa'?'selected':''}>⚫ Sospesa</option>
+        </select>
+        <button class="action-del" onclick="deleteAction('${topicId}','${drId}',${i})">×</button>
+      </div>
+      <div class="fg c2" style="margin-top:8px">
+        <div class="f">
+          <label>Descrizione</label>
+          <textarea class="narr-ta" style="min-height:60px" data-topicid="${topicId}" data-drid="${drId}" data-idx="${i}" data-afield="desc" placeholder="Descrivere l'azione nel dettaglio...">${escHtml(a.desc||'')}</textarea>
+        </div>
+        <div class="f">
+          <label>Responsabile</label>
+          <input class="inp" data-topicid="${topicId}" data-drid="${drId}" data-idx="${i}" data-afield="responsible" value="${escHtml(a.responsible||'')}" placeholder="Es. Direttore HSE">
+          <label style="margin-top:8px">Risorse allocate (€)</label>
+          <input class="inp" type="number" data-topicid="${topicId}" data-drid="${drId}" data-idx="${i}" data-afield="resources" value="${a.resources||''}" placeholder="0">
+          <label style="margin-top:8px">Scadenza</label>
+          <input class="inp" type="date" data-topicid="${topicId}" data-drid="${drId}" data-idx="${i}" data-afield="deadline" value="${a.deadline||''}">
+        </div>
+      </div>
+    </div>`).join('');
+
+  return `<div>
+    <div class="action-list">${actionsHtml}</div>
+    <button class="btn-add-item" onclick="addAction('${topicId}','${drId}')">
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1v10M1 6h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      Aggiungi azione
+    </button>
+  </div>`;
+}
+
+function renderTargetList(topicId, drId, dr, st){
+  const targets = st.targets || [];
+
+  const targetsHtml = targets.map((t,i)=>{
+    const progress = t.baseline && t.target && t.current 
+      ? Math.min(100, Math.round(((t.current - t.baseline) / (t.target - t.baseline)) * 100))
+      : 0;
+    return `<div class="target-item" data-target="${i}">
+      <div class="fg c2">
+        <div class="f">
+          <label>Nome obiettivo</label>
+          <input class="inp" data-topicid="${topicId}" data-drid="${drId}" data-idx="${i}" data-tfield="name" value="${escHtml(t.name||'')}" placeholder="Es. Riduzione emissioni Scope 1+2">
+        </div>
+        <div class="f">
+          <label>Unità di misura</label>
+          <input class="inp" data-topicid="${topicId}" data-drid="${drId}" data-idx="${i}" data-tfield="unit" value="${escHtml(t.unit||'')}" placeholder="Es. % vs 2019 baseline">
+        </div>
+      </div>
+      <div class="fg c3" style="margin-top:8px">
+        <div class="f">
+          <label>Valore baseline</label>
+          <input class="inp" type="number" data-topicid="${topicId}" data-drid="${drId}" data-idx="${i}" data-tfield="baseline" value="${t.baseline||''}" placeholder="100">
+          <span class="hint">Anno: <input style="width:55px;border:none;background:transparent;font-family:'DM Mono',monospace;font-size:.76rem" data-topicid="${topicId}" data-drid="${drId}" data-idx="${i}" data-tfield="baseYear" value="${t.baseYear||2019}" placeholder="2019"></span>
+        </div>
+        <div class="f">
+          <label>Valore target</label>
+          <input class="inp" type="number" data-topicid="${topicId}" data-drid="${drId}" data-idx="${i}" data-tfield="target" value="${t.target||''}" placeholder="50">
+          <span class="hint">Anno: <input style="width:55px;border:none;background:transparent;font-family:'DM Mono',monospace;font-size:.76rem" data-topicid="${topicId}" data-drid="${drId}" data-idx="${i}" data-tfield="targetYear" value="${t.targetYear||2030}" placeholder="2030"></span>
+        </div>
+        <div class="f">
+          <label>Valore attuale</label>
+          <input class="inp" type="number" data-topicid="${topicId}" data-drid="${drId}" data-idx="${i}" data-tfield="current" value="${t.current||''}" placeholder="75">
+          <span class="hint">Anno: ${dmaData.m1?.year||2024}</span>
+        </div>
+      </div>
+      ${t.baseline && t.target ? `
+      <div class="target-progress-wrap">
+        <div style="display:flex;justify-content:space-between;font-size:.7rem;color:var(--inkm)">
+          <span>Avanzamento verso il target</span><span style="font-family:'DM Mono',monospace;color:var(--g700)">${Math.max(0,progress)}%</span>
+        </div>
+        <div class="target-progress-bar"><div class="target-progress-fill" style="width:${Math.max(0,progress)}%"></div></div>
+      </div>` : ''}
+      <button class="action-del" style="margin-top:8px" onclick="deleteTarget('${topicId}','${drId}',${i})">× Rimuovi obiettivo</button>
+    </div>`;
+  }).join('');
+
+  return `<div>
+    <div>${targetsHtml}</div>
+    <button class="btn-add-item" onclick="addTarget('${topicId}','${drId}')">
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1v10M1 6h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      Aggiungi obiettivo
+    </button>
+  </div>`;
+}
+
+function renderMetricTable(topicId, drId, dr, st){
+  const metrics = st.metrics || {};
+  const rows = dr.rows || [];
+  const monthly = dr.monthly;
+  const uploadType = dr.uploadType;
+  const year = dmaData.m1?.year || 2024;
+
+  // Upload zone
+  let uploadHtml = '';
+  if(uploadType){
+    const typeLabels = {energy:'bollette energetiche',water:'bollette idriche'};
+    const uploads = st.uploads || [];
+    const uploadsList = uploads.map((u,i)=>`
+      <div class="upload-item">
+        <span class="upload-item-ic">📄</span>
+        <div class="upload-item-info">
+          <div class="upload-item-name">${escHtml(u.filename||'Documento')}</div>
+          <div class="upload-item-meta">${u.period||'—'} · Estratto con AI</div>
+        </div>
+        <span class="upload-item-val">${u.value ? u.value.toLocaleString('it-IT') : '—'} ${dr.monthlyUnit||''}</span>
+        <button class="upload-item-del" onclick="removeUpload('${topicId}','${drId}',${i})">×</button>
+      </div>`).join('');
+
+    uploadHtml = `
+      <div class="upload-section">
+        <div class="upload-section-title">
+          <div class="ust-ic"><svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M7 1l4 4H8v5H6V5H3L7 1z" fill="white"/><path d="M1 11v1a1 1 0 001 1h10a1 1 0 001-1v-1" stroke="white" stroke-width="1.2" stroke-linecap="round"/></svg></div>
+          <h4>Carica ${typeLabels[uploadType]||'documenti'}</h4>
+          <span>· Estrazione automatica con AI</span>
+        </div>
+        <div class="upload-zone" id="dropzone-${drId}" onclick="document.getElementById('file-${drId}').click()" 
+          ondragover="event.preventDefault();this.classList.add('dragover')" 
+          ondragleave="this.classList.remove('dragover')"
+          ondrop="handleDrop(event,'${topicId}','${drId}','${uploadType}')">
+          <input type="file" id="file-${drId}" accept=".pdf,.jpg,.jpeg,.png" multiple style="display:none"
+            onchange="handleFileSelect(event,'${topicId}','${drId}','${uploadType}')">
+          <div class="upload-zone-ic">📂</div>
+          <p>Trascina qui le <strong>${typeLabels[uploadType]||'bollette'}</strong> oppure<br>
+          <button class="btn-upload" onclick="event.stopPropagation();document.getElementById('file-${drId}').click()">Scegli file</button></p>
+          <p style="margin-top:6px;font-size:.7rem;color:#B45309">PDF, JPG, PNG · Max 10MB per file · AI estrae i dati automaticamente</p>
+        </div>
+        ${uploads.length > 0 ? `<div class="uploads-list">${uploadsList}</div>` : ''}
+      </div>`;
+  }
+
+  // Monthly table
+  let monthlyHtml = '';
+  if(monthly){
+    const monthlyData = st.monthly || {};
+    const monthVals = MONTHS_IT.map(m => {
+      const key = `${String(MONTHS_IT.indexOf(m)+1).padStart(2,'0')}/${year}`;
+      return monthlyData[key] || {value:'',source:'manual'};
+    });
+    const totalVal = monthVals.reduce((s,m) => s + (parseFloat(m.value)||0), 0);
+
+    monthlyHtml = `
+      <div style="margin-bottom:14px">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+          <span style="font-size:.76rem;font-weight:600;color:var(--inks)">Dettaglio mensile ${year}</span>
+          <span style="font-size:.7rem;color:var(--inkm)">Il totale annuo viene calcolato automaticamente</span>
+        </div>
+        <table class="monthly-table">
+          <thead>
+            <tr>
+              ${MONTHS_IT.map(m=>`<th>${m}</th>`).join('')}
+              <th style="background:var(--g50);color:var(--g700)">Totale</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              ${MONTHS_IT.map((m,mi)=>{
+                const key = `${String(mi+1).padStart(2,'0')}/${year}`;
+                const d = monthlyData[key] || {};
+                const ok = !!d.value;
+                return `<td>
+                  <div style="display:flex;flex-direction:column;align-items:center;gap:3px">
+                    <span class="month-status ${ok?'ok':'empty'}"></span>
+                    <input class="month-val-inp" type="number" min="0" 
+                      data-topicid="${topicId}" data-drid="${drId}" data-month="${key}" 
+                      value="${d.value||''}" placeholder="0">
+                    ${d.source==='upload'?'<span style="font-size:.58rem;color:var(--g700)">📄</span>':''}
+                  </div>
+                </td>`;
+              }).join('')}
+              <td class="total-row" style="white-space:nowrap">
+                <strong id="monthly-total-${drId}">${totalVal.toLocaleString('it-IT')}</strong>
+                <span style="font-size:.65rem;font-weight:400"> ${dr.monthlyUnit||''}</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>`;
+  }
+
+  // Main metric table
+  const tableRows = rows.map(r => {
+    if(r.computed){
+      const computedVal = computeMetric(r.formula, metrics);
+      return `<tr class="metric-row-computed">
+        <td>${r.label}</td>
+        <td><span class="metric-val-computed">${computedVal !== null ? computedVal.toFixed(1) : '—'}</span></td>
+        <td class="metric-unit">${r.unit}</td>
+        <td></td>
+      </tr>`;
+    }
+    if(r.type === 'text'){
+      return `<tr class="metric-row-fixed">
+        <td>${r.label}</td>
+        <td colspan="2"><input class="inp" style="font-size:.8rem" data-topicid="${topicId}" data-drid="${drId}" data-metricid="${r.id}" value="${escHtml(metrics[r.id]||'')}" placeholder="—"></td>
+        <td></td>
+      </tr>`;
+    }
+    return `<tr class="metric-row-fixed">
+      <td>${r.label}</td>
+      <td><input class="metric-inp" type="number" min="0" data-topicid="${topicId}" data-drid="${drId}" data-metricid="${r.id}" value="${metrics[r.id]||''}" placeholder="0"></td>
+      <td class="metric-unit">${r.unit}</td>
+      <td></td>
+    </tr>`;
+  });
+
+  // Custom rows
+  const customRows = (st.customRows || []).map((cr,i)=>`
+    <tr class="metric-row-custom">
+      <td><input value="${escHtml(cr.label||'')}" data-topicid="${topicId}" data-drid="${drId}" data-cridx="${i}" data-crfield="label" placeholder="Nome metrica..." style="width:100%;border:none;background:transparent;font-family:'DM Sans',sans-serif;font-size:.82rem;outline:none"></td>
+      <td><input class="metric-inp" type="number" data-topicid="${topicId}" data-drid="${drId}" data-cridx="${i}" data-crfield="value" value="${cr.value||''}" placeholder="0"></td>
+      <td><input style="width:70px;border:none;background:transparent;font-family:'DM Mono',monospace;font-size:.72rem;color:var(--inkm);outline:none" data-topicid="${topicId}" data-drid="${drId}" data-cridx="${i}" data-crfield="unit" value="${escHtml(cr.unit||'')}" placeholder="unità"></td>
+      <td><button class="metric-del-row" onclick="deleteCustomRow('${topicId}','${drId}',${i})">×</button></td>
+    </tr>`).join('');
+
+  const methodNote = dr.showMethodology ? `
+    <div class="method-note">
+      <label>Metodologia di calcolo e fonte dati</label>
+      <textarea data-topicid="${topicId}" data-drid="${drId}" data-field="methodology" placeholder="Specificare la metodologia utilizzata per il calcolo (es. GHG Protocol, DEFRA emission factors, anno di riferimento fattori di emissione)...">${escHtml(st.methodology||'')}</textarea>
+    </div>` : '';
+
+  return `<div>
+    ${uploadHtml}
+    ${monthlyHtml}
+    <div class="metric-table-wrap">
+      <table class="metric-table">
+        <thead><tr><th>Datapoint</th><th>Valore ${year}</th><th>Unità</th><th></th></tr></thead>
+        <tbody>
+          ${tableRows.join('')}
+          ${customRows}
+        </tbody>
+      </table>
+      <button class="metric-add-row" onclick="addCustomRow('${topicId}','${drId}')">
+        <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M5 1v8M1 5h8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+        Aggiungi datapoint personalizzato
+      </button>
+    </div>
+    ${methodNote}
+  </div>`;
+}
+
+function renderHeadcount(topicId, drId, dr, st){
+  const hc = st.headcount || {};
+  const uploadType = dr.uploadType;
+  const year = dmaData.m1?.year || 2024;
+  const uploads = st.uploads || [];
+  const uploadsList = uploads.map((u,i)=>`
+    <div class="upload-item">
+      <span class="upload-item-ic">📄</span>
+      <div class="upload-item-info">
+        <div class="upload-item-name">${escHtml(u.filename||'Cedolino/LUL')}</div>
+        <div class="upload-item-meta">${u.period||'—'} · Estratto con AI</div>
+      </div>
+      <span class="upload-item-val">${u.total||0} FTE</span>
+      <button class="upload-item-del" onclick="removeUpload('${topicId}','${drId}',${i})">×</button>
+    </div>`).join('');
+
+  const cats = ['Dirigenti','Quadri','Impiegati','Operai'];
+
+  return `<div>
+    <div class="upload-section">
+      <div class="upload-section-title">
+        <div class="ust-ic"><svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M7 1l4 4H8v5H6V5H3L7 1z" fill="white"/><path d="M1 11v1a1 1 0 001 1h10a1 1 0 001-1v-1" stroke="white" stroke-width="1.2" stroke-linecap="round"/></svg></div>
+        <h4>Carica cedolini / LUL</h4>
+        <span>· AI estrae headcount, genere, contratti</span>
+      </div>
+      <div class="upload-zone" onclick="document.getElementById('file-${drId}').click()"
+        ondragover="event.preventDefault();this.classList.add('dragover')" 
+        ondragleave="this.classList.remove('dragover')"
+        ondrop="handleDrop(event,'${topicId}','${drId}','personnel')">
+        <input type="file" id="file-${drId}" accept=".pdf,.jpg,.jpeg,.png" multiple style="display:none"
+          onchange="handleFileSelect(event,'${topicId}','${drId}','personnel')">
+        <div class="upload-zone-ic">👥</div>
+        <p>Trascina i <strong>cedolini, LUL o report HR</strong> mensili<br>
+        <button class="btn-upload" onclick="event.stopPropagation();document.getElementById('file-${drId}').click()">Scegli file</button></p>
+      </div>
+      ${uploads.length > 0 ? `<div class="uploads-list">${uploadsList}</div>` : ''}
+    </div>
+
+    <div style="margin-bottom:14px">
+      <div style="font-size:.76rem;font-weight:600;color:var(--inks);margin-bottom:10px">Tabella headcount per categoria — Anno ${year}</div>
+      <table class="headcount-table">
+        <thead>
+          <tr>
+            <th style="text-align:left">Categoria</th>
+            <th>Totale</th>
+            <th>Donne</th>
+            <th>Uomini</th>
+            <th>Tempo ind.</th>
+            <th>Tempo det.</th>
+            <th>Full-time</th>
+            <th>Part-time</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${cats.map(cat=>{
+            const k = cat.toLowerCase().replace(/ì/,'i');
+            const row = (hc.categories||{})[k] || {};
+            return `<tr>
+              <td>${cat}</td>
+              ${['total','women','men','permanent','temporary','fulltime','parttime'].map(f=>`
+              <td><input class="hc-inp" type="number" min="0" data-topicid="${topicId}" data-drid="${drId}" data-cat="${k}" data-hcfield="${f}" value="${row[f]||''}" placeholder="0"></td>`).join('')}
+            </tr>`;
+          }).join('')}
+          <tr class="grand-total">
+            <td>TOTALE</td>
+            ${['total','women','men','permanent','temporary','fulltime','parttime'].map(f=>`
+            <td id="hc-tot-${drId}-${f}">—</td>`).join('')}
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="fg c2" style="margin-top:8px">
+      <div class="f">
+        <label>% lavoratori in IT</label>
+        <input class="inp" type="number" min="0" max="100" data-topicid="${topicId}" data-drid="${drId}" data-hcsingle="pct_it" value="${hc.pct_it||''}" placeholder="0">
+      </div>
+      <div class="f">
+        <label>% lavoratori in altri paesi UE</label>
+        <input class="inp" type="number" min="0" max="100" data-topicid="${topicId}" data-drid="${drId}" data-hcsingle="pct_eu" value="${hc.pct_eu||''}" placeholder="0">
+      </div>
+    </div>
+  </div>`;
+}
+
+function computeMetric(formula, metrics){
+  if(!formula) return null;
+  const parts = formula.split(':');
+  if(parts[0] === 'pct'){
+    const num = parseFloat(metrics[parts[1]]) || 0;
+    const den = parseFloat(metrics[parts[2]]) || 0;
+    return den > 0 ? (num / den * 100) : null;
+  }
+  if(parts[0] === 'sum'){
+    return parts.slice(1).reduce((s,k) => s + (parseFloat(metrics[k])||0), 0);
+  }
+  return null;
+}
+
+// ══════════════════════════════════════════════
+//  EVENT ATTACHMENT
+// ══════════════════════════════════════════════
+function attachDREvents(){
+  // Narrative textareas
+  document.querySelectorAll('.narr-ta[data-field="narrative"]').forEach(ta=>{
+    ta.addEventListener('input', () => {
+      const {topicid, drid} = ta.dataset;
+      const words = ta.value.trim() ? ta.value.trim().split(/\s+/).length : 0;
+      const wcEl = document.getElementById('wc-'+drid);
+      if(wcEl) wcEl.textContent = words + ' parole';
+      setDRValue(topicid, drid, 'narrative', ta.value);
+      refreshDRStatus(topicid, drid);
+      const savedEl = document.getElementById('saved-'+drid);
+      if(savedEl){ savedEl.style.opacity='1'; setTimeout(()=>savedEl.style.opacity='0',1500); }
+    });
+  });
+
+  // Methodology textareas
+  document.querySelectorAll('[data-field="methodology"]').forEach(ta=>{
+    ta.addEventListener('input', () => {
+      setDRValue(ta.dataset.topicid, ta.dataset.drid, 'methodology', ta.value);
+    });
+  });
+
+  // Metric inputs
+  document.querySelectorAll('.metric-inp[data-metricid]').forEach(inp=>{
+    inp.addEventListener('change', () => {
+      const {topicid, drid, metricid} = inp.dataset;
+      const st = getDRState(topicid, drid);
+      if(!st.metrics) st.metrics = {};
+      st.metrics[metricid] = parseFloat(inp.value) || 0;
+      saveState();
+      refreshDRStatus(topicid, drid);
+      updateComputedCells(topicid, drid);
+    });
+  });
+
+  // Text metric inputs
+  document.querySelectorAll('.inp[data-metricid]').forEach(inp=>{
+    inp.addEventListener('change', () => {
+      const {topicid, drid, metricid} = inp.dataset;
+      const st = getDRState(topicid, drid);
+      if(!st.metrics) st.metrics = {};
+      st.metrics[metricid] = inp.value;
+      saveState();
+      refreshDRStatus(topicid, drid);
+    });
+  });
+
+  // Monthly inputs
+  document.querySelectorAll('.month-val-inp').forEach(inp=>{
+    inp.addEventListener('change', () => {
+      const {topicid, drid, month} = inp.dataset;
+      const st = getDRState(topicid, drid);
+      if(!st.monthly) st.monthly = {};
+      st.monthly[month] = {value: parseFloat(inp.value)||0, source:'manual'};
+      saveState();
+      updateMonthlyTotal(topicid, drid);
+      // Sync to main metric if applicable
+      syncMonthlyToMetric(topicid, drid);
+    });
+  });
+
+  // Action fields
+  document.querySelectorAll('[data-afield]').forEach(el=>{
+    el.addEventListener('change', () => {
+      const {topicid, drid, idx, afield} = el.dataset;
+      const st = getDRState(topicid, drid);
+      if(!st.actions) st.actions = [];
+      if(!st.actions[parseInt(idx)]) st.actions[parseInt(idx)] = {};
+      st.actions[parseInt(idx)][afield] = el.value;
+      saveState();
+      refreshDRStatus(topicid, drid);
+    });
+    el.addEventListener('input', () => el.dispatchEvent(new Event('change')));
+  });
+
+  // Target fields
+  document.querySelectorAll('[data-tfield]').forEach(el=>{
+    el.addEventListener('change', () => {
+      const {topicid, drid, idx, tfield} = el.dataset;
+      const st = getDRState(topicid, drid);
+      if(!st.targets) st.targets = [];
+      if(!st.targets[parseInt(idx)]) st.targets[parseInt(idx)] = {};
+      const val = el.type === 'number' ? (parseFloat(el.value)||0) : el.value;
+      st.targets[parseInt(idx)][tfield] = val;
+      saveState();
+      refreshDRStatus(topicid, drid);
+    });
+    el.addEventListener('input', () => el.dispatchEvent(new Event('change')));
+  });
+
+  // Custom row fields
+  document.querySelectorAll('[data-cridx]').forEach(el=>{
+    el.addEventListener('change', () => {
+      const {topicid, drid, cridx, crfield} = el.dataset;
+      const st = getDRState(topicid, drid);
+      if(!st.customRows) st.customRows = [];
+      if(!st.customRows[parseInt(cridx)]) st.customRows[parseInt(cridx)] = {};
+      st.customRows[parseInt(cridx)][crfield] = el.value;
+      saveState();
+    });
+    el.addEventListener('input', () => el.dispatchEvent(new Event('change')));
+  });
+
+  // Headcount inputs
+  document.querySelectorAll('[data-hcfield]').forEach(inp=>{
+    inp.addEventListener('change', () => {
+      const {topicid, drid, cat, hcfield} = inp.dataset;
+      const st = getDRState(topicid, drid);
+      if(!st.headcount) st.headcount = {categories:{}};
+      if(!st.headcount.categories) st.headcount.categories = {};
+      if(!st.headcount.categories[cat]) st.headcount.categories[cat] = {};
+      st.headcount.categories[cat][hcfield] = parseInt(inp.value)||0;
+      saveState();
+      refreshDRStatus(topicid, drid);
+      updateHeadcountTotals(topicid, drid);
+    });
+  });
+
+  document.querySelectorAll('[data-hcsingle]').forEach(inp=>{
+    inp.addEventListener('change', () => {
+      const {topicid, drid, hcsingle} = inp.dataset;
+      const st = getDRState(topicid, drid);
+      if(!st.headcount) st.headcount = {};
+      st.headcount[hcsingle] = parseFloat(inp.value)||0;
+      saveState();
+    });
+  });
+}
+
+function refreshDRStatus(topicId, drId){
+  const isDone = calcDRCompletion(topicId, drId);
+  const card = document.querySelector(`.dr-card[data-drid="${drId}"]`);
+  if(!card) return;
+  card.classList.toggle('compiled', isDone);
+  const statusEl = card.querySelector('.dr-status');
+  if(statusEl){
+    statusEl.innerHTML = isDone ? '<svg width="9" height="7" viewBox="0 0 10 8"><path d="M1 4L4 7L9 1" stroke="white" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>' : '';
+  }
+  updateTabCounters();
+}
+
+function updateTabCounters(){
+  document.querySelectorAll('.tab-btn').forEach(btn=>{
+    const tab = btn.dataset.tab;
+    if(!tab || !currentTopicId) return;
+    const c = calcTabCompletion(currentTopicId, tab);
+    const countEl = btn.querySelector('.tab-count');
+    if(countEl) countEl.textContent = `${c.done}/${c.total}`;
+  });
+}
+
+function updateComputedCells(topicId, drId){
+  // re-render just metric table (cheaper than full re-render)
+  const dr = DR_CATALOG[drId];
+  if(!dr || !dr.rows) return;
+  const st = getDRState(topicId, drId);
+  const metrics = st.metrics || {};
+  dr.rows.filter(r=>r.computed).forEach(r=>{
+    const val = computeMetric(r.formula, metrics);
+    const cells = document.querySelectorAll(`.metric-row-computed`);
+    // Find the right cell by traversing
+  });
+}
+
+function updateMonthlyTotal(topicId, drId){
+  const st = getDRState(topicId, drId);
+  const year = dmaData.m1?.year || 2024;
+  const monthlyData = st.monthly || {};
+  const total = Object.values(monthlyData).reduce((s,m)=>s+(parseFloat(m.value)||0),0);
+  const el = document.getElementById(`monthly-total-${drId}`);
+  if(el) el.textContent = total.toLocaleString('it-IT');
+  // Sync to first metric row if applicable
+  syncMonthlyToMetric(topicId, drId);
+}
+
+function syncMonthlyToMetric(topicId, drId){
+  const dr = DR_CATALOG[drId];
+  if(!dr || !dr.monthlyMetric) return;
+  const st = getDRState(topicId, drId);
+  const monthlyData = st.monthly || {};
+  const total = Object.values(monthlyData).reduce((s,m)=>s+(parseFloat(m.value)||0),0);
+  if(!st.metrics) st.metrics = {};
+  st.metrics[dr.monthlyMetric] = total;
+  saveState();
+  // Update the input field in the metric table
+  const inp = document.querySelector(`[data-metricid="${dr.monthlyMetric}"]`);
+  if(inp) inp.value = total || '';
+}
+
+function updateHeadcountTotals(topicId, drId){
+  const st = getDRState(topicId, drId);
+  const cats = st.headcount?.categories || {};
+  const fields = ['total','women','men','permanent','temporary','fulltime','parttime'];
+  fields.forEach(f=>{
+    const tot = Object.values(cats).reduce((s,c)=>s+(parseInt(c[f])||0),0);
+    const el = document.getElementById(`hc-tot-${drId}-${f}`);
+    if(el) el.textContent = tot.toLocaleString('it-IT');
+  });
+}
+
+// ══ DR TOGGLE ══
+function toggleDR(drId){
+  const card = document.querySelector(`.dr-card[data-drid="${drId}"]`);
+  if(!card) return;
+  const isOpen = card.classList.contains('open');
+  // Close all others
+  document.querySelectorAll('.dr-card.open').forEach(c=>c.classList.remove('open'));
+  if(!isOpen) card.classList.add('open');
+}
+
+// ══ ACTION CRUD ══
+function addAction(topicId, drId){
+  const st = getDRState(topicId, drId);
+  if(!st.actions) st.actions = [];
+  st.actions.push({title:'',desc:'',status:'Pianificata',responsible:'',resources:'',deadline:''});
+  saveState();
+  renderTabContent();
+  openDR(drId);
+}
+
+function deleteAction(topicId, drId, idx){
+  const st = getDRState(topicId, drId);
+  if(st.actions) st.actions.splice(idx,1);
+  saveState();
+  renderTabContent();
+  openDR(drId);
+}
+
+// ══ TARGET CRUD ══
+function addTarget(topicId, drId){
+  const st = getDRState(topicId, drId);
+  if(!st.targets) st.targets = [];
+  st.targets.push({name:'',unit:'',baseline:'',baseYear:2019,target:'',targetYear:2030,current:''});
+  saveState();
+  renderTabContent();
+  openDR(drId);
+}
+
+function deleteTarget(topicId, drId, idx){
+  const st = getDRState(topicId, drId);
+  if(st.targets) st.targets.splice(idx,1);
+  saveState();
+  renderTabContent();
+  openDR(drId);
+}
+
+// ══ CUSTOM ROW CRUD ══
+function addCustomRow(topicId, drId){
+  const st = getDRState(topicId, drId);
+  if(!st.customRows) st.customRows = [];
+  st.customRows.push({label:'',value:'',unit:''});
+  saveState();
+  renderTabContent();
+  openDR(drId);
+}
+
+function deleteCustomRow(topicId, drId, idx){
+  const st = getDRState(topicId, drId);
+  if(st.customRows) st.customRows.splice(idx,1);
+  saveState();
+  renderTabContent();
+  openDR(drId);
+}
+
+function openDR(drId){
+  setTimeout(()=>{
+    const card = document.querySelector(`.dr-card[data-drid="${drId}"]`);
+    if(card && !card.classList.contains('open')) card.classList.add('open');
+  }, 50);
+}
+
+// ══════════════════════════════════════════════
+//  UPLOAD & CLAUDE API
+// ══════════════════════════════════════════════
+function handleFileSelect(event, topicId, drId, uploadType){
+  const files = Array.from(event.target.files);
+  if(!files.length) return;
+  files.forEach(f => processUploadedFile(f, topicId, drId, uploadType));
+  event.target.value = ''; // reset
+}
+
+function handleDrop(event, topicId, drId, uploadType){
+  event.preventDefault();
+  const zone = document.getElementById('dropzone-'+drId);
+  if(zone) zone.classList.remove('dragover');
+  const files = Array.from(event.dataTransfer.files);
+  files.forEach(f => processUploadedFile(f, topicId, drId, uploadType));
+}
+
+async function processUploadedFile(file, topicId, drId, uploadType){
+  if(!apiKey){
+    showToast('API Key non configurata — imposta la chiave AI nelle impostazioni');
+    openApiModal();
+    return;
+  }
+  if(file.size > 10 * 1024 * 1024){
+    showToast('File troppo grande (max 10MB)');
+    return;
+  }
+
+  // Show extracting indicator
+  const zone = document.getElementById('dropzone-'+drId);
+  const indicator = document.createElement('div');
+  indicator.className = 'upload-extracting';
+  indicator.innerHTML = `<div class="spinner"></div> Estrazione AI in corso: <strong>${file.name}</strong>...`;
+  zone?.parentNode?.insertBefore(indicator, zone.nextSibling);
+
+  try {
+    const base64 = await fileToBase64(file);
+    const isImage = file.type.startsWith('image/');
+    const mediaType = file.type || (file.name.endsWith('.pdf') ? 'application/pdf' : 'image/jpeg');
+
+    const prompts = {
+      energy: `Sei un esperto di rendicontazione ESRS/CSRD. Analizza questo documento (bolletta energetica o report energetico). 
+Estrai SOLO i dati seguenti in formato JSON valido:
+{"total_kwh": numero_o_null, "renewable_kwh": numero_o_null, "period": "MM/YYYY_o_null", "supplier": "stringa_o_null", "notes": "eventuali_osservazioni"}
+Rispondi SOLO con il JSON puro, senza markdown, senza testo aggiuntivo.`,
+      water: `Sei un esperto di rendicontazione ESRS/CSRD. Analizza questa bolletta idrica.
+Estrai SOLO i dati seguenti in formato JSON valido:
+{"total_m3": numero_o_null, "period": "MM/YYYY_o_null", "supplier": "stringa_o_null", "notes": "eventuali_osservazioni"}
+Rispondi SOLO con il JSON puro, senza markdown, senza testo aggiuntivo.`,
+      personnel: `Sei un esperto di rendicontazione ESRS/CSRD. Analizza questo documento HR (cedolino, LUL, prospetto dipendenti).
+Estrai SOLO i dati seguenti in formato JSON valido:
+{"total": numero_o_null, "women": numero_o_null, "men": numero_o_null, "permanent": numero_o_null, "temporary": numero_o_null, "fulltime": numero_o_null, "parttime": numero_o_null, "period": "MM/YYYY_o_null", "notes": "eventuali_osservazioni"}
+Rispondi SOLO con il JSON puro, senza markdown, senza testo aggiuntivo.`,
+    };
+
+    const msgContent = isImage
+      ? [{type:'image',source:{type:'base64',media_type:mediaType,data:base64}},{type:'text',text:prompts[uploadType]}]
+      : [{type:'document',source:{type:'base64',media_type:'application/pdf',data:base64}},{type:'text',text:prompts[uploadType]}];
+
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01'},
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        messages: [{role:'user', content: msgContent}]
+      })
+    });
+
+    indicator.remove();
+
+    if(!response.ok){
+      const err = await response.json().catch(()=>({}));
+      throw new Error(err.error?.message || 'API error ' + response.status);
+    }
+
+    const data = await response.json();
+    const text = data.content.map(b=>b.text||'').join('').replace(/```json|```/g,'').trim();
+    const extracted = JSON.parse(text);
+
+    // Store the upload
+    const st = getDRState(topicId, drId);
+    if(!st.uploads) st.uploads = [];
+
+    if(uploadType === 'energy'){
+      const val = extracted.total_kwh ? extracted.total_kwh / 1000 : null; // Wh → kWh already, convert to MWh
+      st.uploads.push({filename:file.name, period:extracted.period||'—', value:extracted.total_kwh, renewableKwh:extracted.renewable_kwh, source:'upload'});
+      // Store in monthly if period available
+      if(extracted.period && st.uploads[st.uploads.length-1].value){
+        if(!st.monthly) st.monthly = {};
+        const mwhVal = (extracted.total_kwh||0)/1000;
+        st.monthly[extracted.period] = {value: mwhVal, source:'upload', filename:file.name};
+      }
+    } else if(uploadType === 'water'){
+      st.uploads.push({filename:file.name, period:extracted.period||'—', value:extracted.total_m3, source:'upload'});
+      if(extracted.period && extracted.total_m3){
+        if(!st.monthly) st.monthly = {};
+        st.monthly[extracted.period] = {value: extracted.total_m3, source:'upload', filename:file.name};
+      }
+    } else if(uploadType === 'personnel'){
+      st.uploads.push({filename:file.name, period:extracted.period||'—', total:extracted.total, data:extracted, source:'upload'});
+    }
+
+    saveState();
+    showToast(`✓ Dati estratti da ${file.name}`);
+    renderTabContent();
+    openDR(drId);
+
+  } catch(err){
+    indicator.remove();
+    console.error('Upload error:', err);
+    showToast('Errore estrazione AI: ' + (err.message||'Verifica la API Key'));
+  }
+}
+
+function removeUpload(topicId, drId, idx){
+  const st = getDRState(topicId, drId);
+  if(st.uploads) st.uploads.splice(idx,1);
+  saveState();
+  renderTabContent();
+  openDR(drId);
+}
+
+async function fileToBase64(file){
+  return new Promise((res,rej)=>{
+    const r = new FileReader();
+    r.onload = () => res(r.result.split(',')[1]);
+    r.onerror = () => rej(new Error('Read failed'));
+    r.readAsDataURL(file);
+  });
+}
+
+// ══════════════════════════════════════════════
+//  API KEY MODAL
+// ══════════════════════════════════════════════
+function openApiModal(){
+  document.getElementById('apiModal').classList.add('open');
+  document.getElementById('apiKeyInput').value = apiKey || '';
+}
+
+function closeApiModal(){
+  document.getElementById('apiModal').classList.remove('open');
+}
+
+function saveApiKey(){
+  const key = document.getElementById('apiKeyInput').value.trim();
+  if(key && !key.startsWith('sk-ant-') && !key.startsWith('sk-')){
+    showToast('API Key non valida — deve iniziare con sk-ant-');
+    return;
+  }
+  apiKey = key;
+  localStorage.setItem('gl_apikey', key);
+  closeApiModal();
+  const btn = document.getElementById('apiBtn');
+  if(btn){
+    btn.classList.toggle('configured', !!key);
+    btn.innerHTML = key 
+      ? `<svg width="11" height="11" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg> API Key ✓`
+      : `<svg width="11" height="11" viewBox="0 0 12 12" fill="none"><path d="M6 1a3 3 0 110 6 3 3 0 010-6zM2 11c0-2.21 1.79-4 4-4s4 1.79 4 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg> API Key`;
+  }
+  showToast(key ? '✓ API Key salvata' : 'API Key rimossa');
+}
+
+// ══ TOAST ══
+function showToast(msg, dur=3200){
+  const t = document.getElementById('toast');
+  document.getElementById('toastMsg').textContent = msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), dur);
+}
+
+// ══ UTILITY ══
+function escHtml(str){ 
+  return String(str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ══════════════════════════════════════════════
+//  INIT
+// ══════════════════════════════════════════════
+loadState();
+renderHub();
+
+// Check API key status
+if(apiKey){
+  const btn = document.getElementById('apiBtn');
+  if(btn){
+    btn.classList.add('configured');
+    btn.innerHTML = `<svg width="11" height="11" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg> API Key ✓`;
+  }
+}
+
+// Close modal on overlay click
+document.getElementById('apiModal').addEventListener('click', function(e){
+  if(e.target === this) closeApiModal();
+});
+</script>
+</body>
+</html>

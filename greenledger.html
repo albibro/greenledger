@@ -1,0 +1,2640 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GreenLedger — Double Materiality Assessment</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --g900:#0D3D25;--g800:#1A7A4A;--g700:#1E8F56;--g600:#22A463;
+  --g200:#A8DBBF;--g100:#D4EFE0;--g50:#EEF8F3;
+  --cream:#F7F4EE;--cd:#EDE9DF;--cdd:#DDD8CC;
+  --ink:#0F1C14;--inks:#3A4D40;--inkm:#6B7F72;
+  --white:#fff;
+  --amber:#D97706;--ambg:#FFFBEB;--ambb:#FDE68A;
+  --ic:#1A7A4A;--rc:#C2410C;--oc:#1D4ED8;
+  --ibg:#EEF8F3;--rbg:#FFF7ED;--obg:#EFF6FF;
+  --ibd:#A8DBBF;--rbd:#FED7AA;--obd:#BFDBFE;
+  --red:#DC2626;--redbg:#FEF2F2;
+  --sh1:0 1px 3px rgba(15,28,20,.07);
+  --sh2:0 4px 16px rgba(15,28,20,.10),0 2px 6px rgba(15,28,20,.06);
+  --sh3:0 16px 48px rgba(15,28,20,.14),0 4px 12px rgba(15,28,20,.08);
+  --r:12px;--rs:8px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--ink);min-height:100vh;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 80% 50% at 5% 10%,rgba(26,122,74,.05) 0%,transparent 60%),radial-gradient(ellipse 50% 40% at 95% 90%,rgba(29,78,216,.03) 0%,transparent 55%);pointer-events:none;z-index:0}
+
+/* ── SHARED HEADER ── */
+.hdr{position:sticky;top:0;z-index:200;background:rgba(247,244,238,.94);backdrop-filter:blur(12px);border-bottom:1px solid var(--cd)}
+.hdr-in{max-width:1260px;margin:0 auto;padding:0 36px;height:64px;display:flex;align-items:center;justify-content:space-between}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;cursor:pointer}
+.lmark{width:34px;height:34px;background:var(--g800);border-radius:10px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;flex-shrink:0}
+.lmark::before{content:'';position:absolute;bottom:-4px;left:-4px;width:26px;height:26px;background:rgba(255,255,255,.15);border-radius:50%}
+.lmark svg{position:relative;z-index:1}
+.ltxt{font-family:'Playfair Display',serif;font-weight:700;font-size:1.2rem;color:var(--g900);letter-spacing:-.02em}
+.ltxt span{color:var(--g800)}
+.hdr-r{display:flex;align-items:center;gap:14px}
+.ctx-pill{display:flex;align-items:center;gap:7px;background:var(--g50);border:1px solid var(--g200);border-radius:100px;padding:4px 12px;max-width:320px;overflow:hidden}
+.ctx-dot{width:7px;height:7px;border-radius:50%;background:var(--g600);flex-shrink:0;animation:pulse 2s ease-in-out infinite}
+.ctx-co{font-size:.78rem;font-weight:600;color:var(--g800);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ctx-nc{font-size:.72rem;color:var(--inkm);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:140px}
+.hdr-usr{width:34px;height:34px;border-radius:50%;background:var(--g100);border:2px solid var(--g200);display:flex;align-items:center;justify-content:center;font-size:.78rem;font-weight:600;color:var(--g800);cursor:pointer;flex-shrink:0}
+
+/* ── STEPPER ── */
+.sbar{background:var(--white);border-bottom:1px solid var(--cd);box-shadow:var(--sh1)}
+.sin{max-width:1260px;margin:0 auto;padding:0 36px;display:flex;height:52px}
+.stp{flex:1;display:flex;align-items:center;gap:8px;padding:0 14px;position:relative;cursor:default;transition:background .2s;min-width:0}
+.stp:not(:last-child)::after{content:'';position:absolute;right:0;top:50%;transform:translateY(-50%);width:1px;height:22px;background:var(--cd)}
+.stp.active{background:var(--g50)}.stp.done{cursor:pointer}.stp.done:hover{background:var(--g50)}
+.snum{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:700;font-family:'DM Mono',monospace;flex-shrink:0;transition:all .25s}
+.stp.pending .snum{background:var(--cdd);color:var(--inkm)}
+.stp.active .snum{background:var(--g800);color:var(--white);box-shadow:0 0 0 3px var(--g100)}
+.stp.done .snum{background:var(--g900);color:var(--white)}
+.slbl{display:flex;flex-direction:column;gap:1px;min-width:0}
+.slbl-n{font-size:.62rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--inkm)}
+.stp.active .slbl-n{color:var(--g700)}
+.slbl-t{font-size:.75rem;font-weight:500;color:var(--inkm);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:110px}
+.stp.active .slbl-t{color:var(--ink);font-weight:600}.stp.done .slbl-t{color:var(--inks)}
+
+/* ── MODULE WRAPPERS ── */
+.mod{display:none;max-width:1260px;margin:0 auto;padding:44px 36px 80px;position:relative;z-index:1}
+.mod.visible{display:block}
+.mod-grid{display:grid;grid-template-columns:1fr 320px;gap:28px;align-items:start}
+
+/* ── HERO ── */
+.hero{margin-bottom:28px;animation:fadeUp .45s ease both}
+.eyebrow{display:inline-flex;align-items:center;gap:6px;background:var(--g50);border:1px solid var(--g200);border-radius:100px;padding:4px 12px;font-size:.7rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--g700);margin-bottom:14px}
+.edot{width:6px;height:6px;border-radius:50%;background:var(--g600);animation:pulse 2s ease-in-out infinite}
+.hero h1{font-family:'Playfair Display',serif;font-size:2.1rem;font-weight:700;color:var(--g900);letter-spacing:-.03em;line-height:1.15;margin-bottom:8px}
+.hero p{font-size:.9rem;color:var(--inks);max-width:520px;line-height:1.65}
+
+/* ── FORM CARD ── */
+.fcard{background:var(--white);border:1px solid var(--cd);border-radius:18px;box-shadow:var(--sh2);overflow:hidden;animation:fadeUp .45s .08s ease both}
+.fcard-hd{padding:22px 28px 18px;border-bottom:1px solid var(--cd);background:linear-gradient(135deg,var(--g50) 0%,var(--white) 100%)}
+.fcard-hd h2{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:600;color:var(--g900)}
+.fcard-hd p{font-size:.78rem;color:var(--inkm);margin-top:3px}
+.fcard-body{padding:28px}
+
+/* ── FORM SECTIONS ── */
+.fsec{margin-bottom:28px}.fsec:last-child{margin-bottom:0}
+.sdiv{display:flex;align-items:center;gap:9px;margin-bottom:18px}
+.sdiv-ic{width:26px;height:26px;background:var(--g800);border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.sdiv-t{font-size:.76rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--inks)}
+.sdiv-l{flex:1;height:1px;background:var(--cd)}
+
+/* ── FIELDS ── */
+.fg{display:grid;gap:16px}.fg.c2{grid-template-columns:1fr 1fr}
+.f{display:flex;flex-direction:column;gap:5px}
+.f label{font-size:.78rem;font-weight:600;color:var(--inks)}
+.f label .req{color:var(--g700);margin-left:2px}
+.f label .hint{font-weight:400;color:var(--inkm);font-size:.73rem;margin-left:5px}
+.inp,.sel,.ta{appearance:none;background:var(--cream);border:1.5px solid var(--cd);border-radius:var(--rs);padding:9px 13px;font-family:'DM Sans',sans-serif;font-size:.86rem;color:var(--ink);transition:border-color .2s,box-shadow .2s,background .2s;outline:none;width:100%}
+.inp::placeholder,.ta::placeholder{color:var(--inkm)}
+.inp:focus,.sel:focus,.ta:focus{border-color:var(--g700);background:var(--white);box-shadow:0 0 0 3px rgba(26,122,74,.1)}
+.ta{resize:vertical;min-height:88px;line-height:1.55}
+.ferr{font-size:.72rem;color:var(--red);margin-top:2px;display:none}
+.f.err .inp,.f.err .sel{border-color:var(--red)}
+.f.err .ferr{display:block}
+
+/* ── NACE MULTI-SELECT ── */
+.nwrap{position:relative}
+.ndrop{position:absolute;top:calc(100% + 4px);left:0;right:0;background:var(--white);border:1.5px solid var(--g200);border-radius:var(--rs);box-shadow:var(--sh3);z-index:300;max-height:220px;overflow-y:auto;display:none}
+.ndrop.open{display:block}
+.nit{display:flex;align-items:flex-start;gap:9px;padding:9px 13px;cursor:pointer;transition:background .15s;border-bottom:1px solid var(--cream)}
+.nit:last-child{border-bottom:none}.nit:hover{background:var(--g50)}.nit.added{background:var(--g50)}
+.nc{font-family:'DM Mono',monospace;font-size:.72rem;font-weight:500;color:var(--g700);background:var(--g100);padding:2px 6px;border-radius:4px;flex-shrink:0;margin-top:1px}
+.nn{font-size:.8rem;color:var(--ink);line-height:1.35}.nd{font-size:.72rem;color:var(--inkm);margin-top:1px}
+.nadd{margin-left:auto;width:18px;height:18px;background:var(--g800);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;min-height:8px}
+.chip{display:inline-flex;align-items:center;gap:6px;background:var(--g50);border:1.5px solid var(--g200);border-radius:7px;padding:5px 9px;font-size:.78rem;font-weight:500;color:var(--g900)}
+.chip .cc{font-family:'DM Mono',monospace;font-size:.7rem;font-weight:600;color:var(--g700);background:var(--g100);padding:1px 5px;border-radius:3px}
+.chip .cpri{font-size:.65rem;font-weight:600;background:var(--g800);color:white;padding:1px 5px;border-radius:3px;text-transform:uppercase}
+.chip .cdel{width:16px;height:16px;border-radius:50%;background:var(--cdd);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--inkm);font-size:.85rem;transition:background .15s;padding:0;line-height:1}
+.chip .cdel:hover{background:var(--red);color:white}
+.chips-empty{font-size:.76rem;color:var(--inkm);font-style:italic}
+
+/* ── BIZ DESC ── */
+.bdesc{background:linear-gradient(135deg,var(--g50) 0%,rgba(247,244,238,.4) 100%);border:1.5px solid var(--g200);border-radius:var(--r);padding:18px}
+.bdesc-hd{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.bdesc-hd .bic{width:22px;height:22px;background:var(--g800);border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.bdesc-hd h3{font-size:.82rem;font-weight:700;color:var(--g900)}
+.bdesc-hd .ai-b{font-size:.65rem;font-weight:700;background:var(--g800);color:white;padding:1px 6px;border-radius:4px;text-transform:uppercase;letter-spacing:.05em}
+.bdesc-hint{font-size:.76rem;color:var(--inkm);line-height:1.6;margin-bottom:12px;padding-left:30px}
+.bdesc-hint strong{color:var(--g800)}
+.ccount{font-size:.7rem;color:var(--inkm);text-align:right;margin-top:4px;font-family:'DM Mono',monospace}
+
+/* ── SIZE ── */
+.sgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}
+.sopt{border:1.5px solid var(--cd);border-radius:var(--rs);padding:9px 7px;text-align:center;cursor:pointer;transition:all .2s;background:var(--cream);position:relative}
+.sopt:hover{border-color:var(--g200);background:var(--g50)}.sopt.active{border-color:var(--g800);background:var(--g50);box-shadow:0 0 0 2px rgba(26,122,74,.12)}
+.sopt .si{font-size:1.2rem;margin-bottom:3px}.sopt .sl{font-size:.7rem;font-weight:700;color:var(--inks);display:block}.sopt .sr{font-size:.65rem;color:var(--inkm);display:block;margin-top:1px;line-height:1.3}
+.sopt.active .sl{color:var(--g800)}
+.sopt .chk{position:absolute;top:4px;right:4px;width:13px;height:13px;background:var(--g800);border-radius:50%;display:none;align-items:center;justify-content:center}
+.sopt.active .chk{display:flex}
+
+/* ── GEO TAGS ── */
+.gtags{display:flex;flex-wrap:wrap;gap:6px;margin-top:3px}
+.gtag{display:inline-flex;align-items:center;gap:4px;background:var(--cream);border:1.5px solid var(--cd);color:var(--inks);border-radius:100px;padding:4px 11px;font-size:.76rem;font-weight:500;cursor:pointer;transition:all .2s}
+.gtag:hover{border-color:var(--g200);background:var(--g50)}.gtag.sel{background:var(--g800);border-color:var(--g800);color:var(--white)}
+
+/* ── RANGE ── */
+.rwrap{display:flex;flex-direction:column;gap:7px}
+.rlbl{display:flex;justify-content:space-between;font-size:.7rem;color:var(--inkm);font-family:'DM Mono',monospace}
+input[type=range]{-webkit-appearance:none;width:100%;height:4px;background:linear-gradient(to right,var(--g800) 0%,var(--g800) var(--p,0%),var(--cd) var(--p,0%),var(--cd) 100%);border-radius:2px;outline:none;cursor:pointer}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:17px;height:17px;border-radius:50%;background:var(--g800);border:3px solid var(--white);box-shadow:0 0 0 2px var(--g800);cursor:grab}
+.rval{font-family:'DM Mono',monospace;font-size:.8rem;font-weight:500;color:var(--g800);text-align:center}
+
+/* ── YEAR ── */
+.yrwrap{display:flex;align-items:center;background:var(--cream);border:1.5px solid var(--cd);border-radius:var(--rs);overflow:hidden;width:150px;transition:border-color .2s}
+.yrwrap:focus-within{border-color:var(--g700);box-shadow:0 0 0 3px rgba(26,122,74,.1)}
+.yrbtn{width:36px;height:38px;background:var(--cdd);border:none;cursor:pointer;font-size:1.1rem;color:var(--inks);transition:background .15s;display:flex;align-items:center;justify-content:center}
+.yrbtn:hover{background:var(--g100);color:var(--g800)}
+.yrv{flex:1;text-align:center;font-family:'DM Mono',monospace;font-size:.9rem;font-weight:500;color:var(--ink);border:none;background:transparent;outline:none}
+
+/* ── STANDARDS ── */
+.stdgrid{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.stdc{border:1.5px solid var(--cd);border-radius:var(--rs);padding:10px 12px;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:9px;background:var(--cream)}
+.stdc:hover{border-color:var(--g200);background:var(--g50)}.stdc.active{border-color:var(--g800);background:var(--g50)}
+.stdcb{width:16px;height:16px;border-radius:4px;border:2px solid var(--cdd);flex-shrink:0;transition:all .2s;display:flex;align-items:center;justify-content:center}
+.stdc.active .stdcb{background:var(--g800);border-color:var(--g800)}
+.stdc.active .stdcb::after{content:'';width:8px;height:4px;border-left:1.5px solid white;border-bottom:1.5px solid white;transform:translateY(-1px) rotate(-45deg);display:block}
+.stdn{font-size:.78rem;font-weight:700;color:var(--ink)}.stdf{font-size:.7rem;color:var(--inkm);line-height:1.3;margin-top:1px}
+
+/* ── ADORNMENT ── */
+.awrap{position:relative}.adl{position:absolute;left:13px;top:50%;transform:translateY(-50%);font-size:.8rem;font-weight:600;color:var(--inkm);font-family:'DM Mono',monospace;pointer-events:none}
+.adr{left:auto;right:13px;font-size:.72rem}.awrap .inp{padding-left:34px}.inpr{padding-right:48px}
+
+/* ── FORM ACTIONS ── */
+.fact{display:flex;align-items:center;justify-content:space-between;padding:18px 28px 22px;border-top:1px solid var(--cd);background:var(--cream)}
+.fpwrap{display:flex;align-items:center;gap:9px}
+.fpbar{width:110px;height:4px;background:var(--cdd);border-radius:2px;overflow:hidden}
+.fpfill{height:100%;background:linear-gradient(90deg,var(--g700),var(--g600));border-radius:2px;transition:width .35s ease}
+.fptxt{font-size:.72rem;font-family:'DM Mono',monospace;color:var(--inkm)}
+
+/* ── SIDEBAR CARDS ── */
+.sidebar{display:flex;flex-direction:column;gap:18px;animation:fadeUp .45s .18s ease both;position:sticky;top:128px}
+.icard{background:var(--white);border:1px solid var(--cd);border-radius:14px;box-shadow:var(--sh1);overflow:hidden}
+.icard-hd{padding:14px 18px;border-bottom:1px solid var(--cd);display:flex;align-items:center;gap:7px}
+.icard-hd .ic{width:22px;height:22px;background:var(--g800);border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.icard-hd h3{font-size:.78rem;font-weight:700;color:var(--inks);letter-spacing:.04em;text-transform:uppercase}
+.icard-bd{padding:14px 18px}
+.csrd-box{background:linear-gradient(135deg,var(--g900) 0%,#0a2e1a 100%);border-radius:11px;padding:16px 18px;color:var(--white)}
+.csrd-box h4{font-family:'Playfair Display',serif;font-size:.95rem;margin-bottom:5px}
+.csrd-box p{font-size:.73rem;color:rgba(255,255,255,.65);line-height:1.55}
+.csrd-bgs{display:flex;flex-wrap:wrap;gap:5px;margin-top:10px}
+.csrd-bg{font-size:.65rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;padding:2px 7px;border-radius:4px;background:rgba(255,255,255,.12);color:var(--g200);border:1px solid rgba(255,255,255,.1)}
+.pitems{display:flex;flex-direction:column;gap:8px}
+.pit{display:flex;align-items:center;gap:9px;padding:7px 9px;border-radius:7px;background:var(--cream)}
+.pit.done{background:var(--g50)}.pit.act .pdot{background:var(--g800);box-shadow:0 0 0 3px rgba(26,122,74,.22);animation:pulse 1.5s ease-in-out infinite}
+.pdot{width:7px;height:7px;border-radius:50%;flex-shrink:0;background:var(--cdd)}
+.pit.done .pdot{background:var(--g600)}
+.ptxt{font-size:.76rem;color:var(--inkm);flex:1}.pit.done .ptxt{color:var(--inks)}.pit.act .ptxt{color:var(--ink);font-weight:600}
+.ppct{font-size:.7rem;font-family:'DM Mono',monospace;color:var(--inkm)}.pit.done .ppct{color:var(--g700)}
+.tiplist{display:flex;flex-direction:column;gap:9px}
+.tiprow{display:flex;gap:7px;align-items:flex-start}
+.tipbul{width:16px;height:16px;background:var(--g100);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.tiptxt{font-size:.76rem;color:var(--inks);line-height:1.5}
+
+/* ── BUTTONS ── */
+.btn{display:inline-flex;align-items:center;gap:7px;padding:10px 20px;border-radius:9px;font-family:'DM Sans',sans-serif;font-size:.86rem;font-weight:600;cursor:pointer;border:none;transition:all .18s;text-decoration:none}
+.btn-pri{background:var(--g800);color:var(--white);box-shadow:0 2px 8px rgba(26,122,74,.3)}
+.btn-pri:hover{background:var(--g700);box-shadow:0 4px 14px rgba(26,122,74,.4);transform:translateY(-1px)}
+.btn-pri:active{transform:translateY(0)}.btn-pri:disabled{background:var(--cdd);color:var(--inkm);box-shadow:none;cursor:not-allowed;transform:none}
+.btn-gh{background:transparent;color:var(--inks);border:1.5px solid var(--cd)}.btn-gh:hover{background:var(--cd)}.btn-gh:disabled{opacity:.4;cursor:not-allowed}
+
+/* ── MODULE 2 SPECIFIC ── */
+.m2-top{margin-bottom:22px;animation:fadeUp .45s ease both}
+.dim3{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+.dimcard{display:flex;align-items:flex-start;gap:9px;background:var(--white);border:1px solid var(--cd);border-radius:10px;padding:11px 14px;flex:1;min-width:160px;box-shadow:var(--sh1)}
+.dimdot{width:9px;height:9px;border-radius:50%;flex-shrink:0;margin-top:3px}
+.dimdot.i{background:var(--ic)}.dimdot.r{background:var(--rc)}.dimdot.o{background:var(--oc)}
+.dimname{font-size:.78rem;font-weight:700;margin-bottom:2px}
+.dimname.i{color:var(--ic)}.dimname.r{color:var(--rc)}.dimname.o{color:var(--oc)}
+.dimdesc{font-size:.72rem;color:var(--inkm);line-height:1.45}
+
+/* ── SCALE BOX ── */
+.scale-box{background:var(--white);border:1px solid var(--cd);border-radius:10px;padding:14px 18px;margin-bottom:22px;animation:fadeUp .45s .06s ease both}
+.scale-title{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--inkm);margin-bottom:10px}
+.scale-items{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.sci{text-align:center}
+.sci-n{font-family:'DM Mono',monospace;font-size:1rem;font-weight:700;color:var(--g800);display:block;margin-bottom:1px}
+.sci-l{font-size:.68rem;font-weight:700;color:var(--inks);display:block;margin-bottom:1px}
+.sci-d{font-size:.65rem;color:var(--inkm);line-height:1.3}
+
+/* ── FILTER BAR ── */
+.fbar{display:flex;align-items:center;gap:8px;margin-bottom:20px;flex-wrap:wrap}
+.flbl{font-size:.76rem;font-weight:600;color:var(--inkm);text-transform:uppercase;letter-spacing:.06em}
+.fbtn{padding:5px 13px;border-radius:100px;border:1.5px solid var(--cdd);background:var(--cream);font-size:.76rem;font-weight:500;color:var(--inks);cursor:pointer;transition:all .15s;font-family:'DM Sans',sans-serif}
+.fbtn:hover{border-color:var(--g200);background:var(--g50)}.fbtn.active{background:var(--g800);border-color:var(--g800);color:white}
+.srch{padding:6px 13px;border:1.5px solid var(--cdd);border-radius:100px;background:var(--white);font-size:.8rem;color:var(--ink);font-family:'DM Sans',sans-serif;outline:none;width:180px;transition:border-color .2s}
+.srch:focus{border-color:var(--g700);box-shadow:0 0 0 2px rgba(26,122,74,.1)}
+.fbar-prog{margin-left:auto;display:flex;align-items:center;gap:8px}
+.fpbar2{width:90px;height:4px;background:var(--cdd);border-radius:2px;overflow:hidden}
+.fpfill2{height:100%;background:linear-gradient(90deg,var(--g700),var(--g600));border-radius:2px;transition:width .35s ease}
+.fptxt2{font-size:.72rem;font-family:'DM Mono',monospace;color:var(--inkm)}
+
+/* ── TOPIC CARDS ── */
+.tgrid{display:grid;gap:13px}
+.tcard{background:var(--white);border:1.5px solid var(--cd);border-radius:14px;box-shadow:var(--sh1);overflow:hidden;transition:box-shadow .2s;animation:fadeUp .35s ease both}
+.tcard:hover{box-shadow:var(--sh2)}.tcard.done{border-color:var(--g200)}.tcard.lowrel{border-color:var(--ambb)}
+.thead{display:flex;align-items:center;gap:12px;padding:16px 22px;cursor:pointer;user-select:none}
+.tpill{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0}
+.tmeta{flex:1;min-width:0}
+.ttrow{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.tcode{font-family:'DM Mono',monospace;font-size:.7rem;font-weight:600;padding:2px 7px;border-radius:4px;flex-shrink:0}
+.tname{font-size:.94rem;font-weight:700;color:var(--ink)}
+.tsub{font-size:.76rem;color:var(--inkm);margin-top:1px}
+.tbadges{display:flex;align-items:center;gap:6px;flex-shrink:0;flex-wrap:wrap;justify-content:flex-end}
+.b-done{font-size:.66rem;font-weight:700;background:var(--g50);color:var(--g700);border:1px solid var(--g200);padding:2px 7px;border-radius:4px}
+.b-low{display:flex;align-items:center;gap:3px;font-size:.67rem;font-weight:600;background:var(--ambg);color:var(--amber);border:1px solid var(--ambb);padding:2px 7px;border-radius:4px}
+.tprev{display:flex;gap:5px}
+.tpv{display:flex;flex-direction:column;align-items:center;gap:1px}
+.tpv-l{font-size:.58rem;font-weight:600;text-transform:uppercase;letter-spacing:.04em}
+.tpv-n{font-size:.8rem;font-weight:700;font-family:'DM Mono',monospace;min-width:18px;text-align:center}
+.tpv-n.iv{color:var(--ic)}.tpv-n.rv{color:var(--rc)}.tpv-n.ov{color:var(--oc)}.tpv-n.emp{color:var(--cdd)}
+.ttog{width:26px;height:26px;border-radius:50%;background:var(--cream);display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0}
+.ttog svg{transition:transform .3s}
+.tcard.open .ttog svg{transform:rotate(180deg)}
+
+/* ── CARD BODY ── */
+.tbody{display:none;border-top:1px solid var(--cd)}
+.tcard.open .tbody{display:block}
+.lowbanner{display:flex;align-items:flex-start;gap:9px;background:var(--ambg);border-bottom:1px solid var(--ambb);padding:11px 22px}
+.lowic{width:22px;height:22px;background:var(--amber);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;flex-shrink:0}
+.lowtxt{font-size:.78rem;color:#92400E;line-height:1.55}
+.lowtxt strong{color:#78350F}
+.tdesc{padding:14px 22px;font-size:.83rem;color:var(--inks);line-height:1.65;border-bottom:1px solid var(--cd)}
+
+/* ── SUB-TOPICS ── */
+.subtopics{padding:20px 22px;display:grid;gap:24px}
+.st-block{}
+.st-title-row{display:flex;align-items:center;gap:8px;margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--cream)}
+.st-label{font-size:.86rem;font-weight:700;color:var(--ink)}
+.st-desc{font-size:.74rem;color:var(--inkm);margin-top:1px}
+.st-comp{font-size:.68rem;font-weight:600;background:var(--g50);color:var(--g700);border:1px solid var(--g200);padding:2px 7px;border-radius:4px;margin-left:auto}
+
+/* ── IRO SECTIONS ── */
+.iro-sections{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.iro-sec{}
+.iro-sec-hd{display:flex;align-items:center;gap:6px;margin-bottom:9px;padding-bottom:7px;border-bottom:2px solid}
+.iro-sec-hd.ih{border-color:var(--ibd)}.iro-sec-hd.rh{border-color:var(--rbd)}.iro-sec-hd.oh{border-color:var(--obd)}
+.iro-sec-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.iro-sec-dot.i{background:var(--ic)}.iro-sec-dot.r{background:var(--rc)}.iro-sec-dot.o{background:var(--oc)}
+.iro-sec-name{font-size:.74rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em}
+.iro-sec-name.i{color:var(--ic)}.iro-sec-name.r{color:var(--rc)}.iro-sec-name.o{color:var(--oc)}
+.iro-sec-cnt{margin-left:auto;font-size:.68rem;font-family:'DM Mono',monospace;color:var(--inkm)}
+
+/* ── IRO ITEMS ── */
+.iro-items{display:flex;flex-direction:column;gap:7px}
+.iro-item{border:1.5px solid var(--cd);border-radius:9px;background:var(--cream);overflow:hidden;transition:border-color .2s}
+.iro-item.incl{background:var(--white)}
+.iro-item.incl.ih{border-color:var(--ibd)}.iro-item.incl.rh{border-color:var(--rbd)}.iro-item.incl.oh{border-color:var(--obd)}
+.iro-item-top{display:flex;align-items:flex-start;gap:8px;padding:9px 10px 7px}
+.iro-auto{width:14px;height:14px;border-radius:3px;flex-shrink:0;margin-top:2px;display:flex;align-items:center;justify-content:center;font-size:.6rem}
+.iro-auto.on{background:var(--g800)}.iro-auto.off{background:var(--cdd)}
+.iro-txt{font-size:.76rem;color:var(--ink);line-height:1.45;flex:1}
+.iro-item:not(.incl) .iro-txt{color:var(--inkm)}
+.iro-toggle{font-size:.66rem;font-weight:600;border:1px solid var(--cdd);border-radius:4px;padding:2px 6px;cursor:pointer;background:var(--cream);font-family:'DM Sans',sans-serif;transition:all .15s;white-space:nowrap;flex-shrink:0;margin-top:1px}
+.iro-toggle.on{background:var(--g800);color:white;border-color:var(--g800)}
+.iro-toggle.off{color:var(--inkm)}.iro-toggle.off:hover{background:var(--g50);border-color:var(--g200);color:var(--g800)}
+.iro-score-row{display:flex;align-items:center;gap:4px;padding:0 10px 9px}
+.iro-score-row.hidden{display:none}
+.sbtn{width:26px;height:26px;border-radius:5px;border:1.5px solid var(--cdd);background:var(--cream);cursor:pointer;transition:all .15s;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;font-family:'DM Mono',monospace;color:var(--inkm)}
+.sbtn:hover{border-color:var(--g200);background:var(--g50)}
+.sbtn.sel.ih{background:var(--ibg);border-color:var(--ibd);color:var(--ic)}
+.sbtn.sel.rh{background:var(--rbg);border-color:var(--rbd);color:var(--rc)}
+.sbtn.sel.oh{background:var(--obg);border-color:var(--obd);color:var(--oc)}
+.sna{margin-left:4px;font-size:.64rem;font-weight:600;color:var(--inkm);background:var(--cream);border:1.5px solid var(--cdd);border-radius:4px;padding:2px 5px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s}
+.sna:hover{background:var(--cdd)}.sna.on{background:var(--inkm);color:white;border-color:var(--inkm)}
+.iro-note{font-size:.7rem;color:var(--inkm);padding:0 10px 8px;font-style:italic}
+
+/* ── TOPIC NOTES ── */
+.tnotes{padding:0 22px 20px;border-top:1px solid var(--cream);margin-top:4px}
+.tnotes label{font-size:.76rem;font-weight:600;color:var(--inks);display:block;margin-bottom:5px;margin-top:14px}
+.tnotes textarea{width:100%;border:1.5px solid var(--cd);border-radius:7px;padding:8px 12px;font-family:'DM Sans',sans-serif;font-size:.8rem;color:var(--ink);background:var(--cream);resize:vertical;min-height:56px;outline:none;transition:border-color .2s}
+.tnotes textarea:focus{border-color:var(--g700);background:white;box-shadow:0 0 0 2px rgba(26,122,74,.08)}
+
+/* ── BOTTOM ACTIONS BAR ── */
+.bbar{position:sticky;bottom:0;background:rgba(247,244,238,.95);backdrop-filter:blur(10px);border-top:1px solid var(--cd);padding:14px 36px;display:flex;align-items:center;justify-content:space-between;z-index:100;margin-top:28px}
+.bbar-stats{display:flex;align-items:center;gap:20px}
+.bstat{display:flex;flex-direction:column;gap:1px}
+.bstat-l{font-size:.65rem;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--inkm)}
+.bstat-v{font-size:1rem;font-weight:700;font-family:'DM Mono',monospace;color:var(--g800)}
+.bbar-acts{display:flex;gap:9px}
+
+/* ── TOAST ── */
+.toast{position:fixed;bottom:22px;right:22px;background:var(--g900);color:var(--white);padding:13px 18px;border-radius:10px;box-shadow:var(--sh3);font-size:.83rem;display:flex;align-items:center;gap:9px;z-index:500;transform:translateY(80px);opacity:0;transition:all .32s cubic-bezier(.34,1.56,.64,1)}
+.toast.show{transform:translateY(0);opacity:1}
+.toast-ic{width:22px;height:22px;background:var(--g600);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(13px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.6;transform:scale(1.15)}}
+
+/* ── SCROLLBAR ── */
+.ndrop::-webkit-scrollbar{width:3px}.ndrop::-webkit-scrollbar-thumb{background:var(--g200);border-radius:2px}
+
+/* ── RESPONSIVE ── */
+@media(max-width:1000px){
+  .mod-grid{grid-template-columns:1fr}.sidebar{position:static}
+  .iro-sections{grid-template-columns:1fr}
+  .dim3{flex-direction:column}
+  .bbar{padding:12px 20px;flex-wrap:wrap;gap:10px}
+  .bbar-stats{flex-wrap:wrap;gap:12px}
+  .sin{overflow-x:auto}.slbl-t{max-width:80px}
+  .hdr-in{padding:0 18px}.sin{padding:0 18px}
+  .mod{padding:28px 18px 80px}
+}
+@media(max-width:640px){
+  .fg.c2{grid-template-columns:1fr}.sgrid{grid-template-columns:repeat(2,1fr)}.stdgrid{grid-template-columns:1fr}
+  .scale-items{grid-template-columns:repeat(5,1fr)}.hero h1{font-size:1.8rem}
+}
+
+/* ══════════════════════════════════
+   MODULE 3 — STAKEHOLDER
+══════════════════════════════════ */
+.m3-grid{display:grid;grid-template-columns:1fr 380px;gap:24px;align-items:start}
+/* Session card */
+.sess-card{background:linear-gradient(135deg,var(--g900) 0%,#0a2e1a 100%);border-radius:16px;padding:24px;color:white;margin-bottom:20px}
+.sess-card h3{font-family:'Playfair Display',serif;font-size:1.1rem;margin-bottom:6px}
+.sess-card p{font-size:.78rem;color:rgba(255,255,255,.65);line-height:1.55;margin-bottom:16px}
+.key-display{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:10px;padding:12px 16px;margin-bottom:14px}
+.key-code{font-family:'DM Mono',monospace;font-size:1.1rem;font-weight:600;letter-spacing:.15em;color:white;flex:1}
+.key-placeholder{font-size:.82rem;color:rgba(255,255,255,.4);font-style:italic}
+.btn-gen{display:inline-flex;align-items:center;gap:7px;padding:9px 18px;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:.84rem;font-weight:600;cursor:pointer;border:none;transition:all .18s;background:var(--g600);color:white}
+.btn-gen:hover{background:var(--g700);transform:translateY(-1px)}
+.sess-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}
+.sess-stat{text-align:center;background:rgba(255,255,255,.08);border-radius:8px;padding:10px}
+.sess-stat-v{font-family:'DM Mono',monospace;font-size:1.3rem;font-weight:700;color:white;display:block}
+.sess-stat-l{font-size:.68rem;color:rgba(255,255,255,.55);text-transform:uppercase;letter-spacing:.06em;margin-top:2px;display:block}
+/* Stakeholder table */
+.stk-card{background:white;border:1px solid var(--cd);border-radius:16px;box-shadow:var(--sh1);overflow:hidden}
+.stk-card-hd{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--cd);background:var(--g50)}
+.stk-card-hd h3{font-size:.88rem;font-weight:700;color:var(--g900)}
+.btn-add-stk{font-size:.76rem;font-weight:600;background:var(--g800);color:white;border:none;border-radius:7px;padding:6px 12px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s}
+.btn-add-stk:hover{background:var(--g700)}
+.stk-row{display:grid;grid-template-columns:36px 1fr 120px 90px 36px;align-items:center;gap:10px;padding:11px 20px;border-bottom:1px solid var(--cream);transition:background .15s}
+.stk-row:last-child{border-bottom:none}.stk-row:hover{background:var(--cream)}
+.stk-avatar{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;color:white;flex-shrink:0}
+.stk-info{min-width:0}
+.stk-name{font-size:.82rem;font-weight:600;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.stk-org{font-size:.72rem;color:var(--inkm);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.stk-cat{font-size:.7rem;font-weight:600;padding:2px 8px;border-radius:100px;white-space:nowrap}
+.stk-status{display:inline-flex;align-items:center;gap:4px;font-size:.72rem;font-weight:600;padding:3px 9px;border-radius:100px}
+.st-invited{background:#FEF9C3;color:#854D0E}.st-opened{background:#DBEAFE;color:#1E40AF}.st-done{background:var(--g50);color:var(--g700)}
+.stk-act{width:28px;height:28px;border-radius:50%;border:1.5px solid var(--cd);background:var(--cream);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.stk-act:hover{border-color:var(--g200);background:var(--g50)}
+/* Survey preview */
+.survey-preview{background:white;border:1px solid var(--cd);border-radius:16px;box-shadow:var(--sh1);overflow:hidden}
+.sp-hd{padding:16px 20px;border-bottom:1px solid var(--cd);background:linear-gradient(135deg,var(--g50) 0%,white 100%);display:flex;align-items:center;gap:10px}
+.sp-hd h3{font-size:.88rem;font-weight:700;color:var(--g900);flex:1}
+.sp-badge{font-size:.68rem;font-weight:600;background:var(--amber);color:white;padding:2px 7px;border-radius:4px;text-transform:uppercase}
+.sp-body{padding:16px 20px}
+.sp-intro{font-size:.8rem;color:var(--inks);line-height:1.6;margin-bottom:14px;padding:12px;background:var(--g50);border-radius:8px;border-left:3px solid var(--g600)}
+.survey-topic-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--cream)}
+.survey-topic-row:last-child{border-bottom:none}
+.stp-emoji{font-size:.9rem;width:22px;text-align:center;flex-shrink:0}
+.stp-name{font-size:.78rem;font-weight:600;color:var(--ink);flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.stp-stars{display:flex;gap:3px}
+.stp-star{width:20px;height:20px;border-radius:4px;background:var(--cream);border:1px solid var(--cd);display:flex;align-items:center;justify-content:center;font-size:.65rem;font-weight:700;font-family:'DM Mono',monospace;color:var(--inkm)}
+/* Consolidate */
+.consol-bar{background:white;border:1px solid var(--cd);border-radius:12px;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;margin-top:16px;box-shadow:var(--sh1)}
+.consol-info{font-size:.82rem;color:var(--inks)}
+.consol-info strong{color:var(--g800)}
+.btn-consol{display:inline-flex;align-items:center;gap:7px;padding:10px 20px;border-radius:9px;font-family:'DM Sans',sans-serif;font-size:.86rem;font-weight:600;cursor:pointer;border:none;background:var(--g800);color:white;transition:all .18s;box-shadow:0 2px 8px rgba(26,122,74,.3)}
+.btn-consol:hover{background:var(--g700);transform:translateY(-1px)}
+.btn-consol:disabled{background:var(--cdd);color:var(--inkm);box-shadow:none;cursor:not-allowed;transform:none}
+
+/* ══════════════════════════════════
+   MODULE 4 — MATRIX
+══════════════════════════════════ */
+.m4-layout{display:grid;grid-template-columns:1fr 300px;gap:24px;align-items:start}
+.matrix-wrap{background:white;border:1px solid var(--cd);border-radius:16px;box-shadow:var(--sh2);overflow:hidden}
+.matrix-hd{padding:18px 24px;border-bottom:1px solid var(--cd);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.matrix-hd h3{font-family:'Playfair Display',serif;font-size:1.05rem;font-weight:600;color:var(--g900)}
+.threshold-ctrl{display:flex;align-items:center;gap:8px}
+.threshold-ctrl label{font-size:.76rem;font-weight:600;color:var(--inkm)}
+.thr-input{width:52px;padding:4px 7px;border:1.5px solid var(--cd);border-radius:6px;font-family:'DM Mono',monospace;font-size:.82rem;color:var(--ink);background:var(--cream);outline:none;text-align:center;transition:border-color .2s}
+.thr-input:focus{border-color:var(--g700)}
+.matrix-svg-wrap{padding:24px;overflow-x:auto}
+/* Matrix SVG styles applied inline */
+.matrix-legend{display:flex;gap:14px;padding:0 24px 18px;flex-wrap:wrap}
+.ml-item{display:flex;align-items:center;gap:6px;font-size:.74rem;color:var(--inks)}
+.ml-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+/* Topic results table */
+.results-table{background:white;border:1px solid var(--cd);border-radius:12px;box-shadow:var(--sh1);overflow:hidden}
+.rt-hd{padding:14px 18px;border-bottom:1px solid var(--cd);background:var(--g50)}
+.rt-hd h3{font-size:.84rem;font-weight:700;color:var(--g900)}
+.rt-row{display:grid;grid-template-columns:32px 1fr 52px 52px 90px;align-items:center;gap:8px;padding:9px 14px;border-bottom:1px solid var(--cream);font-size:.78rem}
+.rt-row:last-child{border-bottom:none}
+.rt-head-row{background:var(--cream);font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--inkm)}
+.rt-emoji{text-align:center;font-size:.9rem}
+.rt-name{font-weight:600;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rt-score{font-family:'DM Mono',monospace;font-weight:700;text-align:center}
+.rt-score.high{color:var(--g700)}.rt-score.med{color:var(--amber)}.rt-score.low{color:var(--inkm)}
+.mat-badge{font-size:.66rem;font-weight:700;padding:2px 7px;border-radius:4px;text-align:center;white-space:nowrap}
+.mat-double{background:var(--g50);color:var(--g700);border:1px solid var(--g200)}
+.mat-impact{background:#EFF6FF;color:#1D4ED8;border:1px solid #BFDBFE}
+.mat-financial{background:#FFF7ED;color:#C2410C;border:1px solid #FED7AA}
+.mat-none{background:var(--cream);color:var(--inkm);border:1px solid var(--cd)}
+/* Weights control */
+.weight-card{background:white;border:1px solid var(--cd);border-radius:12px;box-shadow:var(--sh1);padding:16px}
+.weight-card h4{font-size:.78rem;font-weight:700;color:var(--inks);text-transform:uppercase;letter-spacing:.06em;margin-bottom:12px}
+.weight-row{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.weight-row:last-child{margin-bottom:0}
+.weight-label{font-size:.78rem;color:var(--ink);flex:1}
+.weight-val{font-family:'DM Mono',monospace;font-size:.78rem;font-weight:600;color:var(--g800);min-width:30px;text-align:right}
+input.wslider{width:80px;height:3px;-webkit-appearance:none;appearance:none;background:linear-gradient(to right,var(--g800) 0%,var(--g800) var(--p,50%),var(--cd) var(--p,50%),var(--cd) 100%);border-radius:2px;outline:none;cursor:pointer}
+input.wslider::-webkit-slider-thumb{-webkit-appearance:none;width:13px;height:13px;border-radius:50%;background:var(--g800);border:2px solid white;box-shadow:0 0 0 1px var(--g800)}
+
+/* ══════════════════════════════════
+   MODULE 5 — NARRATIVES
+══════════════════════════════════ */
+.narr-intro{background:white;border:1px solid var(--cd);border-radius:12px;padding:16px 20px;margin-bottom:20px;display:flex;align-items:flex-start;gap:12px;box-shadow:var(--sh1)}
+.narr-ic{width:36px;height:36px;background:var(--g800);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.narr-intro-txt h3{font-size:.9rem;font-weight:700;color:var(--g900);margin-bottom:4px}
+.narr-intro-txt p{font-size:.8rem;color:var(--inks);line-height:1.6}
+.narr-grid{display:grid;gap:16px}
+.narr-card{background:white;border:1.5px solid var(--cd);border-radius:14px;box-shadow:var(--sh1);overflow:hidden}
+.narr-card.material{border-color:var(--g200)}
+.narr-hd{display:flex;align-items:center;gap:12px;padding:16px 20px;border-bottom:1px solid var(--cd)}
+.narr-pill{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:.9rem;flex-shrink:0}
+.narr-meta{flex:1}
+.narr-title{font-size:.9rem;font-weight:700;color:var(--ink)}
+.narr-scores{display:flex;gap:8px;margin-top:3px}
+.nscore{font-size:.7rem;font-weight:600;padding:1px 7px;border-radius:4px}
+.nscore.i{background:var(--ibg);color:var(--ic)}.nscore.r{background:var(--rbg);color:var(--rc)}.nscore.o{background:var(--obg);color:var(--oc)}
+.narr-body{padding:16px 20px}
+.narr-body label{font-size:.76rem;font-weight:600;color:var(--inkm);display:block;margin-bottom:6px}
+.narr-ta{width:100%;border:1.5px solid var(--cd);border-radius:8px;padding:10px 14px;font-family:'DM Sans',sans-serif;font-size:.82rem;color:var(--ink);background:var(--cream);resize:vertical;min-height:100px;line-height:1.6;outline:none;transition:border-color .2s}
+.narr-ta:focus{border-color:var(--g700);background:white;box-shadow:0 0 0 2px rgba(26,122,74,.08)}
+.narr-wc{font-size:.7rem;color:var(--inkm);text-align:right;margin-top:4px;font-family:'DM Mono',monospace}
+.narr-esrs-ref{display:flex;align-items:center;gap:6px;margin-top:10px;flex-wrap:wrap}
+.esrs-chip{font-size:.68rem;font-weight:600;background:var(--g50);border:1px solid var(--g200);color:var(--g700);padding:2px 7px;border-radius:4px}
+
+/* ══════════════════════════════════
+   MODULE 6 — OUTPUTS
+══════════════════════════════════ */
+.out-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:24px}
+.out-card{background:white;border:1px solid var(--cd);border-radius:14px;box-shadow:var(--sh1);overflow:hidden}
+.out-hd{padding:16px 20px;border-bottom:1px solid var(--cd);display:flex;align-items:center;gap:10px;background:var(--g50)}
+.out-hd-ic{width:28px;height:28px;background:var(--g800);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.out-hd h3{font-size:.86rem;font-weight:700;color:var(--g900)}
+.out-body{padding:16px 20px}
+.out-stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.out-stat{background:var(--cream);border-radius:8px;padding:12px;text-align:center}
+.out-stat-v{font-family:'DM Mono',monospace;font-size:1.4rem;font-weight:700;color:var(--g800);display:block}
+.out-stat-l{font-size:.7rem;color:var(--inkm);display:block;margin-top:2px}
+.out-mat-list{display:flex;flex-direction:column;gap:6px}
+.oml-row{display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:6px;background:var(--cream)}
+.oml-emoji{font-size:.85rem;width:20px;text-align:center}
+.oml-name{font-size:.78rem;font-weight:600;color:var(--ink);flex:1}
+.oml-badge{font-size:.65rem;font-weight:700;padding:2px 6px;border-radius:4px}
+.out-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:16px 20px;border-top:1px solid var(--cd)}
+.btn-out{display:flex;align-items:center;justify-content:center;gap:7px;padding:10px 14px;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:.82rem;font-weight:600;cursor:pointer;border:1.5px solid var(--cd);background:white;color:var(--inks);transition:all .15s}
+.btn-out:hover{border-color:var(--g200);background:var(--g50);color:var(--g800)}
+.btn-out.primary{background:var(--g800);border-color:var(--g800);color:white}
+.btn-out.primary:hover{background:var(--g700)}
+.process-log{display:flex;flex-direction:column;gap:8px}
+.pl-row{display:flex;align-items:flex-start;gap:10px;padding:9px 12px;background:var(--cream);border-radius:8px}
+.pl-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:4px}
+.pl-dot.done{background:var(--g600)}.pl-dot.pend{background:var(--cdd)}
+.pl-text{font-size:.78rem;color:var(--inks);flex:1;line-height:1.45}
+.pl-text.pend{color:var(--inkm)}
+.pl-time{font-size:.68rem;color:var(--inkm);font-family:'DM Mono',monospace;white-space:nowrap}
+.out-matrix-mini{padding:16px 20px}
+</style>
+</head>
+<body>
+
+<!-- ═══ SHARED HEADER ═══ -->
+<header class="hdr">
+  <div class="hdr-in">
+    <div class="logo" onclick="if(appState.nav.current===2){goToModule(1)}">
+      <div class="lmark">
+        <svg width="17" height="17" viewBox="0 0 18 18" fill="none">
+          <path d="M9 2C9 2 4 5 4 9.5C4 12.5 6.24 15 9 15C11.76 15 14 12.5 14 9.5C14 5 9 2 9 2Z" fill="white" opacity=".9"/>
+          <path d="M9 6V12M6.5 9.5H11.5" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <span class="ltxt">Green<span>Ledger</span></span>
+    </div>
+    <div class="hdr-r">
+      <div class="ctx-pill" id="ctxPill">
+        <div class="ctx-dot"></div>
+        <span class="ctx-co" id="ctxCo">Nuova valutazione</span>
+        <span class="ctx-nc" id="ctxNc"></span>
+      </div>
+      <div class="hdr-usr">MC</div>
+    </div>
+  </div>
+</header>
+
+<!-- ═══ STEPPER ═══ -->
+<div class="sbar">
+  <div class="sin" id="stepper">
+    <div class="stp active" data-step="1"><div class="snum">1</div><div class="slbl"><span class="slbl-n">Modulo 1</span><span class="slbl-t">Contesto</span></div></div>
+    <div class="stp pending" data-step="2"><div class="snum">2</div><div class="slbl"><span class="slbl-n">Modulo 2</span><span class="slbl-t">Temi Materiali</span></div></div>
+    <div class="stp pending" data-step="3"><div class="snum">3</div><div class="slbl"><span class="slbl-n">Modulo 3</span><span class="slbl-t">Stakeholder</span></div></div>
+    <div class="stp pending" data-step="4"><div class="snum">4</div><div class="slbl"><span class="slbl-n">Modulo 4</span><span class="slbl-t">Scoring & Matrice</span></div></div>
+    <div class="stp pending" data-step="5"><div class="snum">5</div><div class="slbl"><span class="slbl-n">Modulo 5</span><span class="slbl-t">Narrative</span></div></div>
+    <div class="stp pending" data-step="6"><div class="snum">6</div><div class="slbl"><span class="slbl-n">Modulo 6</span><span class="slbl-t">Output</span></div></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     MODULO 1 — CONTESTO AZIENDALE
+═══════════════════════════════════════ -->
+<div class="mod visible" id="mod1">
+<div class="hero">
+  <div class="eyebrow"><span class="edot"></span>Passo 1 di 6 — CSRD / ESRS 2024</div>
+  <h1>Contesto<br>Aziendale</h1>
+  <p>Definisci il perimetro del gruppo: codici NACE, dimensione, geografie e descrizione del modello di business. Questi dati guidano i suggerimenti nel Modulo 2.</p>
+</div>
+
+<div class="mod-grid">
+<div>
+<div class="fcard">
+  <div class="fcard-hd">
+    <h2>Anagrafica e perimetro</h2>
+    <p>Campi con <span style="color:var(--g700)">★</span> obbligatori · badge <span style="background:var(--g800);color:white;padding:1px 5px;border-radius:3px;font-size:.68rem;font-weight:700">AI</span> arricchisce i suggerimenti nel Modulo 2</p>
+  </div>
+  <div class="fcard-body">
+
+    <!-- IDENTITÀ -->
+    <div class="fsec">
+      <div class="sdiv"><div class="sdiv-ic"><svg width="13" height="13" viewBox="0 0 14 14" fill="none"><rect x="1" y="1" width="12" height="12" rx="2" stroke="white" stroke-width="1.4"/><path d="M4 7h6M4 4.5h6M4 9.5h4" stroke="white" stroke-width="1.2" stroke-linecap="round"/></svg></div><span class="sdiv-t">Identità aziendale</span><div class="sdiv-l"></div></div>
+      <div class="fg">
+        <div class="f" id="f-ragione">
+          <label for="ragione">Ragione sociale <span class="req">★</span></label>
+          <input type="text" id="ragione" class="inp" placeholder="es. Gruppo Acme S.p.A.">
+          <span class="ferr">Campo obbligatorio</span>
+        </div>
+      </div>
+      <div class="fg c2" style="margin-top:14px">
+        <div class="f" id="f-piva">
+          <label for="piva">P.IVA / Codice Fiscale <span class="req">★</span></label>
+          <input type="text" id="piva" class="inp" placeholder="IT12345678901" maxlength="16">
+          <span class="ferr">Campo obbligatorio</span>
+        </div>
+        <div class="f">
+          <label for="website">Sito web <span class="hint">(opzionale)</span></label>
+          <input type="url" id="website" class="inp" placeholder="https://www.azienda.it">
+        </div>
+      </div>
+    </div>
+
+    <!-- MULTI-NACE -->
+    <div class="fsec">
+      <div class="sdiv"><div class="sdiv-ic"><svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M2 11V6l5-4 5 4v5H9V8H5v3H2Z" stroke="white" stroke-width="1.3" stroke-linejoin="round"/></svg></div><span class="sdiv-t">Classificazione NACE Rev.2</span><div class="sdiv-l"></div></div>
+      <div class="f" id="f-nace">
+        <label>Codici NACE del gruppo <span class="req">★</span><span class="hint">— il primo è il primario</span></label>
+        <div class="nwrap">
+          <input type="text" id="naceSearch" class="inp" placeholder="Cerca per codice o attività (es. C22, energia, manifattura…)" autocomplete="off">
+          <div class="ndrop" id="naceDrop"></div>
+        </div>
+        <div class="chips" id="naceChips"><span class="chips-empty">Nessun codice aggiunto — cerca e seleziona</span></div>
+        <span class="ferr">Aggiungi almeno un codice NACE</span>
+      </div>
+    </div>
+
+    <!-- BUSINESS DESC -->
+    <div class="fsec">
+      <div class="sdiv"><div class="sdiv-ic"><svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M2 3h10v2H2zM2 7h8v2H2zM2 11h6v2H2z" fill="white"/></svg></div><span class="sdiv-t">Descrizione Business</span><div class="sdiv-l"></div></div>
+      <div class="bdesc">
+        <div class="bdesc-hd">
+          <div class="bic"><svg width="11" height="11" viewBox="0 0 12 12" fill="none"><path d="M6 1l1.5 3 3.5.5-2.5 2.5.5 3.5L6 9l-3 1.5.5-3.5L1 4.5 4.5 4z" fill="white"/></svg></div>
+          <h3>Attività e modello di business</h3>
+          <span class="ai-b">AI</span>
+        </div>
+        <p class="bdesc-hint">Descrivi <strong>cosa produce o vende il gruppo, come genera valore, posizione nella catena del valore</strong> (upstream/downstream), prodotti/servizi principali, tipologia di clienti e fornitori critici.<br><br>Usato nel Modulo 2 per <strong>calibrare gli IRO suggeriti</strong> per ogni topic ESRS.</p>
+        <textarea id="bizDesc" class="ta" maxlength="1200" rows="4" placeholder="Es.: Il Gruppo produce imballaggi in plastica riciclata (HDPE, PET) per il settore alimentare B2B. Supply chain upstream in Europa dell'Est per polimeri riciclati, produzione in 2 stabilimenti (Brescia e Valencia), distribuzione a GDO e industria alimentare in 8 paesi UE. 340 FTE, 75% ricavi da canale GDO..."></textarea>
+        <div class="ccount" id="charCount">0 / 1200</div>
+      </div>
+    </div>
+
+    <!-- DIMENSIONE -->
+    <div class="fsec">
+      <div class="sdiv"><div class="sdiv-ic"><svg width="13" height="13" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="5" r="2.5" stroke="white" stroke-width="1.3"/><path d="M2 12c0-2.76 2.24-5 5-5s5 2.24 5 5" stroke="white" stroke-width="1.3" stroke-linecap="round"/></svg></div><span class="sdiv-t">Dimensione aziendale</span><div class="sdiv-l"></div></div>
+      <div class="f">
+        <label>Fascia CSRD <span class="req">★</span></label>
+        <div class="sgrid" id="sizeGrid">
+          <div class="sopt" data-val="micro"><span class="si">🔹</span><span class="sl">Micro</span><span class="sr">&lt;10 dip<br>&lt;€2M</span><div class="chk"><svg width="7" height="5" viewBox="0 0 8 6"><path d="M1 3L3 5L7 1" stroke="white" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg></div></div>
+          <div class="sopt" data-val="small"><span class="si">🔸</span><span class="sl">Piccola</span><span class="sr">10–49<br>€2–10M</span><div class="chk"><svg width="7" height="5" viewBox="0 0 8 6"><path d="M1 3L3 5L7 1" stroke="white" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg></div></div>
+          <div class="sopt active" data-val="medium"><span class="si">🟧</span><span class="sl">Media</span><span class="sr">50–249<br>€10–50M</span><div class="chk"><svg width="7" height="5" viewBox="0 0 8 6"><path d="M1 3L3 5L7 1" stroke="white" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg></div></div>
+          <div class="sopt" data-val="large"><span class="si">🟩</span><span class="sl">Grande</span><span class="sr">≥250<br>≥€50M</span><div class="chk"><svg width="7" height="5" viewBox="0 0 8 6"><path d="M1 3L3 5L7 1" stroke="white" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg></div></div>
+        </div>
+        <input type="hidden" id="sizeVal" value="medium">
+      </div>
+      <div class="fg c2" style="margin-top:14px">
+        <div class="f">
+          <label>N° dipendenti (FTE) <span class="req">★</span></label>
+          <div class="rwrap">
+            <input type="range" id="empSlider" min="1" max="5000" value="120" step="1">
+            <div class="rlbl"><span>1</span><span>5.000+</span></div>
+            <div class="rval" id="empVal">120 dipendenti</div>
+          </div>
+        </div>
+        <div class="f">
+          <label for="revenue">Fatturato annuo</label>
+          <div class="awrap"><span class="adl">€</span><span class="adl adr">M</span><input type="number" id="revenue" class="inp inpr" placeholder="28.5" min="0" step="0.1"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- GEOGRAFIE -->
+    <div class="fsec">
+      <div class="sdiv"><div class="sdiv-ic"><svg width="13" height="13" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5.5" stroke="white" stroke-width="1.3"/><path d="M7 1.5C7 1.5 5 4 5 7s2 5.5 2 5.5M7 1.5C7 1.5 9 4 9 7s-2 5.5-2 5.5M1.5 7h11" stroke="white" stroke-width="1.1" stroke-linecap="round"/></svg></div><span class="sdiv-t">Geografie operative</span><div class="sdiv-l"></div></div>
+      <div class="f">
+        <label>Presenza geografica <span class="req">★</span></label>
+        <div class="gtags" id="geoTags">
+          <div class="gtag sel" data-val="IT">🇮🇹 Italia</div><div class="gtag" data-val="EU">🇪🇺 Resto UE</div><div class="gtag" data-val="UK">🇬🇧 UK</div><div class="gtag" data-val="US">🇺🇸 Nord America</div><div class="gtag" data-val="APAC">🌏 Asia-Pacifico</div><div class="gtag" data-val="LATAM">🌎 LATAM</div><div class="gtag" data-val="MEA">🌍 MEA</div>
+        </div>
+        <input type="hidden" id="geoVal" value="IT">
+      </div>
+      <div class="f" style="margin-top:14px"><label for="hq">Sede principale</label><input type="text" id="hq" class="inp" placeholder="es. Milano, Lombardia"></div>
+    </div>
+
+    <!-- FRAMEWORK -->
+    <div class="fsec">
+      <div class="sdiv"><div class="sdiv-ic"><svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M2 4h10M2 7h8M2 10h6" stroke="white" stroke-width="1.4" stroke-linecap="round"/></svg></div><span class="sdiv-t">Framework & Anno</span><div class="sdiv-l"></div></div>
+      <div class="fg c2">
+        <div class="f">
+          <label>Standard applicabili</label>
+          <div class="stdgrid" id="stdGrid">
+            <div class="stdc active" data-val="CSRD"><div class="stdcb"></div><div><div class="stdn">CSRD</div><div class="stdf">Corporate Sustainability Reporting Directive</div></div></div>
+            <div class="stdc active" data-val="ESRS"><div class="stdcb"></div><div><div class="stdn">ESRS</div><div class="stdf">European Sustainability Reporting Standards</div></div></div>
+            <div class="stdc" data-val="GRI"><div class="stdcb"></div><div><div class="stdn">GRI Standards</div><div class="stdf">Global Reporting Initiative</div></div></div>
+            <div class="stdc" data-val="TCFD"><div class="stdcb"></div><div><div class="stdn">TCFD</div><div class="stdf">Climate-related Disclosures</div></div></div>
+          </div>
+        </div>
+        <div class="f">
+          <label>Anno di rendicontazione <span class="req">★</span></label>
+          <div class="yrwrap"><button type="button" class="yrbtn" id="yrDn">−</button><input type="text" id="yrVal" class="yrv" value="2024" readonly><button type="button" class="yrbtn" id="yrUp">+</button></div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /fcard-body -->
+  <div class="fact">
+    <div class="fpwrap"><div class="fpbar"><div class="fpfill" id="m1Fill" style="width:0%"></div></div><span class="fptxt" id="m1Txt">0 / 5 campi</span></div>
+    <div style="display:flex;gap:9px">
+      <button class="btn btn-gh" disabled>← Precedente</button>
+      <button class="btn btn-pri" id="m1Next">Continua — Temi Materiali →</button>
+    </div>
+  </div>
+</div><!-- /fcard -->
+</div><!-- /left col -->
+
+<!-- SIDEBAR M1 -->
+<aside class="sidebar">
+  <div class="csrd-box"><h4>CSRD in vigore</h4><p>Grandi imprese UE dal FY2024. PMI quotate e value chain dal 2026–2028.</p><div class="csrd-bgs"><span class="csrd-bg">ESRS E1–E5</span><span class="csrd-bg">ESRS S1–S4</span><span class="csrd-bg">ESRS G1</span><span class="csrd-bg">ESRS 2</span></div></div>
+  <div class="icard">
+    <div class="icard-hd"><div class="ic"><svg width="10" height="10" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5" stroke="white" stroke-width="1.2"/><path d="M6 4v4" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg></div><h3>Avanzamento moduli</h3></div>
+    <div class="icard-bd">
+      <div class="pitems" id="progItems">
+        <div class="pit act"><div class="pdot"></div><span class="ptxt">Contesto aziendale</span><span class="ppct">In corso</span></div>
+        <div class="pit"><div class="pdot"></div><span class="ptxt">Temi materiali ESRS</span><span class="ppct">—</span></div>
+        <div class="pit"><div class="pdot"></div><span class="ptxt">Stakeholder engagement</span><span class="ppct">—</span></div>
+        <div class="pit"><div class="pdot"></div><span class="ptxt">Scoring & Matrice DMA</span><span class="ppct">—</span></div>
+        <div class="pit"><div class="pdot"></div><span class="ptxt">Narrative descrittive</span><span class="ppct">—</span></div>
+        <div class="pit"><div class="pdot"></div><span class="ptxt">Output & documentazione</span><span class="ppct">—</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="icard">
+    <div class="icard-hd"><div class="ic"><svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg></div><h3>Perché questi dati?</h3></div>
+    <div class="icard-bd">
+      <div class="tiplist">
+        <div class="tiprow"><div class="tipbul"><svg viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="var(--g700)" stroke-width="1.4" stroke-linecap="round"/></svg></div><p class="tiptxt">I codici NACE determinano quali <strong>IRO vengono pre-selezionati</strong> nel Modulo 2.</p></div>
+        <div class="tiprow"><div class="tipbul"><svg viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="var(--g700)" stroke-width="1.4" stroke-linecap="round"/></svg></div><p class="tiptxt">La descrizione business <strong>raffina ulteriormente</strong> i suggerimenti di rilevanza.</p></div>
+        <div class="tiprow"><div class="tipbul"><svg viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="var(--g700)" stroke-width="1.4" stroke-linecap="round"/></svg></div><p class="tiptxt">Tutti i 10 topic ESRS restano <strong>sempre votabili</strong> indipendentemente dal settore.</p></div>
+      </div>
+    </div>
+  </div>
+</aside>
+</div><!-- /mod-grid -->
+</div><!-- /mod1 -->
+
+
+<!-- ═══════════════════════════════════════
+     MODULO 2 — TEMI MATERIALI
+═══════════════════════════════════════ -->
+<div class="mod" id="mod2">
+
+<div class="m2-top">
+  <div class="eyebrow"><span class="edot"></span>Passo 2 di 6 — ESRS Topics Assessment</div>
+  <h1 style="font-family:'Playfair Display',serif;font-size:2.1rem;font-weight:700;color:var(--g900);letter-spacing:-.03em;line-height:1.15;margin-bottom:8px">Valutazione<br>Temi Materiali</h1>
+  <p style="font-size:.9rem;color:var(--inks);max-width:560px;line-height:1.65;margin-bottom:0">Per ogni topic ESRS trovi gli <strong>Impatti, Rischi e Opportunità (IRO)</strong> pre-selezionati in base al profilo del tuo gruppo. Valuta ogni IRO su scala 1–5. Puoi escludere IRO non pertinenti o aggiungere quelli mancanti.</p>
+  <div class="dim3">
+    <div class="dimcard"><div class="dimdot i"></div><div><div class="dimname i">Impatti</div><div class="dimdesc">Effetti — positivi o negativi — delle attività del gruppo su persone, ambiente e società lungo la catena del valore.</div></div></div>
+    <div class="dimcard"><div class="dimdot r"></div><div><div class="dimname r">Rischi</div><div class="dimdesc">Minacce finanziarie rilevanti (fisici, di transizione, legali, reputazionali) generate dai temi ESG.</div></div></div>
+    <div class="dimcard"><div class="dimdot o"></div><div><div class="dimname o">Opportunità</div><div class="dimdesc">Potenziale di creazione di valore: nuovi mercati, efficienza, accesso a capitale ESG, vantaggio competitivo.</div></div></div>
+  </div>
+</div>
+
+<div class="scale-box">
+  <div class="scale-title">Scala di valutazione — uguale per tutte e tre le dimensioni</div>
+  <div class="scale-items">
+    <div class="sci"><span class="sci-n">1</span><span class="sci-l">Trascurabile</span><span class="sci-d">Non rilevante per il gruppo</span></div>
+    <div class="sci"><span class="sci-n">2</span><span class="sci-l">Bassa</span><span class="sci-d">Presente ma limitata nell'entità</span></div>
+    <div class="sci"><span class="sci-n">3</span><span class="sci-l">Media</span><span class="sci-d">Moderata, merita disclosure</span></div>
+    <div class="sci"><span class="sci-n">4</span><span class="sci-l">Alta</span><span class="sci-d">Significativa, impatto concreto</span></div>
+    <div class="sci"><span class="sci-n">5</span><span class="sci-l">Critica</span><span class="sci-d">Determinante per la strategia</span></div>
+  </div>
+</div>
+
+<div class="fbar">
+  <span class="flbl">Filtra:</span>
+  <button class="fbtn active" data-f="all">Tutti (10)</button>
+  <button class="fbtn" data-f="E">🌿 Ambiente</button>
+  <button class="fbtn" data-f="S">👥 Sociale</button>
+  <button class="fbtn" data-f="G">⚖️ Governance</button>
+  <button class="fbtn" data-f="todo">Da completare</button>
+  <input type="text" class="srch" id="m2Search" placeholder="🔍 Cerca topic…">
+  <div class="fbar-prog"><div class="fpbar2"><div class="fpfill2" id="m2Fill" style="width:0%"></div></div><span class="fptxt2" id="m2Txt">0 / 10</span></div>
+</div>
+
+<div class="tgrid" id="topicsGrid"></div>
+
+<div class="bbar">
+  <div class="bbar-stats">
+    <div class="bstat"><span class="bstat-l">Completati</span><span class="bstat-v" id="bsComp">0 / 10</span></div>
+    <div class="bstat"><span class="bstat-l">Ø Impatti</span><span class="bstat-v" id="bsImp">—</span></div>
+    <div class="bstat"><span class="bstat-l">Ø Rischi</span><span class="bstat-v" id="bsRisk">—</span></div>
+    <div class="bstat"><span class="bstat-l">Ø Opportunità</span><span class="bstat-v" id="bsOpp">—</span></div>
+  </div>
+  <div class="bbar-acts">
+    <button class="btn btn-gh" id="m2Back">← Modulo 1</button>
+    <button class="btn btn-pri" id="m2Next">Salva e continua →</button>
+  </div>
+</div>
+
+</div><!-- /mod2 -->
+
+<!-- ═══════════════════════════════════════
+     MODULO 3 — STAKEHOLDER ENGAGEMENT
+═══════════════════════════════════════ -->
+<div class="mod" id="mod3">
+<div class="hero">
+  <div class="eyebrow"><span class="edot"></span>Passo 3 di 6 — Stakeholder Engagement</div>
+  <h1>Coinvolgimento<br>Stakeholder</h1>
+  <p>Genera la chiave di sessione, invia i link personalizzati agli stakeholder e monitora le risposte in tempo reale. Consolida quando sei pronto per procedere al Modulo 4.</p>
+</div>
+<div class="m3-grid">
+  <div>
+    <!-- Session card -->
+    <div class="sess-card">
+      <h3>Sessione DMA — <span id="m3Company">—</span></h3>
+      <p>Genera la chiave di sessione per creare i link personalizzati da inviare agli stakeholder. Ogni link è monouso e tracciato.</p>
+      <div class="key-display">
+        <span class="key-code" id="sessKey"><span class="key-placeholder">Nessuna chiave generata</span></span>
+      </div>
+      <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+        <button class="btn-gen" id="genKeyBtn">
+          <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><rect x="2" y="6" width="10" height="7" rx="1.5" stroke="white" stroke-width="1.3"/><path d="M4.5 6V4.5a2.5 2.5 0 015 0V6" stroke="white" stroke-width="1.3" stroke-linecap="round"/></svg>
+          Genera chiave sessione
+        </button>
+        <button class="btn-gen" id="simBtn" style="background:rgba(255,255,255,.15);display:none">
+          <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M7 2v3l2 1" stroke="white" stroke-width="1.3" stroke-linecap="round"/><circle cx="7" cy="7" r="5" stroke="white" stroke-width="1.3"/></svg>
+          Simula risposte stakeholder
+        </button>
+      </div>
+      <div class="sess-stats" id="sessStats" style="display:none">
+        <div class="sess-stat"><span class="sess-stat-v" id="statInvited">0</span><span class="sess-stat-l">Invitati</span></div>
+        <div class="sess-stat"><span class="sess-stat-v" id="statOpened">0</span><span class="sess-stat-l">Link aperti</span></div>
+        <div class="sess-stat"><span class="sess-stat-v" id="statDone">0</span><span class="sess-stat-l">Completati</span></div>
+      </div>
+    </div>
+    <!-- Stakeholder table -->
+    <div class="stk-card">
+      <div class="stk-card-hd">
+        <h3>Stakeholder invitati</h3>
+        <button class="btn-add-stk" id="addStkBtn" disabled>+ Aggiungi stakeholder</button>
+      </div>
+      <div id="stkList">
+        <div style="padding:24px;text-align:center;font-size:.82rem;color:var(--inkm);font-style:italic">Genera la chiave di sessione per abilitare gli inviti</div>
+      </div>
+    </div>
+    <!-- Consolidate bar -->
+    <div class="consol-bar" id="consolBar" style="display:none">
+      <div class="consol-info">
+        <strong id="consolCount">0</strong> stakeholder hanno completato la survey · <span id="consolPct">0%</span> di completamento
+      </div>
+      <button class="btn-consol" id="consolBtn" disabled>
+        <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M7 3l4 4-4 4" stroke="white" stroke-width="1.4" stroke-linecap="round"/></svg>
+        Consolida e vai al Modulo 4
+      </button>
+    </div>
+  </div>
+  <!-- Right: survey preview -->
+  <div>
+    <div class="survey-preview">
+      <div class="sp-hd">
+        <h3>Anteprima survey stakeholder</h3>
+        <span class="sp-badge">Preview</span>
+      </div>
+      <div class="sp-body">
+        <div class="sp-intro">
+          Gentile stakeholder,<br>
+          <strong id="spCompany">il gruppo</strong> ti invita a partecipare alla valutazione di materialità (CSRD/ESRS). Per ogni tema sostenibilità esprimi un giudizio di rilevanza da 1 a 5.
+        </div>
+        <div id="surveyTopicList"></div>
+      </div>
+    </div>
+    <div class="icard" style="margin-top:16px">
+      <div class="icard-hd"><div class="ic"><svg width="10" height="10" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5" stroke="white" stroke-width="1.2"/><path d="M6 4v4" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg></div><h3>Categorie stakeholder</h3></div>
+      <div class="icard-bd">
+        <div class="tiplist">
+          <div class="tiprow"><div class="tipbul">💼</div><p class="tiptxt"><strong>Investitori / Finanziatori</strong> — Banche, fondi, obbligazionisti</p></div>
+          <div class="tiprow"><div class="tipbul">👷</div><p class="tiptxt"><strong>Dipendenti / RSU</strong> — Rappresentanze sindacali</p></div>
+          <div class="tiprow"><div class="tipbul">🏪</div><p class="tiptxt"><strong>Clienti</strong> — GDO, buyer, consumatori finali</p></div>
+          <div class="tiprow"><div class="tipbul">🚚</div><p class="tiptxt"><strong>Fornitori</strong> — Strategici upstream</p></div>
+          <div class="tiprow"><div class="tipbul">🌿</div><p class="tiptxt"><strong>ONG / Comunità</strong> — Associazioni ambientali, locali</p></div>
+          <div class="tiprow"><div class="tipbul">🏛️</div><p class="tiptxt"><strong>Autorità / Regolatori</strong> — Enti di vigilanza</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="bbar">
+  <div class="bbar-stats">
+    <div class="bstat"><span class="bstat-l">Stakeholder invitati</span><span class="bstat-v" id="m3Total">0</span></div>
+    <div class="bstat"><span class="bstat-l">Completati</span><span class="bstat-v" id="m3Done">0</span></div>
+    <div class="bstat"><span class="bstat-l">Completamento</span><span class="bstat-v" id="m3Pct">—</span></div>
+  </div>
+  <div class="bbar-acts">
+    <button class="btn btn-gh" id="m3Back">← Modulo 2</button>
+    <button class="btn btn-pri" id="m3Next" disabled>Consolida → Modulo 4</button>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     MODULO 4 — SCORING & MATRICE
+═══════════════════════════════════════ -->
+<div class="mod" id="mod4">
+<div class="hero">
+  <div class="eyebrow"><span class="edot"></span>Passo 4 di 6 — Double Materiality Matrix</div>
+  <h1>Matrice di Doppia<br>Materialità</h1>
+  <p>Visualizza il posizionamento di tutti i topic ESRS sulla matrice, basata sui punteggi consolidati del referente e degli stakeholder. Regola la soglia di materialità e classifica i topic.</p>
+</div>
+<div class="m4-layout">
+  <div>
+    <div class="matrix-wrap">
+      <div class="matrix-hd">
+        <h3>Matrice Doppia Materialità — <span id="m4Company">—</span> · <span id="m4Year">2024</span></h3>
+        <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+          <div class="threshold-ctrl">
+            <label>Soglia materialità:</label>
+            <input type="number" id="thrVal" class="thr-input" value="2.5" min="1" max="5" step="0.5">
+          </div>
+          <div class="threshold-ctrl">
+            <label style="font-size:.72rem;color:var(--inkm)">Peso stakeholder:</label>
+            <input type="range" class="wslider" id="stkWeight" min="0" max="100" value="30" style="width:80px">
+            <span class="weight-val" id="stkWeightVal">30%</span>
+          </div>
+        </div>
+      </div>
+      <div class="matrix-svg-wrap">
+        <svg id="matrixSvg" viewBox="0 0 580 460" style="width:100%;min-width:360px;font-family:'DM Sans',sans-serif"></svg>
+      </div>
+      <div class="matrix-legend">
+        <div class="ml-item"><div class="ml-dot" style="background:#1A7A4A"></div>Ambiente (E)</div>
+        <div class="ml-item"><div class="ml-dot" style="background:#C2410C"></div>Sociale (S)</div>
+        <div class="ml-item"><div class="ml-dot" style="background:#374151"></div>Governance (G)</div>
+        <div class="ml-item"><div class="ml-dot" style="background:rgba(26,122,74,.15);border:1.5px solid var(--g200);width:14px;height:14px;border-radius:2px"></div>Doppiamente materiale</div>
+      </div>
+    </div>
+  </div>
+  <div style="display:flex;flex-direction:column;gap:16px">
+    <div class="weight-card">
+      <h4>Pesi consolidamento</h4>
+      <div class="weight-row">
+        <span class="weight-label">🎯 Referente sostenibilità</span>
+        <span class="weight-val" id="refWeightLbl">70%</span>
+      </div>
+      <div class="weight-row">
+        <span class="weight-label">👥 Media stakeholder</span>
+        <span class="weight-val" id="stkWeightLbl">30%</span>
+      </div>
+      <div style="margin-top:12px;font-size:.74rem;color:var(--inkm);line-height:1.5;padding:8px;background:var(--cream);border-radius:6px">
+        I punteggi finali sono la media ponderata tra la valutazione professionale del referente e le risposte aggregate degli stakeholder.
+      </div>
+    </div>
+    <div class="results-table">
+      <div class="rt-hd"><h3>Classificazione topic</h3></div>
+      <div class="rt-row rt-head-row">
+        <div></div><div>Topic</div><div style="text-align:center">Imp.</div><div style="text-align:center">Fin.</div><div style="text-align:center">Classe</div>
+      </div>
+      <div id="rtBody"></div>
+    </div>
+  </div>
+</div>
+<div class="bbar">
+  <div class="bbar-stats">
+    <div class="bstat"><span class="bstat-l">Doppiamente materiali</span><span class="bstat-v" id="m4Double">—</span></div>
+    <div class="bstat"><span class="bstat-l">Solo impatto</span><span class="bstat-v" id="m4Impact">—</span></div>
+    <div class="bstat"><span class="bstat-l">Solo finanza</span><span class="bstat-v" id="m4Fin">—</span></div>
+  </div>
+  <div class="bbar-acts">
+    <button class="btn btn-gh" id="m4Back">← Modulo 3</button>
+    <button class="btn btn-pri" id="m4Next">Narrative → Modulo 5</button>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     MODULO 5 — NARRATIVE
+═══════════════════════════════════════ -->
+<div class="mod" id="mod5">
+<div class="hero">
+  <div class="eyebrow"><span class="edot"></span>Passo 5 di 6 — Narrative ESRS</div>
+  <h1>Narrative<br>Descrittive</h1>
+  <p>Per ogni topic materiale, redigi la narrative da includere nel report di sostenibilità. I testi sono pre-compilati sulla base dei punteggi — modificali per adattarli al contesto specifico del gruppo.</p>
+</div>
+<div class="narr-intro">
+  <div class="narr-ic"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 4h12M2 7h9M2 10h7M2 13h5" stroke="white" stroke-width="1.4" stroke-linecap="round"/></svg></div>
+  <div class="narr-intro-txt">
+    <h3>Solo i topic materiali richiedono narrative ESRS complete</h3>
+    <p>I topic classificati come <strong>doppiamente materiali</strong> o <strong>materiali per impatto</strong> richiedono disclosure dettagliata secondo ESRS 2 IRO-1. I topic materiali solo per finanza richiedono disclosure nelle note finanziarie. I topic non materiali vanno documentati come tali con motivazione sintetica.</p>
+  </div>
+</div>
+<div class="narr-grid" id="narrGrid"></div>
+<div class="bbar">
+  <div class="bbar-stats">
+    <div class="bstat"><span class="bstat-l">Topic materiali</span><span class="bstat-v" id="m5MatCount">—</span></div>
+    <div class="bstat"><span class="bstat-l">Narrative redatte</span><span class="bstat-v" id="m5NarrDone">—</span></div>
+  </div>
+  <div class="bbar-acts">
+    <button class="btn btn-gh" id="m5Back">← Modulo 4</button>
+    <button class="btn btn-pri" id="m5Next">Output → Modulo 6</button>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     MODULO 6 — OUTPUT FINALI
+═══════════════════════════════════════ -->
+<div class="mod" id="mod6">
+<div class="hero">
+  <div class="eyebrow"><span class="edot"></span>Passo 6 di 6 — Output Finali</div>
+  <h1>Output e<br>Documentazione</h1>
+  <p>Il processo di Double Materiality Assessment è completato. Qui trovi la matrice finale, il riepilogo dei topic materiali e il documento di processo da allegare al report CSRD.</p>
+</div>
+<div class="out-grid">
+  <div class="out-card">
+    <div class="out-hd"><div class="out-hd-ic"><svg width="12" height="12" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5.5" stroke="white" stroke-width="1.3"/><path d="M4.5 7l2 2 3-3" stroke="white" stroke-width="1.3" stroke-linecap="round"/></svg></div><h3>Riepilogo materialità</h3></div>
+    <div class="out-body">
+      <div class="out-stat-grid">
+        <div class="out-stat"><span class="out-stat-v" id="o6Double">—</span><span class="out-stat-l">Doppiamente materiali</span></div>
+        <div class="out-stat"><span class="out-stat-v" id="o6Total">—</span><span class="out-stat-l">Topic totali valutati</span></div>
+        <div class="out-stat"><span class="out-stat-v" id="o6Stakeholders">—</span><span class="out-stat-l">Stakeholder coinvolti</span></div>
+        <div class="out-stat"><span class="out-stat-v" id="o6Year">2024</span><span class="out-stat-l">Anno di riferimento</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="out-card">
+    <div class="out-hd"><div class="out-hd-ic"><svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M2 3h10v2H2zM2 7h8v2H2zM2 11h6v2H2z" fill="white"/></svg></div><h3>Topic materiali identificati</h3></div>
+    <div class="out-body"><div class="out-mat-list" id="o6MatList"></div></div>
+  </div>
+</div>
+<div class="out-card" style="margin-bottom:20px">
+  <div class="out-hd"><div class="out-hd-ic"><svg width="12" height="12" viewBox="0 0 14 14" fill="none"><rect x="1" y="1" width="12" height="12" rx="2" stroke="white" stroke-width="1.3"/><path d="M4 7l2 2 4-4" stroke="white" stroke-width="1.3" stroke-linecap="round"/></svg></div><h3>Log del processo DMA</h3></div>
+  <div class="out-body"><div class="process-log" id="processLog"></div></div>
+</div>
+<div class="out-grid">
+  <div class="out-card">
+    <div class="out-hd"><div class="out-hd-ic"><svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M7 2v8M4 7l3 3 3-3" stroke="white" stroke-width="1.3" stroke-linecap="round"/><path d="M2 12h10" stroke="white" stroke-width="1.3" stroke-linecap="round"/></svg></div><h3>Esporta documenti</h3></div>
+    <div class="out-actions">
+      <button class="btn-out primary" onclick="showToast('Export PDF in preparazione — funzione disponibile nella versione live.')">
+        <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M7 2v8M4 7l3 3 3-3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><path d="M2 12h10" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+        Matrice PDF
+      </button>
+      <button class="btn-out" onclick="showToast('Export Excel in preparazione — funzione disponibile nella versione live.')">
+        <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><rect x="1" y="1" width="12" height="12" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M4 5l6 4M10 5l-6 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+        Dati Excel
+      </button>
+      <button class="btn-out" onclick="showToast('Documento di processo in preparazione.')">
+        <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M3 2h8v10H3zM5 5h4M5 7h4M5 9h2" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+        Documento processo
+      </button>
+      <button class="btn-out" onclick="window.print()">
+        <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M4 1h6v3H4zM1 5h12v6H1zM4 9h6v4H4z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></svg>
+        Stampa pagina
+      </button>
+    </div>
+  </div>
+  <div class="out-card">
+    <div class="out-hd"><div class="out-hd-ic"><svg width="12" height="12" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5.5" stroke="white" stroke-width="1.3"/><path d="M7 4v3l2 2" stroke="white" stroke-width="1.3" stroke-linecap="round"/></svg></div><h3>Matrice finale (miniatura)</h3></div>
+    <div class="out-matrix-mini">
+      <svg id="miniMatrixSvg" viewBox="0 0 380 280" style="width:100%"></svg>
+    </div>
+  </div>
+</div>
+<div class="bbar">
+  <div class="bbar-stats">
+    <div class="bstat"><span class="bstat-l">Assessment</span><span class="bstat-v" style="color:var(--g600)">Completato ✓</span></div>
+  </div>
+  <div class="bbar-acts">
+    <button class="btn btn-gh" id="m6Back">← Modulo 5</button>
+    <button class="btn btn-pri" onclick="showToast('Nuovo assessment — funzione disponibile nella versione live.')">Nuovo Assessment</button>
+  </div>
+</div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"><div class="toast-ic"><svg width="11" height="11" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg></div><span id="toastMsg">Salvato.</span></div>
+
+<script>
+// ═══════════════════════════════════════════
+//  APP STATE — shared between all modules
+// ═══════════════════════════════════════════
+const appState = {
+  nav: { current: 1 },
+  m1: {
+    ragione:'', piva:'', website:'',
+    nace:[], // [{code,name,sector}]
+    bizDesc:'', size:'medium', employees:120,
+    revenue:'', geo:['IT'], hq:'',
+    year:2024, standards:['CSRD','ESRS'],
+  },
+  m2: {
+    scores:{}, // {topicId:{subId:{i:{iroId:{incl,score}}, r:{...}, o:{...}}, note:''}}
+  },
+};
+
+// ═══════════════════════════════════════════
+//  NACE DATABASE
+// ═══════════════════════════════════════════
+const NACE_DB=[
+  {code:'A01',name:'Coltivazioni agricole',desc:'Produzione vegetale, cereali, ortaggi',sector:'A'},
+  {code:'A02',name:'Silvicoltura',desc:'Foreste, arboricoltura',sector:'A'},
+  {code:'A03',name:'Pesca e acquacoltura',desc:'Pesca e itticoltura',sector:'A'},
+  {code:'B05',name:'Estrazione carbone',desc:'Carbone, coke, lignite',sector:'B'},
+  {code:'B06',name:'Estrazione petrolio e gas',desc:'Idrocarburi liquidi e gassosi',sector:'B'},
+  {code:'B08',name:'Estrazione minerali',desc:'Pietra, sabbia, ghiaia, minerali',sector:'B'},
+  {code:'C10',name:'Industria alimentare',desc:'Lavorazione e conservazione alimenti',sector:'C'},
+  {code:'C13',name:'Industria tessile',desc:'Filatura, tessitura, finissaggio',sector:'C'},
+  {code:'C15',name:'Industria conciaria',desc:'Pelli e accessori in cuoio',sector:'C'},
+  {code:'C16',name:'Industria del legno',desc:'Segagione, falegnameria',sector:'C'},
+  {code:'C17',name:'Industria cartaria',desc:'Carta, cartone e prodotti derivati',sector:'C'},
+  {code:'C20',name:'Industria chimica',desc:'Sostanze e prodotti chimici',sector:'C'},
+  {code:'C21',name:'Farmaceutica',desc:'Medicinali, vaccini, dispositivi',sector:'C'},
+  {code:'C22',name:'Gomma e plastica',desc:'Prodotti in gomma e materie plastiche',sector:'C'},
+  {code:'C23',name:'Minerali non metalliferi',desc:'Vetro, cemento, ceramica',sector:'C'},
+  {code:'C24',name:'Siderurgia e metallurgia',desc:'Ghisa, acciaio, metalli',sector:'C'},
+  {code:'C25',name:'Prodotti in metallo',desc:'Costruzioni metalliche, utensili',sector:'C'},
+  {code:'C26',name:'Elettronica',desc:'Componenti ICT, semiconduttori',sector:'C'},
+  {code:'C27',name:'Apparecchiature elettriche',desc:'Motori, trasformatori, batterie',sector:'C'},
+  {code:'C28',name:'Macchinari e impianti',desc:'Macchine industriali',sector:'C'},
+  {code:'C29',name:'Autoveicoli',desc:'Auto, furgoni, veicoli commerciali',sector:'C'},
+  {code:'C30',name:'Altri mezzi di trasporto',desc:'Navi, ferroviario, aerospazio',sector:'C'},
+  {code:'D35',name:'Energia elettrica, gas, vapore',desc:'Produzione e distribuzione energia',sector:'D'},
+  {code:'E36',name:'Raccolta e trattamento acque',desc:'Acquedotti e fognatura',sector:'E'},
+  {code:'E38',name:'Gestione rifiuti',desc:'Raccolta, trattamento, recupero',sector:'E'},
+  {code:'F41',name:'Costruzioni edilizie',desc:'Edifici residenziali e non',sector:'F'},
+  {code:'F42',name:'Ingegneria civile',desc:'Strade, autostrade, reti',sector:'F'},
+  {code:'G45',name:'Commercio autoveicoli',desc:'Vendita e riparazione auto',sector:'G'},
+  {code:'G46',name:'Commercio all\'ingrosso',desc:'Intermediari B2B',sector:'G'},
+  {code:'G47',name:'Commercio al dettaglio',desc:'GDO, retail, e-commerce',sector:'G'},
+  {code:'H49',name:'Trasporto terrestre',desc:'Autotrasporto, ferroviario',sector:'H'},
+  {code:'H50',name:'Trasporto marittimo',desc:'Navigazione marittima',sector:'H'},
+  {code:'H51',name:'Trasporto aereo',desc:'Aviazione civile e merci',sector:'H'},
+  {code:'H52',name:'Logistica e magazzinaggio',desc:'Depositi, centri distribuzione',sector:'H'},
+  {code:'I55',name:'Alloggio',desc:'Hotel, resort, campeggi',sector:'I'},
+  {code:'I56',name:'Ristorazione',desc:'Bar, ristoranti, catering',sector:'I'},
+  {code:'J58',name:'Editoria',desc:'Libri, giornali, software',sector:'J'},
+  {code:'J61',name:'Telecomunicazioni',desc:'Telefonia, internet, satellite',sector:'J'},
+  {code:'J62',name:'IT e software',desc:'Sviluppo software, cloud, ICT',sector:'J'},
+  {code:'K64',name:'Servizi finanziari',desc:'Banche, intermediazione creditizia',sector:'K'},
+  {code:'K65',name:'Assicurazioni',desc:'Vita, danni, riassicurazione',sector:'K'},
+  {code:'K66',name:'Attività ausiliarie finanziarie',desc:'SGR, fondi, leasing',sector:'K'},
+  {code:'L68',name:'Immobiliare',desc:'Compravendita, locazione',sector:'L'},
+  {code:'M69',name:'Attività legali e contabili',desc:'Avvocati, commercialisti',sector:'M'},
+  {code:'M70',name:'Consulenza direzionale',desc:'Management consulting',sector:'M'},
+  {code:'M71',name:'Architettura e ingegneria',desc:'Progettazione tecnica',sector:'M'},
+  {code:'M72',name:'Ricerca e sviluppo',desc:'R&D scientifica e tecnologica',sector:'M'},
+  {code:'M73',name:'Pubblicità e marketing',desc:'Agenzie creative, media',sector:'M'},
+  {code:'N77',name:'Noleggio e leasing',desc:'Veicoli, macchinari',sector:'N'},
+  {code:'N78',name:'Somministrazione lavoro',desc:'Agenzie per il lavoro',sector:'N'},
+  {code:'O84',name:'PA e difesa',desc:'Pubblica amministrazione',sector:'O'},
+  {code:'P85',name:'Istruzione',desc:'Scuole, università, formazione',sector:'P'},
+  {code:'Q86',name:'Sanità',desc:'Ospedali, cliniche, ambulatori',sector:'Q'},
+  {code:'Q87',name:'Servizi residenziali di cura',desc:'RSA, case di cura',sector:'Q'},
+  {code:'R90',name:'Attività creative e artistiche',desc:'Spettacolo, musei, patrimonio',sector:'R'},
+  {code:'R93',name:'Sport e svago',desc:'Impianti sportivi, parchi',sector:'R'},
+  {code:'S94',name:'Associazioni e organizzazioni',desc:'Sindacati, enti, associazioni',sector:'S'},
+];
+
+// ═══════════════════════════════════════════
+//  IRO LIBRARY — sector-tagged
+//  sectors: array of NACE letter codes, or ['ALL']
+//  auto: true = pre-selected for matching sectors
+// ═══════════════════════════════════════════
+const IRO_LIB = {
+'E1.a':{
+  i:[
+    {id:'E1aI1',txt:'Emissioni dirette di CO₂ e altri GHG da combustione fossile e processi industriali (Scope 1)',s:['B','C','D','H','F']},
+    {id:'E1aI2',txt:'Emissioni indirette da acquisto di energia elettrica e termica (Scope 2)',s:['ALL']},
+    {id:'E1aI3',txt:'Emissioni lungo la catena del valore: approvvigionamento, trasporto, uso e fine vita dei prodotti (Scope 3)',s:['C','G','A']},
+    {id:'E1aI4',txt:'Emissioni di F-gas e refrigeranti con elevato potenziale di riscaldamento globale (GWP)',s:['C','I','G']},
+  ],
+  r:[
+    {id:'E1aR1',txt:'Incremento strutturale dei costi operativi per espansione del sistema ETS e introduzione di carbon tax',s:['B','C','D']},
+    {id:'E1aR2',txt:'Perdita di clienti e contratti con player corporate che impongono target di decarbonizzazione supply chain',s:['C','G','H']},
+    {id:'E1aR3',txt:'Difficoltà di accesso al credito e assicurazioni per attività carbon-intensive',s:['ALL']},
+    {id:'E1aR4',txt:'Stranded assets: svalutazione di impianti ad alta intensità carbonifera in scenari di transizione rapida',s:['B','C','D']},
+  ],
+  o:[
+    {id:'E1aO1',txt:'Riduzione strutturale dei costi energetici attraverso efficienza e generazione da rinnovabili proprie',s:['ALL']},
+    {id:'E1aO2',txt:'Accesso preferenziale a green bond, sustainability-linked loan e finanziamenti agevolati per decarbonizzazione',s:['ALL']},
+    {id:'E1aO3',txt:'Sviluppo di prodotti e servizi low-carbon come leva di differenziazione verso clienti ESG-driven',s:['C','D','G']},
+  ],
+},
+'E1.b':{
+  i:[
+    {id:'E1bI1',txt:'Impatti fisici acuti su impianti e magazzini: alluvioni, ondate di calore, eventi meteorologici estremi',s:['B','C','D','F','A']},
+    {id:'E1bI2',txt:'Impatti fisici cronici: stress idrico, innalzamento temperature medie, variazioni precipitazioni',s:['A','C','D']},
+    {id:'E1bI3',txt:'Vulnerabilità della catena di fornitura a rischi fisici climatici in geografie esposte',s:['C','G','H']},
+  ],
+  r:[
+    {id:'E1bR1',txt:'Danni materiali ad asset fisici per eventi climatici estremi (rischio fisico acuto TCFD)',s:['B','C','D','F']},
+    {id:'E1bR2',txt:'Aumento dei premi assicurativi o impossibilità di copertura per rischi climatici fisici',s:['ALL']},
+    {id:'E1bR3',txt:'Interruzioni operative per indisponibilità di risorse idriche o energetiche in aree colpite da crisi climatica',s:['A','C','D']},
+  ],
+  o:[
+    {id:'E1bO1',txt:'Investimento in piani di resilienza e business continuity che riducono la vulnerabilità operativa',s:['ALL']},
+    {id:'E1bO2',txt:'Infrastructure climate-proof come leva di valorizzazione degli asset e di vantaggio competitivo',s:['F','L','D']},
+  ],
+},
+'E1.c':{
+  i:[
+    {id:'E1cI1',txt:'Consumo di fonti energetiche non rinnovabili e contributo all\'esaurimento delle riserve fossili',s:['B','C','D','H']},
+    {id:'E1cI2',txt:'Dipendenza da reti elettriche ad alta intensità carbonifera in geografie con mix energetico sfavorevole',s:['ALL']},
+    {id:'E1cI3',txt:'Effetti locali di grandi impianti energetici: rumore, impatto visivo, alterazione del territorio',s:['D','B']},
+  ],
+  r:[
+    {id:'E1cR1',txt:'Volatilità e aumento strutturale dei prezzi dell\'energia fossile con impatto su marginalità',s:['C','H','F']},
+    {id:'E1cR2',txt:'Obblighi normativi crescenti: audit energetici obbligatori, certificati bianchi, standard di efficienza',s:['ALL']},
+    {id:'E1cR3',txt:'Dipendenza da singoli fornitori energetici con rischio di supply disruption',s:['C','D']},
+  ],
+  o:[
+    {id:'E1cO1',txt:'Riduzione del costo dell\'energia tramite fotovoltaico, cogenerazione o pompe di calore',s:['ALL']},
+    {id:'E1cO2',txt:'Certificazioni di efficienza energetica e rating ISO 50001 come leva commerciale e di accesso a bandi',s:['ALL']},
+  ],
+},
+'E2.a':{
+  i:[
+    {id:'E2aI1',txt:'Emissioni di inquinanti atmosferici (NOx, SOx, PM10, PM2.5, COV) da impianti produttivi',s:['B','C','D']},
+    {id:'E2aI2',txt:'Effetti sulla salute delle comunità locali in prossimità degli stabilimenti',s:['B','C','D','F']},
+    {id:'E2aI3',txt:'Contributo all\'ozono troposferico e alle piogge acide attraverso emissioni industriali',s:['B','C']},
+  ],
+  r:[
+    {id:'E2aR1',txt:'Sanzioni e contenziosi per superamento soglie emissive delle autorizzazioni AIA',s:['B','C','D']},
+    {id:'E2aR2',txt:'Costi di adeguamento tecnico per normative sulle emissioni sempre più stringenti',s:['B','C','D']},
+    {id:'E2aR3',txt:'Danni reputazionali per episodi di inquinamento locale con impatto sulla licenza sociale',s:['B','C','D']},
+  ],
+  o:[
+    {id:'E2aO1',txt:'Investimenti in tecnologie di abbattimento come differenziatore di compliance preventiva',s:['C','D']},
+    {id:'E2aO2',txt:'Riduzione emissioni come componente ESG per vantaggio in procurement pubblico e gare',s:['ALL']},
+  ],
+},
+'E2.b':{
+  i:[
+    {id:'E2bI1',txt:'Scarichi di reflui industriali con sostanze organiche, metalli pesanti o nutrienti in corpi idrici',s:['C','A','E']},
+    {id:'E2bI2',txt:'Alterazione della qualità delle acque superficiali e sotterranee nelle aree di operatività',s:['B','C','A','F']},
+    {id:'E2bI3',txt:'Impatti su ecosistemi acquatici per thermal pollution o alterazione del pH',s:['D','C']},
+  ],
+  r:[
+    {id:'E2bR1',txt:'Sanzioni AIA e procedimenti penali per superamento dei limiti allo scarico idrico',s:['C','A','E']},
+    {id:'E2bR2',txt:'Costi di bonifica e risarcimento per contaminazione di falde o corsi d\'acqua',s:['B','C','F']},
+    {id:'E2bR3',txt:'Revoca autorizzazioni ambientali con possibile blocco operativo degli impianti',s:['C','D','B']},
+  ],
+  o:[
+    {id:'E2bO1',txt:'Adozione di sistemi di trattamento avanzati come differenziatore di qualità ambientale certificabile',s:['C','E']},
+    {id:'E2bO2',txt:'Riuso e riciclo dell\'acqua di processo: riduzione costi idrici e resilienza produttiva',s:['C','A']},
+  ],
+},
+'E2.c':{
+  i:[
+    {id:'E2cI1',txt:'Contaminazione del suolo per sversamenti accidentali di idrocarburi, solventi o chemicals',s:['B','C','D']},
+    {id:'E2cI2',txt:'Inquinamento da depositi e siti dismessi con passività ambientali pregresse',s:['B','C','F']},
+    {id:'E2cI3',txt:'Perdita di fertilità e biodiversità del suolo per uso intensivo di prodotti fitosanitari',s:['A']},
+  ],
+  r:[
+    {id:'E2cR1',txt:'Passività ambientali per bonifica di siti contaminati (D.Lgs 152/2006)',s:['B','C','F']},
+    {id:'E2cR2',txt:'Blocco operativo e sequestro impianti per superamento dei valori soglia nel suolo',s:['B','C']},
+    {id:'E2cR3',txt:'Svalutazione di asset immobiliari per presenza o rischio di contaminazione del sito',s:['F','L','B']},
+  ],
+  o:[
+    {id:'E2cO1',txt:'Bonifiche e riqualificazione di brownfield come opportunità di sviluppo sostenibile',s:['F','L']},
+    {id:'E2cO2',txt:'Agricoltura rigenerativa e suolo sano come premium per produzioni bio e certificate',s:['A']},
+  ],
+},
+'E2.d':{
+  i:[
+    {id:'E2dI1',txt:'Produzione, uso o smaltimento di sostanze chimiche pericolose (SVHC, PFAS, IPA) con effetti su salute e ambiente',s:['C','B']},
+    {id:'E2dI2',txt:'Esposizione dei lavoratori a chemicals cancerogeni, mutageni o reprotossici nei processi produttivi',s:['C','B','D']},
+    {id:'E2dI3',txt:'Persistenza di inquinanti organici persistenti (POP) nell\'ambiente con effetti a lungo termine sugli ecosistemi',s:['C','B','A']},
+  ],
+  r:[
+    {id:'E2dR1',txt:'Restrizioni REACH e aggiornamento elenchi SVHC: impatto su processi produttivi e formulazioni di prodotto',s:['C']},
+    {id:'E2dR2',txt:'Responsabilità civile e penale per danni alla salute da esposizione prolungata a chemicals',s:['C','B']},
+    {id:'E2dR3',txt:'Costi di sostituzione di sostanze vietate con alternative più costose o meno performanti',s:['C']},
+  ],
+  o:[
+    {id:'E2dO1',txt:'Sviluppo di formulazioni chimiche sostenibili come leva di innovazione e premium pricing',s:['C']},
+    {id:'E2dO2',txt:'Green chemistry leadership come differenziatore verso clienti B2B con supply chain policy stringenti',s:['C','G']},
+  ],
+},
+'E3.a':{
+  i:[
+    {id:'E3aI1',txt:'Prelievo significativo di acqua da fonti superficiali o sotterranee in aree water-stressed',s:['A','C','D']},
+    {id:'E3aI2',txt:'Riduzione della disponibilità idrica locale per altri utenti (comunità, agricoltura) a causa dei prelievi',s:['A','C']},
+    {id:'E3aI3',txt:'Riduzione della qualità dell\'acqua reimmessa rispetto all\'acqua prelevata',s:['C','A','E']},
+    {id:'E3aI4',txt:'Alterazione del regime idrologico di corsi d\'acqua per derivazioni industriali rilevanti',s:['D','A']},
+  ],
+  r:[
+    {id:'E3aR1',txt:'Scarsità idrica in aree operative: interruzioni produttive per indisponibilità di acqua di processo',s:['A','C','D']},
+    {id:'E3aR2',txt:'Incremento tariffe idriche e introduzione di water pricing in aree di stress idrico',s:['A','C']},
+    {id:'E3aR3',txt:'Vincoli autorizzativi sempre più stringenti sui prelievi idrici industriali',s:['A','C','D']},
+  ],
+  o:[
+    {id:'E3aO1',txt:'Efficienza idrica e sistemi di riciclo acqua di processo: riduzione costi e resilienza operativa',s:['A','C','D']},
+    {id:'E3aO2',txt:'Water stewardship certificata come leva di reputazione, certificazioni ambientali e gare d\'appalto',s:['ALL']},
+  ],
+},
+'E3.b':{
+  i:[
+    {id:'E3bI1',txt:'Scarichi in mare di reflui industriali o portatori di microplastiche con impatti su ecosistemi costieri',s:['C','H','A']},
+    {id:'E3bI2',txt:'Disturbo di habitat marini per attività di costruzione, dragaggio o pesca intensiva',s:['A','F','H']},
+  ],
+  r:[
+    {id:'E3bR1',txt:'Restrizioni normative crescenti sull\'uso di aree marine per attività produttive',s:['A','D']},
+    {id:'E3bR2',txt:'Rischio reputazionale per associazione a episodi di inquinamento marino o costiero',s:['C','H','G']},
+  ],
+  o:[
+    {id:'E3bO1',txt:'Blue economy: sviluppo di attività sostenibili legate a risorse marine certificate',s:['A','D']},
+    {id:'E3bO2',txt:'Acquacoltura biologica certificata e premium seafood come segmento ad alto margine',s:['A']},
+  ],
+},
+'E4.a':{
+  i:[
+    {id:'E4aI1',txt:'Frammentazione e distruzione di habitat naturali per espansione di siti produttivi o infrastrutture',s:['B','F','C']},
+    {id:'E4aI2',txt:'Impatto diretto su specie protette nelle aree di operatività del gruppo',s:['B','A','F']},
+    {id:'E4aI3',txt:'Diffusione di specie aliene invasive attraverso movimentazione di merci, veicoli o imballaggi',s:['H','G','A']},
+    {id:'E4aI4',txt:'Riduzione della connettività ecologica per infrastrutture lineari (strade, pipeline, elettrodotti)',s:['H','B','F','D']},
+  ],
+  r:[
+    {id:'E4aR1',txt:'Blocco VIA e autorizzazioni ambientali per impatti su habitat e specie protette (Direttiva Habitat)',s:['F','B','D']},
+    {id:'E4aR2',txt:'Contenzioso legale e sanzioni per violazione della normativa su specie protette',s:['A','B','F']},
+    {id:'E4aR3',txt:'Perdita di licenza sociale in aree sensibili per conflitti con comunità legate agli ecosistemi',s:['B','F','D']},
+  ],
+  o:[
+    {id:'E4aO1',txt:'Progetti di compensazione e ripristino ecologico come fonte di crediti di biodiversità',s:['F','B','D']},
+    {id:'E4aO2',txt:'Certificazioni FSC, RSPO, MSC come premium commerciale per settori dipendenti da risorse naturali',s:['A','C']},
+  ],
+},
+'E4.b':{
+  i:[
+    {id:'E4bI1',txt:'Impermeabilizzazione del suolo e consumo di suolo agricolo per espansione industriale o insediativa',s:['F','C','L']},
+    {id:'E4bI2',txt:'Deforestazione diretta o indiretta nella catena di fornitura per approvvigionamento di commodity',s:['A','C','G']},
+    {id:'E4bI3',txt:'Degrado dei servizi ecosistemici (impollinazione, regolazione idrica, sequestro carbonio) per land use change',s:['A','F']},
+  ],
+  r:[
+    {id:'E4bR1',txt:'Rischio reputazionale e commerciale per associazione a deforestazione nella supply chain',s:['G','C','A']},
+    {id:'E4bR2',txt:'EU Deforestation Regulation (EUDR): obblighi di tracciabilità e due diligence su commodity a rischio',s:['A','G','C']},
+    {id:'E4bR3',txt:'Svalutazione di terreni per degrado ambientale e perdita di fertilità o funzionalità ecosistemica',s:['A','L']},
+  ],
+  o:[
+    {id:'E4bO1',txt:'Land restoration e agroforestry come fonte di carbon credit e diversificazione del reddito',s:['A','F']},
+    {id:'E4bO2',txt:'Nature-based solutions per rischi idrogeologici e climatici: risparmio su costi assicurativi',s:['F','A','D']},
+  ],
+},
+'E5.a':{
+  i:[
+    {id:'E5aI1',txt:'Utilizzo intensivo di materie prime vergini non rinnovabili (metalli, minerali, combustibili fossili)',s:['B','C','D']},
+    {id:'E5aI2',txt:'Dipendenza da materiali critici ad alto rischio di fornitura (terre rare, cobalto, litio)',s:['C']},
+    {id:'E5aI3',txt:'Impatti upstream di estrazione: danni ambientali e sociali nelle aree minerarie della supply chain',s:['C','G']},
+    {id:'E5aI4',txt:'Generazione di scarti e sfridi produttivi per efficienza sub-ottimale dei processi',s:['C','F']},
+  ],
+  r:[
+    {id:'E5aR1',txt:'Volatilità dei prezzi e supply disruption per materiali critici e commodity industriali',s:['C','D']},
+    {id:'E5aR2',txt:'Obblighi di due diligence su minerali da conflitto e materiali critici (CSRD, Conflict Minerals)',s:['C','G']},
+    {id:'E5aR3',txt:'Costi crescenti di accesso a materie prime vergini per esaurimento riserve e tassazione ambientale',s:['C','B']},
+  ],
+  o:[
+    {id:'E5aO1',txt:'Adozione di materiali riciclati e seconde materie prime: riduzione costi e disaccoppiamento da commodity',s:['C','G']},
+    {id:'E5aO2',txt:'Design for circularity: prodotti riprogettati per durabilità, riparabilità e riciclabilità a fine vita',s:['C']},
+    {id:'E5aO3',txt:'Valorizzazione degli scarti di produzione come flusso di ricavo aggiuntivo (simbiosi industriale)',s:['C','A','E']},
+  ],
+},
+'E5.b':{
+  i:[
+    {id:'E5bI1',txt:'Produzione di rifiuti pericolosi da processi industriali con rischio di contaminazione ambientale',s:['B','C','D']},
+    {id:'E5bI2',txt:'Smaltimento in discarica di rifiuti valorizzabili con perdita di risorse e impatti locali',s:['C','G','H']},
+    {id:'E5bI3',txt:'Dispersione di plastica e microplastiche nell\'ambiente attraverso imballaggi e prodotti',s:['C','G']},
+    {id:'E5bI4',txt:'Impatti su comunità locali per traffico, odori e presenza di impianti di trattamento rifiuti',s:['E','F']},
+  ],
+  r:[
+    {id:'E5bR1',txt:'Costi crescenti di smaltimento rifiuti pericolosi e aumento della tassazione sulle discariche',s:['C','B','D']},
+    {id:'E5bR2',txt:'Responsabilità estesa del produttore (EPR): obblighi e costi per fine vita degli imballaggi immessi al consumo',s:['C','G']},
+    {id:'E5bR3',txt:'Sanzioni per non conformità alla normativa rifiuti (tracciabilità FIR, formulari, AIA)',s:['C','B','E']},
+  ],
+  o:[
+    {id:'E5bO1',txt:'Valorizzazione degli scarti come materie prime seconde: riduzione costi e creazione di nuovo business',s:['C','E']},
+    {id:'E5bO2',txt:'Packaging circolare come leva commerciale verso retailer e brand con policy di sostenibilità',s:['C','G']},
+    {id:'E5bO3',txt:'Accesso a fondi PNRR e incentivi europei per investimenti in economia circolare',s:['C','E']},
+  ],
+},
+'S1.a':{
+  i:[
+    {id:'S1aI1',txt:'Retribuzione al di sotto del living wage per categorie di lavoratori con basso potere contrattuale',s:['ALL']},
+    {id:'S1aI2',txt:'Uso elevato di contratti atipici, precari o a tempo determinato senza prospettive di stabilizzazione',s:['G','I','H']},
+    {id:'S1aI3',txt:'Orari di lavoro eccessivi, turni sfavorevoli o lavoro notturno con impatti su salute e vita privata',s:['H','I','C']},
+    {id:'S1aI4',txt:'Mancanza di benefit adeguati e welfare aziendale per lavoratori a basso reddito',s:['G','H','I']},
+  ],
+  r:[
+    {id:'S1aR1',txt:'Alto turnover e difficoltà di attrattività come employer: costi elevati di recruiting e onboarding',s:['ALL']},
+    {id:'S1aR2',txt:'Rischi legali per violazioni della normativa giuslavoristica italiana e europea',s:['ALL']},
+    {id:'S1aR3',txt:'Danni reputazionali per esposti o campagne mediatiche su condizioni di lavoro',s:['G','H','I']},
+  ],
+  o:[
+    {id:'S1aO1',txt:'Employer branding: posizionamento come great place to work per ridurre costi HR e aumentare retention',s:['ALL']},
+    {id:'S1aO2',txt:'Welfare aziendale e flexible work come leva di produttività, engagement e riduzione assenteismo',s:['ALL']},
+  ],
+},
+'S1.b':{
+  i:[
+    {id:'S1bI1',txt:'Infortuni sul lavoro, anche mortali, per carenze nei sistemi di prevenzione e protezione collettiva',s:['C','B','F','H']},
+    {id:'S1bI2',txt:'Malattie professionali da esposizione cronica ad agenti chimici, fisici o biologici',s:['B','C','D']},
+    {id:'S1bI3',txt:'Stress lavoro-correlato e burnout in ambienti ad alta pressione operativa',s:['K','M','J']},
+    {id:'S1bI4',txt:'Impatti sulla salute mentale dei lavoratori per condizioni di lavoro inadeguate o contesti di ristrutturazione',s:['ALL']},
+  ],
+  r:[
+    {id:'S1bR1',txt:'Responsabilità penale e civile per infortuni e malattie professionali (D.Lgs 81/2008, Testo Unico Sicurezza)',s:['ALL']},
+    {id:'S1bR2',txt:'Costi assicurativi INAIL elevati e sanzioni ispettive per non conformità in materia H&S',s:['C','B','F']},
+    {id:'S1bR3',txt:'Interruzioni produttive per incidenti gravi, sequestro di macchinari o scioperi legati alla sicurezza',s:['C','B','F']},
+  ],
+  o:[
+    {id:'S1bO1',txt:'Certificazione ISO 45001 come leva di rating ESG e accesso preferenziale a gare d\'appalto',s:['ALL']},
+    {id:'S1bO2',txt:'Riduzione del tasso infortuni come KPI per bonus management e riduzione premi assicurativi',s:['ALL']},
+  ],
+},
+'S1.c':{
+  i:[
+    {id:'S1cI1',txt:'Gender pay gap strutturale tra uomini e donne in ruoli equivalenti',s:['ALL']},
+    {id:'S1cI2',txt:'Sottorappresentazione di donne, disabili e minoranze in ruoli dirigenziali e di leadership',s:['ALL']},
+    {id:'S1cI3',txt:'Pratiche discriminatorie nei processi di selezione, promozione o accesso alla formazione',s:['ALL']},
+    {id:'S1cI4',txt:'Clima aziendale non inclusivo con episodi di molestie, microaggressioni o discriminazioni',s:['ALL']},
+  ],
+  r:[
+    {id:'S1cR1',txt:'Contenziosi legali e risarcimenti per discriminazione e violazione delle pari opportunità',s:['ALL']},
+    {id:'S1cR2',txt:'Esclusione da gare d\'appalto pubbliche che richiedono la certificazione parità di genere (L. 162/2021)',s:['ALL']},
+    {id:'S1cR3',txt:'Rischio reputazionale per esposizione mediatica su pratiche discriminatorie (social media amplification)',s:['ALL']},
+  ],
+  o:[
+    {id:'S1cO1',txt:'Certificazione UNI/PDR 125 parità di genere come leva per gare pubbliche e miglioramento del rating ESG',s:['ALL']},
+    {id:'S1cO2',txt:'D&I come driver di innovazione, pensiero creativo e performance finanziaria comprovata',s:['ALL']},
+  ],
+},
+'S1.d':{
+  i:[
+    {id:'S1dI1',txt:'Inadeguatezza delle competenze della forza lavoro rispetto alla transizione verde e digitale',s:['ALL']},
+    {id:'S1dI2',txt:'Mancanza di percorsi strutturati di crescita e sviluppo professionale per i dipendenti',s:['ALL']},
+    {id:'S1dI3',txt:'Esclusione di categorie vulnerabili o over-50 dai programmi di formazione e upskilling',s:['ALL']},
+  ],
+  r:[
+    {id:'S1dR1',txt:'Skill gap critico per la trasformazione digitale e verde del business model',s:['C','D','K','J']},
+    {id:'S1dR2',txt:'Perdita di competenze chiave per mancanza di piani di successione e knowledge management',s:['ALL']},
+  ],
+  o:[
+    {id:'S1dO1',txt:'Investimenti in formazione come leva di retention, produttività, innovazione e riduzione errori',s:['ALL']},
+    {id:'S1dO2',txt:'Accesso a fondi Interprofessionali e PNRR per upskilling e reskilling dei lavoratori',s:['ALL']},
+    {id:'S1dO3',txt:'Academy interna e employer branding per attrarre talenti in settori con carenza di competenze',s:['C','D','J','K']},
+  ],
+},
+'S2.a':{
+  i:[
+    {id:'S2aI1',txt:'Rischio di lavoro minorile o forzato in fornitori di primo o secondo livello in paesi a rischio',s:['C','G','A']},
+    {id:'S2aI2',txt:'Condizioni di lavoro non sicure e retribuzioni sotto soglia di sussistenza in fornitori chiave',s:['C','G']},
+    {id:'S2aI3',txt:'Orari eccessivi e mancanza di libertà di associazione sindacale presso fornitori esteri',s:['C','G','A']},
+    {id:'S2aI4',txt:'Impatti discriminatori su lavoratori migranti o stagionali nella catena di fornitura',s:['A','G','H']},
+  ],
+  r:[
+    {id:'S2aR1',txt:'Sanzioni previste dalla CS3D (Corporate Sustainability Due Diligence Directive) per violazioni supply chain',s:['C','G']},
+    {id:'S2aR2',txt:'Danni reputazionali catastrofici per scandali su condizioni di lavoro nei fornitori',s:['G','C']},
+    {id:'S2aR3',txt:'Esclusione da mercati o rifiuto di partnership per assenza di supply chain audit certificati',s:['C','G']},
+  ],
+  o:[
+    {id:'S2aO1',txt:'Programmi di capacity building con fornitori come leva di fidelizzazione e miglioramento qualità',s:['C','G']},
+    {id:'S2aO2',txt:'Certificazioni SA8000 e audit supply chain come differenziatore commerciale in mercati internazionali',s:['C','G']},
+  ],
+},
+'S2.b':{
+  i:[
+    {id:'S2bI1',txt:'Mancanza di meccanismi di reclamo accessibili per lavoratori nella catena del valore',s:['C','G']},
+    {id:'S2bI2',txt:'Pratiche commerciali sleali verso fornitori piccoli: ritardi nei pagamenti, prezzi predatori, clausole leonine',s:['G','C','H']},
+    {id:'S2bI3',txt:'Mancanza di trasparenza e condivisione di obiettivi ESG con i fornitori strategici',s:['ALL']},
+  ],
+  r:[
+    {id:'S2bR1',txt:'Violazione Direttiva Late Payments e normativa sui ritardi di pagamento nelle transazioni commerciali',s:['ALL']},
+    {id:'S2bR2',txt:'Perdita di fornitori strategici per pratiche commerciali non etiche o reputazione danneggiata',s:['ALL']},
+  ],
+  o:[
+    {id:'S2bO1',txt:'Partnership sostenibili a lungo termine con fornitori: co-innovazione e lock-in strategico positivo',s:['C','G']},
+    {id:'S2bO2',txt:'Programmi di sviluppo fornitori come leva di qualità, affidabilità e riduzione dei costi totali',s:['C','G']},
+  ],
+},
+'S3.a':{
+  i:[
+    {id:'S3aI1',txt:'Rumore, vibrazioni, traffico pesante e disturbo per le comunità residenti vicino agli impianti',s:['C','B','D','F']},
+    {id:'S3aI2',txt:'Alterazione del paesaggio e del valore percepito del territorio per infrastrutture industriali',s:['B','D','F']},
+    {id:'S3aI3',txt:'Pressione su servizi locali (viabilità, alloggi, servizi pubblici) per grandi insediamenti',s:['B','C','F']},
+    {id:'S3aI4',txt:'Impatti su attività economiche locali (turismo, agricoltura) per inquinamento o degrado',s:['B','C','D']},
+  ],
+  r:[
+    {id:'S3aR1',txt:'Perdita della licenza sociale ad operare per opposizione di comitati locali e autorità',s:['B','C','D','F']},
+    {id:'S3aR2',txt:'Ricorsi TAR e blocco di autorizzazioni ambientali per opposizione delle comunità interessate',s:['B','D','F']},
+    {id:'S3aR3',txt:'Danni reputazionali locali con impatti su recruitment, relazioni istituzionali e valore del brand',s:['B','C','D']},
+  ],
+  o:[
+    {id:'S3aO1',txt:'Community engagement strutturato e investimenti sociali come leva per la licenza sociale',s:['ALL']},
+    {id:'S3aO2',txt:'Programmi di shared value: valorizzazione del territorio come leva di marketing e reputazione',s:['ALL']},
+  ],
+},
+'S3.b':{
+  i:[
+    {id:'S3bI1',txt:'Restrizione all\'accesso a risorse idriche, alimentari o territoriali di popolazioni locali per attività del gruppo',s:['B','A','D']},
+    {id:'S3bI2',txt:'Impatti negativi sui mezzi di sussistenza di comunità rurali o popolazioni indigene',s:['B','A','F']},
+  ],
+  r:[
+    {id:'S3bR1',txt:'Obblighi FPIC (Free Prior Informed Consent) per operazioni in aree con popolazioni indigene o protette',s:['B','A','D']},
+    {id:'S3bR2',txt:'Contenzioso internazionale e danni reputazionali per violazioni dei diritti delle comunità',s:['B','D']},
+  ],
+  o:[
+    {id:'S3bO1',txt:'Community benefit agreement come strumento di co-sviluppo e consolidamento della licenza sociale',s:['B','D','F']},
+    {id:'S3bO2',txt:'Sviluppo locale: occupazione, formazione e infrastrutture per le comunità ospitanti',s:['B','D','F']},
+  ],
+},
+'S4.a':{
+  i:[
+    {id:'S4aI1',txt:'Danni alla salute dei consumatori per prodotti difettosi, contaminati o con istruzioni inadeguate',s:['C','A','I','Q']},
+    {id:'S4aI2',txt:'Impatti su fasce vulnerabili (bambini, anziani, disabili) per inadeguatezza di prodotti o servizi',s:['G','I','Q']},
+    {id:'S4aI3',txt:'Effetti negativi a lungo termine sulla salute per ingredienti, componenti o additivi controversi',s:['A','C','Q']},
+  ],
+  r:[
+    {id:'S4aR1',txt:'Recall e ritiro dal mercato: costi operativi, perdita di quota e danni reputazionali significativi',s:['A','C','G']},
+    {id:'S4aR2',txt:'Responsabilità civile e penale per danni causati da prodotti (Product Liability Directive EU)',s:['C','G','A']},
+    {id:'S4aR3',txt:'Perdita di certificazioni di qualità (ISO, BRC, IFS) con impatto immediato sull\'accesso al mercato',s:['C','A']},
+  ],
+  o:[
+    {id:'S4aO1',txt:'Premium quality e certificazioni come leva di pricing, fedeltà del cliente e differenziazione',s:['A','C','G']},
+    {id:'S4aO2',txt:'Innovazione verso formulazioni e materiali più sicuri come driver di vantaggio competitivo',s:['C','A']},
+  ],
+},
+'S4.b':{
+  i:[
+    {id:'S4bI1',txt:'Raccolta e profilazione di dati personali dei clienti senza adeguata informativa e consenso esplicito',s:['G','J','K']},
+    {id:'S4bI2',txt:'Rischio di uso improprio di dati sensibili per finalità commerciali non dichiarate o condivisione con terzi',s:['K','J','G']},
+    {id:'S4bI3',txt:'Esclusione digitale di fasce di popolazione che non possono accedere a servizi esclusivamente digitali',s:['K','G','Q']},
+  ],
+  r:[
+    {id:'S4bR1',txt:'Sanzioni del Garante Privacy GDPR: fino al 4% del fatturato globale per violazioni gravi',s:['ALL']},
+    {id:'S4bR2',txt:'Data breach: costi legali, notifiche obbligatorie, risarcimenti e danni reputazionali',s:['J','K','G']},
+    {id:'S4bR3',txt:'Blocco di operazioni digitali per non conformità normativa GDPR o NIS2 in paesi di operatività',s:['J','K']},
+  ],
+  o:[
+    {id:'S4bO1',txt:'Privacy by design e certificazioni ISO 27001 come differenziatore nella fiducia del cliente',s:['J','K','G']},
+    {id:'S4bO2',txt:'Data governance eccellente come abilitatore di AI responsabile e analytics avanzate',s:['J','K']},
+  ],
+},
+'S4.c':{
+  i:[
+    {id:'S4cI1',txt:'Prodotti o servizi non accessibili a fasce di popolazione a basso reddito, anziani o con disabilità',s:['K','G','Q','I']},
+    {id:'S4cI2',txt:'Design che penalizza utenti con competenze digitali limitate: barriere di accesso involontarie',s:['K','J','G']},
+  ],
+  r:[
+    {id:'S4cR1',txt:'European Accessibility Act (EAA 2025): obblighi di adeguamento per prodotti e servizi digitali',s:['K','J','G','Q']},
+    {id:'S4cR2',txt:'Esclusione da mercati o bandi che richiedono prove di inclusività e accessibilità universale',s:['Q','K','G']},
+  ],
+  o:[
+    {id:'S4cO1',txt:'Accessibilità universale: 1,3 miliardi di persone con disabilità come segmento di mercato sottosservito',s:['G','K','J']},
+    {id:'S4cO2',txt:'Servizi finanziari e sanitari inclusivi come leva di espansione in segmenti emergenti e a basso reddito',s:['K','Q']},
+  ],
+},
+'G1.a':{
+  i:[
+    {id:'G1aI1',txt:'Rischio di pratiche corruttive nella gestione di contratti pubblici, permessi e rapporti con PA',s:['ALL']},
+    {id:'G1aI2',txt:'Conflitti di interesse nella governance non adeguatamente identificati e gestiti',s:['ALL']},
+    {id:'G1aI3',txt:'Mancanza di canali di whistleblowing efficaci e protezione inadeguata dei segnalanti',s:['ALL']},
+    {id:'G1aI4',txt:'Pratiche commerciali sleali, anticoncorrenziali o di greenwashing che distorcono il mercato',s:['ALL']},
+  ],
+  r:[
+    {id:'G1aR1',txt:'Sanzioni penali e amministrative per corruzione (D.Lgs 231/2001, FCPA, UK Bribery Act)',s:['ALL']},
+    {id:'G1aR2',txt:'Esclusione da gare d\'appalto pubbliche per condanne o procedimenti per reati contro la PA',s:['ALL']},
+    {id:'G1aR3',txt:'Danni reputazionali irreversibili per scandali di corruzione, frode o greenwashing',s:['ALL']},
+  ],
+  o:[
+    {id:'G1aO1',txt:'Modello 231 robusto e cultura dell\'integrità come fattore di fiducia istituzionale e differenziazione',s:['ALL']},
+    {id:'G1aO2',txt:'Certificazione ISO 37001 Anti-Bribery come requisito per mercati e partner internazionali',s:['ALL']},
+  ],
+},
+'G1.b':{
+  i:[
+    {id:'G1bI1',txt:'Mancanza di criteri ESG nella selezione e qualifica dei fornitori: rischio di complicità in violazioni',s:['ALL']},
+    {id:'G1bI2',txt:'Assenza di audit e monitoraggio sistematico della supply chain su temi ambientali e sociali',s:['C','G']},
+    {id:'G1bI3',txt:'Concentrazione eccessiva su pochi fornitori critici senza diversificazione del rischio di fornitura',s:['C','G','H']},
+  ],
+  r:[
+    {id:'G1bR1',txt:'CS3D: sanzioni fino al 5% del fatturato globale per imprese con fatturato >€150M che violano la DD',s:['ALL']},
+    {id:'G1bR2',txt:'Supply chain disruption per eventi ESG presso fornitori critici (disastri ambientali, scioperi, scandali)',s:['C','G','H']},
+    {id:'G1bR3',txt:'Perdita di accreditamento come fornitore di grandi player con supply chain policy ESG stringenti',s:['ALL']},
+  ],
+  o:[
+    {id:'G1bO1',txt:'Supply chain resiliente e sostenibile come vantaggio competitivo in contesti di crisi globale',s:['ALL']},
+    {id:'G1bO2',txt:'Sviluppo fornitori: co-investimento ESG per innovazione condivisa e partnership strategiche di lungo periodo',s:['C','G']},
+  ],
+},
+'G1.c':{
+  i:[
+    {id:'G1cI1',txt:'Strutture fiscali aggressive o pianificazione ottimizzativa che erode la base imponibile nei paesi ospitanti',s:['K','M','ALL']},
+    {id:'G1cI2',txt:'Utilizzo di giurisdizioni fiscali opache con impatti negativi sui sistemi di welfare nazionali',s:['K','ALL']},
+  ],
+  r:[
+    {id:'G1cR1',txt:'Sanzioni fiscali e maggiori imposte per riqualificazione di schemi di tax planning aggressivo',s:['ALL']},
+    {id:'G1cR2',txt:'Danni reputazionali per esposizione mediatica su pratiche fiscali aggressive (es. LuxLeaks, Panama Papers)',s:['ALL']},
+    {id:'G1cR3',txt:'Obblighi CBCR (country-by-country reporting) e BEPS Pillar 2: compliance crescente e oneri dichiarativi',s:['K','M']},
+  ],
+  o:[
+    {id:'G1cO1',txt:'Tax transparency proattiva come leva di reputazione ESG e fiducia di investitori istituzionali e rating agencies',s:['ALL']},
+    {id:'G1cO2',txt:'Governance fiscale responsabile come componente del profilo G per agenzie di rating ESG',s:['ALL']},
+  ],
+},
+}; // end IRO_LIB
+
+// ═══════════════════════════════════════════
+//  ESRS TOPICS DEFINITION
+// ═══════════════════════════════════════════
+const TOPICS=[
+  {id:'E1',pillar:'E',emoji:'🌡️',name:'Cambiamenti climatici',sub:'Mitigazione, adattamento, energia',color:'#065F46',bg:'#ECFDF5',
+   desc:'Emissioni GHG (Scope 1/2/3), resilienza ai rischi fisici e di transizione, piani di decarbonizzazione e gestione dell\'energia.',
+   highSectors:['B','C','D','H','F'],
+   subs:[
+     {id:'E1.a',label:'Mitigazione clima',desc:'Emissioni GHG, target net-zero, Scope 1/2/3'},
+     {id:'E1.b',label:'Adattamento clima',desc:'Rischi fisici acuti e cronici, piani di resilienza'},
+     {id:'E1.c',label:'Energia',desc:'Consumi energetici, fonti rinnovabili, efficienza'},
+   ]},
+  {id:'E2',pillar:'E',emoji:'🏭',name:'Inquinamento',sub:'Aria, acqua, suolo, sostanze pericolose',color:'#92400E',bg:'#FFFBEB',
+   desc:'Emissioni nell\'aria, scarichi idrici, contaminazione del suolo, sostanze chimiche pericolose, PFAS.',
+   highSectors:['B','C','E','F','A'],
+   subs:[
+     {id:'E2.a',label:'Inquinamento aria',desc:'NOx, SOx, PM, COV, emissioni atmosferiche'},
+     {id:'E2.b',label:'Inquinamento acqua',desc:'Scarichi, reflui, qualità corpi idrici'},
+     {id:'E2.c',label:'Inquinamento suolo',desc:'Contaminazione, siti, passività ambientali'},
+     {id:'E2.d',label:'Sostanze pericolose',desc:'SVHC, PFAS, IPA, chemicals critici'},
+   ]},
+  {id:'E3',pillar:'E',emoji:'💧',name:'Risorse idriche e marine',sub:'Prelievo, consumo, ecosistemi acquatici',color:'#1E40AF',bg:'#EFF6FF',
+   desc:'Prelievo e consumo d\'acqua, aree water-stressed, qualità dell\'acqua, ecosistemi marini e costieri.',
+   highSectors:['A','C','D','E'],
+   subs:[
+     {id:'E3.a',label:'Risorse idriche',desc:'Prelievo, water stress, efficienza idrica'},
+     {id:'E3.b',label:'Ecosistemi marini',desc:'Impatti su mari, oceani, aree costiere'},
+   ]},
+  {id:'E4',pillar:'E',emoji:'🌿',name:'Biodiversità ed ecosistemi',sub:'Specie, habitat, uso del territorio',color:'#065F46',bg:'#F0FDF4',
+   desc:'Specie protette, habitat naturali, deforestazione, conversione d\'uso del suolo, servizi ecosistemici.',
+   highSectors:['A','B','F','C'],
+   subs:[
+     {id:'E4.a',label:'Specie e habitat',desc:'Biodiversità, specie a rischio, aree protette'},
+     {id:'E4.b',label:'Uso del territorio',desc:'Deforestazione, land use change, suolo'},
+   ]},
+  {id:'E5',pillar:'E',emoji:'♻️',name:'Economia circolare',sub:'Materiali, rifiuti, prodotti, fine vita',color:'#4D7C0F',bg:'#F7FEE7',
+   desc:'Uso di risorse (vergini vs riciclate), generazione e gestione rifiuti, design for circularity, economia circolare.',
+   highSectors:['C','E','G','A'],
+   subs:[
+     {id:'E5.a',label:'Afflusso risorse',desc:'Materie prime, materiali critici, efficienza'},
+     {id:'E5.b',label:'Rifiuti',desc:'Produzione, trattamento, valorizzazione rifiuti'},
+   ]},
+  {id:'S1',pillar:'S',emoji:'👷',name:'Forza lavoro propria',sub:'Dipendenti, condizioni, salute, inclusione',color:'#7C2D12',bg:'#FFF7ED',
+   desc:'Condizioni di lavoro, salute e sicurezza, parità di genere, sviluppo competenze, dialogo sociale, benessere.',
+   highSectors:['ALL'],
+   subs:[
+     {id:'S1.a',label:'Condizioni di lavoro',desc:'Retribuzione, orari, contratti, welfare'},
+     {id:'S1.b',label:'Salute e sicurezza',desc:'Infortuni, malattie professionali, H&S'},
+     {id:'S1.c',label:'Parità e inclusione',desc:'Gender pay gap, D&I, pari opportunità'},
+     {id:'S1.d',label:'Sviluppo competenze',desc:'Formazione, upskilling, piani di carriera'},
+   ]},
+  {id:'S2',pillar:'S',emoji:'🌐',name:'Lavoratori value chain',sub:'Fornitori, subfornitori, downstream',color:'#831843',bg:'#FFF1F2',
+   desc:'Condizioni di lavoro e diritti nei fornitori a monte, distribuzione a valle, lavoro minorile e forzato.',
+   highSectors:['C','G','A','H'],
+   subs:[
+     {id:'S2.a',label:'Lavoratori upstream',desc:'Condizioni fornitori, lavoro minorile/forzato'},
+     {id:'S2.b',label:'Diritti value chain',desc:'Meccanismi di reclamo, pratiche commerciali'},
+   ]},
+  {id:'S3',pillar:'S',emoji:'🏘️',name:'Comunità interessate',sub:'Comunità locali, popolazioni, territorio',color:'#7E22CE',bg:'#FAF5FF',
+   desc:'Impatti su comunità locali, licenza sociale, diritti delle popolazioni indigene, accesso a risorse essenziali.',
+   highSectors:['B','D','F','A','E'],
+   subs:[
+     {id:'S3.a',label:'Impatti comunità',desc:'Licenza sociale, rumore, territorio, qualità vita'},
+     {id:'S3.b',label:'Diritti e accesso',desc:'Popolazioni indigene, accesso risorse'},
+   ]},
+  {id:'S4',pillar:'S',emoji:'👤',name:'Consumatori e utenti',sub:'Sicurezza prodotti, privacy, accesso',color:'#0E7490',bg:'#ECFEFF',
+   desc:'Sicurezza e qualità prodotti/servizi, privacy e protezione dati, accesso equo, marketing responsabile.',
+   highSectors:['G','I','J','Q','K'],
+   subs:[
+     {id:'S4.a',label:'Sicurezza e qualità',desc:'Sicurezza prodotti, standard, recall'},
+     {id:'S4.b',label:'Privacy e dati',desc:'GDPR, data breach, cybersecurity'},
+     {id:'S4.c',label:'Accesso e inclusione',desc:'Accessibilità, pricing equo, inclusione digitale'},
+   ]},
+  {id:'G1',pillar:'G',emoji:'⚖️',name:'Condotta aziendale',sub:'Etica, anticorruzione, fornitori, fisco',color:'#374151',bg:'#F9FAFB',
+   desc:'Anticorruzione, trasparenza fiscale, gestione fornitori, whistleblowing, lobbying, sicurezza informatica.',
+   highSectors:['ALL'],
+   subs:[
+     {id:'G1.a',label:'Etica e anticorruzione',desc:'Anti-bribery, codice etico, compliance 231'},
+     {id:'G1.b',label:'Gestione fornitori',desc:'Criteri ESG selezione, due diligence, audit'},
+     {id:'G1.c',label:'Trasparenza fiscale',desc:'Tax governance, CBCR, BEPS'},
+   ]},
+];
+
+// ═══════════════════════════════════════════
+//  NAVIGATION
+// ═══════════════════════════════════════════
+function goToModule(n) {
+  document.querySelectorAll('.mod').forEach(m=>m.classList.remove('visible'));
+  document.getElementById('mod'+n).classList.add('visible');
+  appState.nav.current = n;
+  updateStepper(n);
+  updateHeader();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function updateStepper(active){
+  document.querySelectorAll('.stp').forEach((s,i)=>{
+    s.classList.remove('active','done','pending');
+    const n = i+1;
+    if(n < active) s.classList.add('done');
+    else if(n === active) s.classList.add('active');
+    else s.classList.add('pending');
+    const numEl = s.querySelector('.snum');
+    if(n < active) numEl.textContent = '✓'; else numEl.textContent = n;
+  });
+}
+
+function updateHeader(){
+  const co = appState.m1.ragione || 'Nuova valutazione';
+  const nc = appState.m1.nace.map(n=>n.code).join(', ');
+  document.getElementById('ctxCo').textContent = co;
+  document.getElementById('ctxNc').textContent = nc ? '· '+nc : '';
+}
+
+function showToast(msg, dur=3000){
+  const t = document.getElementById('toast');
+  document.getElementById('toastMsg').textContent = msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), dur);
+}
+
+// ═══════════════════════════════════════════
+//  MODULE 1 — LOGIC
+// ═══════════════════════════════════════════
+const selNACE = []; // [{code,name,sector}]
+const selGeo  = new Set(['IT']);
+let m1Year = 2024;
+
+// NACE
+const naceSearchEl = document.getElementById('naceSearch');
+const naceDropEl   = document.getElementById('naceDrop');
+const naceChipsEl  = document.getElementById('naceChips');
+
+function renderNaceDrop(q){
+  const q2 = q.toLowerCase().trim();
+  const items = q2.length<1 ? NACE_DB.slice(0,14) :
+    NACE_DB.filter(n=>n.code.toLowerCase().includes(q2)||n.name.toLowerCase().includes(q2)||n.desc.toLowerCase().includes(q2)).slice(0,14);
+  naceDropEl.innerHTML = items.map(n=>{
+    const added = selNACE.some(s=>s.code===n.code);
+    return `<div class="nit ${added?'added':''}" data-code="${n.code}" data-name="${n.name}" data-sector="${n.sector}">
+      <span class="nc">${n.code}</span>
+      <div style="flex:1"><div class="nn">${n.name}</div><div class="nd">${n.desc}</div></div>
+      ${added?`<span style="font-size:.7rem;color:var(--g700);font-weight:600">✓</span>`
+             :`<div class="nadd"><svg width="9" height="9" viewBox="0 0 10 10" fill="none"><path d="M5 2v6M2 5h6" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg></div>`}
+    </div>`;
+  }).join('');
+  naceDropEl.querySelectorAll('.nit:not(.added)').forEach(el=>{
+    el.addEventListener('click',()=>{
+      addNACE(el.dataset.code, el.dataset.name, el.dataset.sector);
+      naceSearchEl.value=''; naceDropEl.classList.remove('open');
+    });
+  });
+}
+
+function addNACE(code,name,sector){
+  if(selNACE.some(n=>n.code===code)) return;
+  selNACE.push({code,name,sector});
+  renderNaceChips(); updateM1Progress();
+  document.getElementById('f-nace').classList.remove('err');
+}
+
+function removeNACE(code){
+  const i=selNACE.findIndex(n=>n.code===code);
+  if(i!==-1){selNACE.splice(i,1);} renderNaceChips(); updateM1Progress();
+}
+window.removeNACE=removeNACE;
+
+function renderNaceChips(){
+  if(!selNACE.length){naceChipsEl.innerHTML='<span class="chips-empty">Nessun codice aggiunto — cerca e seleziona</span>';return;}
+  naceChipsEl.innerHTML=selNACE.map((n,i)=>`
+    <div class="chip"><span class="cc">${n.code}</span><span style="color:var(--inks);font-size:.78rem">${n.name}</span>${i===0?'<span class="cpri">Primario</span>':''}
+    <button class="cdel" onclick="removeNACE('${n.code}')">×</button></div>`).join('');
+}
+
+naceSearchEl.addEventListener('focus',()=>{renderNaceDrop(naceSearchEl.value);naceDropEl.classList.add('open')});
+naceSearchEl.addEventListener('input',()=>{renderNaceDrop(naceSearchEl.value);naceDropEl.classList.add('open')});
+document.addEventListener('click',e=>{if(!e.target.closest('.nwrap'))naceDropEl.classList.remove('open')});
+
+// SIZE
+document.getElementById('sizeGrid').querySelectorAll('.sopt').forEach(opt=>{
+  opt.addEventListener('click',()=>{
+    document.querySelectorAll('.sopt').forEach(o=>o.classList.remove('active'));
+    opt.classList.add('active'); appState.m1.size=opt.dataset.val; updateM1Progress();
+  });
+});
+
+// SLIDER
+const empSlider=document.getElementById('empSlider');
+const empValEl=document.getElementById('empVal');
+function updSlider(){
+  const p=((empSlider.value-empSlider.min)/(empSlider.max-empSlider.min))*100;
+  empSlider.style.setProperty('--p',p+'%');
+}
+empSlider.addEventListener('input',()=>{
+  const v=parseInt(empSlider.value);
+  empValEl.textContent=v>=5000?'5.000+ dipendenti':`${v.toLocaleString('it-IT')} dipendenti`;
+  updSlider(); updateM1Progress();
+});
+updSlider();
+
+// GEO
+document.getElementById('geoTags').querySelectorAll('.gtag').forEach(tag=>{
+  tag.addEventListener('click',()=>{
+    const v=tag.dataset.val;
+    if(selGeo.has(v)){if(selGeo.size>1){selGeo.delete(v);tag.classList.remove('sel');}}
+    else{selGeo.add(v);tag.classList.add('sel');}
+    updateM1Progress();
+  });
+});
+
+// STANDARDS
+document.getElementById('stdGrid').querySelectorAll('.stdc').forEach(c=>{
+  c.addEventListener('click',()=>c.classList.toggle('active'));
+});
+
+// YEAR
+document.getElementById('yrDn').addEventListener('click',()=>{m1Year=Math.max(2020,m1Year-1);document.getElementById('yrVal').value=m1Year});
+document.getElementById('yrUp').addEventListener('click',()=>{m1Year=Math.min(2030,m1Year+1);document.getElementById('yrVal').value=m1Year});
+
+// CHAR COUNT
+document.getElementById('bizDesc').addEventListener('input',()=>{
+  const l=document.getElementById('bizDesc').value.length;
+  document.getElementById('charCount').textContent=l+' / 1200';
+  updateM1Progress();
+});
+
+// M1 PROGRESS
+const M1_REQ=[
+  ()=>document.getElementById('ragione').value.trim()!=='',
+  ()=>document.getElementById('piva').value.trim()!=='',
+  ()=>selNACE.length>0,
+  ()=>document.getElementById('sizeVal').value!=='',
+  ()=>selGeo.size>0,
+];
+function updateM1Progress(){
+  const filled=M1_REQ.filter(fn=>fn()).length;
+  const pct=Math.round(filled/M1_REQ.length*100);
+  document.getElementById('m1Fill').style.width=pct+'%';
+  document.getElementById('m1Txt').textContent=`${filled} / ${M1_REQ.length} campi`;
+}
+['ragione','piva'].forEach(id=>document.getElementById(id).addEventListener('input',()=>{
+  updateM1Progress();
+  document.getElementById('f-'+id)?.classList.remove('err');
+}));
+updateM1Progress();
+
+// M1 NEXT
+document.getElementById('m1Next').addEventListener('click',()=>{
+  let valid=true;
+  function setErr(id,show){const el=document.getElementById('f-'+id);if(!el)return;el.classList.toggle('err',show);if(show)valid=false;}
+  setErr('ragione',!document.getElementById('ragione').value.trim());
+  setErr('piva',!document.getElementById('piva').value.trim());
+  setErr('nace',selNACE.length===0);
+  if(!valid){document.querySelector('.err')?.scrollIntoView({behavior:'smooth',block:'center'});return;}
+
+  // Save to appState
+  appState.m1.ragione   = document.getElementById('ragione').value.trim();
+  appState.m1.piva      = document.getElementById('piva').value.trim();
+  appState.m1.website   = document.getElementById('website').value.trim();
+  appState.m1.nace      = [...selNACE];
+  appState.m1.bizDesc   = document.getElementById('bizDesc').value.trim();
+  appState.m1.size      = document.getElementById('sizeVal').value;
+  appState.m1.employees = parseInt(empSlider.value);
+  appState.m1.revenue   = document.getElementById('revenue').value;
+  appState.m1.geo       = [...selGeo];
+  appState.m1.hq        = document.getElementById('hq').value.trim();
+  appState.m1.year      = m1Year;
+  appState.m1.standards = [...document.querySelectorAll('.stdc.active')].map(c=>c.dataset.val);
+
+  // Progress sidebar
+  const pis=document.querySelectorAll('#progItems .pit');
+  pis[0].classList.remove('act');pis[0].classList.add('done');pis[0].querySelector('.ppct').textContent='100%';
+  pis[1].classList.add('act');
+
+  showToast(`Contesto di ${appState.m1.ragione} salvato — passaggio al Modulo 2.`);
+  setTimeout(()=>{
+    goToModule(2);
+    initM2();
+  }, 900);
+});
+
+// ═══════════════════════════════════════════
+//  MODULE 2 — LOGIC
+// ═══════════════════════════════════════════
+let m2Filter = 'all';
+
+function getUserSectors(){
+  return [...new Set(appState.m1.nace.map(n=>n.sector))];
+}
+
+function isAutoSelected(iroItem, userSectors){
+  if(!iroItem.s||iroItem.s.includes('ALL')) return true;
+  return iroItem.s.some(s=>userSectors.includes(s));
+}
+
+function isTopicLowRelevance(topic, userSectors){
+  if(topic.highSectors.includes('ALL')) return false;
+  // Check sector match
+  const sectorMatch = userSectors.some(s=>topic.highSectors.includes(s));
+  if(sectorMatch) return false;
+  // Check keyword in bizDesc
+  const desc = appState.m1.bizDesc.toLowerCase();
+  const kws = topic.name.toLowerCase().split(' ').filter(w=>w.length>4);
+  return !kws.some(kw=>desc.includes(kw));
+}
+
+// Score state helpers
+function getIROState(topicId, subId, dim, iroId){
+  return appState.m2.scores[topicId]?.[subId]?.[dim]?.[iroId] || {incl:null,score:0,na:false};
+}
+function setIROState(topicId, subId, dim, iroId, patch){
+  if(!appState.m2.scores[topicId]) appState.m2.scores[topicId]={};
+  if(!appState.m2.scores[topicId][subId]) appState.m2.scores[topicId][subId]={};
+  if(!appState.m2.scores[topicId][subId][dim]) appState.m2.scores[topicId][subId][dim]={};
+  const cur = appState.m2.scores[topicId][subId][dim][iroId] || {incl:null,score:0,na:false};
+  appState.m2.scores[topicId][subId][dim][iroId] = {...cur,...patch};
+}
+
+function initIRODefaults(userSectors){
+  TOPICS.forEach(t=>{
+    t.subs.forEach(sub=>{
+      const lib = IRO_LIB[sub.id];
+      if(!lib) return;
+      ['i','r','o'].forEach(dim=>{
+        (lib[dim]||[]).forEach(iro=>{
+          const st = getIROState(t.id, sub.id, dim, iro.id);
+          if(st.incl===null){ // not yet initialized
+            setIROState(t.id, sub.id, dim, iro.id, {incl: isAutoSelected(iro,userSectors)});
+          }
+        });
+      });
+    });
+  });
+}
+
+function isSubDone(topicId, subId){
+  const sub = TOPICS.flatMap(t=>t.subs).find(s=>s.id===subId);
+  if(!sub) return false;
+  const lib = IRO_LIB[subId];
+  if(!lib) return false;
+  // All included IROs must have a score or na=true
+  return ['i','r','o'].every(dim=>{
+    const items = lib[dim]||[];
+    return items.every(iro=>{
+      const st = getIROState(topicId, sub.id, dim, iro.id);
+      if(!st.incl) return true; // excluded: ok
+      return st.score>0 || st.na;
+    });
+  });
+}
+
+function isTopicDone(topicId){
+  const t = TOPICS.find(x=>x.id===topicId);
+  return t ? t.subs.every(s=>isSubDone(topicId,s.id)) : false;
+}
+
+function getTopicAvgScore(topicId, dim){
+  const t = TOPICS.find(x=>x.id===topicId);
+  if(!t) return null;
+  const scores=[];
+  t.subs.forEach(sub=>{
+    const lib=IRO_LIB[sub.id];
+    if(!lib) return;
+    (lib[dim]||[]).forEach(iro=>{
+      const st=getIROState(topicId,sub.id,dim,iro.id);
+      if(st.incl&&!st.na&&st.score>0) scores.push(st.score);
+    });
+  });
+  return scores.length ? (scores.reduce((a,b)=>a+b,0)/scores.length) : null;
+}
+
+function initM2(){
+  const userSectors = getUserSectors();
+  initIRODefaults(userSectors);
+  renderTopics();
+  updateM2Stats();
+}
+
+function renderTopics(){
+  const userSectors = getUserSectors();
+  const q = document.getElementById('m2Search').value.toLowerCase();
+  const grid = document.getElementById('topicsGrid');
+
+  const filtered = TOPICS.filter(t=>{
+    const matchF = m2Filter==='all' || t.pillar===m2Filter || (m2Filter==='todo'&&!isTopicDone(t.id));
+    const matchQ = !q || t.id.toLowerCase().includes(q) || t.name.toLowerCase().includes(q) || t.sub.toLowerCase().includes(q);
+    return matchF && matchQ;
+  });
+
+  grid.innerHTML = filtered.map((t,i)=>renderTopicCard(t,i,userSectors)).join('');
+
+  // Events
+  grid.querySelectorAll('.thead').forEach(th=>{
+    th.addEventListener('click',()=>th.closest('.tcard').classList.toggle('open'));
+  });
+
+  attachScoreEvents(grid, userSectors);
+}
+
+function renderTopicCard(t, idx, userSectors){
+  const low = isTopicLowRelevance(t, userSectors);
+  const done = isTopicDone(t.id);
+  const ai = getTopicAvgScore(t.id,'i'), ar = getTopicAvgScore(t.id,'r'), ao = getTopicAvgScore(t.id,'o');
+  const fmtAvg = v => v ? v.toFixed(1) : '–';
+
+  const prevHtml=`<div class="tprev">
+    <div class="tpv"><span class="tpv-l" style="color:var(--ic)">IMP</span><span class="tpv-n ${ai?'iv':'emp'}">${fmtAvg(ai)}</span></div>
+    <div class="tpv"><span class="tpv-l" style="color:var(--rc)">RSK</span><span class="tpv-n ${ar?'rv':'emp'}">${fmtAvg(ar)}</span></div>
+    <div class="tpv"><span class="tpv-l" style="color:var(--oc)">OPP</span><span class="tpv-n ${ao?'ov':'emp'}">${fmtAvg(ao)}</span></div>
+  </div>`;
+
+  const subHtml = t.subs.map(sub=>renderSubTopic(t.id, sub, userSectors)).join('');
+
+  return `<div class="tcard ${done?'done':''} ${low?'lowrel':''}" data-topic="${t.id}" style="animation-delay:${idx*0.04}s">
+  <div class="thead">
+    <div class="tpill" style="background:${t.bg}">${t.emoji}</div>
+    <div class="tmeta">
+      <div class="ttrow">
+        <span class="tcode" style="background:${t.bg};color:${t.color}">${t.id}</span>
+        <span class="tname">${t.name}</span>
+        ${low?`<span class="b-low"><svg width="9" height="9" viewBox="0 0 10 10" fill="none"><path d="M5 1l.9 3.1H9L6.6 5.9l.9 3.1L5 7.3 2.5 9l.9-3.1L1 5.1h3.1z" fill="currentColor"/></svg>Verifica rilevanza</span>`:''}
+      </div>
+      <div class="tsub">${t.sub}</div>
+    </div>
+    <div class="tbadges">${prevHtml}${done?`<span class="b-done">✓ Completo</span>`:''}</div>
+    <div class="ttog"><svg width="11" height="7" viewBox="0 0 12 8" fill="none"><path d="M1 1.5L6 6.5L11 1.5" stroke="var(--inkm)" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+  </div>
+  <div class="tbody">
+    ${low?`<div class="lowbanner"><div class="lowic"><svg width="11" height="11" viewBox="0 0 12 12" fill="none"><path d="M6 1l.9 3.1H9L6.6 5.9l.9 3.1L5 7.3 2.5 9l.9-3.1L1 5.1h3.1z" fill="white"/></svg></div><div class="lowtxt">⚠️ <strong>Suggerimento rilevanza:</strong> In base ai codici NACE selezionati (${appState.m1.nace.map(n=>n.code).join(', ')}) questo topic potrebbe essere <strong>meno direttamente rilevante</strong> per il gruppo. Rimane comunque votabile: se impatti, rischi o opportunità sono presenti, assegna il punteggio. Aggiungi una nota per motivare la valutazione.</div></div>`:''}
+    <div class="tdesc">${t.desc}</div>
+    <div class="subtopics">${subHtml}</div>
+    <div class="tnotes">
+      <label>Note e motivazione della valutazione <span style="font-weight:400;color:var(--inkm);font-size:.73rem">(opzionale — utile per l'audit trail)</span></label>
+      <textarea data-topicid="${t.id}" placeholder="Evidenze raccolte, stakeholder consultati, ragioni della valutazione…">${appState.m2.scores[t.id]?.__note||''}</textarea>
+    </div>
+  </div>
+</div>`;
+}
+
+function renderSubTopic(topicId, sub, userSectors){
+  const lib = IRO_LIB[sub.id];
+  if(!lib) return '';
+  const done = isSubDone(topicId, sub.id);
+
+  const iHTML = renderIROSection(topicId, sub.id, 'i', lib.i||[], userSectors);
+  const rHTML = renderIROSection(topicId, sub.id, 'r', lib.r||[], userSectors);
+  const oHTML = renderIROSection(topicId, sub.id, 'o', lib.o||[], userSectors);
+
+  return `<div class="st-block">
+    <div class="st-title-row">
+      <div><div class="st-label">${sub.label}</div><div class="st-desc">${sub.desc}</div></div>
+      ${done?`<span class="st-comp">✓ Completato</span>`:''}
+    </div>
+    <div class="iro-sections">
+      <div class="iro-sec">${iHTML}</div>
+      <div class="iro-sec">${rHTML}</div>
+      <div class="iro-sec">${oHTML}</div>
+    </div>
+  </div>`;
+}
+
+function renderIROSection(topicId, subId, dim, items, userSectors){
+  const dimConf = {
+    i:{cls:'ih',dotcls:'i',name:'Impatti'},
+    r:{cls:'rh',dotcls:'r',name:'Rischi'},
+    o:{cls:'oh',dotcls:'o',name:'Opportunità'},
+  };
+  const dc = dimConf[dim];
+  const included = items.filter(iro=>{ const st=getIROState(topicId,subId,dim,iro.id); return st.incl!==false&&(st.incl||isAutoSelected(iro,userSectors)); });
+  const cnt = included.filter(iro=>{const st=getIROState(topicId,subId,dim,iro.id);return (st.score>0||st.na);}).length;
+
+  const itemsHtml = items.map(iro=>{
+    const st = getIROState(topicId,subId,dim,iro.id);
+    const auto = isAutoSelected(iro,userSectors);
+    const incl = st.incl===null ? auto : st.incl;
+    return renderIROItem(topicId, subId, dim, iro, incl, auto, st, dc.cls, userSectors);
+  }).join('');
+
+  return `<div class="iro-sec-hd ${dc.cls}">
+    <div class="iro-sec-dot ${dc.dotcls}"></div>
+    <span class="iro-sec-name ${dc.dotcls}">${dc.name}</span>
+    <span class="iro-sec-cnt">${cnt}/${included.length}</span>
+  </div>
+  <div class="iro-items" data-topicid="${topicId}" data-subid="${subId}" data-dim="${dim}">${itemsHtml}</div>`;
+}
+
+function renderIROItem(topicId, subId, dim, iro, incl, auto, st, dimCls, userSectors){
+  const scoreRow = [1,2,3,4,5].map(v=>`<button class="sbtn ${dimCls} ${(st.score===v&&incl)?'sel':''}" data-topicid="${topicId}" data-subid="${subId}" data-dim="${dim}" data-iroid="${iro.id}" data-val="${v}">${v}</button>`).join('');
+  return `<div class="iro-item ${incl?'incl':''} ${dimCls}" data-iroid="${iro.id}">
+    <div class="iro-item-top">
+      <div class="iro-auto ${incl?'on':'off'}" title="${auto?'Auto-selezionato per il tuo settore':'Non selezionato automaticamente'}">
+        ${incl?`<svg width="8" height="6" viewBox="0 0 8 6" fill="none"><path d="M1 3L3 5L7 1" stroke="white" stroke-width="1.3" stroke-linecap="round"/></svg>`:''}
+      </div>
+      <span class="iro-txt">${iro.txt}</span>
+      <button class="iro-toggle ${incl?'on':'off'}" data-topicid="${topicId}" data-subid="${subId}" data-dim="${dim}" data-iroid="${iro.id}">${incl?'Incluso':'+ Includi'}</button>
+    </div>
+    <div class="iro-score-row ${incl?'':'hidden'}">
+      ${scoreRow}
+      <button class="sna ${st.na&&incl?'on':''}" data-topicid="${topicId}" data-subid="${subId}" data-dim="${dim}" data-iroid="${iro.id}">N/A</button>
+    </div>
+    ${!auto&&!incl?`<div class="iro-note">Non selezionato automaticamente per i tuoi codici NACE — includilo se rilevante</div>`:''}
+  </div>`;
+}
+
+function attachScoreEvents(grid, userSectors){
+  // Score buttons
+  grid.querySelectorAll('.sbtn').forEach(btn=>{
+    btn.addEventListener('click',e=>{
+      e.stopPropagation();
+      const {topicid,subid,dim,iroid,val}=btn.dataset;
+      const st = getIROState(topicid,subid,dim,iroid);
+      const newScore = st.score===parseInt(val) ? 0 : parseInt(val);
+      setIROState(topicid,subid,dim,iroid,{score:newScore,na:false});
+      refreshCard(topicid, userSectors);
+      updateM2Stats();
+    });
+  });
+
+  // N/A buttons
+  grid.querySelectorAll('.sna').forEach(btn=>{
+    btn.addEventListener('click',e=>{
+      e.stopPropagation();
+      const {topicid,subid,dim,iroid}=btn.dataset;
+      const st = getIROState(topicid,subid,dim,iroid);
+      setIROState(topicid,subid,dim,iroid,{na:!st.na,score:0});
+      refreshCard(topicid, userSectors);
+      updateM2Stats();
+    });
+  });
+
+  // Include/exclude toggles
+  grid.querySelectorAll('.iro-toggle').forEach(btn=>{
+    btn.addEventListener('click',e=>{
+      e.stopPropagation();
+      const {topicid,subid,dim,iroid}=btn.dataset;
+      const st = getIROState(topicid,subid,dim,iroid);
+      const newIncl = !((st.incl===null?isAutoSelected(IRO_LIB[subid]?.[dim]?.find(x=>x.id===iroid),userSectors):st.incl));
+      setIROState(topicid,subid,dim,iroid,{incl:newIncl,score:newIncl?st.score:0,na:false});
+      refreshCard(topicid, userSectors);
+      updateM2Stats();
+    });
+  });
+
+  // Notes
+  grid.querySelectorAll('.tnotes textarea').forEach(ta=>{
+    ta.addEventListener('click',e=>e.stopPropagation());
+    ta.addEventListener('input',e=>{
+      const tid=e.target.dataset.topicid;
+      if(!appState.m2.scores[tid]) appState.m2.scores[tid]={};
+      appState.m2.scores[tid].__note=e.target.value;
+    });
+  });
+}
+
+function refreshCard(topicId, userSectors){
+  const card = document.querySelector(`.tcard[data-topic="${topicId}"]`);
+  if(!card) return;
+  const wasOpen = card.classList.contains('open');
+  const t = TOPICS.find(x=>x.id===topicId);
+  if(!t) return;
+  card.outerHTML = renderTopicCard(t, 0, userSectors);
+  const newCard = document.querySelector(`.tcard[data-topic="${topicId}"]`);
+  if(newCard){
+    if(wasOpen) newCard.classList.add('open');
+    attachScoreEvents(newCard, userSectors);
+  }
+}
+
+function updateM2Stats(){
+  const completed = TOPICS.filter(t=>isTopicDone(t.id)).length;
+  document.getElementById('m2Fill').style.width=(completed/10*100)+'%';
+  document.getElementById('m2Txt').textContent=`${completed} / 10`;
+  document.getElementById('bsComp').textContent=`${completed} / 10`;
+
+  const allI=[], allR=[], allO=[];
+  TOPICS.forEach(t=>{
+    t.subs.forEach(sub=>{
+      const lib=IRO_LIB[sub.id];
+      if(!lib) return;
+      ['i','r','o'].forEach(dim=>{
+        (lib[dim]||[]).forEach(iro=>{
+          const st=getIROState(t.id,sub.id,dim,iro.id);
+          if(st.incl!==false&&st.score>0){
+            if(dim==='i') allI.push(st.score);
+            if(dim==='r') allR.push(st.score);
+            if(dim==='o') allO.push(st.score);
+          }
+        });
+      });
+    });
+  });
+  const avg=arr=>arr.length?(arr.reduce((a,b)=>a+b,0)/arr.length).toFixed(1):'—';
+  document.getElementById('bsImp').textContent=avg(allI);
+  document.getElementById('bsRisk').textContent=avg(allR);
+  document.getElementById('bsOpp').textContent=avg(allO);
+}
+
+// Filters
+document.querySelectorAll('.fbtn').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.fbtn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active'); m2Filter=btn.dataset.f; renderTopics();
+  });
+});
+document.getElementById('m2Search').addEventListener('input',renderTopics);
+
+// Navigation M2
+document.getElementById('m2Back').addEventListener('click',()=>goToModule(1));
+document.getElementById('m2Next').addEventListener('click',()=>{
+  const c=TOPICS.filter(t=>isTopicDone(t.id)).length;
+  // Save M2 state to appState summary
+  appState.m2.summary = buildM2Summary();
+  showToast(c===10?'Modulo 2 completato — passaggio agli Stakeholder.': `${c}/10 topic completati — procedendo al Modulo 3.`);
+  setTimeout(()=>{ goToModule(3); initM3(); },900);
+});
+
+function buildM2Summary(){
+  // Returns per-topic: {impactScore, financialScore} for matrix
+  return TOPICS.map(t=>{
+    const imp = getTopicAvgScore(t.id,'i') || 0;
+    const rsk = getTopicAvgScore(t.id,'r') || 0;
+    const opp = getTopicAvgScore(t.id,'o') || 0;
+    return {
+      id: t.id,
+      impactScore: imp,                      // Y axis: impact materiality
+      financialScore: Math.max(rsk, opp),    // X axis: financial materiality
+    };
+  });
+}
+
+// ═══════════════════════════════════════════
+//  MODULE 3 — STAKEHOLDER
+// ═══════════════════════════════════════════
+const STAKEHOLDER_TEMPLATES = [
+  {name:'Marco Ferretti', org:'Banca Verde S.p.A.', cat:'Investitori', catColor:'#1D4ED8', catBg:'#EFF6FF'},
+  {name:'Laura Conti', org:'RSU Stabilimento Brescia', cat:'Dipendenti', catColor:'#065F46', catBg:'#ECFDF5'},
+  {name:'Giorgio Neri', org:'Coop Italia — Ufficio Acquisti', cat:'Clienti', catColor:'#7C2D12', catBg:'#FFF7ED'},
+  {name:'Ana Ribeiro', org:'EcoPackaging Suppliers Ltd', cat:'Fornitori', catColor:'#4D7C0F', catBg:'#F7FEE7'},
+  {name:'Federica Russo', org:'Legambiente Lombardia', cat:'ONG / Comunità', catColor:'#0E7490', catBg:'#ECFEFF'},
+  {name:'Ing. Bianchi', org:'ARPA Lombardia', cat:'Autorità', catColor:'#6B21A8', catBg:'#FAF5FF'},
+];
+
+const AVATAR_COLORS = ['#1A7A4A','#C2410C','#1D4ED8','#D97706','#7C2D12','#0E7490'];
+
+let sessionKey = null;
+let stakeholders = []; // [{...template, status:'invited'|'opened'|'done', completedAt, scores:{topicId:score}}]
+
+function genKey(){
+  const co = (appState.m1.ragione||'DEMO').toUpperCase().replace(/\s+/g,'').slice(0,4);
+  const yr = appState.m1.year || 2024;
+  const rnd = Math.random().toString(36).slice(2,6).toUpperCase();
+  return `GL-${yr}-${co}-${rnd}`;
+}
+
+function initM3(){
+  document.getElementById('m3Company').textContent = appState.m1.ragione || '—';
+  document.getElementById('spCompany').textContent = appState.m1.ragione || 'il gruppo';
+  renderSurveyPreview();
+}
+
+function renderSurveyPreview(){
+  const list = document.getElementById('surveyTopicList');
+  list.innerHTML = TOPICS.map(t=>`
+    <div class="survey-topic-row">
+      <span class="stp-emoji">${t.emoji}</span>
+      <span class="stp-name">${t.id} — ${t.name}</span>
+      <div class="stp-stars">${[1,2,3,4,5].map(n=>`<div class="stp-star">${n}</div>`).join('')}</div>
+    </div>`).join('');
+}
+
+document.getElementById('genKeyBtn').addEventListener('click',()=>{
+  sessionKey = genKey();
+  document.getElementById('sessKey').textContent = sessionKey;
+  document.getElementById('sessStats').style.display = 'grid';
+  document.getElementById('addStkBtn').disabled = false;
+  document.getElementById('simBtn').style.display = 'inline-flex';
+  document.getElementById('consolBar').style.display = 'flex';
+  // Pre-populate with templates
+  stakeholders = STAKEHOLDER_TEMPLATES.map((s,i)=>({
+    ...s, id:i, status:'invited', completedAt:null, scores:{}, avatarColor: AVATAR_COLORS[i]
+  }));
+  renderStkList();
+  updateM3Stats();
+  showToast(`Chiave sessione generata: ${sessionKey}`);
+});
+
+document.getElementById('addStkBtn').addEventListener('click',()=>{
+  showToast('Funzione di invito singolo disponibile nella versione live con backend.');
+});
+
+function renderStkList(){
+  const el = document.getElementById('stkList');
+  if(!stakeholders.length){
+    el.innerHTML='<div style="padding:20px;text-align:center;font-size:.82rem;color:var(--inkm);font-style:italic">Nessuno stakeholder aggiunto</div>';
+    return;
+  }
+  el.innerHTML = stakeholders.map(s=>`
+    <div class="stk-row">
+      <div class="stk-avatar" style="background:${s.avatarColor}">${s.name.split(' ').map(w=>w[0]).join('').slice(0,2)}</div>
+      <div class="stk-info"><div class="stk-name">${s.name}</div><div class="stk-org">${s.org}</div></div>
+      <div><span class="stk-cat" style="background:${s.catBg};color:${s.catColor}">${s.cat}</span></div>
+      <div><span class="stk-status ${s.status==='done'?'st-done':s.status==='opened'?'st-opened':'st-invited'}">
+        ${s.status==='done'?'✓ Completato':s.status==='opened'?'↗ Aperto':'✉ Invitato'}
+      </span></div>
+      <button class="stk-act" title="Copia link" onclick="showToast('Link copiato: greenledger.io/survey/${sessionKey}/${s.id}')">
+        <svg width="11" height="11" viewBox="0 0 12 12" fill="none"><rect x="1" y="4" width="7" height="7" rx="1.2" stroke="var(--inkm)" stroke-width="1.2"/><path d="M4 4V3a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1H8" stroke="var(--inkm)" stroke-width="1.2" stroke-linecap="round"/></svg>
+      </button>
+    </div>`).join('');
+}
+
+// Simulate stakeholder responses
+document.getElementById('simBtn').addEventListener('click',()=>{
+  // Simulate: some open, most complete with randomised scores
+  stakeholders = stakeholders.map((s,i)=>{
+    if(i===0) return {...s, status:'opened'};
+    const scores = {};
+    TOPICS.forEach(t=>{ scores[t.id] = +(Math.random()*2+2.5).toFixed(1); });
+    return {...s, status:'done', completedAt: new Date().toISOString(), scores};
+  });
+  renderStkList();
+  updateM3Stats();
+  showToast('Risposte stakeholder simulate — pronto per il consolidamento.');
+  document.getElementById('m3Next').disabled = false;
+  document.getElementById('consolBtn').disabled = false;
+});
+
+function updateM3Stats(){
+  const done = stakeholders.filter(s=>s.status==='done').length;
+  const opened = stakeholders.filter(s=>s.status==='opened').length;
+  const total = stakeholders.length;
+  const pct = total ? Math.round(done/total*100)+'%' : '—';
+  document.getElementById('statInvited').textContent = total;
+  document.getElementById('statOpened').textContent = opened;
+  document.getElementById('statDone').textContent = done;
+  document.getElementById('m3Total').textContent = total;
+  document.getElementById('m3Done').textContent = done;
+  document.getElementById('m3Pct').textContent = pct;
+  document.getElementById('consolCount').textContent = done;
+  document.getElementById('consolPct').textContent = pct;
+}
+
+document.getElementById('m3Back').addEventListener('click',()=>goToModule(2));
+
+function consolidateAndGoM4(){
+  // Merge stakeholder scores into appState
+  appState.m3 = {
+    sessionKey,
+    stakeholders: stakeholders.map(s=>({name:s.name,org:s.org,cat:s.cat,status:s.status,scores:s.scores})),
+  };
+  showToast('Consolidamento completato — apertura Modulo 4.');
+  setTimeout(()=>{ goToModule(4); initM4(); },900);
+}
+
+document.getElementById('consolBtn').addEventListener('click', consolidateAndGoM4);
+document.getElementById('m3Next').addEventListener('click', consolidateAndGoM4);
+
+// ═══════════════════════════════════════════
+//  MODULE 4 — MATRIX
+// ═══════════════════════════════════════════
+let m4Threshold = 2.5;
+let stkWeight = 0.30; // 30% stakeholder, 70% referente
+
+function initM4(){
+  document.getElementById('m4Company').textContent = appState.m1.ragione || '—';
+  document.getElementById('m4Year').textContent = appState.m1.year || 2024;
+  renderMatrix();
+  renderResultsTable();
+  updateM4Stats();
+}
+
+function getConsolidatedScore(topicId){
+  const m2 = appState.m2.summary?.find(x=>x.id===topicId) || {impactScore:0,financialScore:0};
+  // Stakeholder average for this topic
+  const stkScores = (appState.m3?.stakeholders||[])
+    .filter(s=>s.status==='done'&&s.scores[topicId])
+    .map(s=>s.scores[topicId]);
+  const stkAvg = stkScores.length ? stkScores.reduce((a,b)=>a+b,0)/stkScores.length : null;
+
+  const w = stkAvg !== null ? stkWeight : 0;
+  const impactFinal  = m2.impactScore*(1-w)    + (stkAvg||0)*w;
+  const finFinal     = m2.financialScore*(1-w)  + (stkAvg||0)*w;
+  return {impact: +impactFinal.toFixed(2), financial: +finFinal.toFixed(2)};
+}
+
+function classifyTopic(impact, financial, thr){
+  const im = impact >= thr;
+  const fi = financial >= thr;
+  if(im && fi) return 'double';
+  if(im) return 'impact';
+  if(fi) return 'financial';
+  return 'none';
+}
+
+function renderMatrix(svgId='matrixSvg', w=580, h=460){
+  const svg = document.getElementById(svgId);
+  if(!svg) return;
+  const pad = {l:54,r:20,t:20,b:48};
+  const W = w - pad.l - pad.r;
+  const H = h - pad.t - pad.b;
+
+  const thr = m4Threshold;
+  const toX = v => pad.l + (v-1)/(5-1)*W;
+  const toY = v => pad.t + (1-(v-1)/(5-1))*H;
+  const thrX = toX(thr), thrY = toY(thr);
+
+  const topicColors = {E:'#1A7A4A',S:'#C2410C',G:'#374151'};
+
+  let markup = '';
+  // Background quadrants
+  markup += `<rect x="${pad.l}" y="${pad.t}" width="${thrX-pad.l}" height="${thrY-pad.t}" fill="rgba(0,0,0,.02)"/>`;
+  markup += `<rect x="${thrX}" y="${pad.t}" width="${pad.l+W-thrX}" height="${thrY-pad.t}" fill="rgba(194,65,12,.04)"/>`;
+  markup += `<rect x="${pad.l}" y="${thrY}" width="${thrX-pad.l}" height="${pad.t+H-thrY}" fill="rgba(26,122,74,.04)"/>`;
+  markup += `<rect x="${thrX}" y="${thrY}" width="${pad.l+W-thrX}" height="${pad.t+H-thrY}" fill="rgba(26,122,74,.08)"/>`;
+
+  // Grid lines
+  for(let v=1;v<=5;v++){
+    const x=toX(v), y=toY(v);
+    markup+=`<line x1="${x}" y1="${pad.t}" x2="${x}" y2="${pad.t+H}" stroke="#EDE9DF" stroke-width="1"/>`;
+    markup+=`<line x1="${pad.l}" y1="${y}" x2="${pad.l+W}" y2="${y}" stroke="#EDE9DF" stroke-width="1"/>`;
+    markup+=`<text x="${x}" y="${pad.t+H+14}" text-anchor="middle" font-size="10" fill="#6B7F72" font-family="DM Mono">${v}</text>`;
+    markup+=`<text x="${pad.l-8}" y="${y+4}" text-anchor="end" font-size="10" fill="#6B7F72" font-family="DM Mono">${v}</text>`;
+  }
+
+  // Threshold lines
+  markup+=`<line x1="${thrX}" y1="${pad.t}" x2="${thrX}" y2="${pad.t+H}" stroke="#1A7A4A" stroke-width="1.5" stroke-dasharray="5,3"/>`;
+  markup+=`<line x1="${pad.l}" y1="${thrY}" x2="${pad.l+W}" y2="${thrY}" stroke="#1A7A4A" stroke-width="1.5" stroke-dasharray="5,3"/>`;
+
+  // Axis labels
+  markup+=`<text x="${pad.l+W/2}" y="${h-4}" text-anchor="middle" font-size="11" fill="#3A4D40" font-weight="600">Materialità Finanziaria (Rischi & Opportunità) →</text>`;
+  markup+=`<text x="13" y="${pad.t+H/2}" text-anchor="middle" font-size="11" fill="#3A4D40" font-weight="600" transform="rotate(-90 13 ${pad.t+H/2})">← Materialità d'Impatto</text>`;
+
+  // Topic bubbles
+  const placed = [];
+  TOPICS.forEach(t=>{
+    const {impact,financial} = getConsolidatedScore(t.id);
+    let cx = toX(financial), cy = toY(impact);
+    // Collision nudge
+    placed.forEach(p=>{
+      const dx=cx-p.x, dy=cy-p.y, d=Math.sqrt(dx*dx+dy*dy);
+      if(d<22&&d>0){cx+=dx/d*8;cy+=dy/d*8;}
+    });
+    placed.push({x:cx,y:cy});
+    const cl = classifyTopic(impact,financial,thr);
+    const col = topicColors[t.pillar];
+    const r = cl==='double'?13:10;
+    markup+=`<circle cx="${cx}" cy="${cy}" r="${r}" fill="${col}" opacity="${cl==='none'?0.25:0.85}" stroke="white" stroke-width="1.5"/>`;
+    markup+=`<text x="${cx}" y="${cy+4}" text-anchor="middle" font-size="${r>10?8:7}" fill="white" font-weight="700">${t.id}</text>`;
+  });
+
+  // Quadrant labels
+  markup+=`<text x="${pad.l+8}" y="${pad.t+12}" font-size="9" fill="#6B7F72" font-weight="600">NON MATERIALE</text>`;
+  markup+=`<text x="${thrX+6}" y="${pad.t+12}" font-size="9" fill="#C2410C" font-weight="600">SOLO FINANZIARIO</text>`;
+  markup+=`<text x="${pad.l+8}" y="${thrY-6}" font-size="9" fill="#065F46" font-weight="600">SOLO IMPATTO</text>`;
+  markup+=`<text x="${thrX+6}" y="${thrY-6}" font-size="9" fill="#1A7A4A" font-weight="700">DOPPIAMENTE MATERIALE</text>`;
+
+  svg.setAttribute('viewBox',`0 0 ${w} ${h}`);
+  svg.innerHTML = markup;
+}
+
+function renderResultsTable(){
+  const tbody = document.getElementById('rtBody');
+  if(!tbody) return;
+  const rows = TOPICS.map(t=>{
+    const {impact,financial} = getConsolidatedScore(t.id);
+    const cl = classifyTopic(impact,financial,m4Threshold);
+    const clBadge = {
+      double:`<span class="mat-badge mat-double">Doppio</span>`,
+      impact:`<span class="mat-badge mat-impact">Impatto</span>`,
+      financial:`<span class="mat-badge mat-financial">Finanziario</span>`,
+      none:`<span class="mat-badge mat-none">Non mat.</span>`,
+    }[cl];
+    const scoreClass = v => v>=3.5?'high':v>=2?'med':'low';
+    return {cl, html:`<div class="rt-row">
+      <div class="rt-emoji">${t.emoji}</div>
+      <div class="rt-name">${t.id} ${t.name}</div>
+      <div class="rt-score ${scoreClass(impact)}">${impact.toFixed(1)}</div>
+      <div class="rt-score ${scoreClass(financial)}">${financial.toFixed(1)}</div>
+      <div>${clBadge}</div>
+    </div>`};
+  }).sort((a,b)=>{const o={double:0,impact:1,financial:2,none:3};return o[a.cl]-o[b.cl];});
+  tbody.innerHTML = rows.map(r=>r.html).join('');
+}
+
+function updateM4Stats(){
+  const counts = {double:0,impact:0,financial:0,none:0};
+  TOPICS.forEach(t=>{
+    const {impact,financial}=getConsolidatedScore(t.id);
+    counts[classifyTopic(impact,financial,m4Threshold)]++;
+  });
+  document.getElementById('m4Double').textContent   = counts.double;
+  document.getElementById('m4Impact').textContent   = counts.impact;
+  document.getElementById('m4Fin').textContent      = counts.financial;
+  // Store for M5/M6
+  appState.m4 = {counts, threshold: m4Threshold, stkWeight};
+}
+
+document.getElementById('thrVal').addEventListener('input',e=>{
+  m4Threshold = parseFloat(e.target.value)||2.5;
+  renderMatrix(); renderResultsTable(); updateM4Stats();
+});
+document.getElementById('stkWeight').addEventListener('input',e=>{
+  stkWeight = parseInt(e.target.value)/100;
+  document.getElementById('stkWeightVal').textContent  = Math.round(stkWeight*100)+'%';
+  document.getElementById('stkWeightLbl').textContent  = Math.round(stkWeight*100)+'%';
+  document.getElementById('refWeightLbl').textContent  = Math.round((1-stkWeight)*100)+'%';
+  renderMatrix(); renderResultsTable(); updateM4Stats();
+});
+
+document.getElementById('m4Back').addEventListener('click',()=>goToModule(3));
+document.getElementById('m4Next').addEventListener('click',()=>{
+  updateM4Stats();
+  showToast('Matrice salvata — apertura narrative ESRS.');
+  setTimeout(()=>{ goToModule(5); initM5(); },700);
+});
+
+// ═══════════════════════════════════════════
+//  MODULE 5 — NARRATIVES
+// ═══════════════════════════════════════════
+const ESRS_REFS = {
+  E1:['ESRS E1-1','ESRS E1-2','ESRS E1-3','ESRS E1-4'],
+  E2:['ESRS E2-1','ESRS E2-2','ESRS E2-3'],
+  E3:['ESRS E3-1','ESRS E3-2'],
+  E4:['ESRS E4-1','ESRS E4-2'],
+  E5:['ESRS E5-1','ESRS E5-2'],
+  S1:['ESRS S1-1','ESRS S1-2','ESRS S1-3','ESRS S1-4'],
+  S2:['ESRS S2-1','ESRS S2-2'],
+  S3:['ESRS S3-1','ESRS S3-2'],
+  S4:['ESRS S4-1','ESRS S4-2'],
+  G1:['ESRS G1-1','ESRS G1-2','ESRS G1-3'],
+};
+
+function autoNarrative(t, impact, financial, cl){
+  const co = appState.m1.ragione || 'il Gruppo';
+  const nace = appState.m1.nace.map(n=>n.code).join(', ');
+  const clLabel = {double:'doppiamente materiale',impact:'materiale per impatto',financial:'materiale per rischi finanziari',none:'non materiale'};
+  if(cl==='none') return `Il tema ${t.id} — ${t.name} è stato valutato come non materiale per ${co} (punteggio impatto: ${impact.toFixed(1)}/5, punteggio finanziario: ${financial.toFixed(1)}/5). Questa valutazione è basata sul profilo settoriale (${nace||'—'}) e sul processo di engagement stakeholder condotto nell'anno ${appState.m1.year||2024}. Il Gruppo monitorerà l'evoluzione di questo tema nei futuri cicli di reporting.`;
+  return `Il tema ${t.id} — ${t.name} è stato identificato come ${clLabel[cl]} per ${co} (punteggio impatto: ${impact.toFixed(1)}/5, punteggio finanziario: ${financial.toFixed(1)}/5). L'analisi è stata condotta considerando il profilo settoriale (${nace||'—'}), la catena del valore e il coinvolgimento di ${(appState.m3?.stakeholders||[]).filter(s=>s.status==='done').length||0} stakeholder rilevanti. Gli impatti, rischi e opportunità (IRO) identificati nel Modulo 2 costituiscono la base per le politiche e i target descritti nelle sezioni tematiche del report. [Completare con evidenze specifiche, politiche adottate e KPI associati.]`;
+}
+
+function initM5(){
+  const grid = document.getElementById('narrGrid');
+  let matCount = 0;
+  grid.innerHTML = TOPICS.map(t=>{
+    const {impact,financial} = getConsolidatedScore(t.id);
+    const cl = classifyTopic(impact,financial,m4Threshold);
+    const isMat = cl!=='none';
+    if(isMat) matCount++;
+    const savedText = appState.m5?.[t.id] || '';
+    const draft = savedText || autoNarrative(t,impact,financial,cl);
+    const refs = (ESRS_REFS[t.id]||[]).map(r=>`<span class="esrs-chip">${r}</span>`).join('');
+    return `<div class="narr-card ${isMat?'material':''}">
+      <div class="narr-hd">
+        <div class="narr-pill" style="background:${t.bg}">${t.emoji}</div>
+        <div class="narr-meta">
+          <div class="narr-title">${t.id} — ${t.name}</div>
+          <div class="narr-scores">
+            <span class="nscore i">IMP ${impact.toFixed(1)}</span>
+            <span class="nscore r">FIN ${financial.toFixed(1)}</span>
+            <span class="nscore o" style="background:${cl==='double'?'var(--g50)':cl==='impact'?'#EFF6FF':cl==='financial'?'#FFF7ED':'var(--cream)'};color:${cl==='double'?'var(--g700)':cl==='impact'?'#1D4ED8':cl==='financial'?'#C2410C':'var(--inkm)'}">
+              ${cl==='double'?'Doppiamente materiale':cl==='impact'?'Materiale — Impatto':cl==='financial'?'Materiale — Finanziario':'Non materiale'}
+            </span>
+          </div>
+        </div>
+      </div>
+      <div class="narr-body">
+        <label>Narrative ESRS ${isMat?'(disclosure obbligatoria)':'(motivazione non materialità)'}</label>
+        <textarea class="narr-ta" data-topicid="${t.id}" rows="${isMat?5:3}">${draft}</textarea>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-top:6px">
+          <div class="narr-esrs-ref">${refs}</div>
+          <div class="narr-wc" data-wc="${t.id}"></div>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+  document.getElementById('m5MatCount').textContent = matCount + ' / 10';
+  document.getElementById('m5NarrDone').textContent = '0 / ' + matCount;
+
+  // Word count + autosave
+  grid.querySelectorAll('.narr-ta').forEach(ta=>{
+    const updateWc=()=>{
+      const words = ta.value.trim().split(/\s+/).filter(Boolean).length;
+      const wcel = document.querySelector(`.narr-wc[data-wc="${ta.dataset.topicid}"]`);
+      if(wcel) wcel.textContent = words + ' parole';
+      if(!appState.m5) appState.m5={};
+      appState.m5[ta.dataset.topicid]=ta.value;
+      updateM5Done();
+    };
+    updateWc();
+    ta.addEventListener('input', updateWc);
+  });
+}
+
+function updateM5Done(){
+  const total = document.querySelectorAll('.narr-card.material').length;
+  const done = [...document.querySelectorAll('.narr-card.material .narr-ta')].filter(ta=>ta.value.trim().length>30).length;
+  document.getElementById('m5NarrDone').textContent = done + ' / ' + total;
+}
+
+document.getElementById('m5Back').addEventListener('click',()=>goToModule(4));
+document.getElementById('m5Next').addEventListener('click',()=>{
+  showToast('Narrative salvate — apertura output finali.');
+  setTimeout(()=>{ goToModule(6); initM6(); },700);
+});
+
+// ═══════════════════════════════════════════
+//  MODULE 6 — OUTPUTS
+// ═══════════════════════════════════════════
+function initM6(){
+  const counts = appState.m4?.counts || {double:0,impact:0,financial:0,none:0};
+  const total = TOPICS.length;
+  const matTopics = TOPICS.filter(t=>{
+    const {impact,financial}=getConsolidatedScore(t.id);
+    return classifyTopic(impact,financial,m4Threshold)!=='none';
+  });
+  const stkDone = (appState.m3?.stakeholders||[]).filter(s=>s.status==='done').length;
+
+  document.getElementById('o6Double').textContent = counts.double + (counts.impact?'+'+counts.impact:'');
+  document.getElementById('o6Total').textContent = total;
+  document.getElementById('o6Stakeholders').textContent = stkDone;
+  document.getElementById('o6Year').textContent = appState.m1.year || 2024;
+
+  // Material topic list
+  const listEl = document.getElementById('o6MatList');
+  listEl.innerHTML = matTopics.map(t=>{
+    const {impact,financial}=getConsolidatedScore(t.id);
+    const cl=classifyTopic(impact,financial,m4Threshold);
+    const badge = cl==='double'?'<span class="oml-badge" style="background:var(--g50);color:var(--g700);border:1px solid var(--g200)">Doppio</span>':
+                  cl==='impact'?'<span class="oml-badge" style="background:#EFF6FF;color:#1D4ED8;border:1px solid #BFDBFE">Impatto</span>':
+                  '<span class="oml-badge" style="background:#FFF7ED;color:#C2410C;border:1px solid #FED7AA">Finanziario</span>';
+    return `<div class="oml-row"><span class="oml-emoji">${t.emoji}</span><span class="oml-name">${t.id} — ${t.name}</span>${badge}</div>`;
+  }).join('');
+
+  // Process log
+  const now = new Date();
+  const fmt = d=>new Date(d).toLocaleDateString('it-IT',{day:'2-digit',month:'short',year:'numeric'});
+  document.getElementById('processLog').innerHTML = [
+    {done:true, txt:`Modulo 1 completato — Contesto aziendale: <strong>${appState.m1.ragione||'—'}</strong>, NACE: ${appState.m1.nace.map(n=>n.code).join(', ')||'—'}`, time:fmt(now)},
+    {done:true, txt:`Modulo 2 completato — ${TOPICS.filter(t=>isTopicDone(t.id)).length}/10 topic ESRS valutati con ${Object.values(appState.m2.scores||{}).length} risposte IRO`, time:fmt(now)},
+    {done: stkDone>0, txt:`Modulo 3 — Engagement stakeholder: ${stkDone} su ${(appState.m3?.stakeholders||[]).length} completati`, time: stkDone>0?fmt(now):'—'},
+    {done:true, txt:`Modulo 4 completato — Matrice DMA con soglia ${m4Threshold}: <strong>${counts.double} topic doppiamente materiali</strong>`, time:fmt(now)},
+    {done: !!(appState.m5&&Object.keys(appState.m5).length), txt:`Modulo 5 — Narrative ESRS: ${appState.m5?Object.keys(appState.m5).length:0} topic documentati`, time:fmt(now)},
+    {done:true, txt:`Modulo 6 — Output generati · Assessment completato`, time:fmt(now)},
+  ].map(l=>`<div class="pl-row">
+    <div class="pl-dot ${l.done?'done':'pend'}"></div>
+    <div class="pl-text ${l.done?'':'pend'}">${l.txt}</div>
+    <div class="pl-time">${l.time}</div>
+  </div>`).join('');
+
+  // Mini matrix
+  renderMatrix('miniMatrixSvg', 380, 280);
+}
+
+document.getElementById('m6Back').addEventListener('click',()=>goToModule(5));
+
+// ═══ INIT ═══
+goToModule(1);
+updateHeader();
+</script>
+</body>
+</html>
