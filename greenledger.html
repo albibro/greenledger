@@ -3469,41 +3469,283 @@ async function pollStakeholderStatus(){
 setInterval(()=>{if(appState.nav.current===3)pollStakeholderStatus();},10000);
 
 function downloadFullPDF(){
-  const m1=appState.m1, year=m1.year||2026, co=m1.ragione||'Azienda';
-  const stkDone=(appState.m3?.stakeholders||[]).filter(s=>s.status==='done').length;
-  let html=`<!DOCTYPE html><html lang="it"><head><meta charset="UTF-8"><title>DMA — ${co} ${year}</title>
-  <style>body{font-family:Georgia,serif;max-width:800px;margin:40px auto;padding:0 40px;color:#1a1a1a;line-height:1.6}
-  h1{font-size:2rem;color:#0D3D25;border-bottom:3px solid #1A7A4A;padding-bottom:12px}
-  h2{font-size:1.3rem;color:#1A7A4A;margin-top:32px}h3{font-size:1rem;color:#3A4D40;margin-top:20px}
-  table{width:100%;border-collapse:collapse;margin:16px 0;font-size:.88rem}
-  th{background:#0D3D25;color:white;padding:8px 12px;text-align:left}
-  td{padding:8px 12px;border-bottom:1px solid #eee}tr:nth-child(even)td{background:#f9f9f9}
-  .meta{background:#f0f0f0;padding:16px;border-radius:8px;margin:20px 0}</style></head><body>
-  <h1>Double Materiality Assessment</h1>
-  <div class="meta"><strong>${co}</strong> &nbsp;·&nbsp; Anno: ${year}<br>
-  Data: ${new Date().toLocaleDateString('it-IT',{day:'2-digit',month:'long',year:'numeric'})}<br>
-  Referente: ${m1.referente||'—'} &nbsp;·&nbsp; Settore: ${(m1.nace||[]).map(n=>n.code).join(', ')||'—'}<br>
-  Stakeholder: ${stkDone} &nbsp;·&nbsp; Topic valutati: ${TOPICS.length}</div>
-  <h2>Topic materiali</h2>
-  <table><tr><th>Topic</th><th>Impatto</th><th>Finanziario</th><th>Classificazione</th></tr>
-  ${TOPICS.map(t=>{const{impact,financial}=getConsolidatedScore(t.id);const cl=classifyTopic(impact,financial,m4Threshold);
-  const lb={double:'Doppiamente materiale',impact:'Mat. Impatto',financial:'Mat. Finanziario',none:'Non materiale'};
-  return`<tr><td>${t.emoji} ${t.id} — ${t.name}</td><td>${impact.toFixed(2)}/5</td><td>${financial.toFixed(2)}/5</td><td>${lb[cl]}</td></tr>`;}).join('')}
-  </table>
-  <h2>Narrative</h2>
-  ${TOPICS.map(t=>`<h3>${t.emoji} ${t.id} — ${t.name}</h3><p>${appState.m5?.[t.id]||'Non compilata.'}</p>`).join('')}
-  <h2>Log processo DMA</h2>
-  <table><tr><th>Fase</th><th>Stato</th></tr>
-  <tr><td>M1 Contesto</td><td>Completato</td></tr>
-  <tr><td>M2 Valutazione IRO</td><td>Completato</td></tr>
-  <tr><td>M3 Stakeholder</td><td>${stkDone>0?stkDone+' risposte':'Non completato'}</td></tr>
-  <tr><td>M4 Matrice (soglia ${m4Threshold})</td><td>Completato</td></tr>
-  <tr><td>M5 Narrative</td><td>${appState.m5?Object.keys(appState.m5).length+' topic':'Non compilato'}</td></tr>
-  </table>
-  <p style="margin-top:40px;font-size:.75rem;color:#999;border-top:1px solid #eee;padding-top:12px">
-  Generato da GreenLedger — Metodologia EFRAG ESRS — Riforma Omnibus 2025</p>
-  </body></html>`;
-  const w=window.open('','_blank');w.document.write(html);w.document.close();setTimeout(()=>w.print(),500);
+  const m1 = appState.m1;
+  const year = m1.year || 2026;
+  const co = m1.ragione || 'Azienda';
+  const nace = (m1.nace||[]).map(n=>n.code+' '+n.name).join(', ') || '—';
+  const stks = appState.m3?.stakeholders || [];
+  const stkDone = stks.filter(s=>s.status==='done').length;
+  const refDate = new Date().toLocaleDateString('it-IT',{day:'2-digit',month:'long',year:'numeric'});
+  const topicData = TOPICS.map(t=>{
+    const {impact,financial} = getConsolidatedScore(t.id);
+    const cl = classifyTopic(impact,financial,m4Threshold);
+    return {...t, impact, financial, cl};
+  });
+  const matTopics = topicData.filter(t=>t.cl!=='none');
+  const clLabel = {double:'Doppiamente materiale',impact:'Mat. Impatto',financial:'Mat. Finanziario',none:'Non materiale'};
+
+  const SUBTOPIC_DR = {
+    'E1.a':['E1-1','E1-2','E1-3','E1-4','E1-5','E1-6'],
+    'E1.b':['E1-2','E1-3','E1-4','E1-9'],
+    'E1.c':['E1-2','E1-3','E1-4','E1-5'],
+    'E2.a':['E2-1','E2-2','E2-3','E2-4'],
+    'E2.b':['E2-1','E2-2','E2-3','E2-4'],
+    'E2.c':['E2-1','E2-2','E2-3','E2-4'],
+    'E2.d':['E2-1','E2-2','E2-3','E2-5'],
+    'E3.a':['E3-1','E3-2','E3-3','E3-4'],
+    'E3.b':['E3-1','E3-2','E3-3'],
+    'E4.a':['E4-1','E4-2','E4-3','E4-4','E4-5'],
+    'E4.b':['E4-1','E4-2','E4-3','E4-4','E4-5'],
+    'E5.a':['E5-1','E5-2','E5-3','E5-4'],
+    'E5.b':['E5-1','E5-2','E5-3','E5-5'],
+    'S1.a':['S1-1','S1-2','S1-3','S1-4','S1-5','S1-6','S1-10','S1-11'],
+    'S1.b':['S1-1','S1-2','S1-3','S1-4','S1-5','S1-6','S1-14'],
+    'S1.c':['S1-1','S1-2','S1-3','S1-4','S1-5','S1-6','S1-9','S1-16'],
+    'S1.d':['S1-1','S1-2','S1-3','S1-4','S1-5','S1-6','S1-13'],
+    'S2.a':['S2-1','S2-2','S2-3','S2-4','S2-5'],
+    'S2.b':['S2-1','S2-2','S2-3','S2-4','S2-5'],
+    'S3.a':['S3-1','S3-2','S3-3','S3-4','S3-5'],
+    'S3.b':['S3-1','S3-2','S3-3','S3-4','S3-5'],
+    'S4.a':['S4-1','S4-2','S4-3','S4-4','S4-5'],
+    'S4.b':['S4-1','S4-2','S4-3','S4-4','S4-5'],
+    'S4.c':['S4-1','S4-2','S4-3','S4-4','S4-5'],
+    'G1.a':['G1-1','G1-3','G1-4'],
+    'G1.b':['G1-1','G1-2','G1-6'],
+    'G1.c':['G1-1'],
+  };
+
+  function getMatSubs(t){
+    return t.subs.filter(sub=>{
+      const lib=IRO_LIB[sub.id];
+      if(!lib) return false;
+      return ['i','r','o'].some(dim=>(lib[dim]||[]).some(iro=>{
+        const st=getIROState(t.id,sub.id,dim,iro.id);
+        return st.incl&&!st.na&&st.score>=m4Threshold;
+      }));
+    });
+  }
+
+  function getTopicIROs(t){
+    const rows=[];
+    t.subs.forEach(sub=>{
+      const lib=IRO_LIB[sub.id];
+      if(!lib) return;
+      ['i','r','o'].forEach(dim=>{
+        (lib[dim]||[]).forEach(iro=>{
+          const st=getIROState(t.id,sub.id,dim,iro.id);
+          if(!st.incl||st.na) return;
+          const dimLabel={i:'Impatto',r:'Rischio',o:'Opportunita'}[dim];
+          const sign=(dim==='i')?(iro.pos?'+':'-'):(dim==='o'?'+':'-');
+          const cls=(dim==='i')?(iro.pos?'pos':'neg'):(dim==='r'?'rsk':'opp');
+          const dimStr=Object.entries(st.dims||{}).map(([k,v])=>k.charAt(0).toUpperCase()+k.slice(1)+':'+v).join(' · ');
+          rows.push({sub:sub.label,dimLabel,sign,cls,txt:iro.txt,score:st.score||0,dimStr});
+        });
+      });
+    });
+    return rows;
+  }
+
+  function buildSVG(){
+    const W=500,H=360,pad={l:48,r:16,t:16,b:38};
+    const iW=W-pad.l-pad.r,iH=H-pad.t-pad.b;
+    const toX=v=>pad.l+(v-1)/4*iW, toY=v=>pad.t+(1-(v-1)/4)*iH;
+    const thrX=toX(m4Threshold),thrY=toY(m4Threshold);
+    const colors={E:'#1A7A4A',S:'#C2410C',G:'#374151'};
+    let s=`<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">`;
+    s+=`<rect x="${pad.l}" y="${pad.t}" width="${iW}" height="${iH}" fill="#fafafa" stroke="#ddd"/>`;
+    s+=`<rect x="${thrX}" y="${thrY}" width="${pad.l+iW-thrX}" height="${pad.t+iH-thrY}" fill="rgba(26,122,74,.07)"/>`;
+    for(let v=1;v<=5;v++){
+      const x=toX(v),y=toY(v);
+      s+=`<line x1="${x}" y1="${pad.t}" x2="${x}" y2="${pad.t+iH}" stroke="#eee"/>`;
+      s+=`<line x1="${pad.l}" y1="${y}" x2="${pad.l+iW}" y2="${y}" stroke="#eee"/>`;
+      s+=`<text x="${x}" y="${pad.t+iH+13}" text-anchor="middle" font-size="9" fill="#aaa">${v}</text>`;
+      s+=`<text x="${pad.l-5}" y="${y+3}" text-anchor="end" font-size="9" fill="#aaa">${v}</text>`;
+    }
+    s+=`<line x1="${thrX}" y1="${pad.t}" x2="${thrX}" y2="${pad.t+iH}" stroke="#1A7A4A" stroke-width="1.5" stroke-dasharray="4,3"/>`;
+    s+=`<line x1="${pad.l}" y1="${thrY}" x2="${pad.l+iW}" y2="${thrY}" stroke="#1A7A4A" stroke-width="1.5" stroke-dasharray="4,3"/>`;
+    s+=`<text x="${pad.l+iW/2}" y="${H-3}" text-anchor="middle" font-size="9" fill="#666">Materialita Finanziaria</text>`;
+    s+=`<text x="11" y="${pad.t+iH/2}" text-anchor="middle" font-size="9" fill="#666" transform="rotate(-90 11 ${pad.t+iH/2})">Materialita Impatto</text>`;
+    const placed=[];
+    topicData.forEach(t=>{
+      let cx=toX(t.financial),cy=toY(t.impact);
+      placed.forEach(p=>{const dx=cx-p.x,dy=cy-p.y,d=Math.sqrt(dx*dx+dy*dy);if(d<18&&d>0){cx+=dx/d*6;cy+=dy/d*6;}});
+      placed.push({x:cx,y:cy});
+      const r=t.cl==='double'?11:8, op=t.cl==='none'?0.2:0.85;
+      s+=`<circle cx="${cx}" cy="${cy}" r="${r}" fill="${colors[t.pillar]}" opacity="${op}" stroke="white" stroke-width="1.5"/>`;
+      s+=`<text x="${cx}" y="${cy+3}" text-anchor="middle" font-size="${r>8?7:6}" fill="white" font-weight="700">${t.id}</text>`;
+    });
+    s+=`</svg>`;
+    return s;
+  }
+
+  const html=`<!DOCTYPE html>
+<html lang="it"><head><meta charset="UTF-8"><title>DMA — ${co} ${year}</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;color:#1a1a1a;background:white;font-size:10pt;line-height:1.6}
+@media print{.no-print{display:none}.page-break{page-break-before:always}h2{page-break-after:avoid}}
+.page{max-width:820px;margin:0 auto;padding:40px}
+.cover{min-height:97vh;display:flex;flex-direction:column;justify-content:center;padding:60px;border-bottom:4px solid #1A7A4A}
+.cover-badge{font-family:sans-serif;font-size:9pt;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#1A7A4A;margin-bottom:20px}
+.cover h1{font-size:2.2rem;color:#0D3D25;line-height:1.2;margin-bottom:12px}
+.cover-sub{font-size:1rem;color:#3A4D40;margin-bottom:36px}
+.cover-meta{display:grid;grid-template-columns:1fr 1fr;gap:10px;width:100%}
+.cmi{padding:10px 14px;background:#f5f5f5;border-left:3px solid #1A7A4A}
+.cml{font-family:sans-serif;font-size:7.5pt;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6B7F72;display:block;margin-bottom:2px}
+.cmv{font-size:10pt;font-weight:600;color:#0D3D25}
+h2{font-family:sans-serif;font-size:13pt;font-weight:700;color:#0D3D25;border-bottom:2px solid #1A7A4A;padding-bottom:5px;margin:28px 0 14px}
+h3{font-family:sans-serif;font-size:11pt;font-weight:700;color:#3A4D40;margin:18px 0 8px}
+h4{font-family:sans-serif;font-size:8.5pt;font-weight:700;color:#1A7A4A;margin:12px 0 5px;text-transform:uppercase;letter-spacing:.05em}
+p{margin-bottom:9px}
+table{width:100%;border-collapse:collapse;margin:10px 0;font-family:sans-serif;font-size:8.5pt}
+th{background:#0D3D25;color:white;padding:6px 9px;text-align:left;font-weight:600}
+td{padding:5px 9px;border-bottom:1px solid #eee;vertical-align:top}
+tr:nth-child(even) td{background:#fafafa}
+.badge{display:inline-block;padding:2px 7px;border-radius:3px;font-size:7.5pt;font-weight:700}
+.badge-double{background:#EEF8F3;color:#1A7A4A}
+.badge-impact{background:#EFF6FF;color:#1D4ED8}
+.badge-financial{background:#FFF7ED;color:#C2410C}
+.badge-none{background:#F3F4F6;color:#6B7F72}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:14px 0}
+.stat-box{padding:12px;background:#f5f5f5;text-align:center;border-top:3px solid #1A7A4A}
+.stat-num{font-family:sans-serif;font-size:1.6rem;font-weight:700;color:#1A7A4A;display:block}
+.stat-label{font-family:sans-serif;font-size:7.5pt;color:#6B7F72;text-transform:uppercase;letter-spacing:.04em}
+.iro-block{margin:4px 0;padding:7px 9px;border-left:3px solid #ddd;background:#fafafa;font-size:8pt;position:relative}
+.iro-block.neg{border-color:#C2410C}.iro-block.pos{border-color:#1A7A4A}
+.iro-block.rsk{border-color:#D97706}.iro-block.opp{border-color:#1D4ED8}
+.iro-sign{font-weight:700;margin-right:3px}
+.iro-score{float:right;font-family:monospace;font-weight:700;font-size:8.5pt;color:#333}
+.iro-dims{font-size:7pt;color:#6B7F72;margin-top:2px}
+.footer{margin-top:36px;padding-top:10px;border-top:1px solid #eee;font-family:sans-serif;font-size:7.5pt;color:#999;display:flex;justify-content:space-between}
+.print-btn{position:fixed;bottom:20px;right:20px;padding:11px 18px;background:#1A7A4A;color:white;border:none;border-radius:8px;font-family:sans-serif;font-size:10pt;font-weight:600;cursor:pointer;box-shadow:0 4px 12px rgba(26,122,74,.3)}
+.print-btn:hover{background:#0D3D25}
+</style></head><body>
+
+<div class="cover">
+  <div class="cover-badge">🌿 GreenLedger — Double Materiality Assessment</div>
+  <h1>Valutazione di Doppia Materialita</h1>
+  <div class="cover-sub">Documento di processo conforme EFRAG/ESRS — Riforma Omnibus 2025</div>
+  <div class="cover-meta">
+    <div class="cmi"><span class="cml">Azienda</span><span class="cmv">${co}</span></div>
+    <div class="cmi"><span class="cml">Anno rendicontazione</span><span class="cmv">${year}</span></div>
+    <div class="cmi"><span class="cml">Referente sostenibilita</span><span class="cmv">${m1.referente||'—'}</span></div>
+    <div class="cmi"><span class="cml">Settore NACE</span><span class="cmv">${nace}</span></div>
+    <div class="cmi"><span class="cml">Sede</span><span class="cmv">${m1.hq||'—'}</span></div>
+    <div class="cmi"><span class="cml">Data assessment</span><span class="cmv">${refDate}</span></div>
+  </div>
+</div>
+
+<div class="page">
+<h2 class="page-break">1. Sommario Esecutivo</h2>
+<div class="stats-grid">
+  <div class="stat-box"><span class="stat-num">${TOPICS.length}</span><span class="stat-label">Topic valutati</span></div>
+  <div class="stat-box"><span class="stat-num">${matTopics.length}</span><span class="stat-label">Topic materiali</span></div>
+  <div class="stat-box"><span class="stat-num">${stkDone}</span><span class="stat-label">Stakeholder</span></div>
+  <div class="stat-box"><span class="stat-num">${m4Threshold}/5</span><span class="stat-label">Soglia</span></div>
+</div>
+<table>
+  <tr><th>Topic</th><th>Impatto</th><th>Finanziario</th><th>Classificazione</th></tr>
+  ${topicData.map(t=>`<tr>
+    <td>${t.emoji} <strong>${t.id}</strong> — ${t.name}</td>
+    <td style="text-align:center;font-family:monospace">${t.impact.toFixed(2)}</td>
+    <td style="text-align:center;font-family:monospace">${t.financial.toFixed(2)}</td>
+    <td><span class="badge badge-${t.cl}">${clLabel[t.cl]}</span></td>
+  </tr>`).join('')}
+</table>
+
+<h2 class="page-break">2. Metodologia DMA</h2>
+<p>Condotta secondo metodologia <strong>EFRAG</strong>, in conformita con <strong>ESRS 2 IRO-1</strong> e Implementation Guidance IG1.</p>
+<table>
+  <tr><th>Tipo IRO</th><th>Dimensioni</th><th>Formula</th></tr>
+  <tr><td>Impatti negativi (−)</td><td>Gravita · Portata · Irrimediabilita · Probabilita</td><td>sqrt(media(G,P,I) x Prob.)</td></tr>
+  <tr><td>Impatti positivi (+)</td><td>Gravita · Portata · Probabilita</td><td>sqrt(media(G,P) x Prob.)</td></tr>
+  <tr><td>Rischi (⚠) / Opportunita (+)</td><td>Probabilita · Magnitudo finanziaria</td><td>sqrt(Prob. x Magn.)</td></tr>
+</table>
+<table>
+  <tr><th>Parametro</th><th>Valore</th></tr>
+  <tr><td>Soglia materialita</td><td>${m4Threshold}/5</td></tr>
+  <tr><td>Peso referente interno</td><td>${Math.round((1-(appState.m4?.stkWeight||0.3))*100)}%</td></tr>
+  <tr><td>Peso stakeholder</td><td>${Math.round((appState.m4?.stkWeight||0.3)*100)}%</td></tr>
+  <tr><td>Stakeholder invitati / completati</td><td>${stks.length} / ${stkDone}</td></tr>
+</table>
+
+<h2 class="page-break">3. Risultati per Topic Materiale</h2>
+${matTopics.map(t=>{
+  const iros=getTopicIROs(t);
+  const matSubs=getMatSubs(t);
+  const activeDRs=[...new Set(matSubs.flatMap(sub=>SUBTOPIC_DR[sub.id]||[]))];
+  return `<h3>${t.emoji} ${t.id} — ${t.name}</h3>
+<table><tr><th>Impatto</th><th>Finanziario</th><th>Classificazione</th><th>Subtopic materiali</th></tr>
+<tr><td style="font-family:monospace;text-align:center">${t.impact.toFixed(2)}/5</td>
+<td style="font-family:monospace;text-align:center">${t.financial.toFixed(2)}/5</td>
+<td><span class="badge badge-${t.cl}">${clLabel[t.cl]}</span></td>
+<td>${matSubs.map(s=>s.label).join(', ')||'—'}</td></tr></table>
+${iros.length?`<h4>IRO valutati</h4>${iros.map(iro=>`<div class="iro-block ${iro.cls}">
+  <span class="iro-sign">${iro.sign}</span><strong>${iro.dimLabel}</strong> — ${iro.txt}
+  <span class="iro-score">${iro.score>0?iro.score.toFixed(2):'—'}/5</span>
+  ${iro.dimStr?`<div class="iro-dims">${iro.dimStr}</div>`:''}
+</div>`).join('')}`:'<p style="color:#999;font-size:8pt">Nessun IRO votato.</p>'}
+${activeDRs.length?`<h4>DR ESRS attivate</h4><p style="font-size:8pt;font-family:monospace">${activeDRs.join(' · ')}</p>`:''}`;
+}).join('')}
+
+${stkDone>0?`<h2 class="page-break">4. Stakeholder Engagement</h2>
+<table><tr><th>Nome</th><th>Organizzazione</th><th>Categoria</th><th>Status</th></tr>
+${stks.map(s=>`<tr><td>${s.name}</td><td>${s.org||'—'}</td><td>${s.cat}</td>
+<td>${s.status==='done'?'Completato':s.status==='opened'?'Aperto':'Invitato'}</td></tr>`).join('')}
+</table>`:''}
+
+<h2 class="page-break">5. Matrice di Doppia Materialita</h2>
+<div style="text-align:center;margin:16px 0">${buildSVG()}</div>
+<div style="display:flex;gap:14px;justify-content:center;font-family:sans-serif;font-size:8pt;margin:10px 0">
+  <span style="color:#1A7A4A">● Doppiamente materiale</span>
+  <span style="color:#1D4ED8">● Mat. Impatto</span>
+  <span style="color:#C2410C">● Mat. Finanziario</span>
+  <span style="color:#ccc">● Non materiale</span>
+</div>
+
+<h2 class="page-break">6. Disclosure Requirements Attivate</h2>
+<table><tr><th>Topic</th><th>Subtopic materiali</th><th>DR ESRS attivate</th></tr>
+${matTopics.map(t=>{
+  const matSubs=getMatSubs(t);
+  const activeDRs=[...new Set(matSubs.flatMap(sub=>SUBTOPIC_DR[sub.id]||[]))];
+  return `<tr><td>${t.emoji} <strong>${t.id}</strong> ${t.name}</td>
+<td>${matSubs.map(s=>s.label).join('<br>')||'—'}</td>
+<td style="font-family:monospace;font-size:8pt">${activeDRs.join(', ')||'—'}</td></tr>`;
+}).join('')}
+</table>
+
+<h2 class="page-break">7. Audit Trail</h2>
+<table>
+  <tr><th>Parametro</th><th>Valore</th></tr>
+  <tr><td>Azienda</td><td>${co}</td></tr>
+  <tr><td>Anno rendicontazione</td><td>${year}</td></tr>
+  <tr><td>Referente</td><td>${m1.referente||'—'}</td></tr>
+  <tr><td>Sede</td><td>${m1.hq||'—'}</td></tr>
+  <tr><td>NACE</td><td>${nace}</td></tr>
+  <tr><td>Dipendenti</td><td>${m1.employees?.toLocaleString('it-IT')||'—'}</td></tr>
+  <tr><td>Fatturato</td><td>${m1.revenue?'EUR '+m1.revenue+'M':'—'}</td></tr>
+  <tr><td>Geografie</td><td>${(m1.geo||[]).join(', ')||'—'}</td></tr>
+  <tr><td>Soglia materialita</td><td>${m4Threshold}/5</td></tr>
+  <tr><td>Peso stakeholder</td><td>${Math.round((appState.m4?.stkWeight||0.3)*100)}%</td></tr>
+  <tr><td>Topic valutati / materiali</td><td>${TOPICS.length} / ${matTopics.length}</td></tr>
+  <tr><td>Stakeholder invitati / completati</td><td>${stks.length} / ${stkDone}</td></tr>
+  <tr><td>Framework</td><td>EFRAG ESRS — Riforma Omnibus 2025</td></tr>
+  <tr><td>Strumento</td><td>GreenLedger v1.0</td></tr>
+  <tr><td>Data generazione</td><td>${refDate}</td></tr>
+</table>
+
+<div class="footer">
+  <span>GreenLedger — Double Materiality Assessment Platform</span>
+  <span>Generato il ${refDate} · EFRAG ESRS</span>
+</div>
+</div>
+
+<button class="print-btn no-print" onclick="window.print()">Stampa / Salva PDF</button>
+</body></html>`;
+
+  const w=window.open('','_blank');
+  w.document.write(html);
+  w.document.close();
 }
 
 function confirmLock(){
