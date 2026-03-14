@@ -1051,6 +1051,37 @@ input.wslider::-webkit-slider-thumb{-webkit-appearance:none;width:13px;height:13
 </div>
 </div>
 
+<!-- MODAL AGGIUNGI STAKEHOLDER -->
+<div id="stkModal" style="display:none;position:fixed;inset:0;background:rgba(15,28,20,.5);backdrop-filter:blur(4px);z-index:500;align-items:center;justify-content:center">
+  <div style="background:white;border-radius:18px;padding:28px;width:460px;max-width:92vw;box-shadow:0 16px 48px rgba(15,28,20,.18)">
+    <h3 style="font-family:'Playfair Display',serif;font-size:1.1rem;color:#0D3D25;margin-bottom:16px">Aggiungi stakeholder</h3>
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <div><label style="font-size:.76rem;font-weight:600;color:#3A4D40;display:block;margin-bottom:4px">Nome *</label>
+      <input id="stkName" class="inp" placeholder="es. Mario Rossi"></div>
+      <div><label style="font-size:.76rem;font-weight:600;color:#3A4D40;display:block;margin-bottom:4px">Organizzazione</label>
+      <input id="stkOrg" class="inp" placeholder="es. Banca Verde S.p.A."></div>
+      <div><label style="font-size:.76rem;font-weight:600;color:#3A4D40;display:block;margin-bottom:4px">Categoria *</label>
+      <select id="stkCat" class="inp">
+        <option value="">Seleziona...</option>
+        <option value="Investitori">Investitori</option>
+        <option value="Dipendenti">Dipendenti</option>
+        <option value="Clienti">Clienti</option>
+        <option value="Fornitori">Fornitori</option>
+        <option value="ONG / Comunità">ONG / Comunità</option>
+        <option value="Autorità">Autorità</option>
+        <option value="Media">Media</option>
+        <option value="Altro">Altro</option>
+      </select></div>
+      <div><label style="font-size:.76rem;font-weight:600;color:#3A4D40;display:block;margin-bottom:4px">Email (opzionale)</label>
+      <input id="stkEmail" class="inp" type="email" placeholder="es. mario@banca.it"></div>
+    </div>
+    <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:20px">
+      <button class="btn btn-gh btn-sm" onclick="closeStkModal()">Annulla</button>
+      <button class="btn btn-pri btn-sm" onclick="confirmAddStk()">Aggiungi</button>
+    </div>
+  </div>
+</div>
+
 <!-- TOAST -->
 <div class="toast" id="toast"><div class="toast-ic"><svg width="11" height="11" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg></div><span id="toastMsg">Salvato.</span></div>
 
@@ -2294,8 +2325,60 @@ document.getElementById('genKeyBtn').addEventListener('click', async ()=>{
 });
 
 document.getElementById('addStkBtn').addEventListener('click',()=>{
-  showToast('Inserisci email stakeholder e condividi il link sessione generato.');
+  if(!sessionKey){ showToast('Genera prima la chiave sessione'); return; }
+  document.getElementById('stkModal').style.display = 'flex';
+  setTimeout(()=>document.getElementById('stkName').focus(), 100);
 });
+
+function closeStkModal(){
+  document.getElementById('stkModal').style.display = 'none';
+  ['stkName','stkOrg','stkEmail'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('stkCat').value = '';
+}
+
+const CAT_STYLES = {
+  'Investitori':{color:'#1D4ED8',bg:'#EFF6FF'},
+  'Dipendenti':{color:'#065F46',bg:'#ECFDF5'},
+  'Clienti':{color:'#7C2D12',bg:'#FFF7ED'},
+  'Fornitori':{color:'#4D7C0F',bg:'#F7FEE7'},
+  'ONG / Comunità':{color:'#0E7490',bg:'#ECFEFF'},
+  'Autorità':{color:'#6B21A8',bg:'#FAF5FF'},
+  'Media':{color:'#374151',bg:'#F9FAFB'},
+  'Altro':{color:'#6B7F72',bg:'#F3F4F6'},
+};
+
+async function confirmAddStk(){
+  const name = document.getElementById('stkName').value.trim();
+  const org  = document.getElementById('stkOrg').value.trim();
+  const cat  = document.getElementById('stkCat').value;
+  if(!name || !cat){ showToast('Inserisci nome e categoria'); return; }
+  const style = CAT_STYLES[cat] || CAT_STYLES['Altro'];
+  const colors = ['#1A7A4A','#C2410C','#1D4ED8','#D97706','#7C2D12','#0E7490'];
+  const avatarColor = colors[stakeholders.length % colors.length];
+  const newStk = { name, org, cat, catColor:style.color, catBg:style.bg,
+    avatarColor, status:'invited', scores:{}, token:'', surveyLink:'' };
+  try {
+    const res = await fetch('/api/session', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({
+        session_key: sessionKey,
+        company_name: appState.m1.ragione||'Azienda',
+        data: { m1:appState.m1, topics:TOPICS },
+        stakeholders: [newStk],
+        append: true,
+      })
+    });
+    const data = await res.json();
+    if(data.stakeholders && data.stakeholders.length){
+      const added = data.stakeholders[data.stakeholders.length-1];
+      newStk.token = added?.token||'';
+      newStk.surveyLink = window.location.origin+'/survey.html?token='+(added?.token||'');
+    }
+  } catch(e){ console.warn('offline',e); }
+  stakeholders.push(newStk);
+  renderStkList(); updateM3Stats(); closeStkModal();
+  showToast('Stakeholder aggiunto — link pronto!');
+}
 
 function renderStkList(){
   const el = document.getElementById('stkList');
@@ -2353,6 +2436,8 @@ function updateM3Stats(){
 }
 
 document.getElementById('m3Back').addEventListener('click',()=>goToModule(2));
+document.getElementById('m3Next').disabled = false;
+document.getElementById('consolBtn').disabled = false;
 
 function consolidateAndGoM4(){
   // Merge stakeholder scores into appState
@@ -2365,23 +2450,8 @@ function consolidateAndGoM4(){
 }
 
 async function consolidateFromSupabase(){
-  if(sessionKey){
-    try {
-      const res = await fetch('/api/session?key=' + sessionKey);
-      const data = await res.json();
-      if(data.stakeholders){
-        data.stakeholders.forEach(remote => {
-          const local = stakeholders.find(s => s.token === remote.token);
-          if(local){
-            local.status = remote.status;
-            local.scores = remote.scores || {};
-          }
-        });
-        renderStkList();
-        updateM3Stats();
-      }
-    } catch(e){}
-  }
+  // Aggiorna sempre da Supabase prima di consolidare
+  await pollStakeholderStatus();
   consolidateAndGoM4();
 }
 
@@ -2540,7 +2610,17 @@ document.getElementById('stkWeight').addEventListener('input',e=>{
   renderMatrix(); renderResultsTable(); updateM4Stats();
 });
 
-document.getElementById('m4Back').addEventListener('click',()=>goToModule(3));
+document.getElementById('m4Back').addEventListener('click',()=>{
+  goToModule(3);
+  // Ripristina UI modulo 3 se sessione esiste
+  if(sessionKey){
+    document.getElementById('sessKey').textContent = sessionKey;
+    document.getElementById('sessStats').style.display = 'grid';
+    document.getElementById('addStkBtn').disabled = false;
+    document.getElementById('consolBar').style.display = 'flex';
+    pollStakeholderStatus();
+  }
+});
 document.getElementById('m4Next').addEventListener('click',()=>{
   updateM4Stats();
   showToast('Matrice salvata — apertura narrative ESRS.');
@@ -2771,6 +2851,27 @@ async function pollStakeholderStatus(){
 
 // Polling ogni 10 secondi quando siamo nel modulo 3
 setInterval(()=>{ if(appState.nav.current === 3) pollStakeholderStatus(); }, 10000);
+
+async function pollStakeholderStatus(){
+  if(!sessionKey) return;
+  try {
+    const res = await fetch('/api/session?key='+sessionKey);
+    const data = await res.json();
+    if(!data.stakeholders) return;
+    data.stakeholders.forEach(remote=>{
+      const local = stakeholders.find(s=>s.token===remote.token);
+      if(local){
+        local.status = remote.status;
+        local.scores = remote.scores||{};
+        local.completedAt = remote.completed_at;
+      }
+    });
+    renderStkList(); updateM3Stats();
+  } catch(e){}
+}
+
+// Polling ogni 10s quando siamo nel modulo 3
+setInterval(()=>{ if(appState.nav.current===3) pollStakeholderStatus(); }, 10000);
 
 // ═══ INIT ═══
 goToModule(1);
