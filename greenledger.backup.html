@@ -575,7 +575,17 @@ input.wslider::-webkit-slider-thumb{-webkit-appearance:none;width:13px;height:13
           <span class="ferr">Campo obbligatorio</span>
         </div>
       </div>
-
+      <div class="fg c2" style="margin-top:14px">
+        <div class="f" id="f-piva">
+          <label for="piva">P.IVA / Codice Fiscale <span class="req">★</span></label>
+          <input type="text" id="piva" class="inp" placeholder="IT12345678901" maxlength="16">
+          <span class="ferr">Campo obbligatorio</span>
+        </div>
+        <div class="f">
+          <label for="website">Sito web <span class="hint">(opzionale)</span></label>
+          <input type="url" id="website" class="inp" placeholder="https://www.azienda.it">
+        </div>
+      </div>
     </div>
 
     <!-- MULTI-NACE -->
@@ -599,9 +609,9 @@ input.wslider::-webkit-slider-thumb{-webkit-appearance:none;width:13px;height:13
         <div class="bdesc-hd">
           <div class="bic"><svg width="11" height="11" viewBox="0 0 12 12" fill="none"><path d="M6 1l1.5 3 3.5.5-2.5 2.5.5 3.5L6 9l-3 1.5.5-3.5L1 4.5 4.5 4z" fill="white"/></svg></div>
           <h3>Attività e modello di business</h3>
-          
+          <span class="ai-b">AI</span>
         </div>
-        <p class="bdesc-hint">Descrivi <strong>cosa produce o vende il gruppo, come genera valore, posizione nella catena del valore</strong> (upstream/downstream), prodotti/servizi principali, tipologia di clienti e fornitori critici.</p>
+        <p class="bdesc-hint">Descrivi <strong>cosa produce o vende il gruppo, come genera valore, posizione nella catena del valore</strong> (upstream/downstream), prodotti/servizi principali, tipologia di clienti e fornitori critici.<br><br>Usato nel Modulo 2 per <strong>calibrare gli IRO suggeriti</strong> per ogni topic ESRS.</p>
         <textarea id="bizDesc" class="ta" maxlength="1200" rows="4" placeholder="Es.: Il Gruppo produce imballaggi in plastica riciclata (HDPE, PET) per il settore alimentare B2B. Supply chain upstream in Europa dell'Est per polimeri riciclati, produzione in 2 stabilimenti (Brescia e Valencia), distribuzione a GDO e industria alimentare in 8 paesi UE. 340 FTE, 75% ricavi da canale GDO..."></textarea>
         <div class="ccount" id="charCount">0 / 1200</div>
       </div>
@@ -613,8 +623,10 @@ input.wslider::-webkit-slider-thumb{-webkit-appearance:none;width:13px;height:13
       <div class="f">
         <label>Fascia CSRD <span class="req">★</span></label>
         <div class="sgrid" id="sizeGrid">
-          <div class="sopt" data-val="voluntary"><span class="si">🔹</span><span class="sl">Volontario</span><span class="sr">&lt;1.000 dip<br>&lt;€450M</span><div class="chk"><svg width="7" height="5" viewBox="0 0 8 6"><path d="M1 3L3 5L7 1" stroke="white" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg></div></div>
-          <div class="sopt active" data-val="csrd"><span class="si">🟩</span><span class="sl">CSRD</span><span class="sr">&gt;1.000 dip<br>&gt;€450M</span><div class="chk"><svg width="7" height="5" viewBox="0 0 8 6"><path d="M1 3L3 5L7 1" stroke="white" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg></div></div>
+          <div class="sopt" data-val="micro"><span class="si">🔹</span><span class="sl">Micro</span><span class="sr">&lt;10 dip<br>&lt;€2M</span><div class="chk"><svg width="7" height="5" viewBox="0 0 8 6"><path d="M1 3L3 5L7 1" stroke="white" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg></div></div>
+          <div class="sopt" data-val="small"><span class="si">🔸</span><span class="sl">Piccola</span><span class="sr">10–49<br>€2–10M</span><div class="chk"><svg width="7" height="5" viewBox="0 0 8 6"><path d="M1 3L3 5L7 1" stroke="white" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg></div></div>
+          <div class="sopt active" data-val="medium"><span class="si">🟧</span><span class="sl">Media</span><span class="sr">50–249<br>€10–50M</span><div class="chk"><svg width="7" height="5" viewBox="0 0 8 6"><path d="M1 3L3 5L7 1" stroke="white" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg></div></div>
+          <div class="sopt" data-val="large"><span class="si">🟩</span><span class="sl">Grande</span><span class="sr">≥250<br>≥€50M</span><div class="chk"><svg width="7" height="5" viewBox="0 0 8 6"><path d="M1 3L3 5L7 1" stroke="white" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg></div></div>
         </div>
         <input type="hidden" id="sizeVal" value="medium">
       </div>
@@ -649,20 +661,20 @@ input.wslider::-webkit-slider-thumb{-webkit-appearance:none;width:13px;height:13
 
     <!-- FRAMEWORK -->
     <div class="fsec">
-      <div class="sdiv"><div class="sdiv-ic"><svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M2 4h10M2 7h8M2 10h6" stroke="white" stroke-width="1.4" stroke-linecap="round"/></svg></div><span class="sdiv-t">Anno di rendicontazione</span><div class="sdiv-l"></div></div>
+      <div class="sdiv"><div class="sdiv-ic"><svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M2 4h10M2 7h8M2 10h6" stroke="white" stroke-width="1.4" stroke-linecap="round"/></svg></div><span class="sdiv-t">Framework & Anno</span><div class="sdiv-l"></div></div>
       <div class="fg c2">
         <div class="f">
-          <label>Anno di rendicontazione <span class="req">★</span></label>
-          <div class="yrwrap"><button type="button" class="yrbtn" id="yrDn">−</button><input type="text" id="yrVal" class="yrv" value="2026" readonly><button type="button" class="yrbtn" id="yrUp">+</button></div>
+          <label>Standard applicabili</label>
+          <div class="stdgrid" id="stdGrid">
+            <div class="stdc active" data-val="CSRD"><div class="stdcb"></div><div><div class="stdn">CSRD</div><div class="stdf">Corporate Sustainability Reporting Directive</div></div></div>
+            <div class="stdc active" data-val="ESRS"><div class="stdcb"></div><div><div class="stdn">ESRS</div><div class="stdf">European Sustainability Reporting Standards</div></div></div>
+            <div class="stdc" data-val="GRI"><div class="stdcb"></div><div><div class="stdn">GRI Standards</div><div class="stdf">Global Reporting Initiative</div></div></div>
+            <div class="stdc" data-val="TCFD"><div class="stdcb"></div><div><div class="stdn">TCFD</div><div class="stdf">Climate-related Disclosures</div></div></div>
+          </div>
         </div>
         <div class="f">
-          <label>Framework applicabile</label>
-          <div id="stdBadge" style="display:flex;gap:6px;flex-wrap:wrap;margin-top:4px">
-            <span style="font-size:.74rem;font-weight:600;padding:4px 10px;border-radius:6px;background:var(--g50);color:var(--g700);border:1px solid var(--g200)">ESRS</span>
-            <span id="csrdBadge" style="font-size:.74rem;font-weight:600;padding:4px 10px;border-radius:6px;background:var(--g800);color:white;display:none">CSRD obbligatorio</span>
-            <span id="volBadge" style="font-size:.74rem;font-weight:600;padding:4px 10px;border-radius:6px;background:var(--ambg);color:var(--amber);border:1px solid var(--ambb)">Volontario (VSME)</span>
-          </div>
-          <span style="font-size:.72rem;color:var(--inkm);margin-top:6px;display:block">Determinato automaticamente dalla fascia dimensionale</span>
+          <label>Anno di rendicontazione <span class="req">★</span></label>
+          <div class="yrwrap"><button type="button" class="yrbtn" id="yrDn">−</button><input type="text" id="yrVal" class="yrv" value="2024" readonly><button type="button" class="yrbtn" id="yrUp">+</button></div>
         </div>
       </div>
     </div>
@@ -680,7 +692,7 @@ input.wslider::-webkit-slider-thumb{-webkit-appearance:none;width:13px;height:13
 
 <!-- SIDEBAR M1 -->
 <aside class="sidebar">
-  <div class="csrd-box"><h4>CSRD — Riforma Omnibus 2025</h4><p>Dal 2027 obbligo solo per imprese &gt;1.000 dipendenti e &gt;€450M fatturato. Le altre imprese possono rendicontare volontariamente con standard VSME semplificati.</p><div class="csrd-bgs"><span class="csrd-bg">ESRS E1–E5</span><span class="csrd-bg">ESRS S1–S4</span><span class="csrd-bg">ESRS G1</span><span class="csrd-bg">ESRS 2</span><span class="csrd-bg">Omnibus 2025</span></div></div>
+  <div class="csrd-box"><h4>CSRD in vigore</h4><p>Grandi imprese UE dal FY2024. PMI quotate e value chain dal 2026–2028.</p><div class="csrd-bgs"><span class="csrd-bg">ESRS E1–E5</span><span class="csrd-bg">ESRS S1–S4</span><span class="csrd-bg">ESRS G1</span><span class="csrd-bg">ESRS 2</span></div></div>
   <div class="icard">
     <div class="icard-hd"><div class="ic"><svg width="10" height="10" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5" stroke="white" stroke-width="1.2"/><path d="M6 4v4" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg></div><h3>Avanzamento moduli</h3></div>
     <div class="icard-bd">
@@ -1024,59 +1036,19 @@ input.wslider::-webkit-slider-thumb{-webkit-appearance:none;width:13px;height:13
     </div>
   </div>
 </div>
-<!-- MODAL BLOCCO ASSESSMENT -->
-<div id="lockModal" style="display:none;position:fixed;inset:0;background:rgba(15,28,20,.6);backdrop-filter:blur(4px);z-index:500;align-items:center;justify-content:center">
-  <div style="background:white;border-radius:18px;padding:28px;width:480px;max-width:92vw;box-shadow:0 16px 48px rgba(15,28,20,.2)">
-    <div style="font-size:2rem;margin-bottom:12px">🔒</div>
-    <h3 style="font-family:'Playfair Display',serif;font-size:1.1rem;color:#DC2626;margin-bottom:8px">Chiudi e blocca assessment</h3>
-    <p style="font-size:.82rem;color:var(--inks);line-height:1.65;margin-bottom:16px">Stai per <strong>bloccare definitivamente</strong> questa Double Materiality Assessment. Una volta confermato, i moduli 1-5 non potranno più essere modificati senza una password di sblocco.</p>
-    <div style="background:#FEF2F2;border:1px solid #FECACA;border-radius:8px;padding:12px;font-size:.78rem;color:#991B1B;margin-bottom:16px">
-      ⚠️ Questa azione è reversibile solo con la password di sblocco che verrà generata. Salvala in un posto sicuro.
-    </div>
-    <div style="display:flex;flex-direction:column;gap:10px">
-      <div><label style="font-size:.76rem;font-weight:600;color:var(--inks);display:block;margin-bottom:4px">Scrivi "CONFERMO" per procedere</label>
-      <input id="lockConfirmInput" class="inp" placeholder="CONFERMO"></div>
-    </div>
-    <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:18px">
-      <button class="btn btn-gh btn-sm" onclick="document.getElementById('lockModal').style.display='none'">Annulla</button>
-      <button class="btn btn-sm" style="background:#DC2626;color:white;border:none" onclick="confirmLock()">Blocca assessment</button>
-    </div>
-  </div>
-</div>
-
 <div class="bbar">
   <div class="bbar-stats">
-    <div class="bstat"><span class="bstat-l">Assessment</span><span class="bstat-v" style="color:var(--g600)" id="assessmentStatus">Completato ✓</span></div>
+    <div class="bstat"><span class="bstat-l">Assessment</span><span class="bstat-v" style="color:var(--g600)">Completato ✓</span></div>
     <div class="bstat"><span class="bstat-l">Topic materiali</span><span class="bstat-v" id="m6MatCount">—</span></div>
   </div>
   <div class="bbar-acts">
     <button class="btn btn-gh" id="m6Back">← Modulo 5</button>
-    <button class="btn btn-gh" onclick="downloadFullPDF()" style="gap:6px">
-      <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M7 2v8M4 7l3 3 3-3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><path d="M2 12h10" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
-      PDF Revisore
-    </button>
-    <button class="btn btn-gh" id="lockBtn" style="color:#DC2626;border-color:#FECACA" onclick="document.getElementById('lockModal').style.display='flex'">
-      🔒 Chiudi Assessment
-    </button>
     <button class="btn btn-pri" id="m6CsrdBtn" onclick="exportToCsrd()">
       <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M7 1l4 4H8v5H6V5H3L7 1z" fill="white"/><path d="M1 11v1a1 1 0 001 1h10a1 1 0 001-1v-1" stroke="white" stroke-width="1.2" stroke-linecap="round"/></svg>
       Avvia CSRD Reporting →
     </button>
   </div>
 </div>
-</div>
-
-<!-- MODAL N/A GIUSTIFICAZIONE -->
-<div id="naModal" style="display:none;position:fixed;inset:0;background:rgba(15,28,20,.5);backdrop-filter:blur(4px);z-index:500;align-items:center;justify-content:center">
-  <div style="background:white;border-radius:18px;padding:28px;width:460px;max-width:92vw;box-shadow:0 16px 48px rgba(15,28,20,.18)">
-    <h3 style="font-family:'Playfair Display',serif;font-size:1rem;color:#0D3D25;margin-bottom:8px">Giustifica N/A</h3>
-    <p style="font-size:.8rem;color:var(--inkm);margin-bottom:16px">Spiega perché questo IRO non è applicabile al contesto del Gruppo.</p>
-    <textarea id="naNote" style="width:100%;border:1.5px solid var(--cd);border-radius:8px;padding:10px 14px;font-family:'DM Sans',sans-serif;font-size:.83rem;resize:vertical;min-height:90px;outline:none;background:var(--cream)" placeholder="Es. Il Gruppo non opera in aree marine né effettua scarichi costieri..."></textarea>
-    <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:16px">
-      <button class="btn btn-gh btn-sm" onclick="document.getElementById('naModal').style.display='none'">Annulla</button>
-      <button class="btn btn-pri btn-sm" onclick="confirmNA()">Conferma N/A</button>
-    </div>
-  </div>
 </div>
 
 <!-- MODAL AGGIUNGI STAKEHOLDER -->
@@ -1202,441 +1174,441 @@ const NACE_DB=[
 const IRO_LIB = {
 'E1.a':{
   i:[
-    {id:'E1aI1',txt:'Le emissioni dirette di CO₂ e altri GHG da combustione fossile e processi industriali contribuiscono al cambiamento climatico globale (Scope 1)',s:['B','C','D','H','F']},
-    {id:'E1aI2',txt:'Le emissioni indirette da acquisto di energia elettrica e termica amplificano l'impronta carbonifera dell'organizzazione (Scope 2)',s:['ALL']},
-    {id:'E1aI3',txt:'Le emissioni lungo la catena del valore da approvvigionamento, trasporto, uso e fine vita dei prodotti rappresentano la quota maggiore dell'impatto climatico (Scope 3)',s:['C','G','A']},
-    {id:'E1aI4',txt:'Il rilascio di F-gas e refrigeranti con elevato potenziale di riscaldamento globale causa impatti climatici sproporzionati rispetto ai volumi',s:['C','I','G']},
+    {id:'E1aI1',txt:'Emissioni dirette di CO₂ e altri GHG da combustione fossile e processi industriali (Scope 1)',s:['B','C','D','H','F']},
+    {id:'E1aI2',txt:'Emissioni indirette da acquisto di energia elettrica e termica (Scope 2)',s:['ALL']},
+    {id:'E1aI3',txt:'Emissioni lungo la catena del valore: approvvigionamento, trasporto, uso e fine vita dei prodotti (Scope 3)',s:['C','G','A']},
+    {id:'E1aI4',txt:'Emissioni di F-gas e refrigeranti con elevato potenziale di riscaldamento globale (GWP)',s:['C','I','G']},
   ],
   r:[
-    {id:'E1aR1',txt:'L'espansione del sistema ETS e l'introduzione di carbon tax aumentano strutturalmente i costi operativi',s:['B','C','D']},
-    {id:'E1aR2',txt:'La perdita di clienti e contratti con player corporate che impongono target di decarbonizzazione alla supply chain riduce i ricavi',s:['C','G','H']},
-    {id:'E1aR3',txt:'Le difficoltà di accesso al credito e alle assicurazioni per attività carbon-intensive aumentano il costo del capitale',s:['ALL']},
-    {id:'E1aR4',txt:'La svalutazione di impianti ad alta intensità carbonifera in scenari di transizione rapida genera perdite patrimoniali (stranded assets)',s:['B','C','D']},
+    {id:'E1aR1',txt:'Incremento strutturale dei costi operativi per espansione del sistema ETS e introduzione di carbon tax',s:['B','C','D']},
+    {id:'E1aR2',txt:'Perdita di clienti e contratti con player corporate che impongono target di decarbonizzazione supply chain',s:['C','G','H']},
+    {id:'E1aR3',txt:'Difficoltà di accesso al credito e assicurazioni per attività carbon-intensive',s:['ALL']},
+    {id:'E1aR4',txt:'Stranded assets: svalutazione di impianti ad alta intensità carbonifera in scenari di transizione rapida',s:['B','C','D']},
   ],
   o:[
-    {id:'E1aO1',txt:'La riduzione strutturale dei costi energetici attraverso efficienza e generazione da rinnovabili proprie migliora la competitività',s:['ALL']},
-    {id:'E1aO2',txt:'L'accesso preferenziale a green bond e sustainability-linked loan riduce il costo del capitale',s:['ALL']},
-    {id:'E1aO3',txt:'Lo sviluppo di prodotti e servizi low-carbon apre nuovi mercati con clienti ESG-driven',s:['C','D','G']},
+    {id:'E1aO1',txt:'Riduzione strutturale dei costi energetici attraverso efficienza e generazione da rinnovabili proprie',s:['ALL']},
+    {id:'E1aO2',txt:'Accesso preferenziale a green bond, sustainability-linked loan e finanziamenti agevolati per decarbonizzazione',s:['ALL']},
+    {id:'E1aO3',txt:'Sviluppo di prodotti e servizi low-carbon come leva di differenziazione verso clienti ESG-driven',s:['C','D','G']},
   ],
 },
 'E1.b':{
   i:[
-    {id:'E1bI1',txt:'Gli impatti fisici acuti su impianti e magazzini causati da alluvioni, ondate di calore ed eventi meteorologici estremi interrompono l'operatività',s:['B','C','D','F','A']},
-    {id:'E1bI2',txt:'Gli impatti fisici cronici da stress idrico, innalzamento temperature medie e variazioni precipitazioni degradano le condizioni operative',s:['A','C','D']},
-    {id:'E1bI3',txt:'La vulnerabilità della catena di fornitura a rischi fisici climatici in geografie esposte causa disruption produttive',s:['C','G','H']},
+    {id:'E1bI1',txt:'Impatti fisici acuti su impianti e magazzini: alluvioni, ondate di calore, eventi meteorologici estremi',s:['B','C','D','F','A']},
+    {id:'E1bI2',txt:'Impatti fisici cronici: stress idrico, innalzamento temperature medie, variazioni precipitazioni',s:['A','C','D']},
+    {id:'E1bI3',txt:'Vulnerabilità della catena di fornitura a rischi fisici climatici in geografie esposte',s:['C','G','H']},
   ],
   r:[
-    {id:'E1bR1',txt:'I danni materiali ad asset fisici per eventi climatici estremi generano perdite economiche dirette (rischio fisico acuto)',s:['B','C','D','F']},
-    {id:'E1bR2',txt:'L'aumento dei premi assicurativi o l'impossibilità di copertura per rischi climatici fisici incrementa i costi fissi',s:['ALL']},
-    {id:'E1bR3',txt:'Le interruzioni operative per indisponibilità di risorse idriche o energetiche in aree colpite da crisi climatica riducono i ricavi',s:['A','C','D']},
+    {id:'E1bR1',txt:'Danni materiali ad asset fisici per eventi climatici estremi (rischio fisico acuto TCFD)',s:['B','C','D','F']},
+    {id:'E1bR2',txt:'Aumento dei premi assicurativi o impossibilità di copertura per rischi climatici fisici',s:['ALL']},
+    {id:'E1bR3',txt:'Interruzioni operative per indisponibilità di risorse idriche o energetiche in aree colpite da crisi climatica',s:['A','C','D']},
   ],
   o:[
-    {id:'E1bO1',txt:'L'investimento in piani di resilienza e business continuity riduce la vulnerabilità operativa e il profilo di rischio',s:['ALL']},
-    {id:'E1bO2',txt:'Le infrastrutture climate-proof valorizzano gli asset e creano vantaggio competitivo rispetto ai concorrenti più esposti',s:['F','L','D']},
+    {id:'E1bO1',txt:'Investimento in piani di resilienza e business continuity che riducono la vulnerabilità operativa',s:['ALL']},
+    {id:'E1bO2',txt:'Infrastructure climate-proof come leva di valorizzazione degli asset e di vantaggio competitivo',s:['F','L','D']},
   ],
 },
 'E1.c':{
   i:[
-    {id:'E1cI1',txt:'Il consumo di fonti energetiche non rinnovabili contribuisce all'esaurimento delle riserve fossili e alle emissioni climalteranti',s:['B','C','D','H']},
-    {id:'E1cI2',txt:'La dipendenza da reti elettriche ad alta intensità carbonifera in geografie con mix energetico sfavorevole amplifica l'impronta climatica',s:['ALL']},
-    {id:'E1cI3',txt:'I grandi impianti energetici generano impatti locali su comunità vicine (rumore, impatto visivo, alterazione del territorio)',s:['D','B']},
+    {id:'E1cI1',txt:'Consumo di fonti energetiche non rinnovabili e contributo all\'esaurimento delle riserve fossili',s:['B','C','D','H']},
+    {id:'E1cI2',txt:'Dipendenza da reti elettriche ad alta intensità carbonifera in geografie con mix energetico sfavorevole',s:['ALL']},
+    {id:'E1cI3',txt:'Effetti locali di grandi impianti energetici: rumore, impatto visivo, alterazione del territorio',s:['D','B']},
   ],
   r:[
-    {id:'E1cR1',txt:'La volatilità e l'aumento strutturale dei prezzi dell'energia fossile erode i margini operativi',s:['C','H','F']},
-    {id:'E1cR2',txt:'Gli obblighi normativi crescenti (audit energetici, certificati bianchi, standard di efficienza) aumentano i costi di compliance',s:['ALL']},
-    {id:'E1cR3',txt:'La dipendenza da singoli fornitori energetici espone a rischi di supply disruption con impatti sulla continuità produttiva',s:['C','D']},
+    {id:'E1cR1',txt:'Volatilità e aumento strutturale dei prezzi dell\'energia fossile con impatto su marginalità',s:['C','H','F']},
+    {id:'E1cR2',txt:'Obblighi normativi crescenti: audit energetici obbligatori, certificati bianchi, standard di efficienza',s:['ALL']},
+    {id:'E1cR3',txt:'Dipendenza da singoli fornitori energetici con rischio di supply disruption',s:['C','D']},
   ],
   o:[
-    {id:'E1cO1',txt:'La riduzione del costo dell'energia tramite fotovoltaico, cogenerazione o pompe di calore migliora la redditività',s:['ALL']},
-    {id:'E1cO2',txt:'Le certificazioni di efficienza energetica e rating ISO 50001 aprono l'accesso a bandi e gare che le richiedono',s:['ALL']},
+    {id:'E1cO1',txt:'Riduzione del costo dell\'energia tramite fotovoltaico, cogenerazione o pompe di calore',s:['ALL']},
+    {id:'E1cO2',txt:'Certificazioni di efficienza energetica e rating ISO 50001 come leva commerciale e di accesso a bandi',s:['ALL']},
   ],
 },
 'E2.a':{
   i:[
-    {id:'E2aI1',txt:'Le emissioni di inquinanti atmosferici (NOx, SOx, PM10, PM2.5, COV) da impianti produttivi degradano la qualità dell'aria locale',s:['B','C','D']},
-    {id:'E2aI2',txt:'Gli effetti sulla salute delle comunità locali in prossimità degli stabilimenti generano impatti sociali diretti',s:['B','C','D','F']},
-    {id:'E2aI3',txt:'Il contributo all'ozono troposferico e alle piogge acide attraverso emissioni industriali danneggia ecosistemi e infrastrutture',s:['B','C']},
+    {id:'E2aI1',txt:'Emissioni di inquinanti atmosferici (NOx, SOx, PM10, PM2.5, COV) da impianti produttivi',s:['B','C','D']},
+    {id:'E2aI2',txt:'Effetti sulla salute delle comunità locali in prossimità degli stabilimenti',s:['B','C','D','F']},
+    {id:'E2aI3',txt:'Contributo all\'ozono troposferico e alle piogge acide attraverso emissioni industriali',s:['B','C']},
   ],
   r:[
-    {id:'E2aR1',txt:'Le sanzioni e i contenziosi per superamento soglie emissive delle autorizzazioni AIA generano costi legali e operativi',s:['B','C','D']},
-    {id:'E2aR2',txt:'I costi di adeguamento tecnico per normative sulle emissioni sempre più stringenti richiedono investimenti significativi',s:['B','C','D']},
-    {id:'E2aR3',txt:'I danni reputazionali per episodi di inquinamento locale compromettono la licenza sociale ad operare',s:['B','C','D']},
+    {id:'E2aR1',txt:'Sanzioni e contenziosi per superamento soglie emissive delle autorizzazioni AIA',s:['B','C','D']},
+    {id:'E2aR2',txt:'Costi di adeguamento tecnico per normative sulle emissioni sempre più stringenti',s:['B','C','D']},
+    {id:'E2aR3',txt:'Danni reputazionali per episodi di inquinamento locale con impatto sulla licenza sociale',s:['B','C','D']},
   ],
   o:[
-    {id:'E2aO1',txt:'Gli investimenti in tecnologie di abbattimento garantiscono compliance preventiva e riducono il rischio normativo futuro',s:['C','D']},
-    {id:'E2aO2',txt:'La riduzione delle emissioni come componente ESG crea vantaggio in procurement pubblico e gare d'appalto',s:['ALL']},
+    {id:'E2aO1',txt:'Investimenti in tecnologie di abbattimento come differenziatore di compliance preventiva',s:['C','D']},
+    {id:'E2aO2',txt:'Riduzione emissioni come componente ESG per vantaggio in procurement pubblico e gare',s:['ALL']},
   ],
 },
 'E2.b':{
   i:[
-    {id:'E2bI1',txt:'Gli scarichi di reflui industriali con sostanze organiche, metalli pesanti o nutrienti alterano la qualità dei corpi idrici riceventi',s:['C','A','E']},
-    {id:'E2bI2',txt:'L'alterazione della qualità delle acque superficiali e sotterranee nelle aree di operatività compromette gli usi idrici locali',s:['B','C','A','F']},
-    {id:'E2bI3',txt:'Gli impatti su ecosistemi acquatici per thermal pollution o alterazione del pH riducono la biodiversità idrica',s:['D','C']},
+    {id:'E2bI1',txt:'Scarichi di reflui industriali con sostanze organiche, metalli pesanti o nutrienti in corpi idrici',s:['C','A','E']},
+    {id:'E2bI2',txt:'Alterazione della qualità delle acque superficiali e sotterranee nelle aree di operatività',s:['B','C','A','F']},
+    {id:'E2bI3',txt:'Impatti su ecosistemi acquatici per thermal pollution o alterazione del pH',s:['D','C']},
   ],
   r:[
-    {id:'E2bR1',txt:'Le sanzioni AIA e i procedimenti penali per superamento dei limiti allo scarico idrico generano costi legali rilevanti',s:['C','A','E']},
-    {id:'E2bR2',txt:'I costi di bonifica e risarcimento per contaminazione di falde o corsi d'acqua possono essere ingenti e duraturi',s:['B','C','F']},
-    {id:'E2bR3',txt:'La revoca delle autorizzazioni ambientali può comportare il blocco operativo degli impianti con perdita totale di ricavi',s:['C','D','B']},
+    {id:'E2bR1',txt:'Sanzioni AIA e procedimenti penali per superamento dei limiti allo scarico idrico',s:['C','A','E']},
+    {id:'E2bR2',txt:'Costi di bonifica e risarcimento per contaminazione di falde o corsi d\'acqua',s:['B','C','F']},
+    {id:'E2bR3',txt:'Revoca autorizzazioni ambientali con possibile blocco operativo degli impianti',s:['C','D','B']},
   ],
   o:[
-    {id:'E2bO1',txt:'I sistemi di trattamento avanzati costituiscono un differenziatore di qualità ambientale certificabile dai clienti',s:['C','E']},
-    {id:'E2bO2',txt:'Il riuso e riciclo dell'acqua di processo riduce i costi idrici e aumenta la resilienza produttiva in aree di stress idrico',s:['C','A']},
+    {id:'E2bO1',txt:'Adozione di sistemi di trattamento avanzati come differenziatore di qualità ambientale certificabile',s:['C','E']},
+    {id:'E2bO2',txt:'Riuso e riciclo dell\'acqua di processo: riduzione costi idrici e resilienza produttiva',s:['C','A']},
   ],
 },
 'E2.c':{
   i:[
-    {id:'E2cI1',txt:'La contaminazione del suolo per sversamenti accidentali di idrocarburi e solventi causa danni ambientali persistenti',s:['B','C','D']},
-    {id:'E2cI2',txt:'L'inquinamento da depositi e siti dismessi con passività ambientali pregresse continua a degradare suolo e falde',s:['B','C','F']},
-    {id:'E2cI3',txt:'La perdita di fertilità e biodiversità del suolo per uso intensivo di prodotti fitosanitari compromette la produttività agricola locale',s:['A']},
+    {id:'E2cI1',txt:'Contaminazione del suolo per sversamenti accidentali di idrocarburi, solventi o chemicals',s:['B','C','D']},
+    {id:'E2cI2',txt:'Inquinamento da depositi e siti dismessi con passività ambientali pregresse',s:['B','C','F']},
+    {id:'E2cI3',txt:'Perdita di fertilità e biodiversità del suolo per uso intensivo di prodotti fitosanitari',s:['A']},
   ],
   r:[
-    {id:'E2cR1',txt:'Le passività ambientali per bonifica di siti contaminati (D.Lgs 152/2006) generano oneri futuri difficilmente quantificabili',s:['B','C','F']},
-    {id:'E2cR2',txt:'Il blocco operativo e il sequestro degli impianti per superamento dei valori soglia nel suolo interrompono la produzione',s:['B','C']},
-    {id:'E2cR3',txt:'La svalutazione di asset immobiliari per presenza o rischio di contaminazione del sito riduce il patrimonio aziendale',s:['F','L','B']},
+    {id:'E2cR1',txt:'Passività ambientali per bonifica di siti contaminati (D.Lgs 152/2006)',s:['B','C','F']},
+    {id:'E2cR2',txt:'Blocco operativo e sequestro impianti per superamento dei valori soglia nel suolo',s:['B','C']},
+    {id:'E2cR3',txt:'Svalutazione di asset immobiliari per presenza o rischio di contaminazione del sito',s:['F','L','B']},
   ],
   o:[
-    {id:'E2cO1',txt:'Le bonifiche e la riqualificazione di brownfield creano opportunità di sviluppo immobiliare e industriale sostenibile',s:['F','L']},
-    {id:'E2cO2',txt:'L'agricoltura rigenerativa e il suolo sano consentono un premium di prezzo per produzioni bio e certificate',s:['A']},
+    {id:'E2cO1',txt:'Bonifiche e riqualificazione di brownfield come opportunità di sviluppo sostenibile',s:['F','L']},
+    {id:'E2cO2',txt:'Agricoltura rigenerativa e suolo sano come premium per produzioni bio e certificate',s:['A']},
   ],
 },
 'E2.d':{
   i:[
-    {id:'E2dI1',txt:'La produzione, uso o smaltimento di sostanze chimiche pericolose (SVHC, PFAS) causa effetti cronici su salute umana e ambiente',s:['C','B']},
-    {id:'E2dI2',txt:'L'esposizione dei lavoratori a chemicals cancerogeni, mutageni o reprotossici nei processi produttivi genera danni alla salute',s:['C','B','D']},
-    {id:'E2dI3',txt:'La persistenza di inquinanti organici persistenti (POP) nell'ambiente causa effetti a lungo termine sugli ecosistemi',s:['C','B','A']},
+    {id:'E2dI1',txt:'Produzione, uso o smaltimento di sostanze chimiche pericolose (SVHC, PFAS, IPA) con effetti su salute e ambiente',s:['C','B']},
+    {id:'E2dI2',txt:'Esposizione dei lavoratori a chemicals cancerogeni, mutageni o reprotossici nei processi produttivi',s:['C','B','D']},
+    {id:'E2dI3',txt:'Persistenza di inquinanti organici persistenti (POP) nell\'ambiente con effetti a lungo termine sugli ecosistemi',s:['C','B','A']},
   ],
   r:[
-    {id:'E2dR1',txt:'Le restrizioni REACH e l'aggiornamento delle liste SVHC obbligano a riformulare processi produttivi con costi rilevanti',s:['C']},
-    {id:'E2dR2',txt:'La responsabilità civile e penale per danni alla salute da esposizione prolungata a chemicals genera contenziosi pluriennali',s:['C','B']},
-    {id:'E2dR3',txt:'I costi di sostituzione delle sostanze vietate con alternative più costose o meno performanti riducono la competitività',s:['C']},
+    {id:'E2dR1',txt:'Restrizioni REACH e aggiornamento elenchi SVHC: impatto su processi produttivi e formulazioni di prodotto',s:['C']},
+    {id:'E2dR2',txt:'Responsabilità civile e penale per danni alla salute da esposizione prolungata a chemicals',s:['C','B']},
+    {id:'E2dR3',txt:'Costi di sostituzione di sostanze vietate con alternative più costose o meno performanti',s:['C']},
   ],
   o:[
-    {id:'E2dO1',txt:'Lo sviluppo di formulazioni chimiche sostenibili costituisce una leva di innovazione e premium pricing verso clienti B2B',s:['C']},
-    {id:'E2dO2',txt:'La leadership in green chemistry differenzia l'offerta verso clienti con supply chain policy ESG stringenti',s:['C','G']},
+    {id:'E2dO1',txt:'Sviluppo di formulazioni chimiche sostenibili come leva di innovazione e premium pricing',s:['C']},
+    {id:'E2dO2',txt:'Green chemistry leadership come differenziatore verso clienti B2B con supply chain policy stringenti',s:['C','G']},
   ],
 },
 'E3.a':{
   i:[
-    {id:'E3aI1',txt:'Il prelievo significativo di acqua da fonti superficiali o sotterranee in aree water-stressed riduce la disponibilità idrica locale',s:['A','C','D']},
-    {id:'E3aI2',txt:'La riduzione della disponibilità idrica locale per altri utenti (comunità, agricoltura) causa conflitti sociali e ambientali',s:['A','C']},
-    {id:'E3aI3',txt:'La riduzione della qualità dell'acqua reimmessa rispetto all'acqua prelevata compromette gli ecosistemi acquatici riceventi',s:['C','A','E']},
-    {id:'E3aI4',txt:'L'alterazione del regime idrologico di corsi d'acqua per derivazioni industriali rilevanti danneggia habitat e comunità dipendenti',s:['D','A']},
+    {id:'E3aI1',txt:'Prelievo significativo di acqua da fonti superficiali o sotterranee in aree water-stressed',s:['A','C','D']},
+    {id:'E3aI2',txt:'Riduzione della disponibilità idrica locale per altri utenti (comunità, agricoltura) a causa dei prelievi',s:['A','C']},
+    {id:'E3aI3',txt:'Riduzione della qualità dell\'acqua reimmessa rispetto all\'acqua prelevata',s:['C','A','E']},
+    {id:'E3aI4',txt:'Alterazione del regime idrologico di corsi d\'acqua per derivazioni industriali rilevanti',s:['D','A']},
   ],
   r:[
-    {id:'E3aR1',txt:'La scarsità idrica in aree operative causa interruzioni produttive per indisponibilità di acqua di processo',s:['A','C','D']},
-    {id:'E3aR2',txt:'L'incremento delle tariffe idriche e l'introduzione di water pricing in aree di stress idrico aumentano i costi operativi',s:['A','C']},
-    {id:'E3aR3',txt:'I vincoli autorizzativi sempre più stringenti sui prelievi idrici industriali limitano la capacità produttiva futura',s:['A','C','D']},
+    {id:'E3aR1',txt:'Scarsità idrica in aree operative: interruzioni produttive per indisponibilità di acqua di processo',s:['A','C','D']},
+    {id:'E3aR2',txt:'Incremento tariffe idriche e introduzione di water pricing in aree di stress idrico',s:['A','C']},
+    {id:'E3aR3',txt:'Vincoli autorizzativi sempre più stringenti sui prelievi idrici industriali',s:['A','C','D']},
   ],
   o:[
-    {id:'E3aO1',txt:'L'efficienza idrica e i sistemi di riciclo dell'acqua di processo riducono i costi e aumentano la resilienza operativa',s:['A','C','D']},
-    {id:'E3aO2',txt:'La water stewardship certificata diventa leva di reputazione e requisito per certificazioni ambientali e gare d'appalto',s:['ALL']},
+    {id:'E3aO1',txt:'Efficienza idrica e sistemi di riciclo acqua di processo: riduzione costi e resilienza operativa',s:['A','C','D']},
+    {id:'E3aO2',txt:'Water stewardship certificata come leva di reputazione, certificazioni ambientali e gare d\'appalto',s:['ALL']},
   ],
 },
 'E3.b':{
   i:[
-    {id:'E3bI1',txt:'Gli scarichi in mare di reflui industriali o portatori di microplastiche causano impatti irreversibili sugli ecosistemi costieri',s:['C','H','A']},
-    {id:'E3bI2',txt:'Il disturbo di habitat marini per attività di costruzione, dragaggio o pesca intensiva riduce la biodiversità marina',s:['A','F','H']},
+    {id:'E3bI1',txt:'Scarichi in mare di reflui industriali o portatori di microplastiche con impatti su ecosistemi costieri',s:['C','H','A']},
+    {id:'E3bI2',txt:'Disturbo di habitat marini per attività di costruzione, dragaggio o pesca intensiva',s:['A','F','H']},
   ],
   r:[
-    {id:'E3bR1',txt:'Le restrizioni normative crescenti sull'uso di aree marine per attività produttive limitano l'espansione operativa',s:['A','D']},
-    {id:'E3bR2',txt:'Il rischio reputazionale per associazione a episodi di inquinamento marino o costiero danneggia il brand in modo duraturo',s:['C','H','G']},
+    {id:'E3bR1',txt:'Restrizioni normative crescenti sull\'uso di aree marine per attività produttive',s:['A','D']},
+    {id:'E3bR2',txt:'Rischio reputazionale per associazione a episodi di inquinamento marino o costiero',s:['C','H','G']},
   ],
   o:[
-    {id:'E3bO1',txt:'La blue economy sostenibile apre opportunità di sviluppo di attività legate a risorse marine certificate',s:['A','D']},
-    {id:'E3bO2',txt:'L'acquacoltura biologica certificata e il premium seafood rappresentano un segmento ad alto margine in crescita',s:['A']},
+    {id:'E3bO1',txt:'Blue economy: sviluppo di attività sostenibili legate a risorse marine certificate',s:['A','D']},
+    {id:'E3bO2',txt:'Acquacoltura biologica certificata e premium seafood come segmento ad alto margine',s:['A']},
   ],
 },
 'E4.a':{
   i:[
-    {id:'E4aI1',txt:'La frammentazione e distruzione di habitat naturali per espansione di siti produttivi causa perdita irreversibile di biodiversità',s:['B','F','C']},
-    {id:'E4aI2',txt:'L'impatto diretto su specie protette nelle aree di operatività viola obblighi normativi e causa danni ecosistemici',s:['B','A','F']},
-    {id:'E4aI3',txt:'La diffusione di specie aliene invasive attraverso movimentazione di merci e imballaggi altera gli equilibri ecologici locali',s:['H','G','A']},
-    {id:'E4aI4',txt:'La riduzione della connettività ecologica per infrastrutture lineari isola le popolazioni animali aumentando il rischio di estinzione locale',s:['H','B','F','D']},
+    {id:'E4aI1',txt:'Frammentazione e distruzione di habitat naturali per espansione di siti produttivi o infrastrutture',s:['B','F','C']},
+    {id:'E4aI2',txt:'Impatto diretto su specie protette nelle aree di operatività del gruppo',s:['B','A','F']},
+    {id:'E4aI3',txt:'Diffusione di specie aliene invasive attraverso movimentazione di merci, veicoli o imballaggi',s:['H','G','A']},
+    {id:'E4aI4',txt:'Riduzione della connettività ecologica per infrastrutture lineari (strade, pipeline, elettrodotti)',s:['H','B','F','D']},
   ],
   r:[
-    {id:'E4aR1',txt:'Il blocco delle VIA e delle autorizzazioni ambientali per impatti su habitat e specie protette ritarda o impedisce i progetti',s:['F','B','D']},
-    {id:'E4aR2',txt:'Il contenzioso legale e le sanzioni per violazione della normativa su specie protette generano costi e danni reputazionali',s:['A','B','F']},
-    {id:'E4aR3',txt:'La perdita della licenza sociale in aree sensibili per conflitti con comunità legate agli ecosistemi blocca l'operatività',s:['B','F','D']},
+    {id:'E4aR1',txt:'Blocco VIA e autorizzazioni ambientali per impatti su habitat e specie protette (Direttiva Habitat)',s:['F','B','D']},
+    {id:'E4aR2',txt:'Contenzioso legale e sanzioni per violazione della normativa su specie protette',s:['A','B','F']},
+    {id:'E4aR3',txt:'Perdita di licenza sociale in aree sensibili per conflitti con comunità legate agli ecosistemi',s:['B','F','D']},
   ],
   o:[
-    {id:'E4aO1',txt:'I progetti di compensazione e ripristino ecologico generano crediti di biodiversità e migliorano il profilo ESG',s:['F','B','D']},
-    {id:'E4aO2',txt:'Le certificazioni FSC, RSPO, MSC aprono mercati premium per settori dipendenti da risorse naturali certificate',s:['A','C']},
+    {id:'E4aO1',txt:'Progetti di compensazione e ripristino ecologico come fonte di crediti di biodiversità',s:['F','B','D']},
+    {id:'E4aO2',txt:'Certificazioni FSC, RSPO, MSC come premium commerciale per settori dipendenti da risorse naturali',s:['A','C']},
   ],
 },
 'E4.b':{
   i:[
-    {id:'E4bI1',txt:'L'impermeabilizzazione del suolo e il consumo di suolo agricolo per espansione industriale riducono i servizi ecosistemici',s:['F','C','L']},
-    {id:'E4bI2',txt:'La deforestazione diretta o indiretta nella catena di fornitura per approvvigionamento di commodity distrugge habitat critici',s:['A','C','G']},
-    {id:'E4bI3',txt:'Il degrado dei servizi ecosistemici (impollinazione, regolazione idrica) per land use change compromette la produttività agricola',s:['A','F']},
+    {id:'E4bI1',txt:'Impermeabilizzazione del suolo e consumo di suolo agricolo per espansione industriale o insediativa',s:['F','C','L']},
+    {id:'E4bI2',txt:'Deforestazione diretta o indiretta nella catena di fornitura per approvvigionamento di commodity',s:['A','C','G']},
+    {id:'E4bI3',txt:'Degrado dei servizi ecosistemici (impollinazione, regolazione idrica, sequestro carbonio) per land use change',s:['A','F']},
   ],
   r:[
-    {id:'E4bR1',txt:'Il rischio reputazionale e commerciale per associazione a deforestazione nella supply chain riduce l'accesso ai mercati ESG',s:['G','C','A']},
-    {id:'E4bR2',txt:'L'EU Deforestation Regulation (EUDR) impone obblighi di tracciabilità e due diligence su commodity a rischio con costi rilevanti',s:['A','G','C']},
-    {id:'E4bR3',txt:'La svalutazione di terreni per degrado ambientale e perdita di fertilità riduce il patrimonio immobiliare aziendale',s:['A','L']},
+    {id:'E4bR1',txt:'Rischio reputazionale e commerciale per associazione a deforestazione nella supply chain',s:['G','C','A']},
+    {id:'E4bR2',txt:'EU Deforestation Regulation (EUDR): obblighi di tracciabilità e due diligence su commodity a rischio',s:['A','G','C']},
+    {id:'E4bR3',txt:'Svalutazione di terreni per degrado ambientale e perdita di fertilità o funzionalità ecosistemica',s:['A','L']},
   ],
   o:[
-    {id:'E4bO1',txt:'Il land restoration e l'agroforestry generano carbon credit e diversificano il reddito creando nuove fonti di valore',s:['A','F']},
-    {id:'E4bO2',txt:'Le nature-based solutions per rischi idrogeologici e climatici riducono i costi assicurativi e aumentano la resilienza',s:['F','A','D']},
+    {id:'E4bO1',txt:'Land restoration e agroforestry come fonte di carbon credit e diversificazione del reddito',s:['A','F']},
+    {id:'E4bO2',txt:'Nature-based solutions per rischi idrogeologici e climatici: risparmio su costi assicurativi',s:['F','A','D']},
   ],
 },
 'E5.a':{
   i:[
-    {id:'E5aI1',txt:'L'utilizzo intensivo di materie prime vergini non rinnovabili contribuisce all'esaurimento delle risorse naturali globali',s:['B','C','D']},
-    {id:'E5aI2',txt:'La dipendenza da materiali critici ad alto rischio di fornitura (terre rare, cobalto, litio) crea vulnerabilità strategiche',s:['C']},
-    {id:'E5aI3',txt:'Gli impatti upstream di estrazione causano danni ambientali e sociali nelle aree minerarie della supply chain',s:['C','G']},
-    {id:'E5aI4',txt:'La generazione di scarti e sfridi produttivi per inefficienza dei processi rappresenta una perdita di valore e un impatto ambientale',s:['C','F']},
+    {id:'E5aI1',txt:'Utilizzo intensivo di materie prime vergini non rinnovabili (metalli, minerali, combustibili fossili)',s:['B','C','D']},
+    {id:'E5aI2',txt:'Dipendenza da materiali critici ad alto rischio di fornitura (terre rare, cobalto, litio)',s:['C']},
+    {id:'E5aI3',txt:'Impatti upstream di estrazione: danni ambientali e sociali nelle aree minerarie della supply chain',s:['C','G']},
+    {id:'E5aI4',txt:'Generazione di scarti e sfridi produttivi per efficienza sub-ottimale dei processi',s:['C','F']},
   ],
   r:[
-    {id:'E5aR1',txt:'La volatilità dei prezzi e le supply disruption per materiali critici e commodity industriali aumentano i costi e l'incertezza',s:['C','D']},
-    {id:'E5aR2',txt:'Gli obblighi di due diligence su minerali da conflitto e materiali critici (CSRD) aumentano i costi amministrativi',s:['C','G']},
-    {id:'E5aR3',txt:'I costi crescenti di accesso a materie prime vergini per esaurimento riserve e tassazione ambientale erodono i margini',s:['C','B']},
+    {id:'E5aR1',txt:'Volatilità dei prezzi e supply disruption per materiali critici e commodity industriali',s:['C','D']},
+    {id:'E5aR2',txt:'Obblighi di due diligence su minerali da conflitto e materiali critici (CSRD, Conflict Minerals)',s:['C','G']},
+    {id:'E5aR3',txt:'Costi crescenti di accesso a materie prime vergini per esaurimento riserve e tassazione ambientale',s:['C','B']},
   ],
   o:[
-    {id:'E5aO1',txt:'L'adozione di materiali riciclati e seconde materie prime riduce i costi e disaccoppia l'azienda dalla volatilità delle commodity',s:['C','G']},
-    {id:'E5aO2',txt:'Il design for circularity consente di riprogettare prodotti per durabilità, riparabilità e riciclabilità a fine vita',s:['C']},
-    {id:'E5aO3',txt:'La valorizzazione degli scarti di produzione come flusso di ricavo aggiuntivo crea nuove fonti di valore (simbiosi industriale)',s:['C','A','E']},
+    {id:'E5aO1',txt:'Adozione di materiali riciclati e seconde materie prime: riduzione costi e disaccoppiamento da commodity',s:['C','G']},
+    {id:'E5aO2',txt:'Design for circularity: prodotti riprogettati per durabilità, riparabilità e riciclabilità a fine vita',s:['C']},
+    {id:'E5aO3',txt:'Valorizzazione degli scarti di produzione come flusso di ricavo aggiuntivo (simbiosi industriale)',s:['C','A','E']},
   ],
 },
 'E5.b':{
   i:[
-    {id:'E5bI1',txt:'La produzione di rifiuti pericolosi da processi industriali crea rischi di contaminazione ambientale e danni alle comunità locali',s:['B','C','D']},
-    {id:'E5bI2',txt:'Lo smaltimento in discarica di rifiuti valorizzabili causa perdita di risorse e impatti ambientali locali evitabili',s:['C','G','H']},
-    {id:'E5bI3',txt:'La dispersione di plastica e microplastiche nell'ambiente attraverso imballaggi e prodotti causa danni ecosistemici persistenti',s:['C','G']},
-    {id:'E5bI4',txt:'Gli impatti su comunità locali per traffico, odori e presenza di impianti di trattamento rifiuti degradano la qualità della vita',s:['E','F']},
+    {id:'E5bI1',txt:'Produzione di rifiuti pericolosi da processi industriali con rischio di contaminazione ambientale',s:['B','C','D']},
+    {id:'E5bI2',txt:'Smaltimento in discarica di rifiuti valorizzabili con perdita di risorse e impatti locali',s:['C','G','H']},
+    {id:'E5bI3',txt:'Dispersione di plastica e microplastiche nell\'ambiente attraverso imballaggi e prodotti',s:['C','G']},
+    {id:'E5bI4',txt:'Impatti su comunità locali per traffico, odori e presenza di impianti di trattamento rifiuti',s:['E','F']},
   ],
   r:[
-    {id:'E5bR1',txt:'I costi crescenti di smaltimento rifiuti pericolosi e l'aumento della tassazione sulle discariche erodono la redditività',s:['C','B','D']},
-    {id:'E5bR2',txt:'La responsabilità estesa del produttore (EPR) impone obblighi e costi per il fine vita degli imballaggi immessi al consumo',s:['C','G']},
-    {id:'E5bR3',txt:'Le sanzioni per non conformità alla normativa rifiuti (tracciabilità FIR, formulari, AIA) generano costi legali e operativi',s:['C','B','E']},
+    {id:'E5bR1',txt:'Costi crescenti di smaltimento rifiuti pericolosi e aumento della tassazione sulle discariche',s:['C','B','D']},
+    {id:'E5bR2',txt:'Responsabilità estesa del produttore (EPR): obblighi e costi per fine vita degli imballaggi immessi al consumo',s:['C','G']},
+    {id:'E5bR3',txt:'Sanzioni per non conformità alla normativa rifiuti (tracciabilità FIR, formulari, AIA)',s:['C','B','E']},
   ],
   o:[
-    {id:'E5bO1',txt:'La valorizzazione degli scarti come materie prime seconde riduce i costi di smaltimento e crea nuovi flussi di ricavo',s:['C','E']},
-    {id:'E5bO2',txt:'Il packaging circolare costituisce una leva commerciale verso retailer e brand con policy di sostenibilità ambiziose',s:['C','G']},
-    {id:'E5bO3',txt:'L'accesso a fondi PNRR e incentivi europei per investimenti in economia circolare riduce il costo degli investimenti',s:['C','E']},
+    {id:'E5bO1',txt:'Valorizzazione degli scarti come materie prime seconde: riduzione costi e creazione di nuovo business',s:['C','E']},
+    {id:'E5bO2',txt:'Packaging circolare come leva commerciale verso retailer e brand con policy di sostenibilità',s:['C','G']},
+    {id:'E5bO3',txt:'Accesso a fondi PNRR e incentivi europei per investimenti in economia circolare',s:['C','E']},
   ],
 },
 'S1.a':{
   i:[
-    {id:'S1aI1',txt:'La retribuzione al di sotto del living wage per categorie di lavoratori con basso potere contrattuale causa disagio economico e sociale',s:['ALL']},
-    {id:'S1aI2',txt:'L'uso elevato di contratti atipici o precari senza prospettive di stabilizzazione genera insicurezza economica nei lavoratori',s:['G','I','H']},
-    {id:'S1aI3',txt:'Gli orari di lavoro eccessivi, i turni sfavorevoli o il lavoro notturno causano impatti sulla salute e sulla vita familiare dei lavoratori',s:['H','I','C']},
-    {id:'S1aI4',txt:'La mancanza di benefit adeguati e welfare aziendale penalizza i lavoratori a basso reddito aumentando le disuguaglianze interne',s:['G','H','I']},
+    {id:'S1aI1',txt:'Retribuzione al di sotto del living wage per categorie di lavoratori con basso potere contrattuale',s:['ALL']},
+    {id:'S1aI2',txt:'Uso elevato di contratti atipici, precari o a tempo determinato senza prospettive di stabilizzazione',s:['G','I','H']},
+    {id:'S1aI3',txt:'Orari di lavoro eccessivi, turni sfavorevoli o lavoro notturno con impatti su salute e vita privata',s:['H','I','C']},
+    {id:'S1aI4',txt:'Mancanza di benefit adeguati e welfare aziendale per lavoratori a basso reddito',s:['G','H','I']},
   ],
   r:[
-    {id:'S1aR1',txt:'L'alto turnover e le difficoltà di attrattività come employer aumentano i costi di recruiting, formazione e onboarding',s:['ALL']},
-    {id:'S1aR2',txt:'I rischi legali per violazioni della normativa giuslavoristica italiana ed europea generano sanzioni e contenziosi',s:['ALL']},
-    {id:'S1aR3',txt:'I danni reputazionali per esposti o campagne mediatiche su condizioni di lavoro riducono l'attrattività come employer',s:['G','H','I']},
+    {id:'S1aR1',txt:'Alto turnover e difficoltà di attrattività come employer: costi elevati di recruiting e onboarding',s:['ALL']},
+    {id:'S1aR2',txt:'Rischi legali per violazioni della normativa giuslavoristica italiana e europea',s:['ALL']},
+    {id:'S1aR3',txt:'Danni reputazionali per esposti o campagne mediatiche su condizioni di lavoro',s:['G','H','I']},
   ],
   o:[
-    {id:'S1aO1',txt:'Il posizionamento come great place to work riduce i costi HR, aumenta la retention e attrae i migliori talenti',s:['ALL']},
-    {id:'S1aO2',txt:'Il welfare aziendale e il flexible work aumentano la produttività, l'engagement e riducono l'assenteismo',s:['ALL']},
+    {id:'S1aO1',txt:'Employer branding: posizionamento come great place to work per ridurre costi HR e aumentare retention',s:['ALL']},
+    {id:'S1aO2',txt:'Welfare aziendale e flexible work come leva di produttività, engagement e riduzione assenteismo',s:['ALL']},
   ],
 },
 'S1.b':{
   i:[
-    {id:'S1bI1',txt:'Gli infortuni sul lavoro, anche mortali, causano danni fisici e psicologici irreversibili ai lavoratori e alle loro famiglie',s:['C','B','F','H']},
-    {id:'S1bI2',txt:'Le malattie professionali da esposizione cronica ad agenti chimici, fisici o biologici causano danni permanenti alla salute',s:['B','C','D']},
-    {id:'S1bI3',txt:'Lo stress lavoro-correlato e il burnout in ambienti ad alta pressione operativa deteriorano la salute mentale dei lavoratori',s:['K','M','J']},
-    {id:'S1bI4',txt:'Gli impatti sulla salute mentale per condizioni di lavoro inadeguate o ristrutturazioni causano sofferenza psicologica diffusa',s:['ALL']},
+    {id:'S1bI1',txt:'Infortuni sul lavoro, anche mortali, per carenze nei sistemi di prevenzione e protezione collettiva',s:['C','B','F','H']},
+    {id:'S1bI2',txt:'Malattie professionali da esposizione cronica ad agenti chimici, fisici o biologici',s:['B','C','D']},
+    {id:'S1bI3',txt:'Stress lavoro-correlato e burnout in ambienti ad alta pressione operativa',s:['K','M','J']},
+    {id:'S1bI4',txt:'Impatti sulla salute mentale dei lavoratori per condizioni di lavoro inadeguate o contesti di ristrutturazione',s:['ALL']},
   ],
   r:[
-    {id:'S1bR1',txt:'La responsabilità penale e civile per infortuni e malattie professionali (D.Lgs 81/2008) genera costi legali e reputazionali',s:['ALL']},
-    {id:'S1bR2',txt:'I costi assicurativi INAIL elevati e le sanzioni ispettive per non conformità H&S aumentano il costo del lavoro',s:['C','B','F']},
-    {id:'S1bR3',txt:'Le interruzioni produttive per incidenti gravi, sequestro di macchinari o scioperi legati alla sicurezza riducono i ricavi',s:['C','B','F']},
+    {id:'S1bR1',txt:'Responsabilità penale e civile per infortuni e malattie professionali (D.Lgs 81/2008, Testo Unico Sicurezza)',s:['ALL']},
+    {id:'S1bR2',txt:'Costi assicurativi INAIL elevati e sanzioni ispettive per non conformità in materia H&S',s:['C','B','F']},
+    {id:'S1bR3',txt:'Interruzioni produttive per incidenti gravi, sequestro di macchinari o scioperi legati alla sicurezza',s:['C','B','F']},
   ],
   o:[
-    {id:'S1bO1',txt:'La certificazione ISO 45001 migliora il rating ESG e apre l'accesso preferenziale a gare d'appalto pubbliche',s:['ALL']},
-    {id:'S1bO2',txt:'La riduzione del tasso infortuni come KPI per bonus management abbassa i premi assicurativi e migliora la produttività',s:['ALL']},
+    {id:'S1bO1',txt:'Certificazione ISO 45001 come leva di rating ESG e accesso preferenziale a gare d\'appalto',s:['ALL']},
+    {id:'S1bO2',txt:'Riduzione del tasso infortuni come KPI per bonus management e riduzione premi assicurativi',s:['ALL']},
   ],
 },
 'S1.c':{
   i:[
-    {id:'S1cI1',txt:'Il gender pay gap strutturale tra uomini e donne in ruoli equivalenti costituisce una discriminazione economica diretta',s:['ALL']},
-    {id:'S1cI2',txt:'La sottorappresentazione di donne, disabili e minoranze in ruoli dirigenziali perpetua disuguaglianze sistemiche',s:['ALL']},
-    {id:'S1cI3',txt:'Le pratiche discriminatorie nei processi di selezione, promozione o formazione violano i diritti fondamentali dei lavoratori',s:['ALL']},
-    {id:'S1cI4',txt:'Il clima aziendale non inclusivo con episodi di molestie o discriminazioni causa danni psicologici ai lavoratori coinvolti',s:['ALL']},
+    {id:'S1cI1',txt:'Gender pay gap strutturale tra uomini e donne in ruoli equivalenti',s:['ALL']},
+    {id:'S1cI2',txt:'Sottorappresentazione di donne, disabili e minoranze in ruoli dirigenziali e di leadership',s:['ALL']},
+    {id:'S1cI3',txt:'Pratiche discriminatorie nei processi di selezione, promozione o accesso alla formazione',s:['ALL']},
+    {id:'S1cI4',txt:'Clima aziendale non inclusivo con episodi di molestie, microaggressioni o discriminazioni',s:['ALL']},
   ],
   r:[
-    {id:'S1cR1',txt:'I contenziosi legali e i risarcimenti per discriminazione e violazione delle pari opportunità generano costi rilevanti',s:['ALL']},
-    {id:'S1cR2',txt:'L'esclusione da gare d'appalto pubbliche che richiedono la certificazione parità di genere (L. 162/2021) riduce i ricavi',s:['ALL']},
-    {id:'S1cR3',txt:'Il rischio reputazionale per esposizione mediatica su pratiche discriminatorie riduce l'attrattività verso talenti e clienti',s:['ALL']},
+    {id:'S1cR1',txt:'Contenziosi legali e risarcimenti per discriminazione e violazione delle pari opportunità',s:['ALL']},
+    {id:'S1cR2',txt:'Esclusione da gare d\'appalto pubbliche che richiedono la certificazione parità di genere (L. 162/2021)',s:['ALL']},
+    {id:'S1cR3',txt:'Rischio reputazionale per esposizione mediatica su pratiche discriminatorie (social media amplification)',s:['ALL']},
   ],
   o:[
-    {id:'S1cO1',txt:'La certificazione UNI/PDR 125 parità di genere apre l'accesso a gare pubbliche e migliora il rating ESG',s:['ALL']},
-    {id:'S1cO2',txt:'La diversity & inclusion come driver di innovazione e pensiero creativo migliora la performance finanziaria comprovata',s:['ALL']},
+    {id:'S1cO1',txt:'Certificazione UNI/PDR 125 parità di genere come leva per gare pubbliche e miglioramento del rating ESG',s:['ALL']},
+    {id:'S1cO2',txt:'D&I come driver di innovazione, pensiero creativo e performance finanziaria comprovata',s:['ALL']},
   ],
 },
 'S1.d':{
   i:[
-    {id:'S1dI1',txt:'L'inadeguatezza delle competenze della forza lavoro rispetto alla transizione verde e digitale limita la capacità di adattamento',s:['ALL']},
-    {id:'S1dI2',txt:'La mancanza di percorsi strutturati di crescita professionale causa frustrazione e riduce l'engagement dei dipendenti',s:['ALL']},
-    {id:'S1dI3',txt:'L'esclusione di categorie vulnerabili o over-50 dai programmi di formazione aumenta le disuguaglianze interne',s:['ALL']},
+    {id:'S1dI1',txt:'Inadeguatezza delle competenze della forza lavoro rispetto alla transizione verde e digitale',s:['ALL']},
+    {id:'S1dI2',txt:'Mancanza di percorsi strutturati di crescita e sviluppo professionale per i dipendenti',s:['ALL']},
+    {id:'S1dI3',txt:'Esclusione di categorie vulnerabili o over-50 dai programmi di formazione e upskilling',s:['ALL']},
   ],
   r:[
-    {id:'S1dR1',txt:'Lo skill gap critico per la trasformazione digitale e verde del business model rischia di rendere obsoleto il modello operativo',s:['C','D','K','J']},
-    {id:'S1dR2',txt:'La perdita di competenze chiave per mancanza di piani di successione genera vulnerabilità operative critiche',s:['ALL']},
+    {id:'S1dR1',txt:'Skill gap critico per la trasformazione digitale e verde del business model',s:['C','D','K','J']},
+    {id:'S1dR2',txt:'Perdita di competenze chiave per mancanza di piani di successione e knowledge management',s:['ALL']},
   ],
   o:[
-    {id:'S1dO1',txt:'I programmi di upskilling e reskilling aumentano la produttività e preparano la forza lavoro alle sfide future',s:['ALL']},
-    {id:'S1dO2',txt:'Il posizionamento come azienda che investe nelle persone attrae talenti e riduce il costo del turnover',s:['ALL']},
+    {id:'S1dO1',txt:'Investimenti in formazione come leva di retention, produttività, innovazione e riduzione errori',s:['ALL']},
+    {id:'S1dO2',txt:'Accesso a fondi Interprofessionali e PNRR per upskilling e reskilling dei lavoratori',s:['ALL']},
     {id:'S1dO3',txt:'Academy interna e employer branding per attrarre talenti in settori con carenza di competenze',s:['C','D','J','K']},
   ],
 },
 'S2.a':{
   i:[
-    {id:'S2aI1',txt:'Le condizioni di lavoro degradanti presso i fornitori upstream violano i diritti fondamentali dei lavoratori nella catena del valore',s:['C','G','A']},
-    {id:'S2aI2',txt:'Il lavoro minorile o forzato nella supply chain upstream causa danni irreversibili alle vittime e responsabilità per l'acquirente',s:['C','G']},
+    {id:'S2aI1',txt:'Rischio di lavoro minorile o forzato in fornitori di primo o secondo livello in paesi a rischio',s:['C','G','A']},
+    {id:'S2aI2',txt:'Condizioni di lavoro non sicure e retribuzioni sotto soglia di sussistenza in fornitori chiave',s:['C','G']},
     {id:'S2aI3',txt:'Orari eccessivi e mancanza di libertà di associazione sindacale presso fornitori esteri',s:['C','G','A']},
     {id:'S2aI4',txt:'Impatti discriminatori su lavoratori migranti o stagionali nella catena di fornitura',s:['A','G','H']},
   ],
   r:[
-    {id:'S2aR1',txt:'Le sanzioni CS3D fino al 5% del fatturato globale per violazioni della due diligence impongono investimenti preventivi rilevanti',s:['C','G']},
-    {id:'S2aR2',txt:'Le supply chain disruption per eventi ESG presso fornitori critici interrompono la produzione con perdite di ricavi immediate',s:['G','C']},
-    {id:'S2aR3',txt:'La perdita di accreditamento come fornitore di grandi player con supply chain policy ESG stringenti riduce i ricavi',s:['C','G']},
+    {id:'S2aR1',txt:'Sanzioni previste dalla CS3D (Corporate Sustainability Due Diligence Directive) per violazioni supply chain',s:['C','G']},
+    {id:'S2aR2',txt:'Danni reputazionali catastrofici per scandali su condizioni di lavoro nei fornitori',s:['G','C']},
+    {id:'S2aR3',txt:'Esclusione da mercati o rifiuto di partnership per assenza di supply chain audit certificati',s:['C','G']},
   ],
   o:[
-    {id:'S2aO1',txt:'La supply chain resiliente e sostenibile costituisce un vantaggio competitivo in contesti di crisi e volatilità globale',s:['C','G']},
-    {id:'S2aO2',txt:'Il co-investimento ESG con i fornitori genera innovazione condivisa e partnership strategiche di lungo periodo',s:['C','G']},
+    {id:'S2aO1',txt:'Programmi di capacity building con fornitori come leva di fidelizzazione e miglioramento qualità',s:['C','G']},
+    {id:'S2aO2',txt:'Certificazioni SA8000 e audit supply chain come differenziatore commerciale in mercati internazionali',s:['C','G']},
   ],
 },
 'S2.b':{
   i:[
-    {id:'S2bI1',txt:'L'assenza di meccanismi di reclamo accessibili ai lavoratori della supply chain impedisce l'emersione e la remediation degli abusi',s:['C','G']},
-    {id:'S2bI2',txt:'Le pratiche commerciali sleali verso i fornitori (ritardi di pagamento, prezzi predatori) causano instabilità finanziaria nella filiera',s:['G','C','H']},
+    {id:'S2bI1',txt:'Mancanza di meccanismi di reclamo accessibili per lavoratori nella catena del valore',s:['C','G']},
+    {id:'S2bI2',txt:'Pratiche commerciali sleali verso fornitori piccoli: ritardi nei pagamenti, prezzi predatori, clausole leonine',s:['G','C','H']},
     {id:'S2bI3',txt:'Mancanza di trasparenza e condivisione di obiettivi ESG con i fornitori strategici',s:['ALL']},
   ],
   r:[
-    {id:'S2bR1',txt:'L'esposizione a contenziosi internazionali per complicità in violazioni dei diritti umani nella supply chain genera costi legali ingenti',s:['ALL']},
-    {id:'S2bR2',txt:'I danni reputazionali per associazione a scandali di lavoro nella supply chain riducono le vendite e il valore del brand',s:['ALL']},
+    {id:'S2bR1',txt:'Violazione Direttiva Late Payments e normativa sui ritardi di pagamento nelle transazioni commerciali',s:['ALL']},
+    {id:'S2bR2',txt:'Perdita di fornitori strategici per pratiche commerciali non etiche o reputazione danneggiata',s:['ALL']},
   ],
   o:[
-    {id:'S2bO1',txt:'I meccanismi di reclamo efficaci nella supply chain riducono il rischio di scandali e migliorano le relazioni con i fornitori',s:['C','G']},
-    {id:'S2bO2',txt:'Le pratiche commerciali eque verso i fornitori aumentano la fedeltà e la qualità delle forniture nel tempo',s:['C','G']},
+    {id:'S2bO1',txt:'Partnership sostenibili a lungo termine con fornitori: co-innovazione e lock-in strategico positivo',s:['C','G']},
+    {id:'S2bO2',txt:'Programmi di sviluppo fornitori come leva di qualità, affidabilità e riduzione dei costi totali',s:['C','G']},
   ],
 },
 'S3.a':{
   i:[
-    {id:'S3aI1',txt:'Le emissioni, i rumori e i disturbi causati dagli impianti degradano la qualità della vita delle comunità locali vicine',s:['C','B','D','F']},
-    {id:'S3aI2',txt:'L'impatto negativo sulle attività economiche locali (pesca, turismo, agricoltura) riduce i redditi delle comunità coinvolte',s:['B','D','F']},
-    {id:'S3aI3',txt:'Il traffico pesante generato dalla logistica aziendale causa danni alle infrastrutture e alla qualità della vita locale',s:['B','C','F']},
+    {id:'S3aI1',txt:'Rumore, vibrazioni, traffico pesante e disturbo per le comunità residenti vicino agli impianti',s:['C','B','D','F']},
+    {id:'S3aI2',txt:'Alterazione del paesaggio e del valore percepito del territorio per infrastrutture industriali',s:['B','D','F']},
+    {id:'S3aI3',txt:'Pressione su servizi locali (viabilità, alloggi, servizi pubblici) per grandi insediamenti',s:['B','C','F']},
     {id:'S3aI4',txt:'Impatti su attività economiche locali (turismo, agricoltura) per inquinamento o degrado',s:['B','C','D']},
   ],
   r:[
-    {id:'S3aR1',txt:'La perdita della licenza sociale per opposizione delle comunità locali può bloccare espansioni e nuovi insediamenti',s:['B','C','D','F']},
-    {id:'S3aR2',txt:'I contenziosi legali avviati dalle comunità per danni ambientali o sociali generano costi e ritardi operativi significativi',s:['B','D','F']},
-    {id:'S3aR3',txt:'I danni reputazionali locali impattano su recruitment, relazioni istituzionali e valore del brand nella comunità',s:['B','C','D']},
+    {id:'S3aR1',txt:'Perdita della licenza sociale ad operare per opposizione di comitati locali e autorità',s:['B','C','D','F']},
+    {id:'S3aR2',txt:'Ricorsi TAR e blocco di autorizzazioni ambientali per opposizione delle comunità interessate',s:['B','D','F']},
+    {id:'S3aR3',txt:'Danni reputazionali locali con impatti su recruitment, relazioni istituzionali e valore del brand',s:['B','C','D']},
   ],
   o:[
-    {id:'S3aO1',txt:'Il community engagement strutturato e gli investimenti sociali consolidano la licenza sociale e prevengono i conflitti',s:['ALL']},
-    {id:'S3aO2',txt:'I programmi di shared value valorizzano il territorio come leva di marketing e reputazione istituzionale',s:['ALL']},
+    {id:'S3aO1',txt:'Community engagement strutturato e investimenti sociali come leva per la licenza sociale',s:['ALL']},
+    {id:'S3aO2',txt:'Programmi di shared value: valorizzazione del territorio come leva di marketing e reputazione',s:['ALL']},
   ],
 },
 'S3.b':{
   i:[
-    {id:'S3bI1',txt:'La restrizione all'accesso a risorse idriche, alimentari o territoriali di popolazioni locali per attività del gruppo causa danni diretti',s:['B','A','D']},
-    {id:'S3bI2',txt:'Gli impatti negativi sui mezzi di sussistenza di comunità rurali o popolazioni indigene violano i diritti fondamentali',s:['B','A','F']},
+    {id:'S3bI1',txt:'Restrizione all\'accesso a risorse idriche, alimentari o territoriali di popolazioni locali per attività del gruppo',s:['B','A','D']},
+    {id:'S3bI2',txt:'Impatti negativi sui mezzi di sussistenza di comunità rurali o popolazioni indigene',s:['B','A','F']},
   ],
   r:[
-    {id:'S3bR1',txt:'Gli obblighi FPIC per operazioni in aree con popolazioni indigene o protette aumentano i costi e i tempi autorizzativi',s:['B','A','D']},
-    {id:'S3bR2',txt:'Il contenzioso internazionale e i danni reputazionali per violazioni dei diritti delle comunità generano perdite durature',s:['B','D']},
+    {id:'S3bR1',txt:'Obblighi FPIC (Free Prior Informed Consent) per operazioni in aree con popolazioni indigene o protette',s:['B','A','D']},
+    {id:'S3bR2',txt:'Contenzioso internazionale e danni reputazionali per violazioni dei diritti delle comunità',s:['B','D']},
   ],
   o:[
-    {id:'S3bO1',txt:'I community benefit agreement creano co-sviluppo locale e consolidano la licenza sociale a lungo termine',s:['B','D','F']},
-    {id:'S3bO2',txt:'Lo sviluppo locale attraverso occupazione e infrastrutture per le comunità ospitanti rafforza le relazioni territoriali',s:['B','D','F']},
+    {id:'S3bO1',txt:'Community benefit agreement come strumento di co-sviluppo e consolidamento della licenza sociale',s:['B','D','F']},
+    {id:'S3bO2',txt:'Sviluppo locale: occupazione, formazione e infrastrutture per le comunità ospitanti',s:['B','D','F']},
   ],
 },
 'S4.a':{
   i:[
-    {id:'S4aI1',txt:'I danni alla salute dei consumatori per prodotti difettosi, contaminati o con istruzioni inadeguate causano sofferenza e perdita di fiducia',s:['C','A','I','Q']},
-    {id:'S4aI2',txt:'Gli impatti su fasce vulnerabili (bambini, anziani, disabili) per inadeguatezza di prodotti o servizi causano danni sproporzionati',s:['G','I','Q']},
-    {id:'S4aI3',txt:'Gli effetti negativi a lungo termine sulla salute per ingredienti o componenti controversi causano danni cronici ai consumatori',s:['A','C','Q']},
+    {id:'S4aI1',txt:'Danni alla salute dei consumatori per prodotti difettosi, contaminati o con istruzioni inadeguate',s:['C','A','I','Q']},
+    {id:'S4aI2',txt:'Impatti su fasce vulnerabili (bambini, anziani, disabili) per inadeguatezza di prodotti o servizi',s:['G','I','Q']},
+    {id:'S4aI3',txt:'Effetti negativi a lungo termine sulla salute per ingredienti, componenti o additivi controversi',s:['A','C','Q']},
   ],
   r:[
-    {id:'S4aR1',txt:'I recall e il ritiro dal mercato generano costi operativi ingenti, perdita di quota e danni reputazionali duraturi',s:['A','C','G']},
-    {id:'S4aR2',txt:'La responsabilità civile e penale per danni causati da prodotti (Product Liability Directive EU) genera contenziosi pluriennali',s:['C','G','A']},
-    {id:'S4aR3',txt:'La perdita di certificazioni di qualità (ISO, BRC, IFS) blocca immediatamente l'accesso a segmenti di mercato chiave',s:['C','A']},
+    {id:'S4aR1',txt:'Recall e ritiro dal mercato: costi operativi, perdita di quota e danni reputazionali significativi',s:['A','C','G']},
+    {id:'S4aR2',txt:'Responsabilità civile e penale per danni causati da prodotti (Product Liability Directive EU)',s:['C','G','A']},
+    {id:'S4aR3',txt:'Perdita di certificazioni di qualità (ISO, BRC, IFS) con impatto immediato sull\'accesso al mercato',s:['C','A']},
   ],
   o:[
-    {id:'S4aO1',txt:'Il premium quality e le certificazioni costituiscono una leva di pricing, fedeltà del cliente e differenziazione competitiva',s:['A','C','G']},
-    {id:'S4aO2',txt:'L'innovazione verso formulazioni e materiali più sicuri crea vantaggio competitivo e anticipa i requisiti normativi futuri',s:['C','A']},
+    {id:'S4aO1',txt:'Premium quality e certificazioni come leva di pricing, fedeltà del cliente e differenziazione',s:['A','C','G']},
+    {id:'S4aO2',txt:'Innovazione verso formulazioni e materiali più sicuri come driver di vantaggio competitivo',s:['C','A']},
   ],
 },
 'S4.b':{
   i:[
-    {id:'S4bI1',txt:'La raccolta e profilazione di dati personali dei clienti senza adeguata informativa viola i diritti alla privacy degli individui',s:['G','J','K']},
-    {id:'S4bI2',txt:'Il rischio di uso improprio di dati sensibili per finalità commerciali non dichiarate causa danni ai consumatori ignari',s:['K','J','G']},
-    {id:'S4bI3',txt:'L'esclusione digitale di fasce di popolazione che non possono accedere a servizi esclusivamente digitali genera disuguaglianze',s:['K','G','Q']},
+    {id:'S4bI1',txt:'Raccolta e profilazione di dati personali dei clienti senza adeguata informativa e consenso esplicito',s:['G','J','K']},
+    {id:'S4bI2',txt:'Rischio di uso improprio di dati sensibili per finalità commerciali non dichiarate o condivisione con terzi',s:['K','J','G']},
+    {id:'S4bI3',txt:'Esclusione digitale di fasce di popolazione che non possono accedere a servizi esclusivamente digitali',s:['K','G','Q']},
   ],
   r:[
-    {id:'S4bR1',txt:'Le sanzioni del Garante Privacy GDPR fino al 4% del fatturato globale per violazioni gravi rappresentano un rischio finanziario rilevante',s:['ALL']},
-    {id:'S4bR2',txt:'I data breach generano costi legali, notifiche obbligatorie, risarcimenti e danni reputazionali difficili da recuperare',s:['J','K','G']},
-    {id:'S4bR3',txt:'Il blocco di operazioni digitali per non conformità GDPR o NIS2 interrompe servizi con perdite di ricavi immediate',s:['J','K']},
+    {id:'S4bR1',txt:'Sanzioni del Garante Privacy GDPR: fino al 4% del fatturato globale per violazioni gravi',s:['ALL']},
+    {id:'S4bR2',txt:'Data breach: costi legali, notifiche obbligatorie, risarcimenti e danni reputazionali',s:['J','K','G']},
+    {id:'S4bR3',txt:'Blocco di operazioni digitali per non conformità normativa GDPR o NIS2 in paesi di operatività',s:['J','K']},
   ],
   o:[
-    {id:'S4bO1',txt:'La privacy by design e le certificazioni ISO 27001 costituiscono un differenziatore nella fiducia del cliente digitale',s:['J','K','G']},
-    {id:'S4bO2',txt:'La data governance eccellente abilita l'uso responsabile dell'AI e di analytics avanzate come fonte di vantaggio competitivo',s:['J','K']},
+    {id:'S4bO1',txt:'Privacy by design e certificazioni ISO 27001 come differenziatore nella fiducia del cliente',s:['J','K','G']},
+    {id:'S4bO2',txt:'Data governance eccellente come abilitatore di AI responsabile e analytics avanzate',s:['J','K']},
   ],
 },
 'S4.c':{
   i:[
-    {id:'S4cI1',txt:'I prodotti o servizi non accessibili a fasce di popolazione a basso reddito, anziani o con disabilità causano esclusione sociale',s:['K','G','Q','I']},
-    {id:'S4cI2',txt:'Il design che penalizza utenti con competenze digitali limitate crea barriere di accesso involontarie a servizi essenziali',s:['K','J','G']},
+    {id:'S4cI1',txt:'Prodotti o servizi non accessibili a fasce di popolazione a basso reddito, anziani o con disabilità',s:['K','G','Q','I']},
+    {id:'S4cI2',txt:'Design che penalizza utenti con competenze digitali limitate: barriere di accesso involontarie',s:['K','J','G']},
   ],
   r:[
-    {id:'S4cR1',txt:'L'European Accessibility Act (EAA 2025) impone obblighi di adeguamento per prodotti e servizi digitali con costi rilevanti',s:['K','J','G','Q']},
-    {id:'S4cR2',txt:'L'esclusione da mercati o bandi che richiedono prove di inclusività e accessibilità universale riduce i ricavi potenziali',s:['Q','K','G']},
+    {id:'S4cR1',txt:'European Accessibility Act (EAA 2025): obblighi di adeguamento per prodotti e servizi digitali',s:['K','J','G','Q']},
+    {id:'S4cR2',txt:'Esclusione da mercati o bandi che richiedono prove di inclusività e accessibilità universale',s:['Q','K','G']},
   ],
   o:[
-    {id:'S4cO1',txt:'L'accessibilità universale apre 1,3 miliardi di persone con disabilità come segmento di mercato storicamente sottosservito',s:['G','K','J']},
-    {id:'S4cO2',txt:'I servizi finanziari e sanitari inclusivi abilitano l'espansione in segmenti emergenti e a basso reddito ad alto potenziale',s:['K','Q']},
+    {id:'S4cO1',txt:'Accessibilità universale: 1,3 miliardi di persone con disabilità come segmento di mercato sottosservito',s:['G','K','J']},
+    {id:'S4cO2',txt:'Servizi finanziari e sanitari inclusivi come leva di espansione in segmenti emergenti e a basso reddito',s:['K','Q']},
   ],
 },
 'G1.a':{
   i:[
-    {id:'G1aI1',txt:'Il rischio di pratiche corruttive nella gestione di contratti pubblici e rapporti con PA causa danni sistemici alla concorrenza leale',s:['ALL']},
-    {id:'G1aI2',txt:'I conflitti di interesse nella governance non adeguatamente gestiti causano decisioni distorte a danno degli stakeholder',s:['ALL']},
-    {id:'G1aI3',txt:'La mancanza di canali di whistleblowing efficaci impedisce l'emersione di irregolarità e protegge comportamenti scorretti',s:['ALL']},
-    {id:'G1aI4',txt:'Le pratiche commerciali sleali, anticoncorrenziali o di greenwashing distorcono il mercato e ingannano i consumatori',s:['ALL']},
+    {id:'G1aI1',txt:'Rischio di pratiche corruttive nella gestione di contratti pubblici, permessi e rapporti con PA',s:['ALL']},
+    {id:'G1aI2',txt:'Conflitti di interesse nella governance non adeguatamente identificati e gestiti',s:['ALL']},
+    {id:'G1aI3',txt:'Mancanza di canali di whistleblowing efficaci e protezione inadeguata dei segnalanti',s:['ALL']},
+    {id:'G1aI4',txt:'Pratiche commerciali sleali, anticoncorrenziali o di greenwashing che distorcono il mercato',s:['ALL']},
   ],
   r:[
-    {id:'G1aR1',txt:'Le sanzioni penali e amministrative per corruzione (D.Lgs 231/2001, FCPA, UK Bribery Act) generano costi legali e reputazionali ingenti',s:['ALL']},
-    {id:'G1aR2',txt:'L'esclusione da gare d'appalto pubbliche per condanne o procedimenti per reati contro la PA azzera i ricavi da commesse pubbliche',s:['ALL']},
-    {id:'G1aR3',txt:'I danni reputazionali irreversibili per scandali di corruzione, frode o greenwashing riducono permanentemente il valore del brand',s:['ALL']},
+    {id:'G1aR1',txt:'Sanzioni penali e amministrative per corruzione (D.Lgs 231/2001, FCPA, UK Bribery Act)',s:['ALL']},
+    {id:'G1aR2',txt:'Esclusione da gare d\'appalto pubbliche per condanne o procedimenti per reati contro la PA',s:['ALL']},
+    {id:'G1aR3',txt:'Danni reputazionali irreversibili per scandali di corruzione, frode o greenwashing',s:['ALL']},
   ],
   o:[
-    {id:'G1aO1',txt:'Il Modello 231 robusto e la cultura dell'integrità costituiscono fattori di fiducia istituzionale e differenziazione competitiva',s:['ALL']},
-    {id:'G1aO2',txt:'La certificazione ISO 37001 Anti-Bribery è un requisito sempre più richiesto per accedere a mercati e partner internazionali',s:['ALL']},
+    {id:'G1aO1',txt:'Modello 231 robusto e cultura dell\'integrità come fattore di fiducia istituzionale e differenziazione',s:['ALL']},
+    {id:'G1aO2',txt:'Certificazione ISO 37001 Anti-Bribery come requisito per mercati e partner internazionali',s:['ALL']},
   ],
 },
 'G1.b':{
   i:[
-    {id:'G1bI1',txt:'La mancanza di criteri ESG nella selezione dei fornitori crea rischio di complicità in violazioni ambientali e sociali nella filiera',s:['ALL']},
-    {id:'G1bI2',txt:'L'assenza di audit sistematici della supply chain su temi ESG lascia nell'oscurità pratiche dannose dei fornitori',s:['C','G']},
-    {id:'G1bI3',txt:'La concentrazione eccessiva su pochi fornitori critici senza diversificazione crea vulnerabilità strategiche nella fornitura',s:['C','G','H']},
+    {id:'G1bI1',txt:'Mancanza di criteri ESG nella selezione e qualifica dei fornitori: rischio di complicità in violazioni',s:['ALL']},
+    {id:'G1bI2',txt:'Assenza di audit e monitoraggio sistematico della supply chain su temi ambientali e sociali',s:['C','G']},
+    {id:'G1bI3',txt:'Concentrazione eccessiva su pochi fornitori critici senza diversificazione del rischio di fornitura',s:['C','G','H']},
   ],
   r:[
-    {id:'G1bR1',txt:'Le sanzioni CS3D fino al 5% del fatturato globale per imprese con fatturato >€150M che violano la due diligence sono un rischio rilevante',s:['ALL']},
-    {id:'G1bR2',txt:'Le supply chain disruption per eventi ESG presso fornitori critici interrompono la produzione con perdite immediate',s:['C','G','H']},
-    {id:'G1bR3',txt:'La perdita di accreditamento come fornitore di grandi player con supply chain policy ESG stringenti riduce i ricavi',s:['ALL']},
+    {id:'G1bR1',txt:'CS3D: sanzioni fino al 5% del fatturato globale per imprese con fatturato >€150M che violano la DD',s:['ALL']},
+    {id:'G1bR2',txt:'Supply chain disruption per eventi ESG presso fornitori critici (disastri ambientali, scioperi, scandali)',s:['C','G','H']},
+    {id:'G1bR3',txt:'Perdita di accreditamento come fornitore di grandi player con supply chain policy ESG stringenti',s:['ALL']},
   ],
   o:[
-    {id:'G1bO1',txt:'La supply chain resiliente e sostenibile costituisce un vantaggio competitivo crescente in contesti di volatilità globale',s:['ALL']},
-    {id:'G1bO2',txt:'Il co-investimento ESG con i fornitori per innovazione condivisa genera partnership strategiche di lungo periodo',s:['C','G']},
+    {id:'G1bO1',txt:'Supply chain resiliente e sostenibile come vantaggio competitivo in contesti di crisi globale',s:['ALL']},
+    {id:'G1bO2',txt:'Sviluppo fornitori: co-investimento ESG per innovazione condivisa e partnership strategiche di lungo periodo',s:['C','G']},
   ],
 },
 'G1.c':{
   i:[
-    {id:'G1cI1',txt:'Le strutture fiscali aggressive che erodono la base imponibile nei paesi ospitanti sottraggono risorse ai sistemi di welfare pubblico',s:['K','M','ALL']},
-    {id:'G1cI2',txt:'L'utilizzo di giurisdizioni fiscali opache impatta negativamente sui sistemi di welfare nazionali e sulla concorrenza fiscale leale',s:['K','ALL']},
+    {id:'G1cI1',txt:'Strutture fiscali aggressive o pianificazione ottimizzativa che erode la base imponibile nei paesi ospitanti',s:['K','M','ALL']},
+    {id:'G1cI2',txt:'Utilizzo di giurisdizioni fiscali opache con impatti negativi sui sistemi di welfare nazionali',s:['K','ALL']},
   ],
   r:[
-    {id:'G1cR1',txt:'Le sanzioni fiscali e le maggiori imposte per riqualificazione di schemi di tax planning aggressivo generano costi imprevisti',s:['ALL']},
-    {id:'G1cR2',txt:'I danni reputazionali per esposizione mediatica su pratiche fiscali aggressive (LuxLeaks, Panama Papers) riducono il valore del brand',s:['ALL']},
-    {id:'G1cR3',txt:'Gli obblighi CBCR e BEPS Pillar 2 aumentano la compliance crescente e gli oneri dichiarativi per gruppi internazionali',s:['K','M']},
+    {id:'G1cR1',txt:'Sanzioni fiscali e maggiori imposte per riqualificazione di schemi di tax planning aggressivo',s:['ALL']},
+    {id:'G1cR2',txt:'Danni reputazionali per esposizione mediatica su pratiche fiscali aggressive (es. LuxLeaks, Panama Papers)',s:['ALL']},
+    {id:'G1cR3',txt:'Obblighi CBCR (country-by-country reporting) e BEPS Pillar 2: compliance crescente e oneri dichiarativi',s:['K','M']},
   ],
   o:[
-    {id:'G1cO1',txt:'La tax transparency proattiva costituisce una leva di reputazione ESG e fiducia degli investitori istituzionali e delle rating agency',s:['ALL']},
-    {id:'G1cO2',txt:'La governance fiscale responsabile migliora il profilo G per le agenzie di rating ESG e riduce il rischio reputazionale',s:['ALL']},
+    {id:'G1cO1',txt:'Tax transparency proattiva come leva di reputazione ESG e fiducia di investitori istituzionali e rating agencies',s:['ALL']},
+    {id:'G1cO2',txt:'Governance fiscale responsabile come componente del profilo G per agenzie di rating ESG',s:['ALL']},
   ],
 },
 }; // end IRO_LIB
@@ -1767,7 +1739,7 @@ function showToast(msg, dur=3000){
 // ═══════════════════════════════════════════
 const selNACE = []; // [{code,name,sector}]
 const selGeo  = new Set(['IT']);
-let m1Year = 2026;
+let m1Year = 2024;
 
 // NACE
 const naceSearchEl = document.getElementById('naceSearch');
@@ -1823,25 +1795,9 @@ document.addEventListener('click',e=>{if(!e.target.closest('.nwrap'))naceDropEl.
 document.getElementById('sizeGrid').querySelectorAll('.sopt').forEach(opt=>{
   opt.addEventListener('click',()=>{
     document.querySelectorAll('.sopt').forEach(o=>o.classList.remove('active'));
-    opt.classList.add('active');
-    appState.m1.size = opt.dataset.val;
-    updateM1Progress();
-    updateStdBadge(opt.dataset.val);
+    opt.classList.add('active'); appState.m1.size=opt.dataset.val; updateM1Progress();
   });
 });
-
-function updateStdBadge(size){
-  const csrd = document.getElementById('csrdBadge');
-  const vol  = document.getElementById('volBadge');
-  if(!csrd || !vol) return;
-  if(size === 'csrd'){
-    csrd.style.display = 'inline-block';
-    vol.style.display  = 'none';
-  } else {
-    csrd.style.display = 'none';
-    vol.style.display  = 'inline-block';
-  }
-}
 
 // SLIDER
 const empSlider=document.getElementById('empSlider');
@@ -1867,7 +1823,10 @@ document.getElementById('geoTags').querySelectorAll('.gtag').forEach(tag=>{
   });
 });
 
-// Standards determinati automaticamente dalla dimensione
+// STANDARDS
+document.getElementById('stdGrid').querySelectorAll('.stdc').forEach(c=>{
+  c.addEventListener('click',()=>c.classList.toggle('active'));
+});
 
 // YEAR
 document.getElementById('yrDn').addEventListener('click',()=>{m1Year=Math.max(2020,m1Year-1);document.getElementById('yrVal').value=m1Year});
@@ -1883,6 +1842,7 @@ document.getElementById('bizDesc').addEventListener('input',()=>{
 // M1 PROGRESS
 const M1_REQ=[
   ()=>document.getElementById('ragione').value.trim()!=='',
+  ()=>document.getElementById('piva').value.trim()!=='',
   ()=>selNACE.length>0,
   ()=>document.getElementById('sizeVal').value!=='',
   ()=>selGeo.size>0,
@@ -1893,10 +1853,10 @@ function updateM1Progress(){
   document.getElementById('m1Fill').style.width=pct+'%';
   document.getElementById('m1Txt').textContent=`${filled} / ${M1_REQ.length} campi`;
 }
-document.getElementById('ragione').addEventListener('input',()=>{
+['ragione','piva'].forEach(id=>document.getElementById(id).addEventListener('input',()=>{
   updateM1Progress();
-  document.getElementById('f-ragione')?.classList.remove('err');
-});
+  document.getElementById('f-'+id)?.classList.remove('err');
+}));
 updateM1Progress();
 
 // M1 NEXT
@@ -1904,12 +1864,14 @@ document.getElementById('m1Next').addEventListener('click',()=>{
   let valid=true;
   function setErr(id,show){const el=document.getElementById('f-'+id);if(!el)return;el.classList.toggle('err',show);if(show)valid=false;}
   setErr('ragione',!document.getElementById('ragione').value.trim());
+  setErr('piva',!document.getElementById('piva').value.trim());
   setErr('nace',selNACE.length===0);
   if(!valid){document.querySelector('.err')?.scrollIntoView({behavior:'smooth',block:'center'});return;}
 
   // Save to appState
   appState.m1.ragione   = document.getElementById('ragione').value.trim();
-  appState.m1.referente = document.getElementById('referente').value.trim();
+  appState.m1.piva      = document.getElementById('piva').value.trim();
+  appState.m1.website   = document.getElementById('website').value.trim();
   appState.m1.nace      = [...selNACE];
   appState.m1.bizDesc   = document.getElementById('bizDesc').value.trim();
   appState.m1.size      = document.getElementById('sizeVal').value;
@@ -1917,8 +1879,8 @@ document.getElementById('m1Next').addEventListener('click',()=>{
   appState.m1.revenue   = document.getElementById('revenue').value;
   appState.m1.geo       = [...selGeo];
   appState.m1.hq        = document.getElementById('hq').value.trim();
-  appState.m1.year = m1Year;
-  appState.m1.standards = appState.m1.size === 'csrd' ? ['CSRD','ESRS'] : ['ESRS-VSME'];
+  appState.m1.year      = m1Year;
+  appState.m1.standards = [...document.querySelectorAll('.stdc.active')].map(c=>c.dataset.val);
 
   // Progress sidebar
   const pis=document.querySelectorAll('#progItems .pit');
@@ -2149,7 +2111,7 @@ function renderIROItem(topicId, subId, dim, iro, incl, auto, st, dimCls, userSec
     </div>
     <div class="iro-score-row ${incl?'':'hidden'}">
       ${scoreRow}
-      <button class="sna ${st.na&&incl?'on':''}" data-topicid="${topicId}" data-subid="${subId}" data-dim="${dim}" data-iroid="${iro.id}" title="${st.na&&st.naNote?st.naNote:'Non applicabile'}">N/A${st.na&&st.naNote?' ✓':''}</button>
+      <button class="sna ${st.na&&incl?'on':''}" data-topicid="${topicId}" data-subid="${subId}" data-dim="${dim}" data-iroid="${iro.id}">N/A</button>
     </div>
     ${!auto&&!incl?`<div class="iro-note">Non selezionato automaticamente per i tuoi codici NACE — includilo se rilevante</div>`:''}
   </div>`;
@@ -2169,21 +2131,15 @@ function attachScoreEvents(grid, userSectors){
     });
   });
 
-  // N/A buttons — richiede giustificazione
+  // N/A buttons
   grid.querySelectorAll('.sna').forEach(btn=>{
     btn.addEventListener('click',e=>{
       e.stopPropagation();
       const {topicid,subid,dim,iroid}=btn.dataset;
       const st = getIROState(topicid,subid,dim,iroid);
-      if(st.na){
-        // Toglie N/A direttamente
-        setIROState(topicid,subid,dim,iroid,{na:false,score:0,naNote:''});
-        refreshCard(topicid, userSectors);
-        updateM2Stats();
-      } else {
-        // Apre modal per giustificazione
-        openNA(topicid, subid, dim, iroid, st.naNote||'');
-      }
+      setIROState(topicid,subid,dim,iroid,{na:!st.na,score:0});
+      refreshCard(topicid, userSectors);
+      updateM2Stats();
     });
   });
 
@@ -2311,38 +2267,10 @@ function genKey(){
   return `GL-${yr}-${co}-${rnd}`;
 }
 
-async function initM3(){
-  document.getElementById('m3Company').textContent = appState.m1.ragione || 'Engagement Stakeholder';
+function initM3(){
+  document.getElementById('m3Company').textContent = appState.m1.ragione || '—';
   document.getElementById('spCompany').textContent = appState.m1.ragione || 'il gruppo';
   renderSurveyPreview();
-
-  // Avvia sessione automaticamente se non esiste
-  if(!sessionKey){
-    sessionKey = genKey();
-    document.getElementById('sessKey').textContent = sessionKey;
-    document.getElementById('sessStats').style.display = 'grid';
-    document.getElementById('addStkBtn').disabled = false;
-    document.getElementById('consolBar').style.display = 'flex';
-    stakeholders = [];
-    try {
-      await fetch('/api/session', {
-        method:'POST', headers:{'Content-Type':'application/json'},
-        body: JSON.stringify({
-          session_key: sessionKey,
-          company_name: appState.m1.ragione||'Azienda',
-          data: { m1:appState.m1, topics:TOPICS },
-          stakeholders: [],
-        })
-      });
-    } catch(e){}
-  } else {
-    // Sessione già esistente: ripristina UI e aggiorna da Supabase
-    document.getElementById('sessKey').textContent = sessionKey;
-    document.getElementById('sessStats').style.display = 'grid';
-    document.getElementById('addStkBtn').disabled = false;
-    document.getElementById('consolBar').style.display = 'flex';
-    await pollStakeholderStatus();
-  }
 }
 
 function renderSurveyPreview(){
@@ -2953,146 +2881,6 @@ async function pollStakeholderStatus(){
 
 // Polling ogni 10s quando siamo nel modulo 3
 setInterval(()=>{ if(appState.nav.current===3) pollStakeholderStatus(); }, 10000);
-
-function downloadFullPDF(){
-  const m1 = appState.m1;
-  const year = m1.year || 2026;
-  const co = m1.ragione || 'Azienda';
-  const matTopics = TOPICS.filter(t=>{
-    const {impact,financial}=getConsolidatedScore(t.id);
-    return classifyTopic(impact,financial,m4Threshold)!=='none';
-  });
-  const stkDone = (appState.m3?.stakeholders||[]).filter(s=>s.status==='done').length;
-
-  let html = `<!DOCTYPE html><html lang="it"><head><meta charset="UTF-8">
-  <title>DMA Report — ${co} ${year}</title>
-  <style>
-    body{font-family:Georgia,serif;max-width:800px;margin:40px auto;padding:0 40px;color:#1a1a1a;line-height:1.6}
-    h1{font-size:2rem;color:#0D3D25;border-bottom:3px solid #1A7A4A;padding-bottom:12px}
-    h2{font-size:1.3rem;color:#1A7A4A;margin-top:32px}
-    h3{font-size:1rem;color:#3A4D40;margin-top:20px}
-    table{width:100%;border-collapse:collapse;margin:16px 0;font-size:.88rem}
-    th{background:#0D3D25;color:white;padding:8px 12px;text-align:left}
-    td{padding:8px 12px;border-bottom:1px solid #eee}
-    tr:nth-child(even) td{background:#f9f9f9}
-    .badge{display:inline-block;padding:2px 8px;border-radius:4px;font-size:.78rem;font-weight:600}
-    .double{background:#EEF8F3;color:#1A7A4A}
-    .impact{background:#EFF6FF;color:#1D4ED8}
-    .financial{background:#FFF7ED;color:#C2410C}
-    .none{background:#F3F4F6;color:#6B7F72}
-    .meta{background:#f0f0f0;padding:16px;border-radius:8px;margin:20px 0;font-size:.9rem}
-    @media print{body{margin:20px}h1{font-size:1.6rem}}
-  </style></head><body>
-  <h1>Double Materiality Assessment</h1>
-  <div class="meta">
-    <strong>${co}</strong> &nbsp;·&nbsp; Anno di rendicontazione: ${year}<br>
-    Data assessment: ${new Date().toLocaleDateString('it-IT',{day:'2-digit',month:'long',year:'numeric'})}<br>
-    Referente: ${m1.referente||'—'} &nbsp;·&nbsp; Settore: ${m1.nace.map(n=>n.code+' '+n.name).join(', ')||'—'}<br>
-    Stakeholder coinvolti: ${stkDone} &nbsp;·&nbsp; Topic valutati: ${TOPICS.length}
-  </div>
-  <h2>1. Contesto aziendale</h2>
-  <p>${m1.bizDesc||'Non compilato.'}</p>
-  <h2>2. Topic materiali identificati</h2>
-  <table>
-    <tr><th>Topic ESRS</th><th>Materialità Impatto</th><th>Materialità Finanziaria</th><th>Classificazione</th></tr>
-    ${TOPICS.map(t=>{
-      const {impact,financial}=getConsolidatedScore(t.id);
-      const cl=classifyTopic(impact,financial,m4Threshold);
-      const clLabel={double:'Doppiamente materiale',impact:'Mat. Impatto',financial:'Mat. Finanziario',none:'Non materiale'};
-      return `<tr><td>${t.emoji} ${t.id} — ${t.name}</td><td>${impact.toFixed(2)}/5</td><td>${financial.toFixed(2)}/5</td><td><span class="badge ${cl}">${clLabel[cl]}</span></td></tr>`;
-    }).join('')}
-  </table>
-  <h2>3. Narrative di materialità</h2>
-  ${TOPICS.map(t=>{
-    const {impact,financial}=getConsolidatedScore(t.id);
-    const cl=classifyTopic(impact,financial,m4Threshold);
-    const narr=appState.m5?.[t.id]||'Non compilata.';
-    return `<h3>${t.emoji} ${t.id} — ${t.name}</h3><p>${narr}</p>`;
-  }).join('')}
-  <h2>4. Processo DMA — log</h2>
-  <table>
-    <tr><th>Fase</th><th>Stato</th><th>Data</th></tr>
-    <tr><td>Modulo 1 — Contesto aziendale</td><td>✓ Completato</td><td>${new Date().toLocaleDateString('it-IT')}</td></tr>
-    <tr><td>Modulo 2 — Valutazione IRO</td><td>✓ Completato</td><td>${new Date().toLocaleDateString('it-IT')}</td></tr>
-    <tr><td>Modulo 3 — Stakeholder engagement</td><td>${stkDone>0?'✓ '+stkDone+' risposte':'— Non completato'}</td><td>${new Date().toLocaleDateString('it-IT')}</td></tr>
-    <tr><td>Modulo 4 — Matrice DMA</td><td>✓ Completato (soglia: ${m4Threshold})</td><td>${new Date().toLocaleDateString('it-IT')}</td></tr>
-    <tr><td>Modulo 5 — Narrative ESRS</td><td>${appState.m5&&Object.keys(appState.m5).length>0?'✓ '+Object.keys(appState.m5).length+' topic':'— Non completato'}</td><td>${new Date().toLocaleDateString('it-IT')}</td></tr>
-  </table>
-  <p style="margin-top:40px;font-size:.78rem;color:#999;border-top:1px solid #eee;padding-top:12px">
-    Documento generato da GreenLedger — Double Materiality Assessment Platform<br>
-    Metodologia: EFRAG ESRS — Riforma Omnibus 2025
-  </p>
-  </body></html>`;
-
-  const w = window.open('','_blank');
-  w.document.write(html);
-  w.document.close();
-  setTimeout(()=>w.print(), 500);
-}
-
-function confirmLock(){
-  const input = document.getElementById('lockConfirmInput').value.trim();
-  if(input !== 'CONFERMO'){
-    alert('Scrivi esattamente "CONFERMO" per procedere');
-    return;
-  }
-  // Genera password di sblocco
-  const unlockPwd = Math.random().toString(36).slice(2,8).toUpperCase() +
-                    Math.random().toString(36).slice(2,6).toUpperCase();
-  appState.locked = true;
-  appState.lockedAt = new Date().toISOString();
-  appState.unlockPwd = unlockPwd;
-
-  // Disabilita tutti i pulsanti dei moduli precedenti
-  document.querySelectorAll('.btn-pri, .btn-gh').forEach(btn=>{
-    if(btn.id !== 'm6CsrdBtn' && btn.id !== 'm6Back' && btn.id !== 'lockBtn'){
-      // lascia i pulsanti M6
-    }
-  });
-
-  document.getElementById('lockModal').style.display = 'none';
-  document.getElementById('lockBtn').textContent = '🔒 Bloccato';
-  document.getElementById('lockBtn').disabled = true;
-  document.getElementById('assessmentStatus').textContent = '🔒 Bloccato';
-
-  // Blocca navigazione ai moduli precedenti
-  document.querySelectorAll('.stp.done').forEach(s=>s.style.pointerEvents='none');
-
-  showToast('Assessment bloccato! Password di sblocco: ' + unlockPwd, 8000);
-  setTimeout(()=>{
-    prompt('Salva questa password di sblocco in un posto sicuro:', unlockPwd);
-  }, 500);
-}
-
-function handlePrevReport(event){
-  const file = event.target.files[0];
-  if(!file) return;
-  document.getElementById('prevReportName').textContent = file.name;
-  appState.m1.prevReportName = file.name;
-  showToast('Bilancio caricato — utilizzato come riferimento per la valutazione');
-}
-
-let _naPending = null;
-
-function openNA(topicid, subid, dim, iroid, currentNote){
-  _naPending = {topicid, subid, dim, iroid};
-  document.getElementById('naNote').value = currentNote || '';
-  document.getElementById('naModal').style.display = 'flex';
-  setTimeout(()=>document.getElementById('naNote').focus(), 100);
-}
-
-function confirmNA(){
-  if(!_naPending) return;
-  const note = document.getElementById('naNote').value.trim();
-  if(!note){ alert('La giustificazione è obbligatoria per selezionare N/A'); return; }
-  const {topicid, subid, dim, iroid} = _naPending;
-  const st = getIROState(topicid, subid, dim, iroid);
-  setIROState(topicid, subid, dim, iroid, {na: !st.na || true, score: 0, naNote: note});
-  refreshCard(topicid, getUserSectors());
-  updateM2Stats();
-  document.getElementById('naModal').style.display = 'none';
-  _naPending = null;
-}
 
 // ═══ INIT ═══
 goToModule(1);
