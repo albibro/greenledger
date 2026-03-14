@@ -3317,31 +3317,43 @@ function initM6(){
 
 document.getElementById('m6Back').addEventListener('click',()=>goToModule(5));
 
-function exportToCsrd(){
-  const materialTopics=TOPICS.map(t=>{
-    const{impact,financial}=getConsolidatedScore(t.id);
-    const cls=classifyTopic(impact,financial,m4Threshold);
-    return{id:t.id,name:t.name,emoji:t.emoji,pillar:t.pillar,color:t.color,bg:t.bg,sub:t.sub,
-      impactScore:+impact.toFixed(2),financialScore:+financial.toFixed(2),class:cls};
-  });
-  const payload={m1:{...appState.m1},materialTopics,m3:appState.m3||null,
-    m4:{threshold:m4Threshold,stkWeight,counts:appState.m4?.counts||{}},
-    m5:appState.m5||{},exportedAt:new Date().toISOString()};
-  try{ localStorage.setItem('gl_dma',JSON.stringify(payload)); }
-  catch(e){ showToast('Errore salvataggio'); return; }
-  const matCount=materialTopics.filter(t=>t.class!=='none').length;
-  showToast('DMA esportata: '+matCount+' topic materiali');
-  setTimeout(()=>window.open('greenledger-csrd.html','_blank'),800);
-}
+// exportToCsrd definita sotto
 
 // ═══════════════════════════════════════════
 //  EXPORT DMA → CSRD REPORTING
 // ═══════════════════════════════════════════
 function exportToCsrd(){
-  // Serializza appState reale + materialTopics calcolati
   const materialTopics = TOPICS.map(t => {
     const {impact, financial} = getConsolidatedScore(t.id);
     const cls = classifyTopic(impact, financial, m4Threshold);
+
+    // Calcola punteggi per subtopic per attivare solo DR materiali nel CSRD
+    const subtopicScores = {};
+    t.subs.forEach(sub => {
+      const lib = IRO_LIB[sub.id];
+      if(!lib) return;
+      const avg = (arr) => arr.length ? arr.reduce((a,b)=>a+b,0)/arr.length : 0;
+      const getScores = (dim) => (lib[dim]||[]).map(iro => {
+        const st = getIROState(t.id, sub.id, dim, iro.id);
+        return (st.incl && !st.na && st.score > 0) ? st.score : null;
+      }).filter(s => s !== null);
+
+      const avgI = avg(getScores('i'));
+      const avgR = avg(getScores('r'));
+      const avgO = avg(getScores('o'));
+      const finScore = Math.max(avgR, avgO);
+
+      subtopicScores[sub.id] = {
+        id: sub.id,
+        label: sub.label,
+        impactScore: +avgI.toFixed(2),
+        financialScore: +finScore.toFixed(2),
+        material: avgI >= m4Threshold || finScore >= m4Threshold,
+        materialImpact: avgI >= m4Threshold,
+        materialFinancial: finScore >= m4Threshold,
+      };
+    });
+
     return {
       id: t.id,
       name: t.name,
@@ -3353,35 +3365,25 @@ function exportToCsrd(){
       impactScore: +impact.toFixed(2),
       financialScore: +financial.toFixed(2),
       class: cls,
+      subtopicScores,
     };
   });
 
-  const matCount = materialTopics.filter(t => t.class !== 'none').length;
-
   const payload = {
-    m1: { ...appState.m1 },
+    m1: {...appState.m1},
     materialTopics,
     m3: appState.m3 || null,
-    m4: {
-      threshold: m4Threshold,
-      stkWeight,
-      counts: appState.m4?.counts || {},
-    },
+    m4: {threshold: m4Threshold, stkWeight, counts: appState.m4?.counts||{}},
     m5: appState.m5 || {},
     exportedAt: new Date().toISOString(),
   };
 
-  try {
-    localStorage.setItem('gl_dma', JSON.stringify(payload));
-  } catch(e) {
-    showToast('Errore nel salvataggio — localStorage pieno o non disponibile.');
-    return;
-  }
+  try { localStorage.setItem('gl_dma', JSON.stringify(payload)); }
+  catch(e) { showToast('Errore salvataggio localStorage'); return; }
 
-  showToast(`DMA esportata: ${matCount} topic materiali → apertura CSRD Reporting...`);
-  setTimeout(() => {
-    window.open('greenledger-csrd.html', '_blank');
-  }, 800);
+  const matCount = materialTopics.filter(t => t.class !== 'none').length;
+  showToast('DMA esportata: ' + matCount + ' topic materiali');
+  setTimeout(() => window.open('greenledger-csrd.html', '_blank'), 800);
 }
 
 function copyLink(link){

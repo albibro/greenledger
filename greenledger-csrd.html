@@ -794,6 +794,77 @@ const DR_CATALOG = {
 };
 
 // ══ TOPIC → TAB → DR MAPPING ══
+// Mapping subtopic -> DR attivati (EFRAG ID177)
+const SUBTOPIC_DR_MAP = {
+  // E1
+  'E1.a': {gov:['E1-1','E1-2'],actions:['E1-3'],targets:['E1-4'],metrics:['E1-5','E1-6','E1-7']},
+  'E1.b': {gov:['E1-2'],actions:['E1-3'],targets:['E1-4'],metrics:['E1-9']},
+  'E1.c': {gov:['E1-2'],actions:['E1-3'],targets:['E1-4'],metrics:['E1-5']},
+  // E2
+  'E2.a': {gov:['E2-1'],actions:['E2-2'],targets:['E2-3'],metrics:['E2-4','E2-6']},
+  'E2.b': {gov:['E2-1'],actions:['E2-2'],targets:['E2-3'],metrics:['E2-4','E2-6']},
+  'E2.c': {gov:['E2-1'],actions:['E2-2'],targets:['E2-3'],metrics:['E2-4','E2-6']},
+  'E2.d': {gov:['E2-1'],actions:['E2-2'],targets:['E2-3'],metrics:['E2-5','E2-6']},
+  // E3
+  'E3.a': {gov:['E3-1'],actions:['E3-2'],targets:['E3-3'],metrics:['E3-4','E3-5']},
+  'E3.b': {gov:['E3-1'],actions:['E3-2'],targets:['E3-3'],metrics:['E3-5']},
+  // E4
+  'E4.a': {gov:['E4-1','E4-2'],actions:['E4-3'],targets:['E4-4'],metrics:['E4-5','E4-6']},
+  'E4.b': {gov:['E4-1','E4-2'],actions:['E4-3'],targets:['E4-4'],metrics:['E4-5','E4-6']},
+  // E5
+  'E5.a': {gov:['E5-1'],actions:['E5-2'],targets:['E5-3'],metrics:['E5-4','E5-6']},
+  'E5.b': {gov:['E5-1'],actions:['E5-2'],targets:['E5-3'],metrics:['E5-5','E5-6']},
+  // S1 — PAT sempre per qualsiasi subtopic materiale, metriche specifiche per subtopic
+  'S1.a': {gov:['S1-1','S1-2','S1-3'],actions:['S1-4'],targets:['S1-5'],metrics:['S1-6','S1-7','S1-10','S1-11']},
+  'S1.b': {gov:['S1-1','S1-2','S1-3'],actions:['S1-4'],targets:['S1-5'],metrics:['S1-6','S1-7','S1-14']},
+  'S1.c': {gov:['S1-1','S1-2','S1-3'],actions:['S1-4'],targets:['S1-5'],metrics:['S1-6','S1-9','S1-16']},
+  'S1.d': {gov:['S1-1','S1-2','S1-3'],actions:['S1-4'],targets:['S1-5'],metrics:['S1-6','S1-13']},
+  // S2
+  'S2.a': {gov:['S2-1','S2-2'],actions:['S2-3'],targets:['S2-4'],metrics:['S2-5']},
+  'S2.b': {gov:['S2-1','S2-2'],actions:['S2-3'],targets:['S2-4'],metrics:['S2-5']},
+  // S3
+  'S3.a': {gov:['S3-1','S3-2'],actions:['S3-3'],targets:['S3-4'],metrics:['S3-5']},
+  'S3.b': {gov:['S3-1','S3-2'],actions:['S3-3'],targets:['S3-4'],metrics:['S3-5']},
+  // S4
+  'S4.a': {gov:['S4-1','S4-2'],actions:['S4-3'],targets:['S4-4'],metrics:['S4-5']},
+  'S4.b': {gov:['S4-1','S4-2'],actions:['S4-3'],targets:['S4-4'],metrics:['S4-5']},
+  'S4.c': {gov:['S4-1','S4-2'],actions:['S4-3'],targets:['S4-4'],metrics:['S4-5']},
+  // G1
+  'G1.a': {gov:['G1-1'],actions:['G1-3'],targets:[],metrics:['G1-4']},
+  'G1.b': {gov:['G1-1','G1-2'],actions:['G1-3'],targets:[],metrics:['G1-6']},
+  'G1.c': {gov:['G1-1'],actions:[],targets:[],metrics:[]},
+};
+
+// Funzione che calcola i DR attivi per un topic in base ai subtopic materiali
+function getActiveDRsForTopic(topicId, subtopicScores){
+  const allDRs = {gov:new Set(), actions:new Set(), targets:new Set(), metrics:new Set()};
+
+  // Itera sui subtopic e aggiungi i DR se materiali
+  if(subtopicScores){
+    Object.entries(subtopicScores).forEach(([subId, sub])=>{
+      if(!sub.material) return;
+      const mapping = SUBTOPIC_DR_MAP[subId];
+      if(!mapping) return;
+      ['gov','actions','targets','metrics'].forEach(tab=>{
+        (mapping[tab]||[]).forEach(dr => allDRs[tab].add(dr));
+      });
+    });
+  }
+
+  // Se nessun subtopic ha scores (es. demo senza M2 compilato), usa tutti i DR
+  const hasAnyMaterial = subtopicScores && Object.values(subtopicScores).some(s=>s.material);
+  if(!hasAnyMaterial){
+    return TOPIC_STRUCTURE[topicId];
+  }
+
+  return {
+    gov: [...allDRs.gov],
+    actions: [...allDRs.actions],
+    targets: [...allDRs.targets],
+    metrics: [...allDRs.metrics],
+  };
+}
+
 const TOPIC_STRUCTURE = {
   ESRS2:{gov:['GOV-1','GOV-2','GOV-3','GOV-4','GOV-5'],actions:['SBM-1','SBM-2','SBM-3'],targets:['IRO-1'],metrics:['IRO-2']},
   E1:{gov:['E1-1','E1-2','E1-8'],actions:['E1-3'],targets:['E1-4'],metrics:['E1-5','E1-6','E1-7','E1-9']},
@@ -1156,7 +1227,12 @@ function switchTab(tabId){
 }
 
 function renderTabContent(){
-  const struct = TOPIC_STRUCTURE[currentTopicId];
+  // Usa DR filtrati per subtopic materiali se disponibili
+  const topicData = dmaData?.materialTopics?.find(t=>t.id===currentTopicId);
+  const subtopicScores = topicData?.subtopicScores || null;
+  const struct = currentTopicId === 'ESRS2'
+    ? TOPIC_STRUCTURE['ESRS2']
+    : getActiveDRsForTopic(currentTopicId, subtopicScores);
   if(!struct) return;
   const drIds = struct[currentTab] || [];
 
@@ -1721,9 +1797,15 @@ function updateTabCounters(){
   document.querySelectorAll('.tab-btn').forEach(btn=>{
     const tab = btn.dataset.tab;
     if(!tab || !currentTopicId) return;
-    const c = calcTabCompletion(currentTopicId, tab);
+    const topicData = dmaData?.materialTopics?.find(t=>t.id===currentTopicId);
+    const subtopicScores = topicData?.subtopicScores || null;
+    const struct = currentTopicId === 'ESRS2'
+      ? TOPIC_STRUCTURE['ESRS2']
+      : getActiveDRsForTopic(currentTopicId, subtopicScores);
+    const drIds = (struct?.[tab]) || [];
+    const done = drIds.filter(id => calcDRCompletion(currentTopicId, id)).length;
     const countEl = btn.querySelector('.tab-count');
-    if(countEl) countEl.textContent = `${c.done}/${c.total}`;
+    if(countEl) countEl.textContent = done+'/'+drIds.length;
   });
 }
 
