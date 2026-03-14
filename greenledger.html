@@ -575,74 +575,6 @@ input.wslider::-webkit-slider-thumb{-webkit-appearance:none;width:13px;height:13
           <span class="ferr">Campo obbligatorio</span>
         </div>
       </div>
-      <div class="fg c2" style="margin-top:14px">
-        <div class="f" id="f-piva">
-          <label for="piva">P.IVA / Codice Fiscale <span class="req">★</span></label>
-          <input type="text" id="piva" class="inp" placeholder="IT12345678901" maxlength="16">
-          <span class="ferr">Campo obbligatorio</span>
-        </div>
-        <div class="f">
-          <label for="website">Sito web <span class="hint">(opzionale)</span></label>
-          <input type="url" id="website" class="inp" placeholder="https://www.azienda.it">
-        </div>
-      </div>
-    </div>
-
-    <!-- MULTI-NACE -->
-    <div class="fsec">
-      <div class="sdiv"><div class="sdiv-ic"><svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M2 11V6l5-4 5 4v5H9V8H5v3H2Z" stroke="white" stroke-width="1.3" stroke-linejoin="round"/></svg></div><span class="sdiv-t">Classificazione NACE Rev.2</span><div class="sdiv-l"></div></div>
-      <div class="f" id="f-nace">
-        <label>Codici NACE del gruppo <span class="req">★</span><span class="hint">— il primo è il primario</span></label>
-        <div class="nwrap">
-          <input type="text" id="naceSearch" class="inp" placeholder="Cerca per codice o attività (es. C22, energia, manifattura…)" autocomplete="off">
-          <div class="ndrop" id="naceDrop"></div>
-        </div>
-        <div class="chips" id="naceChips"><span class="chips-empty">Nessun codice aggiunto — cerca e seleziona</span></div>
-        <span class="ferr">Aggiungi almeno un codice NACE</span>
-      </div>
-    </div>
-
-    <!-- BUSINESS DESC -->
-    <div class="fsec">
-      <div class="sdiv"><div class="sdiv-ic"><svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M2 3h10v2H2zM2 7h8v2H2zM2 11h6v2H2z" fill="white"/></svg></div><span class="sdiv-t">Descrizione Business</span><div class="sdiv-l"></div></div>
-      <div class="bdesc">
-        <div class="bdesc-hd">
-          <div class="bic"><svg width="11" height="11" viewBox="0 0 12 12" fill="none"><path d="M6 1l1.5 3 3.5.5-2.5 2.5.5 3.5L6 9l-3 1.5.5-3.5L1 4.5 4.5 4z" fill="white"/></svg></div>
-          <h3>Attività e modello di business</h3>
-          
-        </div>
-        <p class="bdesc-hint">Descrivi <strong>cosa produce o vende il gruppo, come genera valore, posizione nella catena del valore</strong> (upstream/downstream), prodotti/servizi principali, tipologia di clienti e fornitori critici.<br><br>Usato nel Modulo 2 per <strong>calibrare gli IRO suggeriti</strong> per ogni topic ESRS.</p>
-        <textarea id="bizDesc" class="ta" maxlength="1200" rows="4" placeholder="Es.: Il Gruppo produce imballaggi in plastica riciclata (HDPE, PET) per il settore alimentare B2B. Supply chain upstream in Europa dell'Est per polimeri riciclati, produzione in 2 stabilimenti (Brescia e Valencia), distribuzione a GDO e industria alimentare in 8 paesi UE. 340 FTE, 75% ricavi da canale GDO..."></textarea>
-        <div class="ccount" id="charCount">0 / 1200</div>
-      </div>
-    </div>
-
-    <!-- DIMENSIONE -->
-    <div class="fsec">
-      <div class="sdiv"><div class="sdiv-ic"><svg width="13" height="13" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="5" r="2.5" stroke="white" stroke-width="1.3"/><path d="M2 12c0-2.76 2.24-5 5-5s5 2.24 5 5" stroke="white" stroke-width="1.3" stroke-linecap="round"/></svg></div><span class="sdiv-t">Dimensione aziendale</span><div class="sdiv-l"></div></div>
-      <div class="f">
-        <label>Fascia CSRD <span class="req">★</span></label>
-        <div class="sgrid" id="sizeGrid">
-          <div class="sopt" data-val="voluntary"><span class="si">🔹</span><span class="sl">Volontario</span><span class="sr">&lt;1.000 dip<br>&lt;€450M</span><div class="chk"><svg width="7" height="5" viewBox="0 0 8 6"><path d="M1 3L3 5L7 1" stroke="white" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg></div></div>
-          <div class="sopt active" data-val="csrd"><span class="si">🟩</span><span class="sl">CSRD</span><span class="sr">&gt;1.000 dip<br>&gt;€450M</span><div class="chk"><svg width="7" height="5" viewBox="0 0 8 6"><path d="M1 3L3 5L7 1" stroke="white" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg></div></div>
-        </div>
-        <input type="hidden" id="sizeVal" value="csrd">
-      </div>
-      <div class="fg c2" style="margin-top:14px">
-        <div class="f">
-          <label>N° dipendenti (FTE) <span class="req">★</span></label>
-          <div class="rwrap">
-            <input type="range" id="empSlider" min="1" max="5000" value="120" step="1">
-            <div class="rlbl"><span>1</span><span>5.000+</span></div>
-            <div class="rval" id="empVal">120 dipendenti</div>
-          </div>
-        </div>
-        <div class="f">
-          <label for="revenue">Fatturato annuo</label>
-          <div class="awrap"><span class="adl">€</span><span class="adl adr">M</span><input type="number" id="revenue" class="inp inpr" placeholder="28.5" min="0" step="0.1"></div>
-        </div>
-      </div>
-    </div>
 
     <!-- GEOGRAFIE -->
     <div class="fsec">
@@ -1134,83 +1066,91 @@ const appState = {
 //  NACE DATABASE
 // ═══════════════════════════════════════════
 const NACE_DB=[
-  {code:'A01',name:'Coltivazioni agricole',desc:'Produzione vegetale, cereali, ortaggi',sector:'A'},
-  {code:'A02',name:'Silvicoltura',desc:'Foreste, arboricoltura',sector:'A'},
-  {code:'A03',name:'Pesca e acquacoltura',desc:'Pesca e itticoltura',sector:'A'},
-  {code:'B05',name:'Estrazione carbone',desc:'Carbone, coke, lignite',sector:'B'},
-  {code:'B06',name:'Estrazione petrolio e gas',desc:'Idrocarburi liquidi e gassosi',sector:'B'},
-  {code:'B08',name:'Estrazione minerali',desc:'Pietra, sabbia, ghiaia, minerali',sector:'B'},
-  {code:'C10',name:'Industria alimentare',desc:'Lavorazione e conservazione alimenti',sector:'C'},
-  {code:'C13',name:'Industria tessile',desc:'Filatura, tessitura, finissaggio',sector:'C'},
-  {code:'C15',name:'Industria conciaria',desc:'Pelli e accessori in cuoio',sector:'C'},
-  {code:'C16',name:'Industria del legno',desc:'Segagione, falegnameria',sector:'C'},
-  {code:'C17',name:'Industria cartaria',desc:'Carta, cartone e prodotti derivati',sector:'C'},
-  {code:'C20',name:'Industria chimica',desc:'Sostanze e prodotti chimici',sector:'C'},
-  {code:'C21',name:'Farmaceutica',desc:'Medicinali, vaccini, dispositivi',sector:'C'},
-  {code:'C22',name:'Gomma e plastica',desc:'Prodotti in gomma e materie plastiche',sector:'C'},
-  {code:'C23',name:'Minerali non metalliferi',desc:'Vetro, cemento, ceramica',sector:'C'},
-  {code:'C24',name:'Siderurgia e metallurgia',desc:'Ghisa, acciaio, metalli',sector:'C'},
-  {code:'C25',name:'Prodotti in metallo',desc:'Costruzioni metalliche, utensili',sector:'C'},
-  {code:'C26',name:'Elettronica',desc:'Componenti ICT, semiconduttori',sector:'C'},
-  {code:'C27',name:'Apparecchiature elettriche',desc:'Motori, trasformatori, batterie',sector:'C'},
-  {code:'C28',name:'Macchinari e impianti',desc:'Macchine industriali',sector:'C'},
-  {code:'C29',name:'Autoveicoli',desc:'Auto, furgoni, veicoli commerciali',sector:'C'},
-  {code:'C30',name:'Altri mezzi di trasporto',desc:'Navi, ferroviario, aerospazio',sector:'C'},
-  {code:'D35',name:'Energia elettrica, gas, vapore',desc:'Produzione e distribuzione energia',sector:'D'},
-  {code:'E36',name:'Raccolta e trattamento acque',desc:'Acquedotti e fognatura',sector:'E'},
-  {code:'E38',name:'Gestione rifiuti',desc:'Raccolta, trattamento, recupero',sector:'E'},
-  {code:'F41',name:'Costruzioni edilizie',desc:'Edifici residenziali e non',sector:'F'},
-  {code:'F42',name:'Ingegneria civile',desc:'Strade, autostrade, reti',sector:'F'},
-  {code:'G45',name:'Commercio autoveicoli',desc:'Vendita e riparazione auto',sector:'G'},
-  {code:'G46',name:'Commercio ingrosso B2B',desc:'Intermediari B2B',sector:'G'},
-  {code:'G47',name:'Commercio al dettaglio',desc:'GDO, retail, e-commerce',sector:'G'},
-  {code:'H49',name:'Trasporto terrestre',desc:'Autotrasporto, ferroviario',sector:'H'},
-  {code:'H50',name:'Trasporto marittimo',desc:'Navigazione marittima',sector:'H'},
-  {code:'H51',name:'Trasporto aereo',desc:'Aviazione civile e merci',sector:'H'},
-  {code:'H52',name:'Logistica e magazzinaggio',desc:'Depositi, centri distribuzione',sector:'H'},
-  {code:'I55',name:'Alloggio',desc:'Hotel, resort, campeggi',sector:'I'},
-  {code:'I56',name:'Ristorazione',desc:'Bar, ristoranti, catering',sector:'I'},
-  {code:'J58',name:'Editoria',desc:'Libri, giornali, software',sector:'J'},
-  {code:'J61',name:'Telecomunicazioni',desc:'Telefonia, internet, satellite',sector:'J'},
-  {code:'J62',name:'IT e software',desc:'Sviluppo software, cloud, ICT',sector:'J'},
-  {code:'K64',name:'Servizi finanziari',desc:'Banche, intermediazione creditizia',sector:'K'},
-  {code:'K65',name:'Assicurazioni',desc:'Vita, danni, riassicurazione',sector:'K'},
-  {code:'K66',name:'Attività ausiliarie finanziarie',desc:'SGR, fondi, leasing',sector:'K'},
-  {code:'L68',name:'Immobiliare',desc:'Compravendita, locazione',sector:'L'},
-  {code:'M69',name:'Attività legali e contabili',desc:'Avvocati, commercialisti',sector:'M'},
-  {code:'M70',name:'Consulenza direzionale',desc:'Management consulting',sector:'M'},
-  {code:'M71',name:'Architettura e ingegneria',desc:'Progettazione tecnica',sector:'M'},
-  {code:'M72',name:'Ricerca e sviluppo',desc:'R&D scientifica e tecnologica',sector:'M'},
-  {code:'M73',name:'Pubblicità e marketing',desc:'Agenzie creative, media',sector:'M'},
-  {code:'N77',name:'Noleggio e leasing',desc:'Veicoli, macchinari',sector:'N'},
-  {code:'N78',name:'Somministrazione lavoro',desc:'Agenzie per il lavoro',sector:'N'},
-  {code:'O84',name:'PA e difesa',desc:'Pubblica amministrazione',sector:'O'},
-  {code:'P85',name:'Istruzione',desc:'Scuole, università, formazione',sector:'P'},
-  {code:'Q86',name:'Sanità',desc:'Ospedali, cliniche, ambulatori',sector:'Q'},
-  {code:'Q87',name:'Servizi residenziali di cura',desc:'RSA, case di cura',sector:'Q'},
-  {code:'R90',name:'Attività creative e artistiche',desc:'Spettacolo, musei, patrimonio',sector:'R'},
-  {code:'R93',name:'Sport e svago',desc:'Impianti sportivi, parchi',sector:'R'},
-  {code:'S94',name:'Associazioni e organizzazioni',desc:'Sindacati, enti, associazioni',sector:'S'},
-  {code:'C11',name:'Industria delle bevande',desc:'Vini, birre, acque minerali',sector:'C'},
-  {code:'C14',name:'Confezione abbigliamento',desc:'Moda, abbigliamento, accessori',sector:'C'},
-  {code:'C18',name:'Stampa e riproduzione',desc:'Tipografie, editoria stampata',sector:'C'},
-  {code:'C31',name:'Fabbricazione di mobili',desc:'Arredamento, design industriale',sector:'C'},
-  {code:'C32',name:'Altre industrie manifatturiere',desc:'Gioielleria, strumenti, giochi',sector:'C'},
-  {code:'C33',name:'Riparazione macchine e impianti',desc:'Manutenzione impianti industriali',sector:'C'},
-  {code:'E37',name:'Gestione acque reflue',desc:'Depurazione, fognatura',sector:'E'},
-  {code:'E39',name:'Bonifica e servizi ambientali',desc:'Decontaminazione siti, bonifica',sector:'E'},
-  {code:'F43',name:'Lavori costruzione specializzati',desc:'Impiantistica, demolizione, finiture',sector:'F'},
-  {code:'G46b',name:'Commercio ingrosso B2B',desc:'Intermediari commerciali B2B',sector:'G'},
-  {code:'H53',name:'Servizi postali e corriere',desc:'Posta, corrieri, logistica',sector:'H'},
-  {code:'J59',name:'Produzioni cinema e TV',desc:'Film, serie TV, audiovisivi',sector:'J'},
-  {code:'J60',name:'Attività radiotelevisive',desc:'Radio, televisione, streaming',sector:'J'},
-  {code:'M74',name:'Altre attivita professionali',desc:'Design, fotografia, traduzione',sector:'M'},
-  {code:'N79',name:'Agenzie viaggio e tour operator',desc:'Turismo organizzato, booking',sector:'N'},
-  {code:'N81',name:'Servizi per edifici e paesaggio',desc:'Pulizie, giardinaggio, facility',sector:'N'},
-  {code:'N82',name:'Servizi di supporto imprese',desc:'Call center, back office',sector:'N'},
-  {code:'Q88',name:'Assistenza sociale non residenziale',desc:'Servizi sociali, assistenza anziani',sector:'Q'},
-  {code:'S95',name:'Riparazione computer e beni',desc:'Assistenza tecnica, riparazione',sector:'S'},
-  {code:'S96',name:'Servizi personali vari',desc:'Parrucchieri, estetisti, lavanderie',sector:'S'},
+  {code:'A01',name:'Coltivazioni agricole e produzione animale',desc:'Cereali, ortaggi, frutta, allevamento',sector:'A'},
+  {code:'A02',name:'Silvicoltura e utilizzo aree forestali',desc:'Foreste, legname, arboricoltura',sector:'A'},
+  {code:'A03',name:'Pesca e acquacoltura',desc:'Pesca marina, fluviale, itticoltura',sector:'A'},
+  {code:'B05',name:'Estrazione di carbone',desc:'Carbone, coke, lignite',sector:'B'},
+  {code:'B06',name:'Estrazione di petrolio e gas naturale',desc:'Idrocarburi liquidi e gassosi',sector:'B'},
+  {code:'B07',name:'Estrazione di minerali metalliferi',desc:'Ferro, metalli non ferrosi, uranio',sector:'B'},
+  {code:'B08',name:'Altre estrazioni di minerali',desc:'Pietra, sabbia, ghiaia, sale, torba',sector:'B'},
+  {code:'B09',name:'Servizi di supporto alle estrazioni',desc:'Servizi tecnici per industria estrattiva',sector:'B'},
+  {code:'C10',name:'Industria alimentare',desc:'Lavorazione carni, pesce, frutta, cereali, oli',sector:'C'},
+  {code:'C11',name:'Industria delle bevande',desc:'Vini, birre, distillati, acque, soft drink',sector:'C'},
+  {code:'C12',name:'Industria del tabacco',desc:'Sigarette, tabacco lavorato',sector:'C'},
+  {code:'C13',name:'Industria tessile',desc:'Filatura, tessitura, finissaggio, maglieria',sector:'C'},
+  {code:'C14',name:'Confezione abbigliamento',desc:'Moda, abbigliamento, accessori, pellicce',sector:'C'},
+  {code:'C15',name:'Industria conciaria e calzaturiera',desc:'Pelli, cuoio, borse, calzature',sector:'C'},
+  {code:'C16',name:'Industria del legno',desc:'Segagione, pannelli, imballaggi in legno',sector:'C'},
+  {code:'C17',name:'Industria cartaria',desc:'Carta, cartone, prodotti in carta',sector:'C'},
+  {code:'C18',name:'Stampa e riproduzione',desc:'Tipografie, editoria stampata, supporti registrati',sector:'C'},
+  {code:'C19',name:'Raffinazione petrolio e coke',desc:'Raffinerie, carburanti, lubrificanti',sector:'B'},
+  {code:'C20',name:'Industria chimica',desc:'Chimica di base, fertilizzanti, plastica, gomma sintetica',sector:'C'},
+  {code:'C21',name:'Industria farmaceutica',desc:'Medicinali, vaccini, dispositivi medici',sector:'C'},
+  {code:'C22',name:'Gomma e materie plastiche',desc:'Pneumatici, imballaggi plastici, componenti in gomma',sector:'C'},
+  {code:'C23',name:'Minerali non metalliferi',desc:'Vetro, cemento, ceramica, mattoni',sector:'C'},
+  {code:'C24',name:'Siderurgia e metallurgia',desc:'Ghisa, acciaio, metalli non ferrosi, fusione',sector:'C'},
+  {code:'C25',name:'Prodotti in metallo',desc:'Costruzioni metalliche, utensili, imballaggi metallici',sector:'C'},
+  {code:'C26',name:'Elettronica e ottica',desc:'Componenti ICT, semiconduttori, strumenti ottici',sector:'C'},
+  {code:'C27',name:'Apparecchiature elettriche',desc:'Motori, trasformatori, batterie, illuminazione',sector:'C'},
+  {code:'C28',name:'Macchinari e impianti',desc:'Macchine industriali, pompe, compressori',sector:'C'},
+  {code:'C29',name:'Autoveicoli e rimorchi',desc:'Auto, furgoni, veicoli commerciali, componenti',sector:'C'},
+  {code:'C30',name:'Altri mezzi di trasporto',desc:'Navi, ferroviario, aerospazio, biciclette',sector:'C'},
+  {code:'C31',name:'Fabbricazione di mobili',desc:'Arredamento residenziale e contract, materassi',sector:'C'},
+  {code:'C32',name:'Altre industrie manifatturiere',desc:'Gioielleria, strumenti musicali, giochi, dispositivi medici',sector:'C'},
+  {code:'C33',name:'Riparazione e installazione macchine',desc:'Manutenzione impianti industriali',sector:'C'},
+  {code:'D35',name:'Energia elettrica gas vapore',desc:'Produzione e distribuzione energia, gas, teleriscaldamento',sector:'D'},
+  {code:'E36',name:'Raccolta e trattamento acque',desc:'Acquedotti, potabilizzazione, distribuzione idrica',sector:'E'},
+  {code:'E37',name:'Gestione acque reflue',desc:'Fognatura, depurazione, trattamento reflui',sector:'E'},
+  {code:'E38',name:'Gestione rifiuti',desc:'Raccolta, trattamento, smaltimento, recupero rifiuti',sector:'E'},
+  {code:'E39',name:'Bonifica e servizi ambientali',desc:'Decontaminazione siti, gestione suoli contaminati',sector:'E'},
+  {code:'F41',name:'Costruzioni edilizie',desc:'Edifici residenziali e non residenziali',sector:'F'},
+  {code:'F42',name:'Ingegneria civile',desc:'Strade, autostrade, ferrovie, reti, infrastrutture',sector:'F'},
+  {code:'F43',name:'Lavori costruzione specializzati',desc:'Impiantistica, demolizione, finiture, coperture',sector:'F'},
+  {code:'G45',name:'Commercio e riparazione autoveicoli',desc:'Vendita, manutenzione, riparazione auto e moto',sector:'G'},
+  {code:'G46',name:'Commercio ingrosso',desc:'Commercio B2B alimentare, industriale, chimico',sector:'G'},
+  {code:'G47',name:'Commercio al dettaglio',desc:'GDO, retail, e-commerce, negozi specializzati',sector:'G'},
+  {code:'H49',name:'Trasporto terrestre e pipeline',desc:'Autotrasporto, ferroviario, taxi, pipeline',sector:'H'},
+  {code:'H50',name:'Trasporto marittimo',desc:'Navigazione marittima e fluviale passeggeri e merci',sector:'H'},
+  {code:'H51',name:'Trasporto aereo',desc:'Aviazione civile, cargo aereo, trasporto spaziale',sector:'H'},
+  {code:'H52',name:'Logistica e magazzinaggio',desc:'Depositi, centri distribuzione, servizi portuali',sector:'H'},
+  {code:'H53',name:'Servizi postali e corriere',desc:'Posta, corrieri, consegna pacchi',sector:'H'},
+  {code:'I55',name:'Alloggio e ospitalita',desc:'Hotel, resort, B&B, campeggi, affitti brevi',sector:'I'},
+  {code:'I56',name:'Ristorazione e catering',desc:'Ristoranti, bar, mense, catering, food delivery',sector:'I'},
+  {code:'J58',name:'Editoria',desc:'Libri, giornali, riviste, software, videogiochi',sector:'J'},
+  {code:'J59',name:'Produzioni audio video e cinema',desc:'Film, serie TV, musica, audiovisivi',sector:'J'},
+  {code:'J60',name:'Radiotelevisione e broadcasting',desc:'Radio, televisione, streaming',sector:'J'},
+  {code:'J61',name:'Telecomunicazioni',desc:'Telefonia fissa e mobile, internet, satellite',sector:'J'},
+  {code:'J62',name:'IT e software',desc:'Sviluppo software, cloud, ICT, consulenza informatica',sector:'J'},
+  {code:'J63',name:'Servizi informativi',desc:'Data center, portali web, agenzie stampa',sector:'J'},
+  {code:'K64',name:'Servizi finanziari',desc:'Banche, credito, holding, fondi di investimento',sector:'K'},
+  {code:'K65',name:'Assicurazioni e fondi pensione',desc:'Assicurazioni vita, danni, riassicurazione',sector:'K'},
+  {code:'K66',name:'Attivita ausiliarie finanziarie',desc:'SGR, trading, leasing, agenti assicurativi',sector:'K'},
+  {code:'L68',name:'Attivita immobiliari',desc:'Compravendita, gestione, locazione immobili, agenzie',sector:'L'},
+  {code:'M69',name:'Attivita legali e contabili',desc:'Avvocati, notai, commercialisti, revisori',sector:'M'},
+  {code:'M70',name:'Consulenza direzionale',desc:'Management consulting, PR, comunicazione',sector:'M'},
+  {code:'M71',name:'Architettura e ingegneria',desc:'Progettazione tecnica, collaudi, analisi tecniche',sector:'M'},
+  {code:'M72',name:'Ricerca e sviluppo',desc:'R&D scientifica, biotecnologie, scienze sociali',sector:'M'},
+  {code:'M73',name:'Pubblicita e ricerche di mercato',desc:'Agenzie creative, media planning, sondaggi',sector:'M'},
+  {code:'M74',name:'Altre attivita professionali',desc:'Design, fotografia, traduzione, veterinaria',sector:'M'},
+  {code:'N77',name:'Noleggio e leasing',desc:'Noleggio auto, attrezzature, beni personali',sector:'N'},
+  {code:'N78',name:'Agenzie per il lavoro',desc:'Somministrazione, ricerca e selezione personale',sector:'N'},
+  {code:'N79',name:'Agenzie viaggio e tour operator',desc:'Turismo organizzato, booking, reservation',sector:'N'},
+  {code:'N80',name:'Sicurezza e investigazione',desc:'Vigilanza privata, guardie giurate, investigatori',sector:'N'},
+  {code:'N81',name:'Servizi per edifici e paesaggio',desc:'Pulizie, giardinaggio, facility management',sector:'N'},
+  {code:'N82',name:'Servizi di supporto imprese',desc:'Call center, back office, packaging, convegni',sector:'N'},
+  {code:'O84',name:'Pubblica amministrazione e difesa',desc:'PA centrale e locale, ordine pubblico, difesa',sector:'O'},
+  {code:'P85',name:'Istruzione',desc:'Scuole, universita, formazione professionale',sector:'P'},
+  {code:'Q86',name:'Sanita',desc:'Ospedali, cliniche, medici, dentisti',sector:'Q'},
+  {code:'Q87',name:'Servizi residenziali di cura',desc:'RSA, case di cura, assistenza disabili',sector:'Q'},
+  {code:'Q88',name:'Assistenza sociale non residenziale',desc:'Servizi sociali diurni, asili nido',sector:'Q'},
+  {code:'R90',name:'Attivita creative e artistiche',desc:'Spettacolo, arti performative, creazione artistica',sector:'R'},
+  {code:'R91',name:'Biblioteche musei e cultura',desc:'Musei, biblioteche, siti storici, giardini zoologici',sector:'R'},
+  {code:'R92',name:'Lotterie e scommesse',desc:'Giochi, scommesse, casinò',sector:'R'},
+  {code:'R93',name:'Sport e svago',desc:'Impianti sportivi, fitness, parchi divertimento',sector:'R'},
+  {code:'S94',name:'Associazioni e organizzazioni',desc:'Sindacati, enti, associazioni di categoria, ONG',sector:'S'},
+  {code:'S95',name:'Riparazione computer e beni personali',desc:'Assistenza tecnica, riparazione elettronica',sector:'S'},
+  {code:'S96',name:'Servizi personali',desc:'Parrucchieri, estetisti, lavanderie, pompe funebri',sector:'S'},
+  {code:'T97',name:'Datori di lavoro domestico',desc:'Colf, badanti, personale domestico',sector:'T'},
 ];
 
 // ═══════════════════════════════════════════
@@ -1839,28 +1779,35 @@ naceSearchEl.addEventListener('input',()=>{renderNaceDrop(naceSearchEl.value);na
 document.addEventListener('click',e=>{if(!e.target.closest('.nwrap'))naceDropEl.classList.remove('open')});
 
 // SIZE
-document.getElementById('sizeGrid').querySelectorAll('.sopt').forEach(opt=>{
-  opt.addEventListener('click',()=>{
-    document.getElementById('sizeGrid').querySelectorAll('.sopt').forEach(o=>o.classList.remove('active'));
-    opt.classList.add('active');
-    document.getElementById('sizeVal').value = opt.dataset.val;
-    appState.m1.size = opt.dataset.val;
-    updateM1Progress();
-    updateStdBadge(opt.dataset.val);
-  });
-});
-
-function updateStdBadge(size){
-  const csrd = document.getElementById('csrdBadge');
-  const vol  = document.getElementById('volBadge');
-  if(!csrd || !vol) return;
-  if(size === 'csrd'){
-    csrd.style.display = 'inline-block';
-    vol.style.display  = 'none';
+function autoDetectCsrd(){
+  const emp = parseInt(document.getElementById('empSlider').value) || 0;
+  const rev = parseFloat(document.getElementById('revenue').value) || 0;
+  const isCsrd = emp > 1000 && rev > 450;
+  const box = document.getElementById('csrdAutoBox');
+  const icon = document.getElementById('csrdAutoIcon');
+  const label = document.getElementById('csrdAutoLabel');
+  const desc = document.getElementById('csrdAutoDesc');
+  document.getElementById('sizeVal').value = isCsrd ? 'csrd' : 'voluntary';
+  appState.m1.size = isCsrd ? 'csrd' : 'voluntary';
+  if(isCsrd){
+    box.style.background = 'var(--g50)';
+    box.style.borderColor = 'var(--g200)';
+    icon.textContent = '🟩';
+    label.textContent = 'CSRD obbligatorio';
+    label.style.color = 'var(--g800)';
+    desc.textContent = 'Oltre 1.000 dipendenti e oltre €450M fatturato — rendicontazione CSRD/ESRS obbligatoria dal 2027';
   } else {
-    csrd.style.display = 'none';
-    vol.style.display  = 'inline-block';
+    box.style.background = 'var(--ambg)';
+    box.style.borderColor = 'var(--ambb)';
+    icon.textContent = '🔹';
+    label.textContent = 'Rendicontazione volontaria (VSME)';
+    label.style.color = 'var(--amber)';
+    const missing = [];
+    if(emp <= 1000) missing.push('dipendenti ≤1.000');
+    if(rev <= 450) missing.push('fatturato ≤€450M');
+    desc.textContent = missing.length ? missing.join(' · ') + ' — sotto soglia CSRD Omnibus 2025' : 'Inserisci dipendenti e fatturato';
   }
+  updateM1Progress();
 }
 
 // SLIDER
@@ -1873,10 +1820,11 @@ function updSlider(){
 empSlider.addEventListener('input',()=>{
   const v=parseInt(empSlider.value);
   empValEl.textContent=v>=5000?'5.000+ dipendenti':`${v.toLocaleString('it-IT')} dipendenti`;
-  updSlider(); updateM1Progress();
+  updSlider();
+  autoDetectCsrd();
 });
 updSlider();
-updateStdBadge(document.getElementById('sizeVal').value);
+autoDetectCsrd();
 
 // GEO
 document.getElementById('geoTags').querySelectorAll('.gtag').forEach(tag=>{
@@ -2986,10 +2934,6 @@ function handlePrevReport(event){
   document.getElementById('prevReportName').textContent = file.name;
   appState.m1.prevReportName = file.name;
   showToast('Bilancio caricato come riferimento');
-}
-
-function updateStdBadgeInit(){
-  updateStdBadge(document.getElementById('sizeVal').value);
 }
 
 function copyLink(link){
