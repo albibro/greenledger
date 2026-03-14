@@ -2252,20 +2252,45 @@ function renderSurveyPreview(){
     </div>`).join('');
 }
 
-document.getElementById('genKeyBtn').addEventListener('click',()=>{
+document.getElementById('genKeyBtn').addEventListener('click', async ()=>{
   sessionKey = genKey();
   document.getElementById('sessKey').textContent = sessionKey;
   document.getElementById('sessStats').style.display = 'grid';
   document.getElementById('addStkBtn').disabled = false;
-  document.getElementById('simBtn').style.display = 'inline-flex';
   document.getElementById('consolBar').style.display = 'flex';
-  // Pre-populate with templates
+
+  // Salva assessment su Supabase con gli stakeholder template
   stakeholders = STAKEHOLDER_TEMPLATES.map((s,i)=>({
     ...s, id:i, status:'invited', completedAt:null, scores:{}, avatarColor: AVATAR_COLORS[i]
   }));
+
+  try {
+    const res = await fetch('/api/session', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({
+        session_key: sessionKey,
+        company_name: appState.m1.ragione || 'Azienda',
+        data: { m1: appState.m1, topics: TOPICS },
+        stakeholders: stakeholders,
+      })
+    });
+    const data = await res.json();
+    if(data.stakeholders){
+      // Aggiorna stakeholders locali con token da Supabase
+      stakeholders = stakeholders.map((s,i) => ({
+        ...s,
+        token: data.stakeholders[i]?.token || '',
+        surveyLink: window.location.origin + '/survey.html?token=' + (data.stakeholders[i]?.token || ''),
+      }));
+    }
+    showToast('Sessione creata — link survey pronti!');
+  } catch(e){
+    showToast('Sessione creata (offline mode)');
+  }
+
   renderStkList();
   updateM3Stats();
-  showToast(`Chiave sessione generata: ${sessionKey}`);
 });
 
 document.getElementById('addStkBtn').addEventListener('click',()=>{
@@ -2281,12 +2306,16 @@ function renderStkList(){
   el.innerHTML = stakeholders.map(s=>`
     <div class="stk-row">
       <div class="stk-avatar" style="background:${s.avatarColor}">${s.name.split(' ').map(w=>w[0]).join('').slice(0,2)}</div>
-      <div class="stk-info"><div class="stk-name">${s.name}</div><div class="stk-org">${s.org}</div></div>
+      <div class="stk-info">
+        <div class="stk-name">${s.name}</div>
+        <div class="stk-org">${s.org}</div>
+        ${s.surveyLink ? `<div style="font-size:.68rem;color:var(--g700);font-family:'DM Mono',monospace;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:200px">${s.surveyLink}</div>` : ''}
+      </div>
       <div><span class="stk-cat" style="background:${s.catBg};color:${s.catColor}">${s.cat}</span></div>
       <div><span class="stk-status ${s.status==='done'?'st-done':s.status==='opened'?'st-opened':'st-invited'}">
         ${s.status==='done'?'✓ Completato':s.status==='opened'?'↗ Aperto':'✉ Invitato'}
       </span></div>
-      <button class="stk-act" title="Copia link" onclick="showToast('Link copiato: greenledger.io/survey/${sessionKey}/${s.id}')">
+      <button class="stk-act" title="Copia link survey" onclick="copyLink('${s.surveyLink||''}')">
         <svg width="11" height="11" viewBox="0 0 12 12" fill="none"><rect x="1" y="4" width="7" height="7" rx="1.2" stroke="var(--inkm)" stroke-width="1.2"/><path d="M4 4V3a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1H8" stroke="var(--inkm)" stroke-width="1.2" stroke-linecap="round"/></svg>
       </button>
     </div>`).join('');
@@ -2335,8 +2364,29 @@ function consolidateAndGoM4(){
   setTimeout(()=>{ goToModule(4); initM4(); },900);
 }
 
-document.getElementById('consolBtn').addEventListener('click', consolidateAndGoM4);
-document.getElementById('m3Next').addEventListener('click', consolidateAndGoM4);
+async function consolidateFromSupabase(){
+  if(sessionKey){
+    try {
+      const res = await fetch('/api/session?key=' + sessionKey);
+      const data = await res.json();
+      if(data.stakeholders){
+        data.stakeholders.forEach(remote => {
+          const local = stakeholders.find(s => s.token === remote.token);
+          if(local){
+            local.status = remote.status;
+            local.scores = remote.scores || {};
+          }
+        });
+        renderStkList();
+        updateM3Stats();
+      }
+    } catch(e){}
+  }
+  consolidateAndGoM4();
+}
+
+document.getElementById('consolBtn').addEventListener('click', consolidateFromSupabase);
+document.getElementById('m3Next').addEventListener('click', consolidateFromSupabase);
 
 // ═══════════════════════════════════════════
 //  MODULE 4 — MATRIX
@@ -2689,6 +2739,38 @@ function exportToCsrd(){
     window.open('greenledger-csrd.html', '_blank');
   }, 800);
 }
+
+function copyLink(link){
+  if(!link){ showToast('Genera prima la chiave sessione'); return; }
+  navigator.clipboard.writeText(link).then(()=>{
+    showToast('Link copiato negli appunti!');
+  }).catch(()=>{
+    prompt('Copia questo link:', link);
+  });
+}
+
+async function pollStakeholderStatus(){
+  if(!sessionKey) return;
+  try {
+    const res = await fetch('/api/session?key=' + sessionKey);
+    const data = await res.json();
+    if(!data.stakeholders) return;
+    // Aggiorna status locali
+    data.stakeholders.forEach(remote => {
+      const local = stakeholders.find(s => s.token === remote.token);
+      if(local){
+        local.status = remote.status;
+        local.scores = remote.scores || {};
+        local.completedAt = remote.completed_at;
+      }
+    });
+    renderStkList();
+    updateM3Stats();
+  } catch(e){}
+}
+
+// Polling ogni 10 secondi quando siamo nel modulo 3
+setInterval(()=>{ if(appState.nav.current === 3) pollStakeholderStatus(); }, 10000);
 
 // ═══ INIT ═══
 goToModule(1);
