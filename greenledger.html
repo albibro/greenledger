@@ -2145,6 +2145,7 @@ document.getElementById('bizDesc').addEventListener('input',()=>{
 const M1_REQ=[
   ()=>document.getElementById('ragione').value.trim()!=='',
   ()=>selNACE.length>0,
+  ()=>parseInt(document.getElementById('empSlider').value)>1,
   ()=>(parseFloat(document.getElementById('revenue').value)||0)>0,
   ()=>selGeo.size>0,
 ];
@@ -2152,7 +2153,7 @@ function updateM1Progress(){
   const filled=M1_REQ.filter(fn=>fn()).length;
   const pct=Math.round(filled/M1_REQ.length*100);
   document.getElementById('m1Fill').style.width=pct+'%';
-  document.getElementById('m1Txt').textContent=`${filled} / ${M1_REQ.length} campi`;
+  const labels=['Ragione sociale','Codice NACE','Dipendenti','Fatturato','Geografia']; document.getElementById('m1Txt').textContent=`${filled} / ${M1_REQ.length} — ${filled===M1_REQ.length?'Completo':'Mancano: '+labels.filter((_,i)=>!M1_REQ[i]()).join(', ')}`;
 }
 document.getElementById('revenue').addEventListener('input',()=>{ updateM1Progress(); autoDetectCsrd(); });
 document.getElementById('ragione').addEventListener('input',()=>{
