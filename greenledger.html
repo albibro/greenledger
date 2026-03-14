@@ -2290,38 +2290,20 @@ document.getElementById('genKeyBtn').addEventListener('click', async ()=>{
   document.getElementById('addStkBtn').disabled = false;
   document.getElementById('consolBar').style.display = 'flex';
 
-  // Salva assessment su Supabase con gli stakeholder template
-  stakeholders = STAKEHOLDER_TEMPLATES.map((s,i)=>({
-    ...s, id:i, status:'invited', completedAt:null, scores:{}, avatarColor: AVATAR_COLORS[i]
-  }));
-
+  stakeholders = [];
   try {
-    const res = await fetch('/api/session', {
-      method: 'POST',
-      headers: {'Content-Type':'application/json'},
+    await fetch('/api/session', {
+      method:'POST', headers:{'Content-Type':'application/json'},
       body: JSON.stringify({
         session_key: sessionKey,
-        company_name: appState.m1.ragione || 'Azienda',
-        data: { m1: appState.m1, topics: TOPICS },
-        stakeholders: stakeholders,
+        company_name: appState.m1.ragione||'Azienda',
+        data: { m1:appState.m1, topics:TOPICS },
+        stakeholders: [],
       })
     });
-    const data = await res.json();
-    if(data.stakeholders){
-      // Aggiorna stakeholders locali con token da Supabase
-      stakeholders = stakeholders.map((s,i) => ({
-        ...s,
-        token: data.stakeholders[i]?.token || '',
-        surveyLink: window.location.origin + '/survey.html?token=' + (data.stakeholders[i]?.token || ''),
-      }));
-    }
-    showToast('Sessione creata — link survey pronti!');
-  } catch(e){
-    showToast('Sessione creata (offline mode)');
-  }
-
-  renderStkList();
-  updateM3Stats();
+  } catch(e){}
+  renderStkList(); updateM3Stats();
+  showToast('Sessione creata — aggiungi gli stakeholder!');
 });
 
 document.getElementById('addStkBtn').addEventListener('click',()=>{
@@ -2441,12 +2423,39 @@ document.getElementById('consolBtn').disabled = false;
 
 function consolidateAndGoM4(){
   // Merge stakeholder scores into appState
+  // I voti da survey usano {topicId: {i: score, f: score}}
+  // Il formato atteso da M4 usa {topicId: score} (media i+f)
+  const normalizedStakeholders = stakeholders.map(s=>{
+    const normalizedScores = {};
+    if(s.scores){
+      Object.entries(s.scores).forEach(([topicId, val])=>{
+        if(typeof val === 'object' && val !== null){
+          // Formato survey: {i: N, f: N} → media
+          const avg = ((val.i||0) + (val.f||0)) / 2;
+          normalizedScores[topicId] = +avg.toFixed(2);
+        } else {
+          // Formato vecchio: numero diretto
+          normalizedScores[topicId] = val;
+        }
+      });
+    }
+    return {
+      name: s.name,
+      org: s.org,
+      cat: s.cat,
+      status: s.status,
+      scores: normalizedScores,
+    };
+  });
+
   appState.m3 = {
     sessionKey,
-    stakeholders: stakeholders.map(s=>({name:s.name,org:s.org,cat:s.cat,status:s.status,scores:s.scores})),
+    stakeholders: normalizedStakeholders,
   };
-  showToast('Consolidamento completato — apertura Modulo 4.');
-  setTimeout(()=>{ goToModule(4); initM4(); },900);
+
+  const done = stakeholders.filter(s=>s.status==='done').length;
+  showToast(`Consolidamento completato — ${done} stakeholder su ${stakeholders.length} hanno risposto.`);
+  setTimeout(()=>{ goToModule(4); initM4(); }, 900);
 }
 
 async function consolidateFromSupabase(){
