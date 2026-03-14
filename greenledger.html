@@ -1981,8 +1981,8 @@ const naceChipsEl  = document.getElementById('naceChips');
 
 function renderNaceDrop(q){
   const q2 = q.toLowerCase().trim();
-  const items = q2.length<1 ? NACE_DB.slice(0,14) :
-    NACE_DB.filter(n=>n.code.toLowerCase().includes(q2)||n.name.toLowerCase().includes(q2)||n.desc.toLowerCase().includes(q2)).slice(0,14);
+  const items = q2.length<1 ? NACE_DB.slice(0,20) :
+    NACE_DB.filter(n=>n.code.toLowerCase().includes(q2)||n.name.toLowerCase().includes(q2)||n.desc.toLowerCase().includes(q2)||n.sector.toLowerCase()===q2).slice(0,30);
   naceDropEl.innerHTML = items.map(n=>{
     const added = selNACE.some(s=>s.code===n.code);
     return `<div class="nit ${added?'added':''}" data-code="${n.code}" data-name="${n.name}" data-sector="${n.sector}">
