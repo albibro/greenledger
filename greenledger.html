@@ -169,6 +169,24 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:17px;heigh
 .awrap{position:relative}.adl{position:absolute;left:13px;top:50%;transform:translateY(-50%);font-size:.8rem;font-weight:600;color:var(--inkm);font-family:'DM Mono',monospace;pointer-events:none}
 .adr{left:auto;right:13px;font-size:.72rem}.awrap .inp{padding-left:34px}.inpr{padding-right:48px}
 
+/* ── IRO DIMENSIONI ESRS ── */
+.iro-dims{padding:6px 0 4px 0;display:flex;flex-direction:column;gap:7px}
+.iro-dim-row{display:flex;align-items:center;gap:8px}
+.iro-dim-label{font-size:.66rem;font-weight:600;color:var(--inks);min-width:115px;flex-shrink:0}
+.iro-dim-slider{flex:1;height:3px;-webkit-appearance:none;appearance:none;background:linear-gradient(to right,var(--g800) 0%,var(--g800) var(--p,0%),var(--cd) var(--p,0%),var(--cd) 100%);border-radius:2px;outline:none;cursor:pointer}
+.iro-dim-slider::-webkit-slider-thumb{-webkit-appearance:none;width:13px;height:13px;border-radius:50%;background:var(--g800);border:2px solid white;box-shadow:0 0 0 1px var(--g800)}
+.iro-dim-slider.neg{background:linear-gradient(to right,var(--rc) 0%,var(--rc) var(--p,0%),var(--cd) var(--p,0%),var(--cd) 100%)}
+.iro-dim-slider.neg::-webkit-slider-thumb{background:var(--rc)}
+.iro-dim-slider.rsk{background:linear-gradient(to right,var(--amber) 0%,var(--amber) var(--p,0%),var(--cd) var(--p,0%),var(--cd) 100%)}
+.iro-dim-slider.rsk::-webkit-slider-thumb{background:var(--amber)}
+.iro-dim-val{font-family:'DM Mono',monospace;font-size:.7rem;font-weight:700;min-width:14px;text-align:right;color:var(--g800)}
+.iro-dim-val.neg{color:var(--rc)}
+.iro-dim-val.rsk{color:var(--amber)}
+.iro-score-final{display:flex;align-items:center;gap:6px;margin-top:6px;padding-top:6px;border-top:1px dashed var(--cd)}
+.iro-score-final-label{font-size:.65rem;color:var(--inkm);flex:1}
+.iro-score-final-val{font-family:'DM Mono',monospace;font-size:.8rem;font-weight:700;padding:2px 7px;border-radius:4px;background:var(--g50);color:var(--g800);border:1px solid var(--g200)}
+.iro-score-final-val.neg{color:var(--rc);background:#FFF7ED;border-color:var(--rbd)}
+.iro-score-final-val.rsk{color:var(--amber);background:var(--ambg);border-color:var(--ambb)}
 /* ── FORM ACTIONS ── */
 .fact{display:flex;align-items:center;justify-content:space-between;padding:18px 28px 22px;border-top:1px solid var(--cd);background:var(--cream)}
 .fpwrap{display:flex;align-items:center;gap:9px}
@@ -2254,12 +2272,12 @@ function isSubDone(topicId, subId){
   if(!sub) return false;
   const lib = IRO_LIB[subId];
   if(!lib) return false;
-  // All included IROs must have a score or na=true
   return ['i','r','o'].every(dim=>{
     const items = lib[dim]||[];
     return items.every(iro=>{
       const st = getIROState(topicId, sub.id, dim, iro.id);
-      if(!st.incl) return true; // excluded: ok
+      if(!st.incl) return true;
+      // Con slider: score>0 significa che almeno una dimensione è stata impostata
       return st.score>0 || st.na;
     });
   });
@@ -2282,7 +2300,7 @@ function getTopicAvgScore(topicId, dim){
       if(st.incl&&!st.na&&st.score>0) scores.push(st.score);
     });
   });
-  return scores.length ? (scores.reduce((a,b)=>a+b,0)/scores.length) : null;
+  return scores.length ? +(scores.reduce((a,b)=>a+b,0)/scores.length).toFixed(2) : null;
 }
 
 function initM2(){
@@ -2448,34 +2466,122 @@ function renderIROSection(topicId, subId, dim, items, userSectors){
   <div class="iro-items" data-topicid="${topicId}" data-subid="${subId}" data-dim="${dim}">${itemsHtml}</div>`;
 }
 
+function calcIROScore(dim, dims, isPos){
+  if(!dims) return 0;
+  if(dim==='i'){
+    if(isPos){
+      const g=dims.gravita||0, p=dims.portata||0, pr=dims.probabilita||0;
+      if(!g&&!p&&!pr) return 0;
+      return +Math.sqrt(((g+p)/2)*pr).toFixed(2);
+    } else {
+      const g=dims.gravita||0, p=dims.portata||0, ir=dims.irrimediabilita||0, pr=dims.probabilita||0;
+      if(!g&&!p&&!ir&&!pr) return 0;
+      return +Math.sqrt(((g+p+ir)/3)*pr).toFixed(2);
+    }
+  } else {
+    const pr=dims.probabilita||0, mag=dims.magnitudo||0;
+    if(!pr&&!mag) return 0;
+    return +Math.sqrt(pr*mag).toFixed(2);
+  }
+}
+
+function renderDimSlider(topicId, subId, dim, iroId, dimKey, label, val, cls){
+  const v = val||0;
+  const pct = v ? ((v-1)/4*100).toFixed(0)+'%' : '0%';
+  return '<div class="iro-dim-row">' +
+    '<span class="iro-dim-label">'+label+'</span>' +
+    '<input type="range" class="iro-dim-slider '+cls+'" min="1" max="5" value="'+(v||1)+'" style="--p:'+pct+'"' +
+    ' data-topicid="'+topicId+'" data-subid="'+subId+'" data-dim="'+dim+'" data-iroid="'+iroId+'" data-dimkey="'+dimKey+'">' +
+    '<span class="iro-dim-val '+cls+'" id="dimval-'+iroId+'-'+dimKey+'">'+(v||'—')+'</span>' +
+    '</div>';
+}
+
 function renderIROItem(topicId, subId, dim, iro, incl, auto, st, dimCls, userSectors){
-  const scoreRow = [1,2,3,4,5].map(v=>`<button class="sbtn ${dimCls} ${(st.score===v&&incl)?'sel':''}" data-topicid="${topicId}" data-subid="${subId}" data-dim="${dim}" data-iroid="${iro.id}" data-val="${v}">${v}</button>`).join('');
-  return `<div class="iro-item ${incl?'incl':''} ${dimCls}" data-iroid="${iro.id}">
-    <div class="iro-item-top">
-      <div class="iro-auto ${incl?'on':'off'}" title="${auto?'Auto-selezionato per il tuo settore':'Non selezionato automaticamente'}">
-        ${incl?`<svg width="8" height="6" viewBox="0 0 8 6" fill="none"><path d="M1 3L3 5L7 1" stroke="white" stroke-width="1.3" stroke-linecap="round"/></svg>`:''}
-      </div>
-      <span class="iro-txt">${iro.txt}</span>
-      <button class="iro-toggle ${incl?'on':'off'}" data-topicid="${topicId}" data-subid="${subId}" data-dim="${dim}" data-iroid="${iro.id}">${incl?'Incluso':'+ Includi'}</button>
-    </div>
-    <div class="iro-score-row ${incl?'':'hidden'}">
-      ${scoreRow}
-      <button class="sna ${st.na&&incl?'on':''}" data-topicid="${topicId}" data-subid="${subId}" data-dim="${dim}" data-iroid="${iro.id}">N/A</button>
-    </div>
-    ${!auto&&!incl?`<div class="iro-note">Non selezionato automaticamente per i tuoi codici NACE — includilo se rilevante</div>`:''}
-  </div>`;
+  const isPos = iro.pos === true;
+  const dims = st.dims || {};
+  const score = incl ? calcIROScore(dim, dims, isPos) : 0;
+  const cls = (dim==='i'&&!isPos) ? 'neg' : (dim==='r' ? 'rsk' : '');
+
+  let dimSliders = '';
+  if(incl){
+    if(dim==='i'&&!isPos){
+      dimSliders =
+        '<div class="iro-dims">' +
+        renderDimSlider(topicId,subId,dim,iro.id,'gravita','Gravità (severity)',dims.gravita,'neg') +
+        renderDimSlider(topicId,subId,dim,iro.id,'portata','Portata (scale)',dims.portata,'neg') +
+        renderDimSlider(topicId,subId,dim,iro.id,'irrimediabilita','Irrimediabilità',dims.irrimediabilita,'neg') +
+        renderDimSlider(topicId,subId,dim,iro.id,'probabilita','Probabilità',dims.probabilita,'neg') +
+        '<div class="iro-score-final">' +
+          '<span class="iro-score-final-label">√(media grav.,portata,irrim. × prob.)</span>' +
+          '<span class="iro-score-final-val neg" id="score-'+iro.id+'">'+(score>0?score.toFixed(2):'—')+'</span>' +
+        '</div></div>';
+    } else if(dim==='i'&&isPos){
+      dimSliders =
+        '<div class="iro-dims">' +
+        renderDimSlider(topicId,subId,dim,iro.id,'gravita','Gravità (severity)',dims.gravita,'') +
+        renderDimSlider(topicId,subId,dim,iro.id,'portata','Portata (scale)',dims.portata,'') +
+        renderDimSlider(topicId,subId,dim,iro.id,'probabilita','Probabilità',dims.probabilita,'') +
+        '<div class="iro-score-final">' +
+          '<span class="iro-score-final-label">√(media gravità,portata × prob.)</span>' +
+          '<span class="iro-score-final-val" id="score-'+iro.id+'">'+(score>0?score.toFixed(2):'—')+'</span>' +
+        '</div></div>';
+    } else if(dim==='r'){
+      dimSliders =
+        '<div class="iro-dims">' +
+        renderDimSlider(topicId,subId,dim,iro.id,'probabilita','Probabilità',dims.probabilita,'rsk') +
+        renderDimSlider(topicId,subId,dim,iro.id,'magnitudo','Magnitudo finanziaria',dims.magnitudo,'rsk') +
+        '<div class="iro-score-final">' +
+          '<span class="iro-score-final-label">√(probabilità × magnitudo)</span>' +
+          '<span class="iro-score-final-val rsk" id="score-'+iro.id+'">'+(score>0?score.toFixed(2):'—')+'</span>' +
+        '</div></div>';
+    } else if(dim==='o'){
+      dimSliders =
+        '<div class="iro-dims">' +
+        renderDimSlider(topicId,subId,dim,iro.id,'probabilita','Probabilità',dims.probabilita,'') +
+        renderDimSlider(topicId,subId,dim,iro.id,'magnitudo','Magnitudo finanziaria',dims.magnitudo,'') +
+        '<div class="iro-score-final">' +
+          '<span class="iro-score-final-label">√(probabilità × magnitudo)</span>' +
+          '<span class="iro-score-final-val" id="score-'+iro.id+'">'+(score>0?score.toFixed(2):'—')+'</span>' +
+        '</div></div>';
+    }
+  }
+
+  return '<div class="iro-item '+(incl?'incl':'')+' '+dimCls+'" data-iroid="'+iro.id+'">' +
+    '<div class="iro-item-top">' +
+      '<div class="iro-auto '+(incl?'on':'off')+'">' +
+        (incl?'<svg width="8" height="6" viewBox="0 0 8 6" fill="none"><path d="M1 3L3 5L7 1" stroke="white" stroke-width="1.3" stroke-linecap="round"/></svg>':'') +
+      '</div>' +
+      '<span class="iro-txt">'+iro.txt+'</span>' +
+      '<button class="iro-toggle '+(incl?'on':'off')+'" data-topicid="'+topicId+'" data-subid="'+subId+'" data-dim="'+dim+'" data-iroid="'+iro.id+'">'+(incl?'Incluso':'+ Includi')+'</button>' +
+    '</div>' +
+    (incl ? dimSliders +
+      '<div style="margin-top:6px">' +
+        '<button class="sna '+(st.na&&incl?'on':'')+'" data-topicid="'+topicId+'" data-subid="'+subId+'" data-dim="'+dim+'" data-iroid="'+iro.id+'">N/A'+(st.na?' ✓':'')+'</button>' +
+      '</div>' : '') +
+    (!auto&&!incl?'<div class="iro-note">Non selezionato automaticamente per i tuoi codici NACE</div>':'') +
+  '</div>';
 }
 
 function attachScoreEvents(grid, userSectors){
-  // Score buttons
-  grid.querySelectorAll('.sbtn').forEach(btn=>{
-    btn.addEventListener('click',e=>{
+  // Slider dimensioni ESRS
+  grid.querySelectorAll('.iro-dim-slider').forEach(slider=>{
+    slider.addEventListener('input', e=>{
       e.stopPropagation();
-      const {topicid,subid,dim,iroid,val}=btn.dataset;
+      const {topicid,subid,dim,iroid,dimkey} = slider.dataset;
+      const val = parseInt(slider.value);
+      slider.style.setProperty('--p', ((val-1)/4*100).toFixed(0)+'%');
+      const label = document.getElementById('dimval-'+iroid+'-'+dimkey);
+      if(label) label.textContent = val;
       const st = getIROState(topicid,subid,dim,iroid);
-      const newScore = st.score===parseInt(val) ? 0 : parseInt(val);
-      setIROState(topicid,subid,dim,iroid,{score:newScore,na:false});
-      refreshCard(topicid, userSectors);
+      const dims = Object.assign({}, st.dims||{});
+      dims[dimkey] = val;
+      const lib = IRO_LIB[subid];
+      const iro = lib?.[dim]?.find(x=>x.id===iroid);
+      const isPos = iro?.pos === true;
+      const score = calcIROScore(dim, dims, isPos);
+      const scoreEl = document.getElementById('score-'+iroid);
+      if(scoreEl) scoreEl.textContent = score>0 ? score.toFixed(2) : '—';
+      setIROState(topicid,subid,dim,iroid,{dims, score, na:false});
       updateM2Stats();
     });
   });
@@ -2486,9 +2592,13 @@ function attachScoreEvents(grid, userSectors){
       e.stopPropagation();
       const {topicid,subid,dim,iroid}=btn.dataset;
       const st = getIROState(topicid,subid,dim,iroid);
-      setIROState(topicid,subid,dim,iroid,{na:!st.na,score:0});
-      refreshCard(topicid, userSectors);
-      updateM2Stats();
+      if(st.na){
+        setIROState(topicid,subid,dim,iroid,{na:false,score:0,naNote:'',dims:{}});
+        refreshCard(topicid, userSectors);
+        updateM2Stats();
+      } else {
+        openNA(topicid, subid, dim, iroid, st.naNote||'');
+      }
     });
   });
 
