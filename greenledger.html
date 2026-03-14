@@ -2400,23 +2400,23 @@ function renderIROSection(topicId, subId, dim, items, userSectors){
       const bg = isPos ? 'rgba(26,122,74,.10)' : 'rgba(194,65,12,.10)';
       const label = isPos ? 'Impatti positivi' : 'Impatti negativi';
       const desc = isPos ? 'Benefici su persone, ambiente e comunità' : 'Danni su persone, ambiente e comunità';
-      return \`<div style="margin-bottom:10px">
-        <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px;padding-bottom:5px;border-bottom:1.5px solid \${isPos?'var(--ibd)':'var(--rbd)'}">
-          <span style="font-size:.8rem;font-weight:800;padding:1px 6px;border-radius:3px;background:\${bg};color:\${color}">\${sign}</span>
-          <span style="font-size:.72rem;font-weight:700;color:\${color};text-transform:uppercase;letter-spacing:.06em">\${label}</span>
-          <span style="font-size:.68rem;color:var(--inkm);margin-left:4px">\${desc}</span>
-          <span style="margin-left:auto;font-size:.68rem;font-family:'DM Mono',monospace;color:var(--inkm)">\${cnt}/\${included.length}</span>
+      return `<div style="margin-bottom:10px">
+        <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px;padding-bottom:5px;border-bottom:1.5px solid ${isPos?'var(--ibd)':'var(--rbd)'}">
+          <span style="font-size:.8rem;font-weight:800;padding:1px 6px;border-radius:3px;background:${bg};color:${color}">${sign}</span>
+          <span style="font-size:.72rem;font-weight:700;color:${color};text-transform:uppercase;letter-spacing:.06em">${label}</span>
+          <span style="font-size:.68rem;color:var(--inkm);margin-left:4px">${desc}</span>
+          <span style="margin-left:auto;font-size:.68rem;font-family:'DM Mono',monospace;color:var(--inkm)">${cnt}/${included.length}</span>
         </div>
-        <div class="iro-items" data-topicid="\${topicId}" data-subid="\${subId}" data-dim="\${dim}">\${itemsHtml}</div>
-      </div>\`;
+        <div class="iro-items" data-topicid="${topicId}" data-subid="${subId}" data-dim="${dim}">${itemsHtml}</div>
+      </div>`;
     };
 
-    return \`<div class="iro-sec-hd ih">
+    return `<div class="iro-sec-hd ih">
       <div class="iro-sec-dot i"></div>
       <span class="iro-sec-name i">Impatti</span>
     </div>
-    \${renderSubSection(negItems, false)}
-    \${renderSubSection(posItems, true)}\`;
+    ${renderSubSection(negItems, false)}
+    ${renderSubSection(posItems, true)}`;
   }
 
   // Per rischi e opportunità — rendering standard
@@ -2433,16 +2433,16 @@ function renderIROSection(topicId, subId, dim, items, userSectors){
   const colorMap = {r:'var(--amber)', o:'var(--ic)'};
   const descMap = {r:'Rischi economici per il Gruppo', o:'Benefici economici e impatti positivi'};
 
-  return \`<div class="iro-sec-hd \${dc.cls}">
-    <div class="iro-sec-dot \${dc.dotcls}"></div>
-    <span class="iro-sec-name \${dc.dotcls}">
-      <span style="font-size:.72rem;font-weight:800;margin-right:4px;padding:1px 5px;border-radius:3px;background:\${dim==='r'?'rgba(217,119,6,.1)':'rgba(26,122,74,.1)'};color:\${colorMap[dim]}">\${signMap[dim]}</span>
-      \${dc.name}
+  return `<div class="iro-sec-hd ${dc.cls}">
+    <div class="iro-sec-dot ${dc.dotcls}"></div>
+    <span class="iro-sec-name ${dc.dotcls}">
+      <span style="font-size:.72rem;font-weight:800;margin-right:4px;padding:1px 5px;border-radius:3px;background:${dim==='r'?'rgba(217,119,6,.1)':'rgba(26,122,74,.1)'};color:${colorMap[dim]}">${signMap[dim]}</span>
+      ${dc.name}
     </span>
-    <span class="iro-sec-cnt">\${cnt}/\${included.length}</span>
+    <span class="iro-sec-cnt">${cnt}/${included.length}</span>
   </div>
-  <div style="font-size:.66rem;color:var(--inkm);padding:2px 0 8px 14px;font-style:italic">\${descMap[dim]}</div>
-  <div class="iro-items" data-topicid="\${topicId}" data-subid="\${subId}" data-dim="\${dim}">\${itemsHtml}</div>\`;
+  <div style="font-size:.66rem;color:var(--inkm);padding:2px 0 8px 14px;font-style:italic">${descMap[dim]}</div>
+  <div class="iro-items" data-topicid="${topicId}" data-subid="${subId}" data-dim="${dim}">${itemsHtml}</div>`;
 }
 
 function renderIROItem(topicId, subId, dim, iro, incl, auto, st, dimCls, userSectors){
