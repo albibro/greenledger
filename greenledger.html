@@ -752,16 +752,57 @@ input.wslider::-webkit-slider-thumb{-webkit-appearance:none;width:13px;height:13
 </div>
 
 <div class="scale-box">
-  <div class="scale-title">Scala di valutazione — uguale per tutte e tre le dimensioni</div>
+  <div class="scale-title">Scala di valutazione — 5 livelli (usata per tutte le dimensioni)</div>
   <div class="scale-items">
-    <div class="sci"><span class="sci-n">1</span><span class="sci-l">Trascurabile</span><span class="sci-d">Non rilevante per il gruppo</span></div>
-    <div class="sci"><span class="sci-n">2</span><span class="sci-l">Bassa</span><span class="sci-d">Presente ma limitata nell'entità</span></div>
-    <div class="sci"><span class="sci-n">3</span><span class="sci-l">Media</span><span class="sci-d">Moderata, merita disclosure</span></div>
-    <div class="sci"><span class="sci-n">4</span><span class="sci-l">Alta</span><span class="sci-d">Significativa, impatto concreto</span></div>
-    <div class="sci"><span class="sci-n">5</span><span class="sci-l">Critica</span><span class="sci-d">Determinante per la strategia</span></div>
+    <div class="sci"><span class="sci-n">1</span><span class="sci-l">Trascurabile</span><span class="sci-d">Quasi irrilevante</span></div>
+    <div class="sci"><span class="sci-n">2</span><span class="sci-l">Basso</span><span class="sci-d">Limitato</span></div>
+    <div class="sci"><span class="sci-n">3</span><span class="sci-l">Medio</span><span class="sci-d">Moderato</span></div>
+    <div class="sci"><span class="sci-n">4</span><span class="sci-l">Alto</span><span class="sci-d">Significativo</span></div>
+    <div class="sci"><span class="sci-n">5</span><span class="sci-l">Critico</span><span class="sci-d">Determinante</span></div>
+  </div>
+  <div style="margin-top:14px;border-top:1px solid var(--cd);padding-top:14px">
+    <div class="scale-title" style="margin-bottom:10px">Dimensioni di valutazione per tipo di IRO</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
+      <div style="background:var(--redbg);border:1px solid var(--rbd);border-radius:8px;padding:11px 13px">
+        <div style="font-size:.68rem;font-weight:700;color:var(--rc);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px">− Impatti negativi → Materialità d'impatto</div>
+        <div style="font-size:.72rem;color:var(--inks);line-height:1.7">
+          <strong>Gravità</strong> — Quanto è grave il danno su persone o ambiente<br>
+          <strong>Portata</strong> — Quante persone/aree geografiche sono colpite<br>
+          <strong>Irrimediabilità</strong> — Quanto è difficile rimediare al danno<br>
+          <strong>Probabilità</strong> — Quanto è probabile che l'impatto si verifichi
+        </div>
+        <div style="margin-top:7px;font-size:.68rem;font-family:'DM Mono',monospace;color:var(--rc);background:rgba(194,65,12,.06);padding:4px 8px;border-radius:4px">Score = √(media(grav., portata, irrim.) × prob.)</div>
+      </div>
+      <div style="background:var(--g50);border:1px solid var(--g200);border-radius:8px;padding:11px 13px">
+        <div style="font-size:.68rem;font-weight:700;color:var(--g700);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px">+ Impatti positivi → Materialità d'impatto</div>
+        <div style="font-size:.72rem;color:var(--inks);line-height:1.7">
+          <strong>Gravità</strong> — Quanto è significativo il beneficio generato<br>
+          <strong>Portata</strong> — Quante persone/aree beneficiano<br>
+          <strong>Probabilità</strong> — Quanto è probabile che il beneficio si realizzi
+        </div>
+        <div style="margin-top:7px;font-size:.68rem;font-family:'DM Mono',monospace;color:var(--g700);background:rgba(26,122,74,.06);padding:4px 8px;border-radius:4px">Score = √(media(gravità, portata) × probabilità)</div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <div style="background:var(--ambg);border:1px solid var(--ambb);border-radius:8px;padding:11px 13px">
+        <div style="font-size:.68rem;font-weight:700;color:var(--amber);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px">⚠ Rischi finanziari → Materialità finanziaria</div>
+        <div style="font-size:.72rem;color:var(--inks);line-height:1.7">
+          <strong>Probabilità</strong> — Quanto è probabile che il rischio si materializzi<br>
+          <strong>Magnitudo</strong> — Quale impatto economico avrebbe sul Gruppo
+        </div>
+        <div style="margin-top:7px;font-size:.68rem;font-family:'DM Mono',monospace;color:var(--amber);background:rgba(217,119,6,.06);padding:4px 8px;border-radius:4px">Score = √(probabilità × magnitudo finanziaria)</div>
+      </div>
+      <div style="background:var(--obg);border:1px solid var(--obd);border-radius:8px;padding:11px 13px">
+        <div style="font-size:.68rem;font-weight:700;color:var(--oc);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px">+ Opportunità → Materialità finanziaria</div>
+        <div style="font-size:.72rem;color:var(--inks);line-height:1.7">
+          <strong>Probabilità</strong> — Quanto è probabile che si concretizzi<br>
+          <strong>Magnitudo</strong> — Quale potenziale valore economico potrebbe generare
+        </div>
+        <div style="margin-top:7px;font-size:.68rem;font-family:'DM Mono',monospace;color:var(--oc);background:rgba(29,78,216,.06);padding:4px 8px;border-radius:4px">Score = √(probabilità × magnitudo finanziaria)</div>
+      </div>
+    </div>
   </div>
 </div>
-
 <div class="fbar">
   <span class="flbl">Filtra:</span>
   <button class="fbtn active" data-f="all">Tutti (10)</button>
@@ -2385,10 +2426,26 @@ function renderSubTopic(topicId, sub, userSectors){
       <div><div class="st-label">${sub.label}</div><div class="st-desc">${sub.desc}</div></div>
       ${done?`<span class="st-comp">✓ Completato</span>`:''}
     </div>
-    <div class="iro-sections">
-      <div class="iro-sec">${iHTML}</div>
-      <div class="iro-sec">${rHTML}</div>
-      <div class="iro-sec">${oHTML}</div>
+    <div style="display:flex;flex-direction:column;gap:16px">
+      <div>
+        <div style="font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--ic);margin-bottom:8px;display:flex;align-items:center;gap:6px">
+          <span style="width:18px;height:18px;background:var(--ic);border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:.7rem;color:white;font-weight:800">I</span>
+          Materialità d'impatto
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+          <div class="iro-sec">${iHTML}</div>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--amber);margin-bottom:8px;display:flex;align-items:center;gap:6px">
+          <span style="width:18px;height:18px;background:var(--amber);border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:.7rem;color:white;font-weight:800">F</span>
+          Materialità finanziaria
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+          <div class="iro-sec">${rHTML}</div>
+          <div class="iro-sec">${oHTML}</div>
+        </div>
+      </div>
     </div>
   </div>`;
 }
