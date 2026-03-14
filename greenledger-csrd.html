@@ -500,11 +500,13 @@ const DR_CATALOG = {
     hint:'Descrivere il processo di identificazione e coinvolgimento degli stakeholder, come le loro opinioni influenzano la strategia. Rimanda ai risultati del Modulo 3 — Stakeholder Engagement del DMA.',
     placeholder:'Il Gruppo ha identificato i seguenti gruppi di stakeholder rilevanti: [lista]. Il processo di engagement si è svolto mediante [modalità: survey, interviste, focus group...]. Le principali aspettative emerse riguardano...'},
   'SBM-3':{label:'IRO materiali e interazione con strategia e business model',mandatory:true,ref:'ESRS 2 SBM-3, §51-55',
-    hint:'Descrivere gli IRO materiali identificati nel DMA e come si relazionano alla strategia e al modello di business del Gruppo. Rimanda alla matrice di doppia materialità (Modulo 4).',
-    placeholder:'La Double Materiality Assessment ha identificato [N] topic materiali. Gli IRO più rilevanti per il Gruppo comprendono [impatti principali], [rischi principali], [opportunità principali]. Questi interagiscono con la strategia attraverso...'},
+    hint:'Descrivere gli IRO materiali identificati nel DMA e come si relazionano alla strategia e al modello di business del Gruppo. Il campo viene pre-popolato automaticamente con i risultati della DMA — integrare con dettagli strategici specifici.',
+    placeholder:'La Double Materiality Assessment ha identificato [N] topic materiali...',
+    autoPopulate:'sbm3'},
   'IRO-1':{label:'Descrizione dei processi per l\'identificazione e valutazione degli IRO materiali',mandatory:true,ref:'ESRS 2 IRO-1, §53',
-    hint:'Descrivere la metodologia del processo DMA: fonti informative, criteri di valutazione, coinvolgimento degli esperti interni, ruolo degli stakeholder, soglie di materialità utilizzate.',
-    placeholder:'Il Gruppo ha condotto la Double Materiality Assessment secondo la metodologia EFRAG. Il processo ha coinvolto [N] stakeholder chiave, valutato [N] IRO per ciascuno dei 10 topic ESRS, utilizzando una scala 1-5 per impatto e rischio/opportunità...'},
+    hint:'Descrivere la metodologia del processo DMA. Il campo viene pre-popolato automaticamente con i dati del processo condotto.',
+    placeholder:'Il Gruppo ha condotto la Double Materiality Assessment...',
+    autoPopulate:'iro1'},
   'IRO-2':{label:'Mappa delle disclosure ESRS coperte dal report',mandatory:true,ref:'ESRS 2 IRO-2, §56-58',
     hint:'Elencare tutte le disclosure requirements (DR) degli standard ESRS applicabili, indicando per ciascuna se è stata coperta nel report, omessa con giustificazione, o non applicabile.',
     placeholder:'La tabella seguente riporta tutte le DR degli standard ESRS applicati nel report di sostenibilità [anno]...'},
@@ -1863,9 +1865,12 @@ function toggleDR(drId){
   const card = document.querySelector(`.dr-card[data-drid="${drId}"]`);
   if(!card) return;
   const isOpen = card.classList.contains('open');
-  // Close all others
   document.querySelectorAll('.dr-card.open').forEach(c=>c.classList.remove('open'));
-  if(!isOpen) card.classList.add('open');
+  if(!isOpen){
+    card.classList.add('open');
+    // Auto-popola se previsto
+    if(currentTopicId) autoPopulateDR(currentTopicId, drId);
+  }
 }
 
 // ══ ACTION CRUD ══
@@ -2104,6 +2109,82 @@ function showToast(msg, dur=3200){
 // ══ UTILITY ══
 function escHtml(str){ 
   return String(str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ══ AUTO-POPULATE DR ══
+function generateSBM3Text(){
+  if(!dmaData) return '';
+  const m1 = dmaData.m1 || {};
+  const topics = dmaData.materialTopics || [];
+  const threshold = dmaData.m4?.threshold || 2.5;
+  const stkDone = (dmaData.m3?.stakeholders||[]).filter(s=>s.status==='done').length;
+  const year = m1.year || 2026;
+  const co = m1.ragione || 'il Gruppo';
+  const matTopics = topics.filter(t=>t.class!=='none');
+  const doubleTopics = topics.filter(t=>t.class==='double');
+  const impactOnly = topics.filter(t=>t.class==='impact');
+  const finOnly = topics.filter(t=>t.class==='financial');
+  const topicLines = matTopics.map(t=>{
+    const cls = {double:'doppiamente materiale',impact:'materiale per impatto',financial:'materiale per rischio finanziario'}[t.class];
+    const subs = t.subtopicScores ? Object.values(t.subtopicScores).filter(s=>s.material) : [];
+    const subLine = subs.length ? ' — subtopic materiali: ' + subs.map(s=>s.label).join(', ') : '';
+    return '\u2022 ' + t.emoji + ' ' + t.id + ' ' + t.name + ' (' + cls + ' | impatto: ' + t.impactScore.toFixed(1) + '/5, finanziario: ' + t.financialScore.toFixed(1) + '/5)' + subLine;
+  }).join('\n');
+  return co + ' ha condotto una Double Materiality Assessment (DMA) per l anno di rendicontazione ' + year +
+    ' secondo la metodologia EFRAG/ESRS, identificando i seguenti IRO materiali:\n\n' +
+    topicLines + '\n\n' +
+    'In totale sono stati identificati ' + matTopics.length + ' topic materiali su 10 valutati: ' +
+    doubleTopics.length + ' doppiamente materiali, ' +
+    impactOnly.length + ' materiali solo per impatto, ' +
+    finOnly.length + ' materiali solo per rischio finanziario.\n\n' +
+    'La soglia di materialita applicata e ' + threshold + '/5. ' +
+    (stkDone > 0 ? 'Il processo ha coinvolto ' + stkDone + ' stakeholder esterni con peso ' + Math.round((dmaData.m4?.stkWeight||0.3)*100) + '%.' : '') + '\n\n' +
+    'Gli IRO identificati interagiscono con la strategia del Gruppo attraverso: [descrivere come gli IRO materiali influenzano strategia, investimenti e modello operativo].';
+}
+
+function generateIRO1Text(){
+  if(!dmaData) return '';
+  const m1 = dmaData.m1 || {};
+  const year = m1.year || 2026;
+  const co = m1.ragione || 'il Gruppo';
+  const stkDone = (dmaData.m3?.stakeholders||[]).filter(s=>s.status==='done').length;
+  const threshold = dmaData.m4?.threshold || 2.5;
+  const stkWeight = Math.round((dmaData.m4?.stkWeight||0.3)*100);
+  const nace = (m1.nace||[]).map(n=>n.code+' '+n.name).join(', ');
+  return 'Il Gruppo ' + co + ' ha condotto la Double Materiality Assessment per l anno ' + year +
+    ' secondo la metodologia EFRAG e le linee guida ESRS 2 IRO-1.\n\n' +
+    'PERIMETRO: La valutazione copre le operazioni dirette e la catena del valore. Settori: ' + (nace||'—') + '.\n\n' +
+    'PROCESSO: Il referente di sostenibilita ha valutato gli IRO per tutti i 10 topic ESRS (E1-E5, S1-S4, G1). ' +
+    'Dimensioni valutate:\n' +
+    '- Impatti negativi: radice(media(Gravita, Portata, Irrimediabilita) x Probabilita)\n' +
+    '- Impatti positivi: radice(media(Gravita, Portata) x Probabilita)\n' +
+    '- Rischi e Opportunita: radice(Probabilita x Magnitudo finanziaria)\n\n' +
+    'STAKEHOLDER: ' +
+    (stkDone > 0
+      ? stkDone + ' stakeholder hanno completato la valutazione. Peso integrato: ' + stkWeight + '%.'
+      : 'Nessun engagement stakeholder formale in questo ciclo.') + '\n\n' +
+    'SOGLIA: Topic materiale se punteggio consolidato > ' + threshold + '/5. ' +
+    'Subtopic materiale se almeno un IRO supera la soglia.\n\n' +
+    'RISULTATI: Descritti in ESRS 2 SBM-3.';
+}
+
+function autoPopulateDR(topicId, drId){
+  const dr = DR_CATALOG[drId];
+  if(!dr || !dr.autoPopulate) return;
+  const st = getDRState(topicId, drId);
+  if(st.narrative && st.narrative.trim().length > 50) return;
+  let text = '';
+  if(dr.autoPopulate === 'sbm3') text = generateSBM3Text();
+  if(dr.autoPopulate === 'iro1') text = generateIRO1Text();
+  if(!text) return;
+  setDRValue(topicId, drId, 'narrative', text);
+  const ta = document.querySelector('.narr-ta[data-drid="'+drId+'"]');
+  if(ta){
+    ta.value = text;
+    const wcEl = document.getElementById('wc-'+drId);
+    if(wcEl) wcEl.textContent = ta.value.trim().split(/\s+/).length + ' parole';
+  }
+  refreshDRStatus(topicId, drId);
 }
 
 // ══════════════════════════════════════════════
