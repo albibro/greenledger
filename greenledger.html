@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>GreenLedger — Double Materiality Assessment</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
@@ -618,7 +619,7 @@ input.wslider::-webkit-slider-thumb{-webkit-appearance:none;width:13px;height:13
           </div>
         </div>
         <div class="f">
-          <label for="revenue">Fatturato annuo <span class="hint">(euro milioni)</span></label>
+          <label for="revenue">Fatturato annuo <span class="req">★</span> <span class="hint">(€ milioni)</span></label>
           <div class="awrap"><span class="adl">E</span><span class="adl adr">M</span><input type="number" id="revenue" class="inp inpr" placeholder="28.5" min="0" step="0.1" oninput="autoDetectCsrd()"></div>
         </div>
       </div>
@@ -2144,7 +2145,7 @@ document.getElementById('bizDesc').addEventListener('input',()=>{
 const M1_REQ=[
   ()=>document.getElementById('ragione').value.trim()!=='',
   ()=>selNACE.length>0,
-  ()=>['voluntary','csrd'].includes(document.getElementById('sizeVal').value),
+  ()=>(parseFloat(document.getElementById('revenue').value)||0)>0,
   ()=>selGeo.size>0,
 ];
 function updateM1Progress(){
@@ -2153,6 +2154,7 @@ function updateM1Progress(){
   document.getElementById('m1Fill').style.width=pct+'%';
   document.getElementById('m1Txt').textContent=`${filled} / ${M1_REQ.length} campi`;
 }
+document.getElementById('revenue').addEventListener('input',()=>{ updateM1Progress(); autoDetectCsrd(); });
 document.getElementById('ragione').addEventListener('input',()=>{
   updateM1Progress();
   document.getElementById('f-ragione')?.classList.remove('err');
