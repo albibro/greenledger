@@ -1407,10 +1407,12 @@ const NACE_DB=[
 const IRO_LIB = {
 'E1.a':{
   i:[
-    {id:'E1aI1',txt:'Emissioni dirette di CO₂ e altri GHG da combustione fossile e processi industriali (Scope 1)',s:['B','C','D','H','F']},
-    {id:'E1aI2',txt:'Emissioni indirette da acquisto di energia elettrica e termica (Scope 2)',s:['ALL']},
-    {id:'E1aI3',txt:'Emissioni lungo la catena del valore: approvvigionamento, trasporto, uso e fine vita dei prodotti (Scope 3)',s:['C','G','A']},
-    {id:'E1aI4',txt:'Emissioni di F-gas e refrigeranti con elevato potenziale di riscaldamento globale (GWP)',s:['C','I','G']},
+    {id:'E1aI1',txt:'Emissioni dirette di CO₂ e altri GHG da combustione fossile e processi industriali (Scope 1)',s:['B','C','D','H','F'],pos:false},
+    {id:'E1aI2',txt:'Emissioni indirette da acquisto di energia elettrica e termica (Scope 2)',s:['ALL'],pos:false},
+    {id:'E1aI3',txt:'Emissioni lungo la catena del valore: approvvigionamento, trasporto, uso e fine vita dei prodotti (Scope 3)',s:['C','G','A'],pos:false},
+    {id:'E1aI4',txt:'Emissioni di F-gas e refrigeranti con elevato potenziale di riscaldamento globale (GWP)',s:['C','I','G'],pos:false},
+    {id:'E1aIP1',txt:'La transizione verso fonti rinnovabili riduce le emissioni climalteranti e migliora la qualita dell aria locale per le comunita vicine agli impianti',s:['ALL'],pos:true},
+    {id:'E1aIP2',txt:'I piani di decarbonizzazione creano nuovi posti di lavoro nella green economy e accelerano lo sviluppo di competenze sostenibili nella forza lavoro',s:['C','D','B'],pos:true},
   ],
   r:[
     {id:'E1aR1',txt:'Incremento strutturale dei costi operativi per espansione del sistema ETS e introduzione di carbon tax',s:['B','C','D']},
@@ -1426,9 +1428,11 @@ const IRO_LIB = {
 },
 'E1.b':{
   i:[
-    {id:'E1bI1',txt:'Impatti fisici acuti su impianti e magazzini: alluvioni, ondate di calore, eventi meteorologici estremi',s:['B','C','D','F','A']},
-    {id:'E1bI2',txt:'Impatti fisici cronici: stress idrico, innalzamento temperature medie, variazioni precipitazioni',s:['A','C','D']},
-    {id:'E1bI3',txt:'Vulnerabilità della catena di fornitura a rischi fisici climatici in geografie esposte',s:['C','G','H']},
+    {id:'E1bI1',txt:'Impatti fisici acuti su impianti e magazzini: alluvioni, ondate di calore, eventi meteorologici estremi',s:['B','C','D','F','A'],pos:false},
+    {id:'E1bI2',txt:'Impatti fisici cronici: stress idrico, innalzamento temperature medie, variazioni precipitazioni',s:['A','C','D'],pos:false},
+    {id:'E1bI3',txt:'Vulnerabilità della catena di fornitura a rischi fisici climatici in geografie esposte',s:['C','G','H'],pos:false},
+    {id:'E1bIP1',txt:'Gli investimenti in resilienza climatica proteggono le comunita locali dai rischi fisici acuti e migliorano la sicurezza del territorio',s:['ALL'],pos:true},
+    {id:'E1bIP2',txt:'I sistemi di early warning e la pianificazione della business continuity aumentano la sicurezza operativa e riducono i rischi per i lavoratori',s:['ALL'],pos:true},
   ],
   r:[
     {id:'E1bR1',txt:'Danni materiali ad asset fisici per eventi climatici estremi (rischio fisico acuto TCFD)',s:['B','C','D','F']},
@@ -1442,9 +1446,11 @@ const IRO_LIB = {
 },
 'E1.c':{
   i:[
-    {id:'E1cI1',txt:'Consumo di fonti energetiche non rinnovabili e contributo all\’esaurimento delle riserve fossili',s:['B','C','D','H']},
-    {id:'E1cI2',txt:'Dipendenza da reti elettriche ad alta intensità carbonifera in geografie con mix energetico sfavorevole',s:['ALL']},
-    {id:'E1cI3',txt:'Effetti locali di grandi impianti energetici: rumore, impatto visivo, alterazione del territorio',s:['D','B']},
+    {id:'E1cI1',txt:'Consumo di fonti energetiche non rinnovabili e contributo all\’esaurimento delle riserve fossili',s:['B','C','D','H'],pos:false},
+    {id:'E1cI2',txt:'Dipendenza da reti elettriche ad alta intensità carbonifera in geografie con mix energetico sfavorevole',s:['ALL'],pos:false},
+    {id:'E1cI3',txt:'Effetti locali di grandi impianti energetici: rumore, impatto visivo, alterazione del territorio',s:['D','B'],pos:false},
+    {id:'E1cIP1',txt:'Il miglioramento dell efficienza energetica riduce i costi operativi e libera risorse per investimenti in innovazione e benessere dei lavoratori',s:['ALL'],pos:true},
+    {id:'E1cIP2',txt:'La generazione di energia da fonti rinnovabili proprie riduce la dipendenza da combustibili fossili e migliora la resilienza energetica locale',s:['ALL'],pos:true},
   ],
   r:[
     {id:'E1cR1',txt:'Volatilità e aumento strutturale dei prezzi dell\’energia fossile con impatto su marginalità',s:['C','H','F']},
@@ -1458,9 +1464,11 @@ const IRO_LIB = {
 },
 'E2.a':{
   i:[
-    {id:'E2aI1',txt:'Emissioni di inquinanti atmosferici (NOx, SOx, PM10, PM2.5, COV) da impianti produttivi',s:['B','C','D']},
-    {id:'E2aI2',txt:'Effetti sulla salute delle comunità locali in prossimità degli stabilimenti',s:['B','C','D','F']},
-    {id:'E2aI3',txt:'Contributo all\’ozono troposferico e alle piogge acide attraverso emissioni industriali',s:['B','C']},
+    {id:'E2aI1',txt:'Emissioni di inquinanti atmosferici (NOx, SOx, PM10, PM2.5, COV) da impianti produttivi',s:['B','C','D'],pos:false},
+    {id:'E2aI2',txt:'Effetti sulla salute delle comunità locali in prossimità degli stabilimenti',s:['B','C','D','F'],pos:false},
+    {id:'E2aI3',txt:'Contributo all\’ozono troposferico e alle piogge acide attraverso emissioni industriali',s:['B','C'],pos:false},
+    {id:'E2aIP1',txt:'La riduzione delle emissioni inquinanti migliora la qualita dell aria e la salute delle comunita vicine agli impianti produttivi',s:['B','C','D'],pos:true},
+    {id:'E2aIP2',txt:'L adozione di tecnologie pulite riduce l esposizione dei lavoratori a sostanze nocive e migliora le condizioni di salute e sicurezza',s:['C','D'],pos:true},
   ],
   r:[
     {id:'E2aR1',txt:'Sanzioni e contenziosi per superamento soglie emissive delle autorizzazioni AIA',s:['B','C','D']},
@@ -1474,9 +1482,11 @@ const IRO_LIB = {
 },
 'E2.b':{
   i:[
-    {id:'E2bI1',txt:'Scarichi di reflui industriali con sostanze organiche, metalli pesanti o nutrienti in corpi idrici',s:['C','A','E']},
-    {id:'E2bI2',txt:'Alterazione della qualità delle acque superficiali e sotterranee nelle aree di operatività',s:['B','C','A','F']},
-    {id:'E2bI3',txt:'Impatti su ecosistemi acquatici per thermal pollution o alterazione del pH',s:['D','C']},
+    {id:'E2bI1',txt:'Scarichi di reflui industriali con sostanze organiche, metalli pesanti o nutrienti in corpi idrici',s:['C','A','E'],pos:false},
+    {id:'E2bI2',txt:'Alterazione della qualità delle acque superficiali e sotterranee nelle aree di operatività',s:['B','C','A','F'],pos:false},
+    {id:'E2bI3',txt:'Impatti su ecosistemi acquatici per thermal pollution o alterazione del pH',s:['D','C'],pos:false},
+    {id:'E2bIP1',txt:'Il trattamento avanzato dei reflui migliora la qualita dei corpi idrici riceventi e preserva gli ecosistemi acquatici per le comunita dipendenti',s:['C','E'],pos:true},
+    {id:'E2bIP2',txt:'Il riuso dell acqua di processo riduce il prelievo idrico e preserva la disponibilita per altri utenti e per gli ecosistemi',s:['C','A'],pos:true},
   ],
   r:[
     {id:'E2bR1',txt:'Sanzioni AIA e procedimenti penali per superamento dei limiti allo scarico idrico',s:['C','A','E']},
@@ -1490,9 +1500,10 @@ const IRO_LIB = {
 },
 'E2.c':{
   i:[
-    {id:'E2cI1',txt:'Contaminazione del suolo per sversamenti accidentali di idrocarburi, solventi o chemicals',s:['B','C','D']},
-    {id:'E2cI2',txt:'Inquinamento da depositi e siti dismessi con passività ambientali pregresse',s:['B','C','F']},
-    {id:'E2cI3',txt:'Perdita di fertilità e biodiversità del suolo per uso intensivo di prodotti fitosanitari',s:['A']},
+    {id:'E2cI1',txt:'Contaminazione del suolo per sversamenti accidentali di idrocarburi, solventi o chemicals',s:['B','C','D'],pos:false},
+    {id:'E2cI2',txt:'Inquinamento da depositi e siti dismessi con passività ambientali pregresse',s:['B','C','F'],pos:false},
+    {id:'E2cI3',txt:'Perdita di fertilità e biodiversità del suolo per uso intensivo di prodotti fitosanitari',s:['A'],pos:false},
+    {id:'E2cIP1',txt:'Le bonifiche ambientali ripristinano la funzionalita ecologica dei suoli e restituiscono aree utilizzabili alle comunita locali',s:['F','L'],pos:true},
   ],
   r:[
     {id:'E2cR1',txt:'Passività ambientali per bonifica di siti contaminati (D.Lgs 152/2006)',s:['B','C','F']},
@@ -1506,9 +1517,10 @@ const IRO_LIB = {
 },
 'E2.d':{
   i:[
-    {id:'E2dI1',txt:'Produzione, uso o smaltimento di sostanze chimiche pericolose (SVHC, PFAS, IPA) con effetti su salute e ambiente',s:['C','B']},
-    {id:'E2dI2',txt:'Esposizione dei lavoratori a chemicals cancerogeni, mutageni o reprotossici nei processi produttivi',s:['C','B','D']},
-    {id:'E2dI3',txt:'Persistenza di inquinanti organici persistenti (POP) nell\’ambiente con effetti a lungo termine sugli ecosistemi',s:['C','B','A']},
+    {id:'E2dI1',txt:'Produzione, uso o smaltimento di sostanze chimiche pericolose (SVHC, PFAS, IPA) con effetti su salute e ambiente',s:['C','B'],pos:false},
+    {id:'E2dI2',txt:'Esposizione dei lavoratori a chemicals cancerogeni, mutageni o reprotossici nei processi produttivi',s:['C','B','D'],pos:false},
+    {id:'E2dI3',txt:'Persistenza di inquinanti organici persistenti (POP) nell\’ambiente con effetti a lungo termine sugli ecosistemi',s:['C','B','A'],pos:false},
+    {id:'E2dIP1',txt:'La sostituzione di sostanze pericolose con alternative sicure riduce l esposizione dei lavoratori e delle comunita a rischi chimici cronici',s:['C'],pos:true},
   ],
   r:[
     {id:'E2dR1',txt:'Restrizioni REACH e aggiornamento elenchi SVHC: impatto su processi produttivi e formulazioni di prodotto',s:['C']},
@@ -1522,10 +1534,12 @@ const IRO_LIB = {
 },
 'E3.a':{
   i:[
-    {id:'E3aI1',txt:'Prelievo significativo di acqua da fonti superficiali o sotterranee in aree water-stressed',s:['A','C','D']},
-    {id:'E3aI2',txt:'Riduzione della disponibilità idrica locale per altri utenti (comunità, agricoltura) a causa dei prelievi',s:['A','C']},
-    {id:'E3aI3',txt:'Riduzione della qualità dell\’acqua reimmessa rispetto all\’acqua prelevata',s:['C','A','E']},
-    {id:'E3aI4',txt:'Alterazione del regime idrologico di corsi d\’acqua per derivazioni industriali rilevanti',s:['D','A']},
+    {id:'E3aI1',txt:'Prelievo significativo di acqua da fonti superficiali o sotterranee in aree water-stressed',s:['A','C','D'],pos:false},
+    {id:'E3aI2',txt:'Riduzione della disponibilità idrica locale per altri utenti (comunità, agricoltura) a causa dei prelievi',s:['A','C'],pos:false},
+    {id:'E3aI3',txt:'Riduzione della qualità dell\’acqua reimmessa rispetto all\’acqua prelevata',s:['C','A','E'],pos:false},
+    {id:'E3aI4',txt:'Alterazione del regime idrologico di corsi d\’acqua per derivazioni industriali rilevanti',s:['D','A'],pos:false},
+    {id:'E3aIP1',txt:'L efficienza idrica e il riuso dell acqua preservano le risorse idriche locali per le comunita e gli ecosistemi dipendenti',s:['A','C','D'],pos:true},
+    {id:'E3aIP2',txt:'La water stewardship certificata contribuisce alla sicurezza idrica del territorio e al benessere delle popolazioni nelle aree operative',s:['ALL'],pos:true},
   ],
   r:[
     {id:'E3aR1',txt:'Scarsità idrica in aree operative: interruzioni produttive per indisponibilità di acqua di processo',s:['A','C','D']},
@@ -1539,8 +1553,9 @@ const IRO_LIB = {
 },
 'E3.b':{
   i:[
-    {id:'E3bI1',txt:'Scarichi in mare di reflui industriali o portatori di microplastiche con impatti su ecosistemi costieri',s:['C','H','A']},
-    {id:'E3bI2',txt:'Disturbo di habitat marini per attività di costruzione, dragaggio o pesca intensiva',s:['A','F','H']},
+    {id:'E3bI1',txt:'Scarichi in mare di reflui industriali o portatori di microplastiche con impatti su ecosistemi costieri',s:['C','H','A'],pos:false},
+    {id:'E3bI2',txt:'Disturbo di habitat marini per attività di costruzione, dragaggio o pesca intensiva',s:['A','F','H'],pos:false},
+    {id:'E3bIP1',txt:'La protezione degli ecosistemi marini e costieri preserva la biodiversita marina e i mezzi di sussistenza delle comunita costiere',s:['A','H'],pos:true},
   ],
   r:[
     {id:'E3bR1',txt:'Restrizioni normative crescenti sull\’uso di aree marine per attività produttive',s:['A','D']},
@@ -1553,10 +1568,12 @@ const IRO_LIB = {
 },
 'E4.a':{
   i:[
-    {id:'E4aI1',txt:'Frammentazione e distruzione di habitat naturali per espansione di siti produttivi o infrastrutture',s:['B','F','C']},
-    {id:'E4aI2',txt:'Impatto diretto su specie protette nelle aree di operatività del gruppo',s:['B','A','F']},
-    {id:'E4aI3',txt:'Diffusione di specie aliene invasive attraverso movimentazione di merci, veicoli o imballaggi',s:['H','G','A']},
-    {id:'E4aI4',txt:'Riduzione della connettività ecologica per infrastrutture lineari (strade, pipeline, elettrodotti)',s:['H','B','F','D']},
+    {id:'E4aI1',txt:'Frammentazione e distruzione di habitat naturali per espansione di siti produttivi o infrastrutture',s:['B','F','C'],pos:false},
+    {id:'E4aI2',txt:'Impatto diretto su specie protette nelle aree di operatività del gruppo',s:['B','A','F'],pos:false},
+    {id:'E4aI3',txt:'Diffusione di specie aliene invasive attraverso movimentazione di merci, veicoli o imballaggi',s:['H','G','A'],pos:false},
+    {id:'E4aI4',txt:'Riduzione della connettività ecologica per infrastrutture lineari (strade, pipeline, elettrodotti)',s:['H','B','F','D'],pos:false},
+    {id:'E4aIP1',txt:'I programmi di ripristino ecologico aumentano la biodiversita locale e migliorano i servizi ecosistemici per le comunita dipendenti',s:['ALL'],pos:true},
+    {id:'E4aIP2',txt:'La creazione di corridoi ecologici e aree buffer intorno agli impianti aumenta la connettivita ecologica e preserva le specie locali',s:['F','B'],pos:true},
   ],
   r:[
     {id:'E4aR1',txt:'Blocco VIA e autorizzazioni ambientali per impatti su habitat e specie protette (Direttiva Habitat)',s:['F','B','D']},
@@ -1570,9 +1587,11 @@ const IRO_LIB = {
 },
 'E4.b':{
   i:[
-    {id:'E4bI1',txt:'Impermeabilizzazione del suolo e consumo di suolo agricolo per espansione industriale o insediativa',s:['F','C','L']},
-    {id:'E4bI2',txt:'Deforestazione diretta o indiretta nella catena di fornitura per approvvigionamento di commodity',s:['A','C','G']},
-    {id:'E4bI3',txt:'Degrado dei servizi ecosistemici (impollinazione, regolazione idrica, sequestro carbonio) per land use change',s:['A','F']},
+    {id:'E4bI1',txt:'Impermeabilizzazione del suolo e consumo di suolo agricolo per espansione industriale o insediativa',s:['F','C','L'],pos:false},
+    {id:'E4bI2',txt:'Deforestazione diretta o indiretta nella catena di fornitura per approvvigionamento di commodity',s:['A','C','G'],pos:false},
+    {id:'E4bI3',txt:'Degrado dei servizi ecosistemici (impollinazione, regolazione idrica, sequestro carbonio) per land use change',s:['A','F'],pos:false},
+    {id:'E4bIP1',txt:'Le pratiche di land restoration ripristinano la fertilita del suolo e la produttivita agricola per le comunita rurali dipendenti',s:['A','F'],pos:true},
+    {id:'E4bIP2',txt:'L agroforestry e le colture miste aumentano la biodiversita agricola e migliorano la resilienza dei sistemi alimentari locali',s:['A'],pos:true},
   ],
   r:[
     {id:'E4bR1',txt:'Rischio reputazionale e commerciale per associazione a deforestazione nella supply chain',s:['G','C','A']},
@@ -1586,10 +1605,12 @@ const IRO_LIB = {
 },
 'E5.a':{
   i:[
-    {id:'E5aI1',txt:'Utilizzo intensivo di materie prime vergini non rinnovabili (metalli, minerali, combustibili fossili)',s:['B','C','D']},
-    {id:'E5aI2',txt:'Dipendenza da materiali critici ad alto rischio di fornitura (terre rare, cobalto, litio)',s:['C']},
-    {id:'E5aI3',txt:'Impatti upstream di estrazione: danni ambientali e sociali nelle aree minerarie della supply chain',s:['C','G']},
-    {id:'E5aI4',txt:'Generazione di scarti e sfridi produttivi per efficienza sub-ottimale dei processi',s:['C','F']},
+    {id:'E5aI1',txt:'Utilizzo intensivo di materie prime vergini non rinnovabili (metalli, minerali, combustibili fossili)',s:['B','C','D'],pos:false},
+    {id:'E5aI2',txt:'Dipendenza da materiali critici ad alto rischio di fornitura (terre rare, cobalto, litio)',s:['C'],pos:false},
+    {id:'E5aI3',txt:'Impatti upstream di estrazione: danni ambientali e sociali nelle aree minerarie della supply chain',s:['C','G'],pos:false},
+    {id:'E5aI4',txt:'Generazione di scarti e sfridi produttivi per efficienza sub-ottimale dei processi',s:['C','F'],pos:false},
+    {id:'E5aIP1',txt:'L uso di materiali riciclati riduce l estrazione di risorse naturali e limita i danni ambientali nelle aree minerarie della supply chain',s:['C'],pos:true},
+    {id:'E5aIP2',txt:'Il design for circularity prolunga la vita dei prodotti riducendo i rifiuti e creando valore economico per i consumatori',s:['C'],pos:true},
   ],
   r:[
     {id:'E5aR1',txt:'Volatilità dei prezzi e supply disruption per materiali critici e commodity industriali',s:['C','D']},
@@ -1604,10 +1625,12 @@ const IRO_LIB = {
 },
 'E5.b':{
   i:[
-    {id:'E5bI1',txt:'Produzione di rifiuti pericolosi da processi industriali con rischio di contaminazione ambientale',s:['B','C','D']},
-    {id:'E5bI2',txt:'Smaltimento in discarica di rifiuti valorizzabili con perdita di risorse e impatti locali',s:['C','G','H']},
-    {id:'E5bI3',txt:'Dispersione di plastica e microplastiche nell\’ambiente attraverso imballaggi e prodotti',s:['C','G']},
-    {id:'E5bI4',txt:'Impatti su comunità locali per traffico, odori e presenza di impianti di trattamento rifiuti',s:['E','F']},
+    {id:'E5bI1',txt:'Produzione di rifiuti pericolosi da processi industriali con rischio di contaminazione ambientale',s:['B','C','D'],pos:false},
+    {id:'E5bI2',txt:'Smaltimento in discarica di rifiuti valorizzabili con perdita di risorse e impatti locali',s:['C','G','H'],pos:false},
+    {id:'E5bI3',txt:'Dispersione di plastica e microplastiche nell\’ambiente attraverso imballaggi e prodotti',s:['C','G'],pos:false},
+    {id:'E5bI4',txt:'Impatti su comunità locali per traffico, odori e presenza di impianti di trattamento rifiuti',s:['E','F'],pos:false},
+    {id:'E5bIP1',txt:'La valorizzazione dei rifiuti come materie prime seconde riduce il volume in discarica e crea benefici economici per le comunita locali',s:['C','E'],pos:true},
+    {id:'E5bIP2',txt:'Il packaging sostenibile riduce l impatto ambientale dei prodotti e migliora la qualita dell ambiente per le comunita lungo la supply chain',s:['C','G'],pos:true},
   ],
   r:[
     {id:'E5bR1',txt:'Costi crescenti di smaltimento rifiuti pericolosi e aumento della tassazione sulle discariche',s:['C','B','D']},
@@ -1622,10 +1645,12 @@ const IRO_LIB = {
 },
 'S1.a':{
   i:[
-    {id:'S1aI1',txt:'Retribuzione al di sotto del living wage per categorie di lavoratori con basso potere contrattuale',s:['ALL']},
-    {id:'S1aI2',txt:'Uso elevato di contratti atipici, precari o a tempo determinato senza prospettive di stabilizzazione',s:['G','I','H']},
-    {id:'S1aI3',txt:'Orari di lavoro eccessivi, turni sfavorevoli o lavoro notturno con impatti su salute e vita privata',s:['H','I','C']},
-    {id:'S1aI4',txt:'Mancanza di benefit adeguati e welfare aziendale per lavoratori a basso reddito',s:['G','H','I']},
+    {id:'S1aI1',txt:'Retribuzione al di sotto del living wage per categorie di lavoratori con basso potere contrattuale',s:['ALL'],pos:false},
+    {id:'S1aI2',txt:'Uso elevato di contratti atipici, precari o a tempo determinato senza prospettive di stabilizzazione',s:['G','I','H'],pos:false},
+    {id:'S1aI3',txt:'Orari di lavoro eccessivi, turni sfavorevoli o lavoro notturno con impatti su salute e vita privata',s:['H','I','C'],pos:false},
+    {id:'S1aI4',txt:'Mancanza di benefit adeguati e welfare aziendale per lavoratori a basso reddito',s:['G','H','I'],pos:false},
+    {id:'S1aIP1',txt:'La retribuzione equa e il welfare aziendale migliorano il benessere economico e la qualita della vita dei lavoratori e delle loro famiglie',s:['ALL'],pos:true},
+    {id:'S1aIP2',txt:'I contratti stabili e le prospettive di carriera creano sicurezza economica e consentono ai lavoratori di pianificare il proprio futuro',s:['ALL'],pos:true},
   ],
   r:[
     {id:'S1aR1',txt:'Alto turnover e difficoltà di attrattività come employer: costi elevati di recruiting e onboarding',s:['ALL']},
@@ -1639,10 +1664,12 @@ const IRO_LIB = {
 },
 'S1.b':{
   i:[
-    {id:'S1bI1',txt:'Infortuni sul lavoro, anche mortali, per carenze nei sistemi di prevenzione e protezione collettiva',s:['C','B','F','H']},
-    {id:'S1bI2',txt:'Malattie professionali da esposizione cronica ad agenti chimici, fisici o biologici',s:['B','C','D']},
-    {id:'S1bI3',txt:'Stress lavoro-correlato e burnout in ambienti ad alta pressione operativa',s:['K','M','J']},
-    {id:'S1bI4',txt:'Impatti sulla salute mentale dei lavoratori per condizioni di lavoro inadeguate o contesti di ristrutturazione',s:['ALL']},
+    {id:'S1bI1',txt:'Infortuni sul lavoro, anche mortali, per carenze nei sistemi di prevenzione e protezione collettiva',s:['C','B','F','H'],pos:false},
+    {id:'S1bI2',txt:'Malattie professionali da esposizione cronica ad agenti chimici, fisici o biologici',s:['B','C','D'],pos:false},
+    {id:'S1bI3',txt:'Stress lavoro-correlato e burnout in ambienti ad alta pressione operativa',s:['K','M','J'],pos:false},
+    {id:'S1bI4',txt:'Impatti sulla salute mentale dei lavoratori per condizioni di lavoro inadeguate o contesti di ristrutturazione',s:['ALL'],pos:false},
+    {id:'S1bIP1',txt:'I programmi di salute e sicurezza riducono gli infortuni e migliorano il benessere fisico e mentale di tutti i lavoratori',s:['ALL'],pos:true},
+    {id:'S1bIP2',txt:'Gli ambienti di lavoro sicuri e salubri aumentano la produttivita e il senso di appartenenza dei lavoratori',s:['ALL'],pos:true},
   ],
   r:[
     {id:'S1bR1',txt:'Responsabilità penale e civile per infortuni e malattie professionali (D.Lgs 81/2008, Testo Unico Sicurezza)',s:['ALL']},
@@ -1656,10 +1683,12 @@ const IRO_LIB = {
 },
 'S1.c':{
   i:[
-    {id:'S1cI1',txt:'Gender pay gap strutturale tra uomini e donne in ruoli equivalenti',s:['ALL']},
-    {id:'S1cI2',txt:'Sottorappresentazione di donne, disabili e minoranze in ruoli dirigenziali e di leadership',s:['ALL']},
-    {id:'S1cI3',txt:'Pratiche discriminatorie nei processi di selezione, promozione o accesso alla formazione',s:['ALL']},
-    {id:'S1cI4',txt:'Clima aziendale non inclusivo con episodi di molestie, microaggressioni o discriminazioni',s:['ALL']},
+    {id:'S1cI1',txt:'Gender pay gap strutturale tra uomini e donne in ruoli equivalenti',s:['ALL'],pos:false},
+    {id:'S1cI2',txt:'Sottorappresentazione di donne, disabili e minoranze in ruoli dirigenziali e di leadership',s:['ALL'],pos:false},
+    {id:'S1cI3',txt:'Pratiche discriminatorie nei processi di selezione, promozione o accesso alla formazione',s:['ALL'],pos:false},
+    {id:'S1cI4',txt:'Clima aziendale non inclusivo con episodi di molestie, microaggressioni o discriminazioni',s:['ALL'],pos:false},
+    {id:'S1cIP1',txt:'Le politiche di parita di genere e inclusione creano opportunita uguali per tutti i lavoratori e riducono le disuguaglianze sistemiche',s:['ALL'],pos:true},
+    {id:'S1cIP2',txt:'Gli ambienti di lavoro inclusivi e rispettosi aumentano il benessere psicologico e la motivazione di tutti i dipendenti',s:['ALL'],pos:true},
   ],
   r:[
     {id:'S1cR1',txt:'Contenziosi legali e risarcimenti per discriminazione e violazione delle pari opportunità',s:['ALL']},
@@ -1673,9 +1702,11 @@ const IRO_LIB = {
 },
 'S1.d':{
   i:[
-    {id:'S1dI1',txt:'Inadeguatezza delle competenze della forza lavoro rispetto alla transizione verde e digitale',s:['ALL']},
-    {id:'S1dI2',txt:'Mancanza di percorsi strutturati di crescita e sviluppo professionale per i dipendenti',s:['ALL']},
-    {id:'S1dI3',txt:'Esclusione di categorie vulnerabili o over-50 dai programmi di formazione e upskilling',s:['ALL']},
+    {id:'S1dI1',txt:'Inadeguatezza delle competenze della forza lavoro rispetto alla transizione verde e digitale',s:['ALL'],pos:false},
+    {id:'S1dI2',txt:'Mancanza di percorsi strutturati di crescita e sviluppo professionale per i dipendenti',s:['ALL'],pos:false},
+    {id:'S1dI3',txt:'Esclusione di categorie vulnerabili o over-50 dai programmi di formazione e upskilling',s:['ALL'],pos:false},
+    {id:'S1dIP1',txt:'I programmi di formazione e upskilling aumentano le competenze dei lavoratori e migliorano le loro prospettive di carriera e occupabilita',s:['ALL'],pos:true},
+    {id:'S1dIP2',txt:'Lo sviluppo professionale continuo aumenta il senso di realizzazione e la motivazione dei lavoratori nel lungo periodo',s:['ALL'],pos:true},
   ],
   r:[
     {id:'S1dR1',txt:'Skill gap critico per la trasformazione digitale e verde del business model',s:['C','D','K','J']},
@@ -1689,10 +1720,12 @@ const IRO_LIB = {
 },
 'S2.a':{
   i:[
-    {id:'S2aI1',txt:'Rischio di lavoro minorile o forzato in fornitori di primo o secondo livello in paesi a rischio',s:['C','G','A']},
-    {id:'S2aI2',txt:'Condizioni di lavoro non sicure e retribuzioni sotto soglia di sussistenza in fornitori chiave',s:['C','G']},
-    {id:'S2aI3',txt:'Orari eccessivi e mancanza di libertà di associazione sindacale presso fornitori esteri',s:['C','G','A']},
-    {id:'S2aI4',txt:'Impatti discriminatori su lavoratori migranti o stagionali nella catena di fornitura',s:['A','G','H']},
+    {id:'S2aI1',txt:'Rischio di lavoro minorile o forzato in fornitori di primo o secondo livello in paesi a rischio',s:['C','G','A'],pos:false},
+    {id:'S2aI2',txt:'Condizioni di lavoro non sicure e retribuzioni sotto soglia di sussistenza in fornitori chiave',s:['C','G'],pos:false},
+    {id:'S2aI3',txt:'Orari eccessivi e mancanza di libertà di associazione sindacale presso fornitori esteri',s:['C','G','A'],pos:false},
+    {id:'S2aI4',txt:'Impatti discriminatori su lavoratori migranti o stagionali nella catena di fornitura',s:['A','G','H'],pos:false},
+    {id:'S2aIP1',txt:'Il miglioramento delle condizioni di lavoro nei fornitori upstream aumenta il benessere di migliaia di lavoratori nella catena del valore',s:['C','G'],pos:true},
+    {id:'S2aIP2',txt:'La formazione e il supporto ai fornitori per l adeguamento agli standard ESG crea capacity building nelle comunita produttive',s:['ALL'],pos:true},
   ],
   r:[
     {id:'S2aR1',txt:'Sanzioni previste dalla CS3D (Corporate Sustainability Due Diligence Directive) per violazioni supply chain',s:['C','G']},
@@ -1706,9 +1739,10 @@ const IRO_LIB = {
 },
 'S2.b':{
   i:[
-    {id:'S2bI1',txt:'Mancanza di meccanismi di reclamo accessibili per lavoratori nella catena del valore',s:['C','G']},
-    {id:'S2bI2',txt:'Pratiche commerciali sleali verso fornitori piccoli: ritardi nei pagamenti, prezzi predatori, clausole leonine',s:['G','C','H']},
-    {id:'S2bI3',txt:'Mancanza di trasparenza e condivisione di obiettivi ESG con i fornitori strategici',s:['ALL']},
+    {id:'S2bI1',txt:'Mancanza di meccanismi di reclamo accessibili per lavoratori nella catena del valore',s:['C','G'],pos:false},
+    {id:'S2bI2',txt:'Pratiche commerciali sleali verso fornitori piccoli: ritardi nei pagamenti, prezzi predatori, clausole leonine',s:['G','C','H'],pos:false},
+    {id:'S2bI3',txt:'Mancanza di trasparenza e condivisione di obiettivi ESG con i fornitori strategici',s:['ALL'],pos:false},
+    {id:'S2bIP1',txt:'I meccanismi di pagamento equo e i termini contrattuali trasparenti creano stabilita finanziaria per i fornitori e le loro comunita',s:['ALL'],pos:true},
   ],
   r:[
     {id:'S2bR1',txt:'Violazione Direttiva Late Payments e normativa sui ritardi di pagamento nelle transazioni commerciali',s:['ALL']},
@@ -1721,10 +1755,12 @@ const IRO_LIB = {
 },
 'S3.a':{
   i:[
-    {id:'S3aI1',txt:'Rumore, vibrazioni, traffico pesante e disturbo per le comunità residenti vicino agli impianti',s:['C','B','D','F']},
-    {id:'S3aI2',txt:'Alterazione del paesaggio e del valore percepito del territorio per infrastrutture industriali',s:['B','D','F']},
-    {id:'S3aI3',txt:'Pressione su servizi locali (viabilità, alloggi, servizi pubblici) per grandi insediamenti',s:['B','C','F']},
-    {id:'S3aI4',txt:'Impatti su attività economiche locali (turismo, agricoltura) per inquinamento o degrado',s:['B','C','D']},
+    {id:'S3aI1',txt:'Rumore, vibrazioni, traffico pesante e disturbo per le comunità residenti vicino agli impianti',s:['C','B','D','F'],pos:false},
+    {id:'S3aI2',txt:'Alterazione del paesaggio e del valore percepito del territorio per infrastrutture industriali',s:['B','D','F'],pos:false},
+    {id:'S3aI3',txt:'Pressione su servizi locali (viabilità, alloggi, servizi pubblici) per grandi insediamenti',s:['B','C','F'],pos:false},
+    {id:'S3aI4',txt:'Impatti su attività economiche locali (turismo, agricoltura) per inquinamento o degrado',s:['B','C','D'],pos:false},
+    {id:'S3aIP1',txt:'Gli investimenti sociali nelle comunita locali creano infrastrutture, servizi e opportunita di lavoro per le popolazioni ospitanti',s:['ALL'],pos:true},
+    {id:'S3aIP2',txt:'Il dialogo strutturato con le comunita consente di identificare e soddisfare bisogni locali creando valore condiviso nel territorio',s:['ALL'],pos:true},
   ],
   r:[
     {id:'S3aR1',txt:'Perdita della licenza sociale ad operare per opposizione di comitati locali e autorità',s:['B','C','D','F']},
@@ -1738,8 +1774,9 @@ const IRO_LIB = {
 },
 'S3.b':{
   i:[
-    {id:'S3bI1',txt:'Restrizione all\’accesso a risorse idriche, alimentari o territoriali di popolazioni locali per attività del gruppo',s:['B','A','D']},
-    {id:'S3bI2',txt:'Impatti negativi sui mezzi di sussistenza di comunità rurali o popolazioni indigene',s:['B','A','F']},
+    {id:'S3bI1',txt:'Restrizione all\’accesso a risorse idriche, alimentari o territoriali di popolazioni locali per attività del gruppo',s:['B','A','D'],pos:false},
+    {id:'S3bI2',txt:'Impatti negativi sui mezzi di sussistenza di comunità rurali o popolazioni indigene',s:['B','A','F'],pos:false},
+    {id:'S3bIP1',txt:'Il rispetto dei diritti delle popolazioni locali e il consenso informato crea fiducia e relazioni di lungo periodo con le comunita ospitanti',s:['B','D'],pos:true},
   ],
   r:[
     {id:'S3bR1',txt:'Obblighi FPIC (Free Prior Informed Consent) per operazioni in aree con popolazioni indigene o protette',s:['B','A','D']},
@@ -1752,9 +1789,11 @@ const IRO_LIB = {
 },
 'S4.a':{
   i:[
-    {id:'S4aI1',txt:'Danni alla salute dei consumatori per prodotti difettosi, contaminati o con istruzioni inadeguate',s:['C','A','I','Q']},
-    {id:'S4aI2',txt:'Impatti su fasce vulnerabili (bambini, anziani, disabili) per inadeguatezza di prodotti o servizi',s:['G','I','Q']},
-    {id:'S4aI3',txt:'Effetti negativi a lungo termine sulla salute per ingredienti, componenti o additivi controversi',s:['A','C','Q']},
+    {id:'S4aI1',txt:'Danni alla salute dei consumatori per prodotti difettosi, contaminati o con istruzioni inadeguate',s:['C','A','I','Q'],pos:false},
+    {id:'S4aI2',txt:'Impatti su fasce vulnerabili (bambini, anziani, disabili) per inadeguatezza di prodotti o servizi',s:['G','I','Q'],pos:false},
+    {id:'S4aI3',txt:'Effetti negativi a lungo termine sulla salute per ingredienti, componenti o additivi controversi',s:['A','C','Q'],pos:false},
+    {id:'S4aIP1',txt:'I prodotti sicuri e di qualita certificata tutelano la salute dei consumatori e aumentano la loro fiducia nel brand',s:['C','G','A'],pos:true},
+    {id:'S4aIP2',txt:'L innovazione verso prodotti piu sicuri e sostenibili migliora il benessere dei consumatori e riduce i rischi per le categorie vulnerabili',s:['C','A'],pos:true},
   ],
   r:[
     {id:'S4aR1',txt:'Recall e ritiro dal mercato: costi operativi, perdita di quota e danni reputazionali significativi',s:['A','C','G']},
@@ -1768,9 +1807,10 @@ const IRO_LIB = {
 },
 'S4.b':{
   i:[
-    {id:'S4bI1',txt:'Raccolta e profilazione di dati personali dei clienti senza adeguata informativa e consenso esplicito',s:['G','J','K']},
-    {id:'S4bI2',txt:'Rischio di uso improprio di dati sensibili per finalità commerciali non dichiarate o condivisione con terzi',s:['K','J','G']},
-    {id:'S4bI3',txt:'Esclusione digitale di fasce di popolazione che non possono accedere a servizi esclusivamente digitali',s:['K','G','Q']},
+    {id:'S4bI1',txt:'Raccolta e profilazione di dati personali dei clienti senza adeguata informativa e consenso esplicito',s:['G','J','K'],pos:false},
+    {id:'S4bI2',txt:'Rischio di uso improprio di dati sensibili per finalità commerciali non dichiarate o condivisione con terzi',s:['K','J','G'],pos:false},
+    {id:'S4bI3',txt:'Esclusione digitale di fasce di popolazione che non possono accedere a servizi esclusivamente digitali',s:['K','G','Q'],pos:false},
+    {id:'S4bIP1',txt:'La protezione dei dati personali e la privacy by design tutelano i diritti fondamentali dei consumatori nell era digitale',s:['J','K','G'],pos:true},
   ],
   r:[
     {id:'S4bR1',txt:'Sanzioni del Garante Privacy GDPR: fino al 4% del fatturato globale per violazioni gravi',s:['ALL']},
@@ -1784,8 +1824,9 @@ const IRO_LIB = {
 },
 'S4.c':{
   i:[
-    {id:'S4cI1',txt:'Prodotti o servizi non accessibili a fasce di popolazione a basso reddito, anziani o con disabilità',s:['K','G','Q','I']},
-    {id:'S4cI2',txt:'Design che penalizza utenti con competenze digitali limitate: barriere di accesso involontarie',s:['K','J','G']},
+    {id:'S4cI1',txt:'Prodotti o servizi non accessibili a fasce di popolazione a basso reddito, anziani o con disabilità',s:['K','G','Q','I'],pos:false},
+    {id:'S4cI2',txt:'Design che penalizza utenti con competenze digitali limitate: barriere di accesso involontarie',s:['K','J','G'],pos:false},
+    {id:'S4cIP1',txt:'I prodotti e servizi accessibili a fasce vulnerabili, anziani e disabili promuovono l inclusione sociale e riducono le disuguaglianze digitali',s:['G','K','Q'],pos:true},
   ],
   r:[
     {id:'S4cR1',txt:'European Accessibility Act (EAA 2025): obblighi di adeguamento per prodotti e servizi digitali',s:['K','J','G','Q']},
@@ -1798,10 +1839,12 @@ const IRO_LIB = {
 },
 'G1.a':{
   i:[
-    {id:'G1aI1',txt:'Rischio di pratiche corruttive nella gestione di contratti pubblici, permessi e rapporti con PA',s:['ALL']},
-    {id:'G1aI2',txt:'Conflitti di interesse nella governance non adeguatamente identificati e gestiti',s:['ALL']},
-    {id:'G1aI3',txt:'Mancanza di canali di whistleblowing efficaci e protezione inadeguata dei segnalanti',s:['ALL']},
-    {id:'G1aI4',txt:'Pratiche commerciali sleali, anticoncorrenziali o di greenwashing che distorcono il mercato',s:['ALL']},
+    {id:'G1aI1',txt:'Rischio di pratiche corruttive nella gestione di contratti pubblici, permessi e rapporti con PA',s:['ALL'],pos:false},
+    {id:'G1aI2',txt:'Conflitti di interesse nella governance non adeguatamente identificati e gestiti',s:['ALL'],pos:false},
+    {id:'G1aI3',txt:'Mancanza di canali di whistleblowing efficaci e protezione inadeguata dei segnalanti',s:['ALL'],pos:false},
+    {id:'G1aI4',txt:'Pratiche commerciali sleali, anticoncorrenziali o di greenwashing che distorcono il mercato',s:['ALL'],pos:false},
+    {id:'G1aIP1',txt:'La cultura dell integrita e la prevenzione della corruzione creano un contesto di fiducia istituzionale che beneficia tutta la societa',s:['ALL'],pos:true},
+    {id:'G1aIP2',txt:'Il whistleblowing efficace e la protezione dei segnalanti crea un ambiente organizzativo piu equo e trasparente per tutti i dipendenti',s:['ALL'],pos:true},
   ],
   r:[
     {id:'G1aR1',txt:'Sanzioni penali e amministrative per corruzione (D.Lgs 231/2001, FCPA, UK Bribery Act)',s:['ALL']},
@@ -1815,9 +1858,11 @@ const IRO_LIB = {
 },
 'G1.b':{
   i:[
-    {id:'G1bI1',txt:'Mancanza di criteri ESG nella selezione e qualifica dei fornitori: rischio di complicità in violazioni',s:['ALL']},
-    {id:'G1bI2',txt:'Assenza di audit e monitoraggio sistematico della supply chain su temi ambientali e sociali',s:['C','G']},
-    {id:'G1bI3',txt:'Concentrazione eccessiva su pochi fornitori critici senza diversificazione del rischio di fornitura',s:['C','G','H']},
+    {id:'G1bI1',txt:'Mancanza di criteri ESG nella selezione e qualifica dei fornitori: rischio di complicità in violazioni',s:['ALL'],pos:false},
+    {id:'G1bI2',txt:'Assenza di audit e monitoraggio sistematico della supply chain su temi ambientali e sociali',s:['C','G'],pos:false},
+    {id:'G1bI3',txt:'Concentrazione eccessiva su pochi fornitori critici senza diversificazione del rischio di fornitura',s:['C','G','H'],pos:false},
+    {id:'G1bIP1',txt:'I criteri ESG nella selezione dei fornitori elevano gli standard sociali e ambientali lungo tutta la catena del valore',s:['ALL'],pos:true},
+    {id:'G1bIP2',txt:'Il co-sviluppo ESG con i fornitori trasferisce competenze e crea capacita di innovazione sostenibile nelle comunita produttive',s:['C','G'],pos:true},
   ],
   r:[
     {id:'G1bR1',txt:'CS3D: sanzioni fino al 5% del fatturato globale per imprese con fatturato >€150M che violano la DD',s:['ALL']},
@@ -1831,8 +1876,9 @@ const IRO_LIB = {
 },
 'G1.c':{
   i:[
-    {id:'G1cI1',txt:'Strutture fiscali aggressive o pianificazione ottimizzativa che erode la base imponibile nei paesi ospitanti',s:['K','M','ALL']},
-    {id:'G1cI2',txt:'Utilizzo di giurisdizioni fiscali opache con impatti negativi sui sistemi di welfare nazionali',s:['K','ALL']},
+    {id:'G1cI1',txt:'Strutture fiscali aggressive o pianificazione ottimizzativa che erode la base imponibile nei paesi ospitanti',s:['K','M','ALL'],pos:false},
+    {id:'G1cI2',txt:'Utilizzo di giurisdizioni fiscali opache con impatti negativi sui sistemi di welfare nazionali',s:['K','ALL'],pos:false},
+    {id:'G1cIP1',txt:'La trasparenza fiscale e il pagamento equo delle imposte nei paesi operativi contribuisce al finanziamento dei servizi pubblici locali',s:['ALL'],pos:true},
   ],
   r:[
     {id:'G1cR1',txt:'Sanzioni fiscali e maggiori imposte per riqualificazione di schemi di tax planning aggressivo',s:['ALL']},
@@ -2329,13 +2375,53 @@ function renderSubTopic(topicId, sub, userSectors){
 function renderIROSection(topicId, subId, dim, items, userSectors){
   const dimConf = {
     i:{cls:'ih',dotcls:'i',name:'Impatti'},
-    r:{cls:'rh',dotcls:'r',name:'Rischi'},
+    r:{cls:'rh',dotcls:'r',name:'Rischi finanziari'},
     o:{cls:'oh',dotcls:'o',name:'Opportunità'},
   };
   const dc = dimConf[dim];
+
+  // Per gli impatti, dividi in negativi e positivi
+  if(dim === 'i'){
+    const negItems = items.filter(iro => !iro.pos);
+    const posItems = items.filter(iro => iro.pos);
+
+    const renderSubSection = (subItems, isPos) => {
+      if(!subItems.length) return '';
+      const included = subItems.filter(iro=>{ const st=getIROState(topicId,subId,dim,iro.id); return st.incl!==false&&(st.incl||isAutoSelected(iro,userSectors)); });
+      const cnt = included.filter(iro=>{const st=getIROState(topicId,subId,dim,iro.id);return (st.score>0||st.na);}).length;
+      const itemsHtml = subItems.map(iro=>{
+        const st = getIROState(topicId,subId,dim,iro.id);
+        const auto = isAutoSelected(iro,userSectors);
+        const incl = st.incl===null ? auto : st.incl;
+        return renderIROItem(topicId, subId, dim, iro, incl, auto, st, isPos?'oh':'rh', userSectors);
+      }).join('');
+      const sign = isPos ? '+' : '−';
+      const color = isPos ? 'var(--ic)' : 'var(--rc)';
+      const bg = isPos ? 'rgba(26,122,74,.10)' : 'rgba(194,65,12,.10)';
+      const label = isPos ? 'Impatti positivi' : 'Impatti negativi';
+      const desc = isPos ? 'Benefici su persone, ambiente e comunità' : 'Danni su persone, ambiente e comunità';
+      return \`<div style="margin-bottom:10px">
+        <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px;padding-bottom:5px;border-bottom:1.5px solid \${isPos?'var(--ibd)':'var(--rbd)'}">
+          <span style="font-size:.8rem;font-weight:800;padding:1px 6px;border-radius:3px;background:\${bg};color:\${color}">\${sign}</span>
+          <span style="font-size:.72rem;font-weight:700;color:\${color};text-transform:uppercase;letter-spacing:.06em">\${label}</span>
+          <span style="font-size:.68rem;color:var(--inkm);margin-left:4px">\${desc}</span>
+          <span style="margin-left:auto;font-size:.68rem;font-family:'DM Mono',monospace;color:var(--inkm)">\${cnt}/\${included.length}</span>
+        </div>
+        <div class="iro-items" data-topicid="\${topicId}" data-subid="\${subId}" data-dim="\${dim}">\${itemsHtml}</div>
+      </div>\`;
+    };
+
+    return \`<div class="iro-sec-hd ih">
+      <div class="iro-sec-dot i"></div>
+      <span class="iro-sec-name i">Impatti</span>
+    </div>
+    \${renderSubSection(negItems, false)}
+    \${renderSubSection(posItems, true)}\`;
+  }
+
+  // Per rischi e opportunità — rendering standard
   const included = items.filter(iro=>{ const st=getIROState(topicId,subId,dim,iro.id); return st.incl!==false&&(st.incl||isAutoSelected(iro,userSectors)); });
   const cnt = included.filter(iro=>{const st=getIROState(topicId,subId,dim,iro.id);return (st.score>0||st.na);}).length;
-
   const itemsHtml = items.map(iro=>{
     const st = getIROState(topicId,subId,dim,iro.id);
     const auto = isAutoSelected(iro,userSectors);
@@ -2343,12 +2429,20 @@ function renderIROSection(topicId, subId, dim, items, userSectors){
     return renderIROItem(topicId, subId, dim, iro, incl, auto, st, dc.cls, userSectors);
   }).join('');
 
-  return `<div class="iro-sec-hd ${dc.cls}">
-    <div class="iro-sec-dot ${dc.dotcls}"></div>
-    <span class="iro-sec-name ${dc.dotcls}">${dc.name}</span>
-    <span class="iro-sec-cnt">${cnt}/${included.length}</span>
+  const signMap = {r:'⚠', o:'+'};
+  const colorMap = {r:'var(--amber)', o:'var(--ic)'};
+  const descMap = {r:'Rischi economici per il Gruppo', o:'Benefici economici e impatti positivi'};
+
+  return \`<div class="iro-sec-hd \${dc.cls}">
+    <div class="iro-sec-dot \${dc.dotcls}"></div>
+    <span class="iro-sec-name \${dc.dotcls}">
+      <span style="font-size:.72rem;font-weight:800;margin-right:4px;padding:1px 5px;border-radius:3px;background:\${dim==='r'?'rgba(217,119,6,.1)':'rgba(26,122,74,.1)'};color:\${colorMap[dim]}">\${signMap[dim]}</span>
+      \${dc.name}
+    </span>
+    <span class="iro-sec-cnt">\${cnt}/\${included.length}</span>
   </div>
-  <div class="iro-items" data-topicid="${topicId}" data-subid="${subId}" data-dim="${dim}">${itemsHtml}</div>`;
+  <div style="font-size:.66rem;color:var(--inkm);padding:2px 0 8px 14px;font-style:italic">\${descMap[dim]}</div>
+  <div class="iro-items" data-topicid="\${topicId}" data-subid="\${subId}" data-dim="\${dim}">\${itemsHtml}</div>\`;
 }
 
 function renderIROItem(topicId, subId, dim, iro, incl, auto, st, dimCls, userSectors){
