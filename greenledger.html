@@ -616,7 +616,7 @@ input.wslider::-webkit-slider-thumb{-webkit-appearance:none;width:13px;height:13
           <div class="sopt" data-val="voluntary"><span class="si">🔹</span><span class="sl">Volontario</span><span class="sr">&lt;1.000 dip<br>&lt;€450M</span><div class="chk"><svg width="7" height="5" viewBox="0 0 8 6"><path d="M1 3L3 5L7 1" stroke="white" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg></div></div>
           <div class="sopt active" data-val="csrd"><span class="si">🟩</span><span class="sl">CSRD</span><span class="sr">&gt;1.000 dip<br>&gt;€450M</span><div class="chk"><svg width="7" height="5" viewBox="0 0 8 6"><path d="M1 3L3 5L7 1" stroke="white" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg></div></div>
         </div>
-        <input type="hidden" id="sizeVal" value="medium">
+        <input type="hidden" id="sizeVal" value="csrd">
       </div>
       <div class="fg c2" style="margin-top:14px">
         <div class="f">
@@ -1192,6 +1192,37 @@ const NACE_DB=[
   {code:'R90',name:'Attività creative e artistiche',desc:'Spettacolo, musei, patrimonio',sector:'R'},
   {code:'R93',name:'Sport e svago',desc:'Impianti sportivi, parchi',sector:'R'},
   {code:'S94',name:'Associazioni e organizzazioni',desc:'Sindacati, enti, associazioni',sector:'S'},
+  {code:'A01',name:'Coltivazioni agricole e produzione di prodotti animali',desc:'Cereali, ortaggi, frutta, allevamento',sector:'A'},
+  {code:'C11',name:'Industria delle bevande',desc:'Vini, birre, acque minerali, soft drink',sector:'C'},
+  {code:'C12',name:'Industria del tabacco',desc:'Sigarette, tabacco lavorato',sector:'C'},
+  {code:'C14',name:'Confezione di articoli di abbigliamento',desc:'Moda, abbigliamento, accessori',sector:'C'},
+  {code:'C18',name:'Stampa e riproduzione',desc:'Tipografie, editoria stampata',sector:'C'},
+  {code:'C19',name:'Raffinazione petrolio e coke',desc:'Raffinerie, prodotti petroliferi',sector:'B'},
+  {code:'C31',name:'Fabbricazione di mobili',desc:'Arredamento, design industriale',sector:'C'},
+  {code:'C32',name:'Altre industrie manifatturiere',desc:'Gioielleria, strumenti musicali, giochi',sector:'C'},
+  {code:'C33',name:'Riparazione e manutenzione macchine',desc:'Manutenzione impianti industriali',sector:'C'},
+  {code:'E37',name:'Gestione delle acque reflue',desc:'Depurazione, fognatura',sector:'E'},
+  {code:'E39',name:'Bonifica e altri servizi ambientali',desc:'Decontaminazione siti, bonifica',sector:'E'},
+  {code:'F43',name:'Lavori di costruzione specializzati',desc:'Impiantistica, demolizione, finiture',sector:'F'},
+  {code:'G46',name:'Commercio all'ingrosso (escluso auto)',desc:'Intermediari commerciali B2B',sector:'G'},
+  {code:'H53',name:'Servizi postali e di corriere',desc:'Posta, corrieri, logistica ultimo miglio',sector:'H'},
+  {code:'I56',name:'Ristorazione e catering',desc:'Ristoranti, bar, mense, catering',sector:'I'},
+  {code:'J59',name:'Produzioni cinematografiche e TV',desc:'Film, serie TV, produzioni audiovisive',sector:'J'},
+  {code:'J60',name:'Attività radiotelevisive',desc:'Radio, televisione, streaming',sector:'J'},
+  {code:'K66',name:'Servizi di supporto finanziario',desc:'SGR, fondi, trading, fintech',sector:'K'},
+  {code:'L68',name:'Attività immobiliari',desc:'Compravendita, gestione, locazione immobili',sector:'L'},
+  {code:'M74',name:'Altre attività professionali e tecniche',desc:'Design, fotografia, traduzione',sector:'M'},
+  {code:'M75',name:'Servizi veterinari',desc:'Cliniche veterinarie, pet care',sector:'M'},
+  {code:'N79',name:'Agenzie viaggio e tour operator',desc:'Turismo organizzato, booking',sector:'N'},
+  {code:'N80',name:'Servizi di vigilanza e investigazione',desc:'Sicurezza privata, guardie giurate',sector:'N'},
+  {code:'N81',name:'Servizi per edifici e paesaggio',desc:'Pulizie, giardinaggio, facility management',sector:'N'},
+  {code:'N82',name:'Servizi di supporto alle imprese',desc:'Call center, back office, segreteria',sector:'N'},
+  {code:'Q88',name:'Assistenza sociale non residenziale',desc:'Servizi sociali diurni, assistenza anziani',sector:'Q'},
+  {code:'R91',name:'Biblioteche, archivi e musei',desc:'Patrimonio culturale, mostre',sector:'R'},
+  {code:'R92',name:'Lotterie e scommesse',desc:'Giochi, scommesse, casinò',sector:'R'},
+  {code:'S95',name:'Riparazione computer e beni personali',desc:'Assistenza tecnica, riparazione',sector:'S'},
+  {code:'S96',name:'Altre attività di servizi personali',desc:'Parrucchieri, estetisti, lavanderie',sector:'S'},
+  {code:'T97',name:'Attività di famiglie come datori di lavoro',desc:'Collaboratori domestici, badanti',sector:'T'},
 ];
 
 // ═══════════════════════════════════════════
@@ -1822,8 +1853,9 @@ document.addEventListener('click',e=>{if(!e.target.closest('.nwrap'))naceDropEl.
 // SIZE
 document.getElementById('sizeGrid').querySelectorAll('.sopt').forEach(opt=>{
   opt.addEventListener('click',()=>{
-    document.querySelectorAll('.sopt').forEach(o=>o.classList.remove('active'));
+    document.getElementById('sizeGrid').querySelectorAll('.sopt').forEach(o=>o.classList.remove('active'));
     opt.classList.add('active');
+    document.getElementById('sizeVal').value = opt.dataset.val;
     appState.m1.size = opt.dataset.val;
     updateM1Progress();
     updateStdBadge(opt.dataset.val);
@@ -1856,6 +1888,7 @@ empSlider.addEventListener('input',()=>{
   updSlider(); updateM1Progress();
 });
 updSlider();
+updateStdBadge(document.getElementById('sizeVal').value);
 
 // GEO
 document.getElementById('geoTags').querySelectorAll('.gtag').forEach(tag=>{
@@ -1884,7 +1917,7 @@ document.getElementById('bizDesc').addEventListener('input',()=>{
 const M1_REQ=[
   ()=>document.getElementById('ragione').value.trim()!=='',
   ()=>selNACE.length>0,
-  ()=>document.getElementById('sizeVal').value!=='',
+  ()=>['voluntary','csrd'].includes(document.getElementById('sizeVal').value),
   ()=>selGeo.size>0,
 ];
 function updateM1Progress(){
