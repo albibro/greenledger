@@ -2432,9 +2432,7 @@ function renderSubTopic(topicId, sub, userSectors){
           <span style="width:18px;height:18px;background:var(--ic);border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:.7rem;color:white;font-weight:800">I</span>
           Materialità d'impatto
         </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-          <div class="iro-sec">${iHTML}</div>
-        </div>
+        <div class="iro-sec">${iHTML}</div>
       </div>
       <div>
         <div style="font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--amber);margin-bottom:8px;display:flex;align-items:center;gap:6px">
@@ -2489,12 +2487,14 @@ function renderIROSection(topicId, subId, dim, items, userSectors){
       </div>`;
     };
 
-    return `<div class="iro-sec-hd ih">
+    return `<div class="iro-sec-hd ih" style="margin-bottom:10px">
       <div class="iro-sec-dot i"></div>
       <span class="iro-sec-name i">Impatti</span>
     </div>
-    ${renderSubSection(negItems, false)}
-    ${renderSubSection(posItems, true)}`;
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+      <div>${renderSubSection(negItems, false)}</div>
+      <div>${renderSubSection(posItems, true)}</div>
+    </div>`;
   }
 
   // Per rischi e opportunità — rendering standard
