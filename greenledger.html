@@ -565,16 +565,86 @@ input.wslider::-webkit-slider-thumb{-webkit-appearance:none;width:13px;height:13
   </div>
   <div class="fcard-body">
 
-    <!-- IDENTITÀ -->
+    <!-- IDENTITA -->
     <div class="fsec">
-      <div class="sdiv"><div class="sdiv-ic"><svg width="13" height="13" viewBox="0 0 14 14" fill="none"><rect x="1" y="1" width="12" height="12" rx="2" stroke="white" stroke-width="1.4"/><path d="M4 7h6M4 4.5h6M4 9.5h4" stroke="white" stroke-width="1.2" stroke-linecap="round"/></svg></div><span class="sdiv-t">Identità aziendale</span><div class="sdiv-l"></div></div>
-      <div class="fg">
+      <div class="sdiv"><div class="sdiv-ic"><svg width="13" height="13" viewBox="0 0 14 14" fill="none"><rect x="1" y="1" width="12" height="12" rx="2" stroke="white" stroke-width="1.4"/><path d="M4 7h6M4 4.5h6M4 9.5h4" stroke="white" stroke-width="1.2" stroke-linecap="round"/></svg></div><span class="sdiv-t">Identita aziendale</span><div class="sdiv-l"></div></div>
+      <div class="fg c2">
         <div class="f" id="f-ragione">
           <label for="ragione">Ragione sociale <span class="req">★</span></label>
           <input type="text" id="ragione" class="inp" placeholder="es. Gruppo Acme S.p.A.">
           <span class="ferr">Campo obbligatorio</span>
         </div>
+        <div class="f">
+          <label for="referente">Nome referente sostenibilita</label>
+          <input type="text" id="referente" class="inp" placeholder="es. Mario Rossi">
+        </div>
       </div>
+      <div class="f" style="margin-top:14px">
+        <label>Bilancio di sostenibilita precedente <span style="font-weight:400;color:var(--inkm);font-size:.73rem">(opzionale)</span></label>
+        <div style="display:flex;align-items:center;gap:10px;margin-top:4px">
+          <label style="display:inline-flex;align-items:center;gap:7px;padding:8px 14px;border-radius:8px;border:1.5px dashed var(--g200);background:var(--g50);font-size:.78rem;font-weight:600;color:var(--g700);cursor:pointer">
+            Carica PDF
+            <input type="file" id="prevReport" accept=".pdf" style="display:none" onchange="handlePrevReport(event)">
+          </label>
+          <span id="prevReportName" style="font-size:.78rem;color:var(--inkm)">Nessun file selezionato</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- NACE -->
+    <div class="fsec">
+      <div class="sdiv"><div class="sdiv-ic"><svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M2 2h10v3H2zM2 6h5v6H2zM9 6h3v6H9z" stroke="white" stroke-width="1.2" stroke-linejoin="round"/></svg></div><span class="sdiv-t">Settore di attivita (NACE)</span><div class="sdiv-l"></div></div>
+      <div class="f" id="f-nace">
+        <label>Codici NACE <span class="req">★</span> <span class="hint">Cerca per codice o descrizione</span></label>
+        <div class="nwrap">
+          <input type="text" id="naceSearch" class="inp" placeholder="Cerca per codice o attivita (es. C22, energia, manifattura)" autocomplete="off">
+          <div class="ndrop" id="naceDrop"></div>
+        </div>
+        <div class="chips" id="naceChips"><span class="chips-empty">Nessun codice aggiunto — cerca e seleziona</span></div>
+        <span class="ferr">Aggiungi almeno un codice NACE</span>
+      </div>
+    </div>
+
+    <!-- DIMENSIONE -->
+    <div class="fsec">
+      <div class="sdiv"><div class="sdiv-ic"><svg width="13" height="13" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="5" r="2.5" stroke="white" stroke-width="1.3"/><path d="M2 12c0-2.76 2.24-5 5-5s5 2.24 5 5" stroke="white" stroke-width="1.3" stroke-linecap="round"/></svg></div><span class="sdiv-t">Dimensione aziendale</span><div class="sdiv-l"></div></div>
+      <div class="fg c2">
+        <div class="f">
+          <label>N dipendenti (FTE) <span class="req">★</span></label>
+          <div class="rwrap">
+            <input type="range" id="empSlider" min="1" max="5000" value="120" step="1">
+            <div class="rlbl"><span>1</span><span>5.000+</span></div>
+            <div class="rval" id="empVal">120 dipendenti</div>
+          </div>
+        </div>
+        <div class="f">
+          <label for="revenue">Fatturato annuo <span class="hint">(euro milioni)</span></label>
+          <div class="awrap"><span class="adl">E</span><span class="adl adr">M</span><input type="number" id="revenue" class="inp inpr" placeholder="28.5" min="0" step="0.1" oninput="autoDetectCsrd()"></div>
+        </div>
+      </div>
+      <input type="hidden" id="sizeVal" value="voluntary">
+      <div id="csrdAutoBox" style="margin-top:14px;padding:12px 16px;border-radius:10px;background:var(--ambg);border:1.5px solid var(--ambb);display:flex;align-items:center;gap:12px">
+        <div id="csrdAutoIcon" style="font-size:1.4rem">🔹</div>
+        <div style="flex:1">
+          <div id="csrdAutoLabel" style="font-size:.84rem;font-weight:700;color:var(--amber)">Rendicontazione volontaria (VSME)</div>
+          <div id="csrdAutoDesc" style="font-size:.74rem;color:var(--inkm);margin-top:2px">Imposta dipendenti e fatturato per determinare obbligo CSRD Omnibus 2025</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BUSINESS DESC -->
+    <div class="fsec">
+      <div class="sdiv"><div class="sdiv-ic"><svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M2 3h10v2H2zM2 7h8v2H2zM2 11h6v2H2z" fill="white"/></svg></div><span class="sdiv-t">Descrizione Business</span><div class="sdiv-l"></div></div>
+      <div class="bdesc">
+        <div class="bdesc-hd">
+          <div class="bic"><svg width="11" height="11" viewBox="0 0 12 12" fill="none"><path d="M6 1l1.5 3 3.5.5-2.5 2.5.5 3.5L6 9l-3 1.5.5-3.5L1 4.5 4.5 4z" fill="white"/></svg></div>
+          <h3>Attivita e modello di business</h3>
+        </div>
+        <p class="bdesc-hint">Descrivi <strong>cosa produce o vende il gruppo, come genera valore, posizione nella catena del valore</strong> (upstream/downstream), prodotti e servizi principali, tipologia di clienti e fornitori critici.</p>
+        <textarea id="bizDesc" class="ta" maxlength="1200" rows="4" placeholder="Es.: Il Gruppo produce imballaggi in plastica riciclata per il settore alimentare B2B. 340 FTE, 75% ricavi da canale GDO..."></textarea>
+        <div class="ccount" id="charCount">0 / 1200</div>
+      </div>
+    </div>
 
     <!-- GEOGRAFIE -->
     <div class="fsec">
@@ -582,30 +652,25 @@ input.wslider::-webkit-slider-thumb{-webkit-appearance:none;width:13px;height:13
       <div class="f">
         <label>Presenza geografica <span class="req">★</span></label>
         <div class="gtags" id="geoTags">
-          <div class="gtag sel" data-val="IT">🇮🇹 Italia</div><div class="gtag" data-val="EU">🇪🇺 Resto UE</div><div class="gtag" data-val="UK">🇬🇧 UK</div><div class="gtag" data-val="US">🇺🇸 Nord America</div><div class="gtag" data-val="APAC">🌏 Asia-Pacifico</div><div class="gtag" data-val="LATAM">🌎 LATAM</div><div class="gtag" data-val="MEA">🌍 MEA</div>
+          <div class="gtag sel" data-val="IT">Italia</div>
+          <div class="gtag" data-val="EU">Resto UE</div>
+          <div class="gtag" data-val="UK">UK</div>
+          <div class="gtag" data-val="US">Nord America</div>
+          <div class="gtag" data-val="APAC">Asia-Pacifico</div>
+          <div class="gtag" data-val="LATAM">LATAM</div>
+          <div class="gtag" data-val="MEA">MEA</div>
         </div>
         <input type="hidden" id="geoVal" value="IT">
       </div>
       <div class="f" style="margin-top:14px"><label for="hq">Sede principale</label><input type="text" id="hq" class="inp" placeholder="es. Milano, Lombardia"></div>
     </div>
 
-    <!-- FRAMEWORK -->
+    <!-- ANNO -->
     <div class="fsec">
-      <div class="sdiv"><div class="sdiv-ic"><svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M2 4h10M2 7h8M2 10h6" stroke="white" stroke-width="1.4" stroke-linecap="round"/></svg></div><span class="sdiv-t">Framework & Anno</span><div class="sdiv-l"></div></div>
-      <div class="fg c2">
-        <div class="f">
-          <label>Standard applicabili</label>
-          <div class="stdgrid" id="stdGrid">
-            <div class="stdc active" data-val="CSRD"><div class="stdcb"></div><div><div class="stdn">CSRD</div><div class="stdf">Corporate Sustainability Reporting Directive</div></div></div>
-            <div class="stdc active" data-val="ESRS"><div class="stdcb"></div><div><div class="stdn">ESRS</div><div class="stdf">European Sustainability Reporting Standards</div></div></div>
-            <div class="stdc" data-val="GRI"><div class="stdcb"></div><div><div class="stdn">GRI Standards</div><div class="stdf">Global Reporting Initiative</div></div></div>
-            <div class="stdc" data-val="TCFD"><div class="stdcb"></div><div><div class="stdn">TCFD</div><div class="stdf">Climate-related Disclosures</div></div></div>
-          </div>
-        </div>
-        <div class="f">
-          <label>Anno di rendicontazione <span class="req">★</span></label>
-          <div class="yrwrap"><button type="button" class="yrbtn" id="yrDn">−</button><input type="text" id="yrVal" class="yrv" value="2026" readonly><button type="button" class="yrbtn" id="yrUp">+</button></div>
-        </div>
+      <div class="sdiv"><div class="sdiv-ic"><svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M2 4h10M2 7h8M2 10h6" stroke="white" stroke-width="1.4" stroke-linecap="round"/></svg></div><span class="sdiv-t">Anno di rendicontazione</span><div class="sdiv-l"></div></div>
+      <div class="f" style="max-width:160px">
+        <label>Anno <span class="req">★</span></label>
+        <div class="yrwrap"><button type="button" class="yrbtn" id="yrDn">-</button><input type="text" id="yrVal" class="yrv" value="2026" readonly><button type="button" class="yrbtn" id="yrUp">+</button></div>
       </div>
     </div>
 
