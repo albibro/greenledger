@@ -1,6 +1,7 @@
 {
   "rewrites": [
-    { "source": "/", "destination": "/greenledger.html" }
+    { "source": "/", "destination": "/index.html" },
+    { "source": "/app", "destination": "/greenledger.html" }
   ],
   "headers": [
     {
