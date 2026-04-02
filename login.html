@@ -326,12 +326,19 @@ const sb = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 let mode = 'login'; // 'login' | 'signup'
 
+// ── Auth callback: Supabase processa automaticamente i token dall'hash URL
+// onAuthStateChange intercetta SIGNED_IN dopo conferma email / magic link
+sb.auth.onAuthStateChange((event, session) => {
+  if ((event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') && session) {
+    window.location.href = 'https://greenledger-six.vercel.app/dashboard.html';
+  }
+});
+
 // ── Init: check hash for #signup, redirect if already logged in ──
 (async () => {
-  // Handle email confirmation / magic link callback
   const { data: { session } } = await sb.auth.getSession();
   if (session) {
-    window.location.href = 'greenledger.html';
+    window.location.href = 'https://greenledger-six.vercel.app/dashboard.html';
     return;
   }
   if (window.location.hash === '#signup') setMode('signup');
