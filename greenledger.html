@@ -533,7 +533,7 @@ input.wslider::-webkit-slider-thumb{-webkit-appearance:none;width:13px;height:13
 <!-- ═══ SHARED HEADER ═══ -->
 <header class="hdr">
   <div class="hdr-in">
-    <div class="logo" onclick="if(appState.nav.current===2){goToModule(1)}">
+    <a class="logo" href="dashboard.html" style="text-decoration:none">
       <div class="lmark">
         <svg width="17" height="17" viewBox="0 0 18 18" fill="none">
           <path d="M9 2C9 2 4 5 4 9.5C4 12.5 6.24 15 9 15C11.76 15 14 12.5 14 9.5C14 5 9 2 9 2Z" fill="white" opacity=".9"/>
@@ -541,14 +541,18 @@ input.wslider::-webkit-slider-thumb{-webkit-appearance:none;width:13px;height:13
         </svg>
       </div>
       <span class="ltxt">Green<span>Ledger</span></span>
-    </div>
+    </a>
     <div class="hdr-r">
+      <a href="dashboard.html" style="display:inline-flex;align-items:center;gap:6px;font-size:.78rem;font-weight:500;color:var(--inkm);text-decoration:none;padding:6px 12px;border-radius:8px;border:1px solid var(--cd);background:transparent;transition:all .2s" onmouseover="this.style.background='var(--g50)';this.style.borderColor='var(--g200)';this.style.color='var(--g800)'" onmouseout="this.style.background='transparent';this.style.borderColor='var(--cd)';this.style.color='var(--inkm)'">
+        <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M8 2L3 6.5L8 11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Dashboard
+      </a>
       <div class="ctx-pill" id="ctxPill">
         <div class="ctx-dot"></div>
         <span class="ctx-co" id="ctxCo">Nuova valutazione</span>
         <span class="ctx-nc" id="ctxNc"></span>
       </div>
-      <div class="hdr-usr">MC</div>
+      <div class="hdr-usr" id="hdrUsr" title="Esci" onclick="supabaseLogout()" style="cursor:pointer">GL</div>
     </div>
   </div>
 </header>
@@ -3770,6 +3774,36 @@ function confirmLock(){
 // ═══ INIT ═══
 goToModule(1);
 updateHeader();
+</script>
+
+<!-- Supabase: auth guard + avatar + logout -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+(async () => {
+  const { createClient } = supabase;
+  const sb = createClient(
+    'https://sxcuhojxbqyrvouabmeo.supabase.co',
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN4Y3Vob2p4YnF5cnZvdWFibWVvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM0NDM5MjksImV4cCI6MjA4OTAxOTkyOX0.WkjJrzL2gxFnfLXNOQo_QDt5IMgNbJxi37AXAIzPj60'
+  );
+  window._sb = sb;
+
+  const { data: { session } } = await sb.auth.getSession();
+  if (!session) { window.location.href = 'login.html'; return; }
+
+  const user = session.user;
+  const name = user.user_metadata?.full_name || '';
+  const initials = name
+    ? name.split(' ').map(p => p[0]).join('').slice(0,2).toUpperCase()
+    : user.email.slice(0,2).toUpperCase();
+  const av = document.getElementById('hdrUsr');
+  if (av) { av.textContent = initials; av.title = `${user.email} — Esci`; }
+})();
+
+async function supabaseLogout() {
+  if (!window._sb) return;
+  await window._sb.auth.signOut();
+  window.location.href = 'login.html';
+}
 </script>
 </body>
 </html>
