@@ -44,6 +44,13 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .ctx-co{font-size:.78rem;font-weight:600;color:var(--g800);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .ctx-nc{font-size:.72rem;color:var(--inkm);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:140px}
 .hdr-usr{width:34px;height:34px;border-radius:50%;background:var(--g100);border:2px solid var(--g200);display:flex;align-items:center;justify-content:center;font-size:.78rem;font-weight:600;color:var(--g800);cursor:pointer;flex-shrink:0}
+.save-ind{display:flex;align-items:center;gap:5px;font-size:.72rem;font-weight:500;color:var(--g700);opacity:0;transition:opacity .3s;pointer-events:none;white-space:nowrap}
+.save-ind.saving{color:var(--inkm);opacity:1}
+.save-ind.saved{opacity:1}
+.save-ind.err{color:#DC2626;opacity:1}
+.save-dot{width:6px;height:6px;border-radius:50%;background:currentColor;flex-shrink:0}
+.save-dot.spin{background:none;border:1.5px solid var(--inkm);border-top-color:transparent;border-radius:50%;animation:spin .7s linear infinite;width:7px;height:7px}
+@keyframes spin{to{transform:rotate(360deg)}}
 
 /* ── STEPPER ── */
 .sbar{background:var(--white);border-bottom:1px solid var(--cd);box-shadow:var(--sh1)}
@@ -547,6 +554,7 @@ input.wslider::-webkit-slider-thumb{-webkit-appearance:none;width:13px;height:13
         <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M8 2L3 6.5L8 11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
         Dashboard
       </a>
+      <div class="save-ind" id="saveInd"><div class="save-dot" id="saveDot"></div><span id="saveLabel">Salvato</span></div>
       <div class="ctx-pill" id="ctxPill">
         <div class="ctx-dot"></div>
         <span class="ctx-co" id="ctxCo">Nuova valutazione</span>
@@ -2056,6 +2064,7 @@ function goToModule(n) {
   updateStepper(n);
   updateHeader();
   window.scrollTo({top:0,behavior:'smooth'});
+  if (window._sbReady) saveToSupabase();
 }
 
 function updateStepper(active){
@@ -3776,7 +3785,7 @@ goToModule(1);
 updateHeader();
 </script>
 
-<!-- Supabase: auth guard + avatar + logout -->
+<!-- Supabase: auth guard + save/load + logout -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 (async () => {
@@ -3787,18 +3796,102 @@ updateHeader();
   );
   window._sb = sb;
 
+  // ── Auth guard ──
   const { data: { session } } = await sb.auth.getSession();
   if (!session) { window.location.href = 'login.html'; return; }
 
+  // ── Avatar ──
   const user = session.user;
+  window._sbUser = user;
   const name = user.user_metadata?.full_name || '';
   const initials = name
     ? name.split(' ').map(p => p[0]).join('').slice(0,2).toUpperCase()
     : user.email.slice(0,2).toUpperCase();
   const av = document.getElementById('hdrUsr');
   if (av) { av.textContent = initials; av.title = `${user.email} — Esci`; }
+
+  // ── Load ──
+  await loadFromSupabase(user.id);
+  window._sbReady = true;
 })();
 
+// ── Save indicator helpers ──
+function showSaveInd(state) {
+  const ind = document.getElementById('saveInd');
+  const dot = document.getElementById('saveDot');
+  const lbl = document.getElementById('saveLabel');
+  ind.className = 'save-ind ' + state;
+  if (state === 'saving') {
+    dot.className = 'save-dot spin';
+    lbl.textContent = 'Salvataggio…';
+  } else if (state === 'saved') {
+    dot.className = 'save-dot';
+    dot.style.color = 'var(--g700)';
+    lbl.textContent = '✓ Salvato';
+    setTimeout(() => { ind.style.opacity = '0'; }, 2500);
+  } else if (state === 'err') {
+    dot.className = 'save-dot';
+    lbl.textContent = '⚠ Errore salvataggio';
+    setTimeout(() => { ind.style.opacity = '0'; }, 3500);
+  }
+}
+
+// ── saveToSupabase ──
+async function saveToSupabase() {
+  const sb = window._sb;
+  const user = window._sbUser;
+  if (!sb || !user) return;
+
+  // Genera ID assessment se non esiste
+  if (!appState.id) {
+    appState.id = crypto.randomUUID ? crypto.randomUUID()
+      : ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
+          (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16));
+  }
+
+  showSaveInd('saving');
+
+  const { error } = await sb.from('assessments').upsert({
+    id: appState.id,
+    user_id: user.id,
+    company_name: appState.m1.ragione || null,
+    step: appState.nav.current,
+    data: appState,
+    updated_at: new Date().toISOString(),
+  }, { onConflict: 'id' });
+
+  showSaveInd(error ? 'err' : 'saved');
+  if (error) console.error('Save error:', error.message);
+}
+
+// ── loadFromSupabase ──
+async function loadFromSupabase(userId) {
+  const sb = window._sb;
+  if (!sb) return;
+
+  // Cerca ID da URL (?id=xxx) oppure l'assessment più recente
+  const urlId = new URLSearchParams(window.location.search).get('id');
+
+  let query = sb.from('assessments').select('id, data, step').eq('user_id', userId);
+  if (urlId) {
+    query = query.eq('id', urlId).single();
+  } else {
+    query = query.order('updated_at', { ascending: false }).limit(1).maybeSingle();
+  }
+
+  const { data, error } = await query;
+  if (error || !data) return; // nessun assessment salvato → parte da zero
+
+  // Ripristina appState mantenendo le chiavi di default per campi eventualmente nuovi
+  Object.assign(appState, data.data);
+  appState.id = data.id; // assicura coerenza
+
+  // Vai al modulo salvato
+  goToModule(appState.nav.current || 1);
+  updateHeader();
+}
+
+// ── Logout ──
 async function supabaseLogout() {
   if (!window._sb) return;
   await window._sb.auth.signOut();
