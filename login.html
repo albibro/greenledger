@@ -396,7 +396,7 @@ async function handleSubmit(e) {
     } else {
       const { error } = await sb.auth.signInWithPassword({ email, password });
       if (error) throw error;
-      window.location.href = 'greenledger.html';
+      window.location.href = 'dashboard.html';
     }
   } catch (err) {
     showErr(translateError(err.message));
