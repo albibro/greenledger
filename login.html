@@ -381,7 +381,7 @@ async function handleSubmit(e) {
         password,
         options: {
           data: { full_name: name },
-          emailRedirectTo: window.location.origin + '/greenledger.html'
+          emailRedirectTo: 'https://greenledger-six.vercel.app/dashboard.html'
         }
       });
       if (error) throw error;
@@ -415,7 +415,7 @@ async function handleMagicLink() {
   try {
     const { error } = await sb.auth.signInWithOtp({
       email,
-      options: { emailRedirectTo: window.location.origin + '/greenledger.html' }
+      options: { emailRedirectTo: 'https://greenledger-six.vercel.app/dashboard.html' }
     });
     if (error) throw error;
     showSuccess('Magic Link inviato', `Abbiamo inviato il link di accesso a <strong>${email}</strong>. Controlla anche la cartella spam.`);
@@ -438,7 +438,7 @@ async function handleForgot(e) {
   }
   try {
     const { error } = await sb.auth.resetPasswordForEmail(email, {
-      redirectTo: window.location.origin + '/login.html#reset'
+      redirectTo: 'https://greenledger-six.vercel.app/dashboard.html'
     });
     if (error) throw error;
     showAlertOk(`Email di reset inviata a <strong>${email}</strong>. Controlla la posta.`);
