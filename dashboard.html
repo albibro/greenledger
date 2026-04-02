@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard — GreenLedger</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --g900:#0D3D25;--g800:#1A7A4A;--g700:#1E8F56;--g600:#22A463;
+  --g200:#A8DBBF;--g100:#D4EFE0;--g50:#EEF8F3;
+  --cream:#F7F4EE;--cd:#EDE9DF;--cdd:#DDD8CC;
+  --ink:#0F1C14;--inks:#3A4D40;--inkm:#6B7F72;
+  --white:#fff;
+  --amber:#D97706;--ambg:#FFFBEB;--ambb:#FDE68A;
+  --red:#DC2626;--redbg:#FEF2F2;
+  --sh1:0 1px 3px rgba(15,28,20,.07);
+  --sh2:0 4px 16px rgba(15,28,20,.10),0 2px 6px rgba(15,28,20,.06);
+  --sh3:0 16px 48px rgba(15,28,20,.14),0 4px 12px rgba(15,28,20,.08);
+  --r:12px;--rs:8px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--ink);min-height:100vh}
+body::before{content:'';position:fixed;inset:0;background:
+  radial-gradient(ellipse 70% 40% at 5% 10%,rgba(26,122,74,.05) 0%,transparent 60%),
+  radial-gradient(ellipse 40% 30% at 95% 90%,rgba(29,78,216,.03) 0%,transparent 55%);
+  pointer-events:none;z-index:0}
+
+/* ── LOADING SCREEN ── */
+#loadingScreen{
+  position:fixed;inset:0;background:var(--cream);
+  display:flex;align-items:center;justify-content:center;
+  z-index:9999;flex-direction:column;gap:16px;
+}
+.load-logo{display:flex;align-items:center;gap:10px}
+.lmark{width:36px;height:36px;background:var(--g800);border-radius:10px;display:flex;align-items:center;justify-content:center}
+.ltxt{font-family:'Playfair Display',serif;font-weight:700;font-size:1.2rem;color:var(--g900)}
+.ltxt span{color:var(--g800)}
+.load-spinner{width:20px;height:20px;border:2px solid var(--g100);border-top-color:var(--g700);border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ── NAV ── */
+nav{position:sticky;top:0;z-index:200;background:rgba(247,244,238,.94);backdrop-filter:blur(12px);border-bottom:1px solid var(--cd)}
+.nav-in{max-width:1200px;margin:0 auto;padding:0 36px;height:64px;display:flex;align-items:center;justify-content:space-between}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.nav-r{display:flex;align-items:center;gap:14px}
+.user-pill{display:flex;align-items:center;gap:8px;background:var(--g50);border:1px solid var(--g100);border-radius:100px;padding:5px 14px 5px 6px}
+.user-av{width:26px;height:26px;border-radius:50%;background:var(--g800);display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:700;color:var(--white);flex-shrink:0}
+.user-email{font-size:.75rem;font-weight:500;color:var(--inks);max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.btn-logout{padding:7px 14px;border-radius:8px;font-size:.78rem;font-weight:500;color:var(--inkm);background:transparent;border:1px solid var(--cd);cursor:pointer;transition:all .2s}
+.btn-logout:hover{background:var(--redbg);border-color:#FECACA;color:var(--red)}
+
+/* ── MAIN ── */
+main{max-width:1200px;margin:0 auto;padding:44px 36px 80px;position:relative;z-index:1}
+
+/* ── HERO ── */
+.dash-hero{margin-bottom:36px;animation:fadeUp .4s ease both}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+.eyebrow{display:inline-flex;align-items:center;gap:6px;background:var(--g50);border:1px solid var(--g200);border-radius:100px;padding:4px 12px;font-size:.7rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--g700);margin-bottom:14px}
+.edot{width:6px;height:6px;border-radius:50%;background:var(--g600);animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.6;transform:scale(1.2)}}
+.dash-hero h1{font-family:'Playfair Display',serif;font-size:1.9rem;font-weight:700;color:var(--g900);letter-spacing:-.03em;margin-bottom:6px}
+.dash-hero p{font-size:.88rem;color:var(--inkm)}
+
+/* ── QUICK ACTIONS ── */
+.quick-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:44px;animation:fadeUp .4s .08s ease both}
+@media(max-width:700px){.quick-grid{grid-template-columns:1fr}}
+.quick-card{background:var(--white);border:1.5px solid var(--cd);border-radius:16px;padding:24px;cursor:pointer;transition:all .25s;text-decoration:none;display:flex;flex-direction:column;gap:12px;position:relative;overflow:hidden}
+.quick-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--g700),var(--g600));opacity:0;transition:opacity .25s}
+.quick-card:hover{box-shadow:var(--sh2);transform:translateY(-2px);border-color:var(--g200)}
+.quick-card:hover::before{opacity:1}
+.quick-card.primary{background:var(--g900);border-color:var(--g900)}
+.quick-card.primary::before{opacity:1;background:linear-gradient(90deg,rgba(255,255,255,.2),rgba(255,255,255,.05))}
+.quick-card.primary:hover{background:#0D4D2E}
+.qc-icon{width:40px;height:40px;border-radius:10px;background:var(--g50);border:1px solid var(--g100);display:flex;align-items:center;justify-content:center;color:var(--g700)}
+.quick-card.primary .qc-icon{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.15);color:rgba(255,255,255,.9)}
+.qc-h{font-size:.9rem;font-weight:600;color:var(--ink)}
+.quick-card.primary .qc-h{color:var(--white)}
+.qc-p{font-size:.75rem;color:var(--inkm);line-height:1.5}
+.quick-card.primary .qc-p{color:rgba(255,255,255,.55)}
+.qc-arr{position:absolute;right:20px;top:50%;transform:translateY(-50%);color:var(--cdd);transition:all .25s}
+.quick-card:hover .qc-arr{color:var(--g600);transform:translateY(-50%) translateX(2px)}
+.quick-card.primary .qc-arr{color:rgba(255,255,255,.3)}
+.quick-card.primary:hover .qc-arr{color:rgba(255,255,255,.7)}
+
+/* ── SECTION HEADER ── */
+.sec-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.sec-hd h2{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:600;color:var(--g900)}
+.sec-hd span{font-size:.75rem;color:var(--inkm)}
+
+/* ── ASSESSMENT LIST ── */
+.assess-list{display:flex;flex-direction:column;gap:12px;animation:fadeUp .4s .14s ease both}
+.assess-card{background:var(--white);border:1px solid var(--cd);border-radius:14px;padding:20px 24px;display:flex;align-items:center;gap:18px;cursor:pointer;transition:all .2s;text-decoration:none}
+.assess-card:hover{box-shadow:var(--sh2);border-color:var(--g200)}
+.ac-status{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.ac-status.done{background:var(--g600)}
+.ac-status.wip{background:var(--amber)}
+.ac-status.new{background:var(--cdd)}
+.ac-body{flex:1;min-width:0}
+.ac-co{font-size:.9rem;font-weight:600;color:var(--ink);margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ac-meta{font-size:.72rem;color:var(--inkm);display:flex;gap:12px;flex-wrap:wrap}
+.ac-meta span{display:flex;align-items:center;gap:4px}
+.ac-badge{font-size:.65rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;padding:2px 8px;border-radius:100px;flex-shrink:0}
+.ac-badge.done{background:var(--g50);color:var(--g700);border:1px solid var(--g100)}
+.ac-badge.wip{background:var(--ambg);color:var(--amber);border:1px solid var(--ambb)}
+.ac-badge.new{background:var(--cd);color:var(--inkm);border:1px solid var(--cdd)}
+.ac-prog{width:80px;flex-shrink:0}
+.ac-prog-bar{height:4px;background:var(--cd);border-radius:100px;overflow:hidden}
+.ac-prog-fill{height:100%;border-radius:100px;background:linear-gradient(90deg,var(--g700),var(--g600));transition:width .6s ease}
+.ac-prog-lbl{font-size:.65rem;color:var(--inkm);text-align:right;margin-top:4px}
+.ac-arr{color:var(--cdd);transition:all .2s}
+.assess-card:hover .ac-arr{color:var(--g600);transform:translateX(2px)}
+
+/* ── EMPTY STATE ── */
+.empty-state{background:var(--white);border:1.5px dashed var(--cd);border-radius:16px;padding:52px 24px;text-align:center;animation:fadeUp .4s .14s ease both}
+.empty-icon{width:56px;height:56px;border-radius:16px;background:var(--g50);border:1px solid var(--g100);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;color:var(--g700)}
+.empty-h{font-family:'Playfair Display',serif;font-size:1rem;font-weight:600;color:var(--g900);margin-bottom:6px}
+.empty-p{font-size:.8rem;color:var(--inkm);line-height:1.6;max-width:320px;margin:0 auto 20px}
+.btn-new{display:inline-flex;align-items:center;gap:7px;padding:10px 20px;border-radius:9px;font-size:.85rem;font-weight:600;color:var(--white);background:var(--g800);border:none;cursor:pointer;text-decoration:none;transition:all .2s;box-shadow:0 3px 10px rgba(26,122,74,.2)}
+.btn-new:hover{background:var(--g700);transform:translateY(-1px)}
+
+/* ── STATS STRIP ── */
+.stats-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:44px;animation:fadeUp .4s .2s ease both}
+@media(max-width:600px){.stats-strip{grid-template-columns:1fr 1fr}}
+.stat-card{background:var(--white);border:1px solid var(--cd);border-radius:14px;padding:20px 22px}
+.stat-n{font-family:'Playfair Display',serif;font-size:1.7rem;font-weight:700;color:var(--g800);letter-spacing:-.02em}
+.stat-l{font-size:.75rem;color:var(--inkm);margin-top:2px}
+
+@media(max-width:600px){
+  main{padding:32px 20px 60px}
+  .nav-in{padding:0 20px}
+  .user-email{display:none}
+}
+</style>
+</head>
+<body>
+
+<!-- LOADING -->
+<div id="loadingScreen">
+  <div class="load-logo">
+    <div class="lmark">
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+        <path d="M9 2L4 6V14H7V10H11V14H14V6L9 2Z" fill="white" opacity=".9"/>
+        <rect x="7" y="10" width="4" height="4" rx="1" fill="white" opacity=".5"/>
+      </svg>
+    </div>
+    <span class="ltxt">Green<span>Ledger</span></span>
+  </div>
+  <div class="load-spinner"></div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-in">
+    <a class="logo" href="dashboard.html">
+      <div class="lmark">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+          <path d="M9 2L4 6V14H7V10H11V14H14V6L9 2Z" fill="white" opacity=".9"/>
+          <rect x="7" y="10" width="4" height="4" rx="1" fill="white" opacity=".5"/>
+        </svg>
+      </div>
+      <span class="ltxt">Green<span>Ledger</span></span>
+    </a>
+    <div class="nav-r">
+      <div class="user-pill">
+        <div class="user-av" id="userAv">?</div>
+        <span class="user-email" id="userEmail">…</span>
+      </div>
+      <button class="btn-logout" onclick="handleLogout()">Esci</button>
+    </div>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<main id="mainContent" style="display:none">
+
+  <!-- HERO -->
+  <div class="dash-hero">
+    <div class="eyebrow"><span class="edot"></span>Dashboard</div>
+    <h1 id="welcomeMsg">Bentornato</h1>
+    <p>Le tue Double Materiality Assessment</p>
+  </div>
+
+  <!-- QUICK ACTIONS -->
+  <div class="quick-grid">
+    <a class="quick-card primary" href="greenledger.html">
+      <div class="qc-icon">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 4v12M4 10h12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      </div>
+      <div>
+        <div class="qc-h">Nuova Assessment</div>
+        <div class="qc-p">Avvia una nuova DMA guidata in 6 moduli</div>
+      </div>
+      <svg class="qc-arr" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </a>
+    <div class="quick-card" onclick="document.getElementById('assessList').scrollIntoView({behavior:'smooth'})">
+      <div class="qc-icon">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><rect x="3" y="4" width="14" height="3" rx="1.5" fill="currentColor" opacity=".3"/><rect x="3" y="9" width="10" height="3" rx="1.5" fill="currentColor" opacity=".5"/><rect x="3" y="14" width="7" height="3" rx="1.5" fill="currentColor"/></svg>
+      </div>
+      <div>
+        <div class="qc-h">Le mie Assessment</div>
+        <div class="qc-p">Riprendi o visualizza le assessment salvate</div>
+      </div>
+      <svg class="qc-arr" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <div class="quick-card" style="cursor:default;opacity:.6">
+      <div class="qc-icon">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M4 16L7 13H16V5H4V16Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M8 9h5M8 11.5h3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+      </div>
+      <div>
+        <div class="qc-h">Team & Stakeholder</div>
+        <div class="qc-p">Gestione collaboratori — prossimamente</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ASSESSMENT LIST -->
+  <div id="assessList">
+    <div class="sec-hd">
+      <h2>Assessment recenti</h2>
+      <span id="assessCount"></span>
+    </div>
+    <div id="assessContainer">
+      <!-- populated by JS -->
+    </div>
+  </div>
+
+  <!-- STATS -->
+  <div class="stats-strip">
+    <div class="stat-card">
+      <div class="stat-n" id="statTotal">—</div>
+      <div class="stat-l">Assessment totali</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-n" id="statWip">—</div>
+      <div class="stat-l">In corso</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-n" id="statDone">—</div>
+      <div class="stat-l">Completate</div>
+    </div>
+  </div>
+
+</main>
+
+<!-- SUPABASE CDN -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SUPABASE_URL = 'https://sxcuhojxbqyrvouabmeo.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN4Y3Vob2p4YnF5cnZvdWFibWVvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM0NDM5MjksImV4cCI6MjA4OTAxOTkyOX0.WkjJrzL2gxFnfLXNOQo_QDt5IMgNbJxi37AXAIzPj60';
+const { createClient } = supabase;
+const sb = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+// ── Auth guard ──
+async function init() {
+  const { data: { session } } = await sb.auth.getSession();
+  if (!session) {
+    window.location.href = 'login.html';
+    return;
+  }
+  renderUser(session.user);
+  await loadAssessments(session.user.id);
+  document.getElementById('loadingScreen').style.display = 'none';
+  document.getElementById('mainContent').style.display = 'block';
+}
+
+function renderUser(user) {
+  const email = user.email || '';
+  const name = user.user_metadata?.full_name || '';
+  const initials = name
+    ? name.split(' ').map(p => p[0]).join('').slice(0, 2).toUpperCase()
+    : email.slice(0, 2).toUpperCase();
+
+  document.getElementById('userAv').textContent = initials;
+  document.getElementById('userEmail').textContent = email;
+
+  const greeting = name ? `Bentornato, ${name.split(' ')[0]}` : 'Bentornato';
+  document.getElementById('welcomeMsg').textContent = greeting;
+}
+
+// ── Load assessments from Supabase ──
+async function loadAssessments(userId) {
+  const { data, error } = await sb
+    .from('assessments')
+    .select('id, company_name, created_at, updated_at, step, export_data')
+    .eq('user_id', userId)
+    .order('updated_at', { ascending: false });
+
+  const container = document.getElementById('assessContainer');
+
+  if (error || !data || data.length === 0) {
+    container.innerHTML = `
+      <div class="empty-state">
+        <div class="empty-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2" stroke="currentColor" stroke-width="1.5"/><rect x="9" y="3" width="6" height="4" rx="1" stroke="currentColor" stroke-width="1.5"/><path d="M9 12h6M9 16h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </div>
+        <h3 class="empty-h">Nessuna assessment ancora</h3>
+        <p class="empty-p">Crea la tua prima Double Materiality Assessment e inizia il percorso verso la conformità CSRD.</p>
+        <a class="btn-new" href="greenledger.html">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 2v10M2 7h10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+          Nuova Assessment
+        </a>
+      </div>`;
+    document.getElementById('assessCount').textContent = '0 assessment';
+    document.getElementById('statTotal').textContent = '0';
+    document.getElementById('statWip').textContent = '0';
+    document.getElementById('statDone').textContent = '0';
+    return;
+  }
+
+  let wip = 0, done = 0;
+  container.innerHTML = data.map(a => {
+    const step = a.step || 1;
+    const totalSteps = 6;
+    const pct = Math.round((step / totalSteps) * 100);
+    const isDone = step >= totalSteps;
+    const statusClass = isDone ? 'done' : step > 1 ? 'wip' : 'new';
+    const statusLabel = isDone ? 'Completata' : step > 1 ? 'In corso' : 'Nuova';
+    const date = new Date(a.updated_at || a.created_at).toLocaleDateString('it-IT', { day:'2-digit', month:'short', year:'numeric' });
+    const company = a.company_name || 'Azienda senza nome';
+
+    if (isDone) done++; else if (step > 1) wip++;
+
+    return `
+      <a class="assess-card" href="greenledger.html?id=${encodeURIComponent(a.id)}">
+        <div class="ac-status ${statusClass}"></div>
+        <div class="ac-body">
+          <div class="ac-co">${escHtml(company)}</div>
+          <div class="ac-meta">
+            <span>
+              <svg width="11" height="11" viewBox="0 0 11 11" fill="none"><rect x="1" y="2" width="9" height="8" rx="1.5" stroke="currentColor" stroke-width="1.1"/><path d="M3.5 1v2M7.5 1v2M1 5h9" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"/></svg>
+              ${date}
+            </span>
+            <span>
+              <svg width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M1 5.5L3.5 8L10 2" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Modulo ${step} di ${totalSteps}
+            </span>
+          </div>
+        </div>
+        <div class="ac-prog">
+          <div class="ac-prog-bar"><div class="ac-prog-fill" style="width:${pct}%"></div></div>
+          <div class="ac-prog-lbl">${pct}%</div>
+        </div>
+        <span class="ac-badge ${statusClass}">${statusLabel}</span>
+        <svg class="ac-arr" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>`;
+  }).join('');
+
+  document.getElementById('assessCount').textContent = `${data.length} assessment`;
+  document.getElementById('statTotal').textContent = data.length;
+  document.getElementById('statWip').textContent = wip;
+  document.getElementById('statDone').textContent = done;
+}
+
+// ── Logout ──
+async function handleLogout() {
+  await sb.auth.signOut();
+  window.location.href = 'login.html';
+}
+
+function escHtml(str) {
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+init();
+</script>
+</body>
+</html>
