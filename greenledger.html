@@ -2064,7 +2064,11 @@ function goToModule(n) {
   updateStepper(n);
   updateHeader();
   window.scrollTo({top:0,behavior:'smooth'});
-  if (window._sbReady) saveToSupabase();
+  // Salva solo se Supabase è pronto e c'è qualcosa da salvare
+  // (ha già un id oppure sta avanzando oltre M1 con dati)
+  if (window._sbReady && (appState.id || n > 1 || appState.m1.ragione)) {
+    saveToSupabase();
+  }
 }
 
 function updateStepper(active){
@@ -3820,6 +3824,8 @@ function showSaveInd(state) {
   const ind = document.getElementById('saveInd');
   const dot = document.getElementById('saveDot');
   const lbl = document.getElementById('saveLabel');
+  // Gli errori sono silenziosi: non mostrare mai UI di errore nell'header
+  if (state === 'err') return;
   ind.className = 'save-ind ' + state;
   if (state === 'saving') {
     dot.className = 'save-dot spin';
@@ -3829,10 +3835,6 @@ function showSaveInd(state) {
     dot.style.color = 'var(--g700)';
     lbl.textContent = '✓ Salvato';
     setTimeout(() => { ind.style.opacity = '0'; }, 2500);
-  } else if (state === 'err') {
-    dot.className = 'save-dot';
-    lbl.textContent = '⚠ Errore salvataggio';
-    setTimeout(() => { ind.style.opacity = '0'; }, 3500);
   }
 }
 
