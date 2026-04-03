@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Survey Stakeholder — GreenLedger</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --g900:#0D3D25;--g800:#1A7A4A;--g700:#1E8F56;--g600:#22A463;--g500:#28BB72;
+  --g200:#A8DBBF;--g100:#D4EFE0;--g50:#EEF8F3;
+  --cream:#F7F4EE;--cd:#EDE9DF;--cdd:#DDD8CC;
+  --ink:#0F1C14;--inks:#3A4D40;--inkm:#6B7F72;
+  --white:#fff;
+  --amber:#D97706;--ambg:#FFFBEB;
+  --red:#DC2626;--redbg:#FEF2F2;
+  --sh1:0 1px 3px rgba(15,28,20,.07);
+  --sh2:0 4px 16px rgba(15,28,20,.10),0 2px 6px rgba(15,28,20,.06);
+  --r:12px;--rs:8px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--ink);min-height:100vh}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.6;transform:scale(1.2)}}
+@keyframes pop{0%{transform:scale(.8);opacity:0}60%{transform:scale(1.08)}100%{transform:scale(1);opacity:1}}
+
+/* ── LOADING ── */
+#loadScr{position:fixed;inset:0;background:#0A1F12;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:14px;z-index:9999}
+.ls-logo{display:flex;align-items:center;gap:10px}
+.ls-mark{width:34px;height:34px;background:var(--g700);border-radius:10px;display:flex;align-items:center;justify-content:center}
+.ls-txt{font-family:'Playfair Display',serif;font-weight:700;font-size:1.15rem;color:#fff}
+.ls-txt span{color:var(--g200)}
+.ls-spin{width:18px;height:18px;border:2px solid rgba(168,219,191,.2);border-top-color:var(--g500);border-radius:50%;animation:spin .7s linear infinite}
+
+/* ── HEADER ── */
+header{background:rgba(10,31,18,.92);backdrop-filter:blur(16px);border-bottom:1px solid rgba(168,219,191,.1);position:sticky;top:0;z-index:100}
+.hdr-in{max-width:740px;margin:0 auto;padding:0 24px;height:58px;display:flex;align-items:center;gap:14px}
+.logo{display:flex;align-items:center;gap:9px;text-decoration:none}
+.lmark{width:30px;height:30px;background:var(--g800);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.ltxt{font-family:'Playfair Display',serif;font-weight:700;font-size:1rem;color:#fff;letter-spacing:-.02em}
+.ltxt span{color:var(--g200)}
+.hdr-sep{width:1px;height:20px;background:rgba(255,255,255,.15)}
+.hdr-co{font-size:.78rem;color:rgba(255,255,255,.65);font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+/* ── PAGE ── */
+.page{max-width:740px;margin:0 auto;padding:36px 24px 80px}
+@media(max-width:600px){.page{padding:24px 16px 60px}.hdr-in{padding:0 16px}}
+
+/* ── INTRO CARD ── */
+.intro-card{background:var(--white);border:1px solid var(--cd);border-radius:18px;padding:28px 28px 24px;margin-bottom:28px;animation:fadeUp .4s ease both}
+.intro-eyebrow{display:inline-flex;align-items:center;gap:6px;background:var(--g50);border:1px solid var(--g200);border-radius:100px;padding:4px 12px;font-size:.68rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--g700);margin-bottom:14px}
+.edot{width:5px;height:5px;border-radius:50%;background:var(--g600);animation:pulse 2s ease-in-out infinite}
+.intro-card h1{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:700;color:var(--g900);letter-spacing:-.03em;margin-bottom:6px}
+.intro-card p{font-size:.85rem;color:var(--inkm);line-height:1.6;margin-bottom:0}
+.intro-meta{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}
+.meta-chip{display:flex;align-items:center;gap:5px;background:var(--cream);border:1px solid var(--cd);border-radius:7px;padding:5px 10px;font-size:.74rem;color:var(--inks)}
+.meta-chip svg{flex-shrink:0;color:var(--inkm)}
+
+/* ── PROGRESS BAR ── */
+.prog-wrap{margin-bottom:28px;animation:fadeUp .4s .05s ease both}
+.prog-label{display:flex;justify-content:space-between;align-items:center;font-size:.74rem;color:var(--inkm);margin-bottom:7px}
+.prog-label strong{color:var(--ink)}
+.prog-track{height:5px;background:var(--cd);border-radius:100px;overflow:hidden}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--g600),var(--g500));border-radius:100px;transition:width .4s ease}
+
+/* ── IRO CARD ── */
+.iro-card{background:var(--white);border:1px solid var(--cd);border-radius:16px;padding:24px;margin-bottom:16px;animation:fadeUp .35s ease both;transition:border-color .2s}
+.iro-card.answered{border-color:var(--g200);background:var(--g50)}
+.iro-top{display:flex;align-items:flex-start;gap:14px;margin-bottom:16px}
+.iro-emoji{font-size:1.6rem;line-height:1;flex-shrink:0;margin-top:2px}
+.iro-info{flex:1;min-width:0}
+.iro-n{font-size:.67rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--inkm);margin-bottom:3px}
+.iro-title{font-size:.95rem;font-weight:700;color:var(--ink);line-height:1.35}
+.iro-desc{font-size:.8rem;color:var(--inkm);line-height:1.5;margin-top:4px}
+.iro-cat{display:inline-flex;align-items:center;font-size:.62rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:2px 8px;border-radius:5px;margin-top:6px}
+.cat-a{background:var(--g50);color:var(--g700);border:1px solid var(--g100)}
+.cat-s{background:#EFF6FF;color:#1D4ED8;border:1px solid #BFDBFE}
+.cat-g{background:#FDF4FF;color:#7E22CE;border:1px solid #E9D5FF}
+
+/* ── RATING SCALE ── */
+.scale-label{font-size:.74rem;font-weight:600;color:var(--ink);margin-bottom:10px}
+.scale-row{display:flex;gap:8px;flex-wrap:wrap}
+.scale-btn{flex:1;min-width:44px;height:50px;border:2px solid var(--cd);border-radius:10px;background:var(--white);cursor:pointer;font-size:.9rem;font-weight:700;font-family:'DM Mono',monospace;color:var(--inkm);transition:all .15s;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:2px;position:relative}
+.scale-btn:hover{border-color:var(--g500);color:var(--g700);background:var(--g50)}
+.scale-btn.sel{border-color:var(--g600);background:var(--g600);color:#fff;transform:scale(1.04)}
+.scale-btn .s-lbl{font-size:.55rem;font-weight:500;font-family:'DM Sans',sans-serif;opacity:.75;text-align:center;line-height:1;letter-spacing:0}
+.scale-ends{display:flex;justify-content:space-between;margin-top:5px;font-size:.68rem;color:var(--inkm)}
+
+/* ── COMMENT ── */
+.comment-wrap{margin-top:14px}
+.comment-toggle{display:inline-flex;align-items:center;gap:5px;font-size:.74rem;color:var(--g700);font-weight:500;cursor:pointer;background:none;border:none;padding:0;text-decoration:underline;text-underline-offset:2px}
+.comment-toggle:hover{color:var(--g800)}
+.comment-area{margin-top:8px;display:none}
+.comment-area.open{display:block}
+textarea.inp{width:100%;border:1.5px solid var(--cd);border-radius:var(--rs);padding:10px 12px;font-family:'DM Sans',sans-serif;font-size:.83rem;color:var(--ink);background:var(--white);resize:vertical;min-height:72px;line-height:1.5;transition:border-color .2s}
+textarea.inp::placeholder{color:var(--cdd)}
+textarea.inp:focus{outline:none;border-color:var(--g500)}
+
+/* ── ANSWERED BADGE ── */
+.answered-badge{display:inline-flex;align-items:center;gap:5px;font-size:.7rem;font-weight:600;color:var(--g700);background:var(--g50);border:1px solid var(--g100);border-radius:6px;padding:3px 9px;float:right;margin-top:-2px}
+
+/* ── SUBMIT SECTION ── */
+.submit-wrap{background:var(--white);border:1px solid var(--cd);border-radius:16px;padding:24px;margin-top:8px;animation:fadeUp .4s ease both}
+.submit-wrap p{font-size:.83rem;color:var(--inkm);margin-bottom:16px;line-height:1.6}
+.btn-submit{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:14px 24px;background:linear-gradient(135deg,var(--g700),var(--g600));color:#fff;border:none;border-radius:10px;font-size:.92rem;font-weight:600;cursor:pointer;transition:all .2s;font-family:'DM Sans',sans-serif}
+.btn-submit:hover{background:linear-gradient(135deg,var(--g800),var(--g700));transform:translateY(-1px);box-shadow:0 4px 14px rgba(30,143,86,.3)}
+.btn-submit:disabled{opacity:.6;cursor:not-allowed;transform:none;box-shadow:none}
+.btn-submit .spin{width:16px;height:16px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;display:none}
+.btn-submit.loading .spin{display:block}
+.btn-submit.loading .btn-txt{display:none}
+.warn-missing{font-size:.74rem;color:var(--red);margin-top:10px;display:none}
+
+/* ── THANK YOU ── */
+#viewThanks{display:none;min-height:60vh;display:none;align-items:center;justify-content:center;animation:fadeUp .5s ease both}
+.ty-card{background:var(--white);border:1px solid var(--cd);border-radius:20px;padding:48px 36px;text-align:center;max-width:480px;margin:0 auto}
+.ty-icon{width:72px;height:72px;background:linear-gradient(135deg,var(--g700),var(--g500));border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;animation:pop .5s ease both}
+.ty-card h2{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;color:var(--g900);margin-bottom:8px}
+.ty-card p{font-size:.85rem;color:var(--inkm);line-height:1.65;margin-bottom:0}
+.ty-note{margin-top:20px;font-size:.75rem;color:var(--cdd);font-style:italic}
+
+/* ── ERROR ── */
+#viewError{display:none;min-height:60vh;align-items:center;justify-content:center}
+.err-card{background:var(--white);border:1px solid var(--cd);border-radius:20px;padding:40px 32px;text-align:center;max-width:420px;margin:0 auto}
+.err-card h2{font-size:1.1rem;font-weight:700;color:var(--ink);margin-bottom:8px}
+.err-card p{font-size:.83rem;color:var(--inkm);line-height:1.6}
+
+/* ── ALREADY DONE ── */
+#viewDone{display:none;min-height:60vh;align-items:center;justify-content:center}
+</style>
+</head>
+<body>
+
+<!-- LOADING -->
+<div id="loadScr">
+  <div class="ls-logo">
+    <div class="ls-mark">
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 2L4 7V15H7V11H11V15H14V7L9 2Z" fill="white"/></svg>
+    </div>
+    <div class="ls-txt">Green<span>Ledger</span></div>
+  </div>
+  <div class="ls-spin"></div>
+</div>
+
+<!-- HEADER -->
+<header>
+  <div class="hdr-in">
+    <a class="logo" href="index.html">
+      <div class="lmark">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 2L3 7V14H6V10H10V14H13V7L8 2Z" fill="white"/></svg>
+      </div>
+      <div class="ltxt">Green<span>Ledger</span></div>
+    </a>
+    <div class="hdr-sep"></div>
+    <div class="hdr-co" id="hdrCo">Survey Stakeholder</div>
+  </div>
+</header>
+
+<!-- MAIN -->
+<main class="page" id="mainPage" style="display:none">
+
+  <!-- SURVEY VIEW -->
+  <div id="viewSurvey">
+
+    <!-- Intro card -->
+    <div class="intro-card">
+      <div class="intro-eyebrow"><span class="edot"></span> Valutazione IRO</div>
+      <h1 id="introTitle">Survey di materialità</h1>
+      <p id="introDesc">Valuta la rilevanza di ciascun tema per la tua organizzazione e per la società. Il tuo contributo è fondamentale per l'analisi di materialità.</p>
+      <div class="intro-meta">
+        <div class="meta-chip">
+          <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.5"/><path d="M8 5V8.5L10.5 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          <span id="metaTime">~5 minuti</span>
+        </div>
+        <div class="meta-chip">
+          <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M8 2C5.24 2 3 4.24 3 7c0 3.75 5 8 5 8s5-4.25 5-8c0-2.76-2.24-5-5-5zm0 6.5c-.83 0-1.5-.67-1.5-1.5S7.17 5.5 8 5.5s1.5.67 1.5 1.5S8.83 8.5 8 8.5z" fill="currentColor"/></svg>
+          <span id="metaCo">—</span>
+        </div>
+        <div class="meta-chip">
+          <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M8 2a4 4 0 100 8 4 4 0 000-8zM2 13.5C2 11.57 4.69 10 8 10s6 1.57 6 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          <span id="metaName">Stakeholder</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Progress -->
+    <div class="prog-wrap">
+      <div class="prog-label">
+        <span>Progresso: <strong id="progCount">0 / 0</strong> IRO valutati</span>
+        <span id="progPct" style="font-weight:600;color:var(--g700)">0%</span>
+      </div>
+      <div class="prog-track"><div class="prog-fill" id="progFill" style="width:0%"></div></div>
+    </div>
+
+    <!-- IRO Cards -->
+    <div id="iroList"></div>
+
+    <!-- Submit -->
+    <div class="submit-wrap">
+      <p>Quando hai completato tutte le valutazioni, invia il questionario. Potrai modificare le risposte fino all'invio definitivo.</p>
+      <button class="btn-submit" id="btnSubmit" onclick="submitSurvey()">
+        <div class="spin"></div>
+        <span class="btn-txt">Invia valutazioni →</span>
+      </button>
+      <div class="warn-missing" id="warnMissing">Completa tutte le valutazioni prima di inviare.</div>
+    </div>
+
+  </div><!-- /viewSurvey -->
+
+  <!-- THANK YOU -->
+  <div id="viewThanks" style="display:none;align-items:center;justify-content:center">
+    <div class="ty-card">
+      <div class="ty-icon">
+        <svg width="34" height="34" viewBox="0 0 34 34" fill="none"><path d="M7 17L13.5 23.5L27 10" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <h2>Grazie per il tuo contributo!</h2>
+      <p>Le tue valutazioni sono state registrate con successo e contribuiranno all'analisi di doppia materialità dell'azienda.</p>
+      <div class="ty-note">Puoi chiudere questa finestra.</div>
+    </div>
+  </div>
+
+  <!-- ALREADY DONE -->
+  <div id="viewDone" style="display:none;align-items:center;justify-content:center">
+    <div class="ty-card">
+      <div class="ty-icon" style="background:linear-gradient(135deg,var(--amber),#F59E0B)">
+        <svg width="34" height="34" viewBox="0 0 34 34" fill="none"><path d="M17 11V17M17 23H17.01" stroke="white" stroke-width="2.5" stroke-linecap="round"/></svg>
+      </div>
+      <h2>Hai già completato questo survey</h2>
+      <p>La tua valutazione è già stata registrata. Se hai bisogno di apportare modifiche, contatta il responsabile della sessione.</p>
+      <div class="ty-note">Puoi chiudere questa finestra.</div>
+    </div>
+  </div>
+
+  <!-- ERROR -->
+  <div id="viewError" style="display:none;align-items:center;justify-content:center">
+    <div class="err-card">
+      <h2>Link non valido</h2>
+      <p id="errMsg">Il link che hai aperto non è valido o la sessione non è più disponibile. Contatta il responsabile della sessione per ricevere un nuovo link.</p>
+    </div>
+  </div>
+
+</main><!-- /page -->
+
+<!-- SUPABASE CDN -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+'use strict';
+
+const SB_URL = 'https://sxcuhojxbqyrvouabmeo.supabase.co';
+const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN4Y3Vob2p4YnF5cnZvdWFibWVvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM0NDM5MjksImV4cCI6MjA4OTAxOTkyOX0.WkjJrzL2gxFnfLXNOQo_QDt5IMgNbJxi37AXAIzPj60';
+const sb = supabase.createClient(SB_URL, SB_KEY);
+
+// ── URL PARAMS ──
+const params     = new URLSearchParams(window.location.search);
+const sessionId  = params.get('sid');
+const stkId      = params.get('stk');
+
+// ── STATE ──
+let sessionData  = null;  // assessments row
+let stakeholder  = null;  // {id, name, org, category, email}
+let iros         = [];    // active IROs from session
+let scores       = {};    // {iroId: 1-5}
+let comments     = {};    // {iroId: string}
+
+// ── SCALE LABELS ──
+const SCALE_LABELS = ['','Non rilevante','Poco rilevante','Moderatamente rilevante','Molto rilevante','Essenziale'];
+
+function escH(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+// ══════════════════════════
+//  INIT
+// ══════════════════════════
+(async function init(){
+  if(!sessionId || !stkId){
+    showError('Parametri mancanti nel link (sid, stk).');
+    return;
+  }
+
+  // Fetch session from assessments table (anon can read due to RLS)
+  const { data: rows, error } = await sb
+    .from('assessments')
+    .select('id, company_name, data')
+    .eq('id', sessionId)
+    .limit(1);
+
+  if(error || !rows || rows.length === 0){
+    showError('Sessione non trovata. Il link potrebbe essere scaduto o non valido.');
+    return;
+  }
+
+  const row = rows[0];
+  if(row.data?._type !== 'stakeholder_session'){
+    showError('La sessione indicata non è una sessione stakeholder valida.');
+    return;
+  }
+
+  sessionData = row.data;
+  iros        = (sessionData.iros || []).filter(i => i.active !== false);
+
+  if(iros.length === 0){
+    showError('Questa sessione non ha ancora IRO definiti. Contatta il responsabile.');
+    return;
+  }
+
+  // Find stakeholder
+  stakeholder = (sessionData.stakeholders || []).find(s => s.id === stkId);
+  if(!stakeholder){
+    showError('Stakeholder non trovato in questa sessione. Il link potrebbe non essere corretto.');
+    return;
+  }
+
+  // Check if already completed
+  const { data: existing } = await sb
+    .from('stakeholder_responses')
+    .select('status, scores, comments')
+    .eq('session_id', sessionId)
+    .eq('stakeholder_id', stkId)
+    .limit(1);
+
+  const prev = existing?.[0];
+  if(prev?.status === 'completed'){
+    // Pre-fill scores so user sees their answers, then show done view
+    scores   = prev.scores   || {};
+    comments = prev.comments || {};
+    hideLodaing();
+    showView('viewDone');
+    return;
+  }
+
+  // Mark as opened (upsert)
+  await sb.from('stakeholder_responses').upsert({
+    session_id:       sessionId,
+    stakeholder_id:   stkId,
+    stakeholder_name: stakeholder.name || '',
+    status:           'opened',
+  }, { onConflict: 'session_id,stakeholder_id' });
+
+  // If had previous in-progress answers, restore them
+  if(prev?.scores)   scores   = prev.scores;
+  if(prev?.comments) comments = prev.comments;
+
+  // Render UI
+  renderIntro();
+  renderIros();
+  updateProgress();
+  hideLodaing();
+  showView('viewSurvey');
+})();
+
+// ══════════════════════════
+//  RENDER
+// ══════════════════════════
+function renderIntro(){
+  const company = sessionData.session?.company || 'Azienda';
+  const year    = sessionData.session?.year    || '';
+  const desc    = sessionData.session?.description;
+
+  document.getElementById('hdrCo').textContent     = company;
+  document.getElementById('metaCo').textContent    = `${company}${year ? ' · ' + year : ''}`;
+  document.getElementById('metaName').textContent  = stakeholder.name || 'Stakeholder';
+  document.getElementById('metaTime').textContent  = `~${Math.max(3, iros.length)} minuti`;
+  if(desc) document.getElementById('introDesc').textContent = desc;
+
+  document.title = `Survey — ${company} | GreenLedger`;
+}
+
+function renderIros(){
+  const list = document.getElementById('iroList');
+  list.innerHTML = iros.map((iro, idx) => {
+    const catKey = iro.category === 'Ambiente' ? 'a' : iro.category === 'Sociale' ? 's' : 'g';
+    const sel    = scores[iro.id];
+    return `<div class="iro-card${sel ? ' answered' : ''}" id="card-${iro.id}">
+      <div class="iro-top">
+        <div class="iro-emoji">${iro.emoji || '📌'}</div>
+        <div class="iro-info">
+          <div class="iro-n">IRO ${idx + 1} di ${iros.length}${sel ? `&nbsp;<span class="answered-badge"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5L4 7L8 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Valutato</span>` : ''}</div>
+          <div class="iro-title">${escH(iro.title)}</div>
+          ${iro.description ? `<div class="iro-desc">${escH(iro.description)}</div>` : ''}
+          <span class="iro-cat cat-${catKey}">${escH(iro.category)}</span>
+        </div>
+      </div>
+
+      <div class="scale-label">Quanto è rilevante questo tema per la tua organizzazione?</div>
+      <div class="scale-row">
+        ${[1,2,3,4,5].map(v => `
+          <button class="scale-btn${sel === v ? ' sel' : ''}" onclick="setScore('${iro.id}',${v})" title="${SCALE_LABELS[v]}">
+            ${v}
+            <span class="s-lbl">${['','Min','','Medio','','Max'][v]}</span>
+          </button>
+        `).join('')}
+      </div>
+      <div class="scale-ends">
+        <span>1 = Non rilevante</span>
+        <span>5 = Essenziale</span>
+      </div>
+
+      <div class="comment-wrap">
+        <button class="comment-toggle" onclick="toggleComment('${iro.id}')">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 2h8v6H7L5 10V8H2V2z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></svg>
+          ${comments[iro.id] ? 'Modifica commento' : 'Aggiungi commento (opzionale)'}
+        </button>
+        <div class="comment-area${comments[iro.id] ? ' open' : ''}" id="ca-${iro.id}">
+          <textarea class="inp" placeholder="Note o osservazioni su questo tema…" rows="3"
+            onchange="setComment('${iro.id}', this.value)"
+            oninput="setComment('${iro.id}', this.value)">${escH(comments[iro.id] || '')}</textarea>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ══════════════════════════
+//  INTERACTIONS
+// ══════════════════════════
+function setScore(iroId, val){
+  scores[iroId] = val;
+
+  // Update buttons
+  const card = document.getElementById('card-' + iroId);
+  card.querySelectorAll('.scale-btn').forEach((btn, i) => {
+    btn.classList.toggle('sel', i + 1 === val);
+  });
+
+  // Mark card answered
+  card.classList.add('answered');
+
+  // Update answered badge in iro-n
+  const nEl = card.querySelector('.iro-n');
+  const idx  = iros.findIndex(i => i.id === iroId);
+  nEl.innerHTML = `IRO ${idx + 1} di ${iros.length}&nbsp;<span class="answered-badge"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5L4 7L8 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Valutato</span>`;
+
+  updateProgress();
+  saveProgress();
+}
+
+function setComment(iroId, val){
+  if(val.trim()) comments[iroId] = val.trim();
+  else delete comments[iroId];
+}
+
+function toggleComment(iroId){
+  const area = document.getElementById('ca-' + iroId);
+  area.classList.toggle('open');
+  if(area.classList.contains('open')){
+    area.querySelector('textarea').focus();
+  }
+}
+
+function updateProgress(){
+  const answered = iros.filter(i => scores[i.id] != null).length;
+  const total    = iros.length;
+  const pct      = total > 0 ? Math.round((answered / total) * 100) : 0;
+  document.getElementById('progCount').textContent = `${answered} / ${total}`;
+  document.getElementById('progPct').textContent   = `${pct}%`;
+  document.getElementById('progFill').style.width  = pct + '%';
+}
+
+// ══════════════════════════
+//  AUTO-SAVE (progress)
+// ══════════════════════════
+let _saveTimer = null;
+function saveProgress(){
+  clearTimeout(_saveTimer);
+  _saveTimer = setTimeout(async () => {
+    await sb.from('stakeholder_responses').upsert({
+      session_id:       sessionId,
+      stakeholder_id:   stkId,
+      stakeholder_name: stakeholder.name || '',
+      scores,
+      comments,
+      status: 'opened',
+    }, { onConflict: 'session_id,stakeholder_id' });
+  }, 800);
+}
+
+// ══════════════════════════
+//  SUBMIT
+// ══════════════════════════
+async function submitSurvey(){
+  const missing = iros.filter(i => scores[i.id] == null);
+  if(missing.length > 0){
+    const w = document.getElementById('warnMissing');
+    w.style.display = 'block';
+    // Scroll to first unanswered card
+    const firstCard = document.getElementById('card-' + missing[0].id);
+    if(firstCard) firstCard.scrollIntoView({ behavior:'smooth', block:'center' });
+    return;
+  }
+  document.getElementById('warnMissing').style.display = 'none';
+
+  const btn = document.getElementById('btnSubmit');
+  btn.disabled = true;
+  btn.classList.add('loading');
+
+  const { error } = await sb.from('stakeholder_responses').upsert({
+    session_id:       sessionId,
+    stakeholder_id:   stkId,
+    stakeholder_name: stakeholder.name || '',
+    scores,
+    comments,
+    status:           'completed',
+    submitted_at:     new Date().toISOString(),
+  }, { onConflict: 'session_id,stakeholder_id' });
+
+  btn.classList.remove('loading');
+  btn.disabled = false;
+
+  if(error){
+    alert('Errore durante l\'invio: ' + error.message + '\nRiprova tra qualche secondo.');
+    return;
+  }
+
+  showView('viewThanks');
+}
+
+// ══════════════════════════
+//  VIEW HELPERS
+// ══════════════════════════
+function hideLodaing(){
+  document.getElementById('loadScr').style.display = 'none';
+  document.getElementById('mainPage').style.display = 'block';
+}
+
+function showView(id){
+  ['viewSurvey','viewThanks','viewDone','viewError'].forEach(v => {
+    const el = document.getElementById(v);
+    if(el) el.style.display = 'none';
+  });
+  const el = document.getElementById(id);
+  if(el){
+    el.style.display = 'flex';
+    if(id !== 'viewSurvey') el.style.flexDirection = 'column';
+  }
+}
+
+function showError(msg){
+  document.getElementById('errMsg').textContent = msg;
+  hideLodaing();
+  showView('viewError');
+}
+</script>
+</body>
+</html>

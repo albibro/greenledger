@@ -14,117 +14,994 @@
   --cream:#F7F4EE;--cd:#EDE9DF;--cdd:#DDD8CC;
   --ink:#0F1C14;--inks:#3A4D40;--inkm:#6B7F72;
   --white:#fff;
+  --amber:#D97706;--ambg:#FFFBEB;--ambb:#FDE68A;
+  --red:#DC2626;--redbg:#FEF2F2;--redbd:#FECACA;
+  --sh1:0 1px 3px rgba(15,28,20,.07);
   --sh2:0 4px 16px rgba(15,28,20,.10),0 2px 6px rgba(15,28,20,.06);
+  --sh3:0 20px 60px rgba(15,28,20,.16),0 4px 16px rgba(15,28,20,.08);
+  --r:12px;--rs:8px;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
-body{font-family:'DM Sans',sans-serif;background:#0A1F12;color:var(--white);min-height:100vh}
-@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--ink);min-height:100vh}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
 @keyframes float{0%,100%{transform:translate(0,0)}33%{transform:translate(20px,-20px)}66%{transform:translate(-15px,15px)}}
 @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.6;transform:scale(1.2)}}
-@keyframes spin{to{transform:rotate(360deg)}}
 
-/* NAV */
-nav{position:sticky;top:0;z-index:200;background:rgba(10,31,18,.88);backdrop-filter:blur(16px);border-bottom:1px solid rgba(168,219,191,.1)}
-.nav-in{max-width:1200px;margin:0 auto;padding:0 36px;height:64px;display:flex;align-items:center;justify-content:space-between}
+/* ── LOADING ── */
+#loadScr{position:fixed;inset:0;background:#0A1F12;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:14px;z-index:9999}
+.ls-logo{display:flex;align-items:center;gap:10px}
+.ls-mark{width:34px;height:34px;background:var(--g700);border-radius:10px;display:flex;align-items:center;justify-content:center}
+.ls-txt{font-family:'Playfair Display',serif;font-weight:700;font-size:1.15rem;color:#fff}
+.ls-txt span{color:var(--g200)}
+.ls-spin{width:18px;height:18px;border:2px solid rgba(168,219,191,.2);border-top-color:var(--g500);border-radius:50%;animation:spin .7s linear infinite}
+
+/* ── NAV ── */
+nav{position:sticky;top:0;z-index:200;background:rgba(10,31,18,.9);backdrop-filter:blur(16px);border-bottom:1px solid rgba(168,219,191,.1)}
+.nav-in{max-width:1100px;margin:0 auto;padding:0 32px;height:62px;display:flex;align-items:center;justify-content:space-between;gap:16px}
 .logo{display:flex;align-items:center;gap:10px;text-decoration:none}
-.lmark{width:34px;height:34px;background:var(--g800);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.ltxt{font-family:'Playfair Display',serif;font-weight:700;font-size:1.2rem;color:var(--white);letter-spacing:-.02em}
+.lmark{width:32px;height:32px;background:var(--g800);border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.ltxt{font-family:'Playfair Display',serif;font-weight:700;font-size:1.1rem;color:#fff;letter-spacing:-.02em}
 .ltxt span{color:var(--g200)}
-.nav-r{display:flex;align-items:center;gap:12px}
-.btn-nav{padding:7px 16px;border-radius:8px;font-size:.8rem;font-weight:600;color:rgba(255,255,255,.5);background:transparent;border:1px solid rgba(255,255,255,.12);cursor:pointer;transition:all .2s;text-decoration:none}
-.btn-nav:hover{background:rgba(255,255,255,.08);color:var(--white)}
-.btn-nav.primary{background:var(--g500);color:var(--g900);border-color:transparent;box-shadow:0 3px 12px rgba(40,187,114,.3)}
-.btn-nav.primary:hover{background:var(--g200)}
+.nav-c{display:flex;align-items:center;gap:7px;background:rgba(40,187,114,.08);border:1px solid rgba(40,187,114,.15);border-radius:100px;padding:4px 12px}
+.nav-cdot{width:6px;height:6px;border-radius:50%;background:var(--g500);animation:pulse 2s ease-in-out infinite;flex-shrink:0}
+.nav-co{font-size:.76rem;font-weight:600;color:var(--g200);max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.nav-r{display:flex;align-items:center;gap:10px}
+.nav-save{font-size:.72rem;font-weight:600;color:var(--g200);opacity:0;transition:opacity .4s;white-space:nowrap}
+.btn-nav{padding:6px 14px;border-radius:7px;font-size:.78rem;font-weight:500;color:rgba(255,255,255,.5);background:transparent;border:1px solid rgba(255,255,255,.12);cursor:pointer;transition:all .2s;text-decoration:none}
+.btn-nav:hover{background:rgba(255,255,255,.08);color:#fff}
+.nav-av{width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.1);border:1.5px solid rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;color:#fff;flex-shrink:0}
 
-/* HERO */
-.hero{position:relative;overflow:hidden;padding:100px 36px 80px;text-align:center}
-.hero-orbs{position:absolute;inset:0;pointer-events:none}
-.orb{position:absolute;border-radius:50%;filter:blur(70px);animation:float 12s ease-in-out infinite}
-.orb-1{width:500px;height:500px;background:radial-gradient(circle,rgba(34,164,99,.25) 0%,transparent 70%);top:-120px;left:-80px}
-.orb-2{width:400px;height:400px;background:radial-gradient(circle,rgba(13,61,37,.4) 0%,transparent 70%);bottom:-60px;right:0;animation-delay:-6s}
-.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(168,219,191,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(168,219,191,.04) 1px,transparent 1px);background-size:60px 60px;mask-image:radial-gradient(ellipse 70% 70% at 50% 50%,black 20%,transparent 100%)}
-.hero-inner{max-width:700px;margin:0 auto;position:relative;z-index:1;animation:fadeUp .5s ease both}
-.eyebrow{display:inline-flex;align-items:center;gap:8px;background:rgba(168,219,191,.1);border:1px solid rgba(168,219,191,.2);border-radius:100px;padding:6px 16px;font-size:.7rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--g200);margin-bottom:20px}
-.edot{width:6px;height:6px;border-radius:50%;background:var(--g500);animation:pulse 2s ease-in-out infinite}
-.hero-inner h1{font-family:'Playfair Display',serif;font-size:clamp(2rem,5vw,3rem);font-weight:700;color:var(--white);letter-spacing:-.04em;line-height:1.1;margin-bottom:16px}
-.hero-inner p{font-size:.95rem;color:rgba(255,255,255,.5);line-height:1.7;margin-bottom:36px;max-width:520px;margin-left:auto;margin-right:auto}
+/* ── PAGE SHELL ── */
+.page{max-width:1100px;margin:0 auto;padding:36px 32px 80px}
+@media(max-width:700px){.page{padding:24px 16px 64px}.nav-in{padding:0 16px}}
 
-/* COMING SOON CARD */
-.cs-card{background:rgba(255,255,255,.04);border:1px solid rgba(168,219,191,.12);border-radius:20px;padding:48px 40px;max-width:560px;margin:0 auto;position:relative;z-index:1;animation:fadeUp .5s .1s ease both}
-.cs-icon{width:72px;height:72px;border-radius:18px;background:rgba(40,187,114,.12);border:1px solid rgba(40,187,114,.2);display:flex;align-items:center;justify-content:center;margin:0 auto 24px;font-size:2rem}
-.cs-card h2{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:600;color:var(--white);margin-bottom:10px}
-.cs-card p{font-size:.88rem;color:rgba(255,255,255,.45);line-height:1.7;margin-bottom:28px}
-.cs-features{display:flex;flex-direction:column;gap:10px;margin-bottom:32px;text-align:left}
-.cs-feat{display:flex;align-items:center;gap:10px;font-size:.82rem;color:rgba(255,255,255,.5)}
-.cs-feat-dot{width:6px;height:6px;border-radius:50%;background:var(--g500);flex-shrink:0}
-.cs-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(40,187,114,.08);border:1px solid rgba(40,187,114,.15);border-radius:8px;padding:10px 18px;font-size:.8rem;color:var(--g200);font-weight:500}
-.cs-badge svg{flex-shrink:0}
-.btn-back{display:inline-flex;align-items:center;gap:7px;padding:11px 22px;border-radius:10px;background:var(--g500);color:var(--g900);font-size:.88rem;font-weight:600;text-decoration:none;border:none;cursor:pointer;transition:all .2s;box-shadow:0 4px 16px rgba(40,187,114,.3);margin-top:24px}
-.btn-back:hover{background:var(--g200);transform:translateY(-1px)}
+/* ── PAGE HEADER ── */
+.page-hdr{margin-bottom:32px;animation:fadeUp .4s ease both}
+.page-eyebrow{display:inline-flex;align-items:center;gap:6px;background:var(--g50);border:1px solid var(--g200);border-radius:100px;padding:4px 12px;font-size:.68rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--g700);margin-bottom:12px}
+.edot{width:5px;height:5px;border-radius:50%;background:var(--g600);animation:pulse 2s ease-in-out infinite}
+.page-hdr h1{font-family:'Playfair Display',serif;font-size:1.75rem;font-weight:700;color:var(--g900);letter-spacing:-.03em;margin-bottom:4px}
+.page-hdr p{font-size:.85rem;color:var(--inkm);line-height:1.6}
+
+/* ── SECTION CARDS ── */
+.sec{background:var(--white);border:1px solid var(--cd);border-radius:18px;margin-bottom:20px;overflow:hidden;animation:fadeUp .4s ease both}
+.sec.locked{opacity:.5;pointer-events:none}
+.sec-hdr{display:flex;align-items:center;gap:14px;padding:22px 26px;border-bottom:1px solid var(--cd);cursor:pointer;user-select:none}
+.sec-hdr:hover{background:var(--cream)}
+.sec-num{width:30px;height:30px;border-radius:50%;background:#0A1F12;color:#fff;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;font-family:'DM Mono',monospace;flex-shrink:0}
+.sec.done .sec-num{background:var(--g700)}
+.sec-info{flex:1}
+.sec-title{font-size:.95rem;font-weight:700;color:var(--ink)}
+.sec-sub{font-size:.74rem;color:var(--inkm);margin-top:1px}
+.sec-badge{font-size:.66rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:3px 9px;border-radius:5px;background:var(--g50);color:var(--g700);border:1px solid var(--g100);white-space:nowrap}
+.sec-badge.warn{background:var(--ambg);color:var(--amber);border-color:var(--ambb)}
+.sec-badge.zero{background:var(--cream);color:var(--inkm);border-color:var(--cd)}
+.sec-tog{color:var(--cdd);transition:transform .25s;flex-shrink:0}
+.sec.open .sec-tog{transform:rotate(180deg)}
+.sec-body{display:none;padding:24px 26px}
+.sec.open .sec-body{display:block}
+
+/* ── FORMS ── */
+.frow{display:grid;gap:14px;margin-bottom:16px}
+.frow.c2{grid-template-columns:1fr 1fr}
+.frow.c3{grid-template-columns:1fr 1fr 1fr}
+@media(max-width:600px){.frow.c2,.frow.c3{grid-template-columns:1fr}}
+.f{display:flex;flex-direction:column;gap:5px}
+.f label{font-size:.74rem;font-weight:600;color:var(--inks)}
+.f .hint{font-size:.7rem;color:var(--inkm)}
+.inp{width:100%;border:1.5px solid var(--cd);border-radius:8px;padding:9px 12px;font-family:'DM Sans',sans-serif;font-size:.85rem;color:var(--ink);background:var(--cream);outline:none;transition:border-color .2s,background .2s}
+.inp:focus{border-color:var(--g700);background:var(--white);box-shadow:0 0 0 3px rgba(26,122,74,.08)}
+select.inp{cursor:pointer}
+textarea.inp{resize:vertical;min-height:80px;line-height:1.55}
+.char-count{font-size:.67rem;color:var(--inkm);text-align:right;margin-top:2px;font-family:'DM Mono',monospace}
+
+/* ── BUTTONS ── */
+.btn{display:inline-flex;align-items:center;gap:7px;padding:9px 18px;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:.84rem;font-weight:600;cursor:pointer;border:none;transition:all .18s;text-decoration:none;white-space:nowrap}
+.btn-pri{background:var(--g500);color:var(--g900);box-shadow:0 3px 10px rgba(40,187,114,.3)}
+.btn-pri:hover{background:var(--g200);transform:translateY(-1px)}
+.btn-pri:disabled{opacity:.45;cursor:not-allowed;transform:none;box-shadow:none}
+.btn-sec{background:var(--white);color:var(--inks);border:1.5px solid var(--cd)}
+.btn-sec:hover{background:var(--g50);border-color:var(--g200);color:var(--g800)}
+.btn-sm{padding:5px 12px;font-size:.75rem;border-radius:6px}
+.btn-xs{padding:3px 9px;font-size:.68rem;border-radius:5px}
+.btn-danger{background:var(--white);color:var(--red);border:1.5px solid var(--redbd)}
+.btn-danger:hover{background:var(--redbg)}
+
+/* ── ALERTS ── */
+.alert{padding:10px 14px;border-radius:8px;font-size:.78rem;line-height:1.5;margin-bottom:14px;display:flex;gap:8px;align-items:flex-start}
+.alert-ok{background:var(--g50);border:1px solid var(--g200);color:var(--g800)}
+.alert-warn{background:var(--ambg);border:1px solid var(--ambb);color:#92400E}
+
+/* ── SESSION INFO CARD ── */
+.session-card{background:var(--g50);border:1px solid var(--g200);border-radius:12px;padding:16px 18px;margin-bottom:4px;display:flex;align-items:flex-start;gap:14px}
+.sc-ic{width:36px;height:36px;border-radius:9px;background:var(--g700);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.sc-body{flex:1}
+.sc-name{font-size:.92rem;font-weight:700;color:var(--g900)}
+.sc-meta{font-size:.74rem;color:var(--inks);margin-top:2px;line-height:1.5}
+.sc-desc{font-size:.78rem;color:var(--inkm);margin-top:4px;line-height:1.5;font-style:italic}
+
+/* ── SUGGESTED IROS ── */
+.sug-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:20px}
+@media(max-width:900px){.sug-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:600px){.sug-grid{grid-template-columns:1fr}}
+.sug-item{border:1.5px solid var(--cd);border-radius:10px;padding:10px 12px;cursor:pointer;transition:all .18s;display:flex;align-items:center;gap:9px;user-select:none;background:var(--white)}
+.sug-item:hover{border-color:var(--g200);background:var(--g50)}
+.sug-item.on{border-color:var(--g600);background:var(--g50)}
+.sug-emoji{font-size:1.1rem;flex-shrink:0}
+.sug-body{flex:1;min-width:0}
+.sug-title{font-size:.75rem;font-weight:600;color:var(--ink);line-height:1.3}
+.sug-cat{font-size:.62rem;font-weight:600;padding:1px 6px;border-radius:3px;margin-top:3px;display:inline-block}
+.cat-A{background:#ECFDF5;color:#065F46}
+.cat-S{background:#FFF7ED;color:#7C2D12}
+.cat-G{background:#F9FAFB;color:#374151}
+.sug-check{width:18px;height:18px;border-radius:50%;border:1.5px solid var(--cdd);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .18s}
+.sug-item.on .sug-check{background:var(--g700);border-color:var(--g700);color:#fff}
+
+/* ── IRO ADD FORM ── */
+.add-form{background:var(--cream);border:1.5px dashed var(--cdd);border-radius:10px;padding:16px;margin-bottom:16px}
+.add-form-title{font-size:.74rem;font-weight:700;color:var(--inks);margin-bottom:12px;letter-spacing:.03em}
+
+/* ── IRO LIST ── */
+.iro-list{display:flex;flex-direction:column;gap:8px}
+.iro-item{background:var(--white);border:1.5px solid var(--cd);border-radius:10px;padding:12px 14px;display:flex;align-items:flex-start;gap:10px;transition:border-color .18s}
+.iro-item:hover{border-color:var(--g200)}
+.iro-ic{font-size:1rem;flex-shrink:0;padding-top:1px}
+.iro-body{flex:1;min-width:0}
+.iro-title{font-size:.82rem;font-weight:600;color:var(--ink)}
+.iro-desc{font-size:.72rem;color:var(--inkm);margin-top:2px;line-height:1.4}
+.iro-meta{display:flex;align-items:center;gap:6px;margin-top:5px}
+.iro-num{font-family:'DM Mono',monospace;font-size:.62rem;color:var(--inkm)}
+.iro-actions{display:flex;gap:6px;flex-shrink:0}
+
+/* ── STAKEHOLDERS ── */
+.stk-list{display:flex;flex-direction:column;gap:8px;margin-top:16px}
+.stk-item{background:var(--white);border:1.5px solid var(--cd);border-radius:12px;padding:14px 16px;display:flex;align-items:center;gap:12px;transition:all .2s}
+.stk-item:hover{border-color:var(--g200);box-shadow:var(--sh1)}
+.stk-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+.dot-invitato{background:var(--cdd)}
+.dot-aperto{background:var(--amber);box-shadow:0 0 0 3px rgba(217,119,6,.15)}
+.dot-completato{background:var(--g600);box-shadow:0 0 0 3px rgba(34,164,99,.15)}
+.stk-body{flex:1;min-width:0}
+.stk-name{font-size:.86rem;font-weight:600;color:var(--ink)}
+.stk-meta{font-size:.71rem;color:var(--inkm);margin-top:1px;display:flex;gap:8px;flex-wrap:wrap}
+.stk-status{font-size:.66rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;padding:2px 7px;border-radius:4px;flex-shrink:0}
+.status-invitato{background:var(--cream);color:var(--inkm);border:1px solid var(--cd)}
+.status-aperto{background:var(--ambg);color:var(--amber);border:1px solid var(--ambb)}
+.status-completato{background:var(--g50);color:var(--g700);border:1px solid var(--g100)}
+.stk-actions{display:flex;gap:6px;flex-shrink:0}
+.btn-copy{display:inline-flex;align-items:center;gap:4px;padding:5px 10px;border-radius:6px;font-size:.72rem;font-weight:600;color:var(--g700);background:var(--g50);border:1px solid var(--g200);cursor:pointer;transition:all .15s}
+.btn-copy:hover{background:var(--g100)}
+.btn-copy.copied{color:var(--g700);background:var(--g100)}
+
+/* ── RESULTS ── */
+.res-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:24px}
+@media(max-width:600px){.res-summary{grid-template-columns:1fr 1fr}}
+.res-stat{background:var(--white);border:1px solid var(--cd);border-radius:12px;padding:16px;text-align:center}
+.res-stat-n{font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:700;color:var(--g800)}
+.res-stat-l{font-size:.72rem;color:var(--inkm);margin-top:3px}
+.res-iro-list{display:flex;flex-direction:column;gap:10px;margin-bottom:24px}
+.res-iro{background:var(--white);border:1px solid var(--cd);border-radius:12px;padding:14px 16px;display:flex;align-items:center;gap:14px;transition:all .2s}
+.res-iro:hover{border-color:var(--g200);box-shadow:var(--sh1)}
+.res-iro-info{flex:1;min-width:0}
+.res-iro-title{font-size:.84rem;font-weight:600;color:var(--ink);margin-bottom:5px}
+.res-bar-wrap{display:flex;align-items:center;gap:8px}
+.res-bar{flex:1;height:7px;background:var(--cd);border-radius:4px;overflow:hidden;max-width:200px}
+.res-bar-fill{height:100%;border-radius:4px;transition:width .5s ease}
+.bar-green{background:linear-gradient(90deg,var(--g700),var(--g600))}
+.bar-amber{background:linear-gradient(90deg,#D97706,#F59E0B)}
+.bar-red{background:linear-gradient(90deg,#DC2626,#EF4444)}
+.res-bar-val{font-family:'DM Mono',monospace;font-size:.78rem;font-weight:700;color:var(--ink);min-width:24px}
+.res-iro-count{font-size:.7rem;color:var(--inkm);white-space:nowrap;flex-shrink:0}
+.res-iro-score{font-family:'DM Mono',monospace;font-size:1.1rem;font-weight:700;min-width:32px;text-align:center;flex-shrink:0}
+.res-empty{text-align:center;padding:48px 24px;color:var(--inkm)}
+.res-empty-ic{font-size:2.5rem;margin-bottom:12px}
+.res-empty p{font-size:.82rem;line-height:1.6}
+.res-table-wrap{overflow-x:auto;margin-top:4px}
+.res-table{width:100%;border-collapse:collapse;font-size:.8rem}
+.res-table th{background:var(--cream);padding:8px 12px;text-align:left;font-size:.67rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--inkm);border-bottom:2px solid var(--cd)}
+.res-table th.sortable{cursor:pointer;user-select:none}
+.res-table th.sortable:hover{color:var(--g700)}
+.res-table td{padding:9px 12px;border-bottom:1px solid var(--cream);vertical-align:middle}
+.res-table tr:last-child td{border-bottom:none}
+.res-table tr:hover td{background:var(--cream)}
+.res-score-chip{font-family:'DM Mono',monospace;font-size:.76rem;font-weight:700;padding:3px 8px;border-radius:5px;white-space:nowrap}
+.chip-green{background:var(--g50);color:var(--g700);border:1px solid var(--g200)}
+.chip-amber{background:var(--ambg);color:var(--amber);border:1px solid var(--ambb)}
+.chip-red{background:var(--redbg);color:var(--red);border:1px solid var(--redbd)}
+.res-actions{display:flex;gap:10px;margin-bottom:20px}
+.no-session-note{background:var(--cream);border:1.5px dashed var(--cdd);border-radius:10px;padding:24px;text-align:center;font-size:.82rem;color:var(--inkm);line-height:1.6}
+
+/* ── DIVIDER ── */
+.divider{height:1px;background:var(--cd);margin:18px 0}
+.section-label{font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--inkm);margin-bottom:10px}
+
+/* ── EMPTY IRO ── */
+.iro-empty{text-align:center;padding:28px 16px;font-size:.8rem;color:var(--inkm);background:var(--cream);border-radius:8px}
 </style>
 </head>
 <body>
+
+<!-- LOADING -->
+<div id="loadScr">
+  <div class="ls-logo">
+    <div class="ls-mark"><svg width="16" height="16" viewBox="0 0 18 18" fill="none"><path d="M9 2L4 6V14H7V10H11V14H14V6L9 2Z" fill="white" opacity=".9"/><rect x="7" y="10" width="4" height="4" rx="1" fill="white" opacity=".5"/></svg></div>
+    <span class="ls-txt">Green<span>Ledger</span></span>
+  </div>
+  <div class="ls-spin"></div>
+</div>
 
 <!-- NAV -->
 <nav>
   <div class="nav-in">
     <a class="logo" href="dashboard.html">
-      <div class="lmark">
-        <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-          <path d="M9 2L4 6V14H7V10H11V14H14V6L9 2Z" fill="white" opacity=".9"/>
-          <rect x="7" y="10" width="4" height="4" rx="1" fill="white" opacity=".5"/>
-        </svg>
-      </div>
+      <div class="lmark"><svg width="16" height="16" viewBox="0 0 18 18" fill="none"><path d="M9 2L4 6V14H7V10H11V14H14V6L9 2Z" fill="white" opacity=".9"/><rect x="7" y="10" width="4" height="4" rx="1" fill="white" opacity=".5"/></svg></div>
       <span class="ltxt">Green<span>Ledger</span></span>
     </a>
+    <div class="nav-c" id="navSession" style="display:none">
+      <span class="nav-cdot"></span>
+      <span class="nav-co" id="navCo">Sessione attiva</span>
+    </div>
     <div class="nav-r">
+      <span class="nav-save" id="navSave">✓ Salvato</span>
       <a class="btn-nav" href="dashboard.html">← Dashboard</a>
+      <div class="nav-av" id="navAv">?</div>
     </div>
   </div>
 </nav>
 
-<!-- HERO -->
-<section class="hero">
-  <div class="hero-orbs">
-    <div class="orb orb-1"></div>
-    <div class="orb orb-2"></div>
-  </div>
-  <div class="hero-grid"></div>
-  <div class="hero-inner">
-    <div class="eyebrow"><span class="edot"></span>Stakeholder Engagement</div>
-    <h1>Gestione Sessioni Stakeholder</h1>
-    <p>Raccogli le opinioni degli stakeholder chiave, analizza i risultati e integra l'engagement nel processo di Double Materiality Assessment.</p>
-  </div>
-</section>
+<!-- MAIN -->
+<div class="page" id="mainPage" style="display:none">
 
-<!-- COMING SOON -->
-<div style="max-width:1200px;margin:0 auto;padding:0 36px 80px;position:relative;z-index:1">
-  <div class="cs-card">
-    <div class="cs-icon">🚧</div>
-    <h2>Modulo in costruzione</h2>
-    <p>Il modulo di gestione sessioni stakeholder è attualmente in sviluppo. Sarà disponibile a breve con tutte le funzionalità previste.</p>
+  <!-- PAGE HEADER -->
+  <div class="page-hdr">
+    <div class="page-eyebrow"><span class="edot"></span>Stakeholder Engagement</div>
+    <h1>Gestione Sessioni</h1>
+    <p>Definisci i temi da valutare, invita gli stakeholder e analizza i risultati in tempo reale.</p>
+  </div>
 
-    <div class="cs-features">
-      <div class="cs-feat"><span class="cs-feat-dot"></span>Creazione sessioni con link univoci per ogni stakeholder</div>
-      <div class="cs-feat"><span class="cs-feat-dot"></span>Survey ESRS pre-configurata con scoring automatico</div>
-      <div class="cs-feat"><span class="cs-feat-dot"></span>Dashboard risultati con visualizzazione aggregata</div>
-      <div class="cs-feat"><span class="cs-feat-dot"></span>Export dei risultati in formato PDF e Excel</div>
-      <div class="cs-feat"><span class="cs-feat-dot"></span>Integrazione con la DMA — pesi stakeholder calcolati automaticamente</div>
+  <!-- ═══ SEZIONE 1: SETUP ═══ -->
+  <div class="sec open" id="sec1">
+    <div class="sec-hdr" onclick="toggleSec('sec1')">
+      <div class="sec-num">1</div>
+      <div class="sec-info">
+        <div class="sec-title">Setup sessione</div>
+        <div class="sec-sub">Configura i dati base della sessione di raccolta</div>
+      </div>
+      <span class="sec-badge zero" id="badge1">Non salvata</span>
+      <svg class="sec-tog" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 5l5 5 5-5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+    </div>
+    <div class="sec-body">
+      <div id="sessionCard" style="display:none;margin-bottom:18px"></div>
+      <div class="frow c2">
+        <div class="f">
+          <label for="inpCompany">Nome azienda <span style="color:var(--red)">*</span></label>
+          <input class="inp" id="inpCompany" type="text" placeholder="es. Acme S.r.l.">
+        </div>
+        <div class="f">
+          <label for="inpYear">Anno di riferimento</label>
+          <input class="inp" id="inpYear" type="number" min="2020" max="2030" placeholder="2025">
+        </div>
+      </div>
+      <div class="frow">
+        <div class="f">
+          <label for="inpDesc">Contesto aziendale <span style="font-weight:400;color:var(--inkm)">(facoltativo)</span></label>
+          <textarea class="inp" id="inpDesc" placeholder="Breve descrizione del settore, dimensioni aziendali e obiettivi della raccolta stakeholder..." maxlength="500" oninput="updateCharCount('inpDesc','ccDesc',500)"></textarea>
+          <div class="char-count"><span id="ccDesc">0</span>/500 caratteri</div>
+        </div>
+      </div>
+      <button class="btn btn-pri" id="btnCreateSession" onclick="createOrUpdateSession()">
+        <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M7 2v10M2 7h10" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+        <span id="btnSessionLabel">Crea sessione</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- ═══ SEZIONE 2: IRO ═══ -->
+  <div class="sec locked" id="sec2">
+    <div class="sec-hdr" onclick="toggleSec('sec2')">
+      <div class="sec-num">2</div>
+      <div class="sec-info">
+        <div class="sec-title">IRO da valutare</div>
+        <div class="sec-sub">Scegli quali temi sottoporre agli stakeholder</div>
+      </div>
+      <span class="sec-badge zero" id="badge2">0 attivi</span>
+      <svg class="sec-tog" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 5l5 5 5-5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+    </div>
+    <div class="sec-body">
+      <!-- Suggested -->
+      <div class="section-label">IRO suggeriti — attiva/disattiva con un click</div>
+      <div class="sug-grid" id="sugGrid"></div>
+
+      <div class="divider"></div>
+
+      <!-- Custom add -->
+      <div class="section-label">Aggiungi IRO personalizzato</div>
+      <div class="add-form">
+        <div class="frow c3">
+          <div class="f">
+            <label>Titolo <span style="color:var(--red)">*</span></label>
+            <input class="inp" id="inpIroTitle" type="text" placeholder="es. Gestione rifiuti speciali">
+          </div>
+          <div class="f">
+            <label>Categoria</label>
+            <select class="inp" id="inpIroCat">
+              <option value="Ambiente">🌿 Ambiente</option>
+              <option value="Sociale">👥 Sociale</option>
+              <option value="Governance">⚖️ Governance</option>
+            </select>
+          </div>
+          <div class="f" style="justify-content:flex-end">
+            <label>&nbsp;</label>
+            <button class="btn btn-sec" onclick="addCustomIro()">
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1.5v9M1.5 6h9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+              Aggiungi
+            </button>
+          </div>
+        </div>
+        <div class="f" style="margin-top:10px">
+          <label>Descrizione <span style="font-weight:400;color:var(--inkm)">(max 200 caratteri, facoltativa)</span></label>
+          <input class="inp" id="inpIroDesc" type="text" placeholder="Breve descrizione del tema..." maxlength="200">
+        </div>
+      </div>
+
+      <!-- Active IROs -->
+      <div class="section-label">IRO attivi nella sessione</div>
+      <div id="iroList"><div class="iro-empty">Nessun IRO selezionato. Attiva quelli suggeriti o aggiungi un IRO personalizzato.</div></div>
+    </div>
+  </div>
+
+  <!-- ═══ SEZIONE 3: STAKEHOLDER ═══ -->
+  <div class="sec locked" id="sec3">
+    <div class="sec-hdr" onclick="toggleSec('sec3')">
+      <div class="sec-num">3</div>
+      <div class="sec-info">
+        <div class="sec-title">Gestione stakeholder</div>
+        <div class="sec-sub">Aggiungi i partecipanti e condividi i link univoci</div>
+      </div>
+      <span class="sec-badge zero" id="badge3">0 stakeholder</span>
+      <svg class="sec-tog" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 5l5 5 5-5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+    </div>
+    <div class="sec-body">
+      <div class="alert alert-warn" id="iroWarn" style="display:none">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" style="flex-shrink:0;margin-top:1px"><circle cx="7" cy="7" r="6" stroke="currentColor" stroke-width="1.3"/><path d="M7 4.5V7.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><circle cx="7" cy="9.5" r=".6" fill="currentColor"/></svg>
+        Aggiungi almeno un IRO nella sezione 2 prima di invitare gli stakeholder.
+      </div>
+      <div class="frow c3">
+        <div class="f">
+          <label>Nome e cognome <span style="color:var(--red)">*</span></label>
+          <input class="inp" id="inpStkName" type="text" placeholder="Mario Rossi">
+        </div>
+        <div class="f">
+          <label>Organizzazione</label>
+          <input class="inp" id="inpStkOrg" type="text" placeholder="Azienda / Ente">
+        </div>
+        <div class="f">
+          <label>Categoria stakeholder</label>
+          <select class="inp" id="inpStkCat">
+            <option>Dipendenti / Lavoratori</option>
+            <option>Clienti / Consumatori</option>
+            <option>Fornitori</option>
+            <option>Investitori / Finanziatori</option>
+            <option>Comunità locale</option>
+            <option>Enti regolatori / PA</option>
+            <option>Media / ONG</option>
+            <option>Altro</option>
+          </select>
+        </div>
+      </div>
+      <div class="frow c2" style="margin-top:-6px">
+        <div class="f">
+          <label>Email <span style="font-weight:400;color:var(--inkm)">(facoltativa — solo per tuo riferimento)</span></label>
+          <input class="inp" id="inpStkEmail" type="email" placeholder="mario@azienda.it">
+        </div>
+        <div class="f" style="justify-content:flex-end">
+          <label>&nbsp;</label>
+          <button class="btn btn-pri" onclick="addStakeholder()">
+            <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M7 2v10M2 7h10" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+            Aggiungi stakeholder
+          </button>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <div class="section-label">Lista stakeholder</div>
+      <div id="stkList"><div class="iro-empty">Nessuno stakeholder aggiunto ancora.</div></div>
+    </div>
+  </div>
+
+  <!-- ═══ SEZIONE 4: RISULTATI ═══ -->
+  <div class="sec locked" id="sec4">
+    <div class="sec-hdr" onclick="toggleSec('sec4')">
+      <div class="sec-num">4</div>
+      <div class="sec-info">
+        <div class="sec-title">Dashboard risultati</div>
+        <div class="sec-sub">Analisi aggregata delle valutazioni ricevute</div>
+      </div>
+      <span class="sec-badge zero" id="badge4">In attesa</span>
+      <svg class="sec-tog" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 5l5 5 5-5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+    </div>
+    <div class="sec-body">
+      <div class="res-actions">
+        <button class="btn btn-sec btn-sm" onclick="loadResults()">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M11 6A5 5 0 111 6a5 5 0 0110 0zM6 2v4l3 1.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+          Aggiorna risultati
+        </button>
+        <button class="btn btn-sec btn-sm" onclick="exportResultsPlaceholder()">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 9h8M6 2v5M3.5 5.5L6 8l2.5-2.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Esporta risultati
+        </button>
+      </div>
+      <div id="resultsContainer">
+        <div class="res-empty"><div class="res-empty-ic">📊</div><p>Aggiungi e invita gli stakeholder per raccogliere le loro valutazioni.<br>I risultati appariranno qui non appena arriveranno le prime risposte.</p></div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /page -->
+
+<!-- SUPABASE CDN -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+'use strict';
+
+// ══ CONFIG ══
+const SB_URL  = 'https://sxcuhojxbqyrvouabmeo.supabase.co';
+const SB_KEY  = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN4Y3Vob2p4YnF5cnZvdWFibWVvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM0NDM5MjksImV4cCI6MjA4OTAxOTkyOX0.WkjJrzL2gxFnfLXNOQo_QDt5IMgNbJxi37AXAIzPj60';
+const sb      = supabase.createClient(SB_URL, SB_KEY);
+const BASE_URL = window.location.origin;
+
+let sbUser = null;
+let sessionId = null;  // UUID of the Supabase assessment row
+let _saveTimer = null;
+
+// ══ STATE ══
+let sm = {
+  session:      { company:'', year: new Date().getFullYear(), description:'' },
+  iros:         [],   // {id, emoji, title, description, category, custom}
+  stakeholders: [],   // {id, name, org, category, email}
+};
+
+// ══ 15 SUGGESTED IROS ══
+const SUGGESTED = [
+  {id:'s01',emoji:'🌡️',title:'Emissioni dirette e indirette di GHG',description:'Emissioni di gas serra Scope 1 e 2 generate dalle operazioni aziendali.',category:'Ambiente'},
+  {id:'s02',emoji:'⚡',title:'Consumo energetico e fonti rinnovabili',description:'Efficienza energetica, mix di fonti e transizione verso energie rinnovabili.',category:'Ambiente'},
+  {id:'s03',emoji:'🌊',title:'Rischi fisici e di transizione climatica',description:'Esposizione ai rischi del cambiamento climatico e piano di adattamento.',category:'Ambiente'},
+  {id:'s04',emoji:'💧',title:'Consumo e gestione idrica',description:'Prelievo, consumo e scarichi idrici in contesti di stress idrico.',category:'Ambiente'},
+  {id:'s05',emoji:'♻️',title:'Gestione rifiuti e economia circolare',description:'Produzione, smaltimento e recupero rifiuti nel ciclo produttivo.',category:'Ambiente'},
+  {id:'s06',emoji:'👷',title:'Salute e sicurezza dei lavoratori',description:'Infortuni, malattie professionali e benessere fisico e psicologico.',category:'Sociale'},
+  {id:'s07',emoji:'💼',title:'Condizioni di lavoro ed equità retributiva',description:'Salari equi, orari, benefit e condizioni contrattuali dei dipendenti.',category:'Sociale'},
+  {id:'s08',emoji:'🎓',title:'Formazione e sviluppo professionale',description:'Accesso alla formazione, upskilling e opportunità di carriera.',category:'Sociale'},
+  {id:'s09',emoji:'🌈',title:'Diversità, equità e inclusione',description:'Parità di genere, rappresentanza e inclusione di categorie protette.',category:'Sociale'},
+  {id:'s10',emoji:'🤝',title:'Impatto sulle comunità locali',description:'Effetti delle attività aziendali sulle comunità del territorio.',category:'Sociale'},
+  {id:'s11',emoji:'🛡️',title:'Sicurezza prodotti e tutela consumatori',description:'Qualità, sicurezza d\'uso e responsabilità del prodotto verso i clienti.',category:'Sociale'},
+  {id:'s12',emoji:'⚖️',title:'Etica aziendale e prevenzione corruzione',description:'Codice etico, anticorruzione, conflitti di interesse e whistleblowing.',category:'Governance'},
+  {id:'s13',emoji:'🏦',title:'Trasparenza fiscale e fiscalità responsabile',description:'Politiche fiscali, pagamenti alle PA e tax rate effettivo.',category:'Governance'},
+  {id:'s14',emoji:'🔗',title:'Gestione responsabile della supply chain',description:'Standard ESG applicati ai fornitori: audit, selezione e contratti.',category:'Governance'},
+  {id:'s15',emoji:'🔒',title:'Protezione dei dati e cybersecurity',description:'Sicurezza dei dati personali, cyber risk e conformità GDPR.',category:'Governance'},
+];
+
+// ══ UUID UTIL ══
+function uuid(){
+  return (crypto.randomUUID?.()) ||
+    'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g,c=>{
+      const r=crypto.getRandomValues(new Uint8Array(1))[0]%16;
+      return(c==='x'?r:(r&0x3|0x8)).toString(16);
+    });
+}
+
+// ══════════════════════════
+//  INIT
+// ══════════════════════════
+async function init(){
+  const { data:{ session } } = await sb.auth.getSession();
+  if(!session){ window.location.href='login.html'; return; }
+  sbUser = session.user;
+
+  // Nav avatar
+  const name  = sbUser.user_metadata?.full_name || '';
+  const email = sbUser.email || '';
+  const init2 = name
+    ? name.split(' ').map(p=>p[0]).join('').slice(0,2).toUpperCase()
+    : email.slice(0,2).toUpperCase();
+  document.getElementById('navAv').textContent = init2;
+
+  // Load existing session for this user
+  await loadSession();
+
+  document.getElementById('loadScr').style.display = 'none';
+  document.getElementById('mainPage').style.display = 'block';
+
+  // Render suggested IROs (static)
+  renderSuggestedGrid();
+}
+
+// ══════════════════════════
+//  SESSION LOAD / SAVE
+// ══════════════════════════
+async function loadSession(){
+  const { data } = await sb.from('assessments')
+    .select('id, company_name, data, updated_at')
+    .eq('user_id', sbUser.id)
+    .not('data', 'is', null)
+    .order('updated_at', { ascending: false });
+
+  if(!data) return;
+  const row = data.find(a => a.data?._type === 'stakeholder_session');
+  if(!row) return;
+
+  sessionId = row.id;
+  sm = {
+    session: row.data.session || {},
+    iros: row.data.iros || [],
+    stakeholders: row.data.stakeholders || [],
+  };
+
+  // Pre-fill setup form
+  document.getElementById('inpCompany').value = sm.session.company || '';
+  document.getElementById('inpYear').value    = sm.session.year    || new Date().getFullYear();
+  document.getElementById('inpDesc').value    = sm.session.description || '';
+  updateCharCount('inpDesc','ccDesc',500);
+
+  activateSession();
+  renderAll();
+}
+
+async function saveSession(quiet=false){
+  if(!sessionId || !sbUser) return;
+  clearTimeout(_saveTimer);
+  _saveTimer = setTimeout(async () => {
+    const { error } = await sb.from('assessments').upsert({
+      id:           sessionId,
+      user_id:      sbUser.id,
+      company_name: sm.session.company || null,
+      data: { _type:'stakeholder_session', ...sm },
+      updated_at:   new Date().toISOString(),
+    },{ onConflict:'id' });
+
+    if(!error && !quiet){
+      const ind = document.getElementById('navSave');
+      ind.style.opacity = '1';
+      clearTimeout(ind._t);
+      ind._t = setTimeout(()=>ind.style.opacity='0', 2800);
+    }
+  }, 600);
+}
+
+// ══════════════════════════
+//  SESSION CREATION
+// ══════════════════════════
+async function createOrUpdateSession(){
+  const company = document.getElementById('inpCompany').value.trim();
+  const year    = parseInt(document.getElementById('inpYear').value) || new Date().getFullYear();
+  const desc    = document.getElementById('inpDesc').value.trim();
+
+  if(!company){ flash('inpCompany'); return; }
+
+  sm.session = { company, year, description: desc };
+
+  if(!sessionId){
+    sessionId = uuid();
+  }
+
+  const { error } = await sb.from('assessments').upsert({
+    id:           sessionId,
+    user_id:      sbUser.id,
+    company_name: company,
+    data: { _type:'stakeholder_session', ...sm },
+    updated_at:   new Date().toISOString(),
+  },{ onConflict:'id' });
+
+  if(error){ alert('Errore salvataggio: ' + error.message); return; }
+
+  activateSession();
+  renderAll();
+}
+
+function activateSession(){
+  const company = sm.session.company || 'Sessione';
+  const year    = sm.session.year    || '';
+
+  // Update nav
+  document.getElementById('navCo').textContent = company;
+  document.getElementById('navSession').style.display = 'flex';
+
+  // Badge section 1
+  setSectionBadge('badge1', `${company} · ${year}`, 'ok');
+  document.getElementById('btnSessionLabel').textContent = 'Aggiorna sessione';
+  document.getElementById('sec1').classList.add('done');
+
+  // Show session card
+  const sc = document.getElementById('sessionCard');
+  sc.style.display = 'block';
+  sc.innerHTML = `<div class="session-card">
+    <div class="sc-ic"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 2L3 6V13H6V9H10V13H13V6L8 2Z" fill="white" opacity=".9"/></svg></div>
+    <div class="sc-body">
+      <div class="sc-name">${escH(company)}</div>
+      <div class="sc-meta">Anno ${year} &nbsp;·&nbsp; ID sessione: <code style="font-family:'DM Mono',monospace;font-size:.68rem">${sessionId?.slice(0,8)}…</code></div>
+      ${sm.session.description ? `<div class="sc-desc">${escH(sm.session.description)}</div>` : ''}
+    </div>
+  </div>`;
+
+  // Unlock sections 2-4
+  ['sec2','sec3','sec4'].forEach(id => document.getElementById(id).classList.remove('locked'));
+
+  // Auto-open section 2 if no IROs yet
+  if(sm.iros.length === 0){
+    openSec('sec2');
+  }
+}
+
+// ══════════════════════════
+//  SECTION TOGGLE
+// ══════════════════════════
+function toggleSec(id){
+  const el = document.getElementById(id);
+  if(el.classList.contains('locked')) return;
+  el.classList.toggle('open');
+}
+function openSec(id){
+  document.getElementById(id).classList.add('open');
+}
+
+// ══════════════════════════
+//  SUGGESTED IRO GRID
+// ══════════════════════════
+function renderSuggestedGrid(){
+  const grid = document.getElementById('sugGrid');
+  grid.innerHTML = SUGGESTED.map(s => {
+    const on = sm.iros.some(i => i.id === s.id);
+    return `<div class="sug-item${on?' on':''}" id="sug-${s.id}" onclick="toggleSuggested('${s.id}')">
+      <span class="sug-emoji">${s.emoji}</span>
+      <div class="sug-body">
+        <div class="sug-title">${s.title}</div>
+        <span class="sug-cat cat-${s.category[0]}">${s.category}</span>
+      </div>
+      <div class="sug-check">${on ? svgCheck() : ''}</div>
+    </div>`;
+  }).join('');
+}
+
+function toggleSuggested(sid){
+  const s = SUGGESTED.find(x => x.id === sid);
+  if(!s) return;
+  const idx = sm.iros.findIndex(i => i.id === sid);
+  if(idx >= 0){
+    sm.iros.splice(idx,1);
+    document.getElementById('sug-'+sid)?.classList.remove('on');
+    document.querySelector(`#sug-${sid} .sug-check`).innerHTML = '';
+  } else {
+    sm.iros.push({...s, custom:false});
+    document.getElementById('sug-'+sid)?.classList.add('on');
+    document.querySelector(`#sug-${sid} .sug-check`).innerHTML = svgCheck();
+  }
+  renderIroList();
+  updateBadges();
+  saveSession();
+}
+
+// ══════════════════════════
+//  CUSTOM IRO
+// ══════════════════════════
+function addCustomIro(){
+  const title = document.getElementById('inpIroTitle').value.trim();
+  const desc  = document.getElementById('inpIroDesc').value.trim();
+  const cat   = document.getElementById('inpIroCat').value;
+  if(!title){ flash('inpIroTitle'); return; }
+
+  const emojis = {'Ambiente':'🌿','Sociale':'👥','Governance':'⚖️'};
+  sm.iros.push({ id: 'c-'+uuid().slice(0,8), emoji: emojis[cat]||'📌', title, description: desc, category: cat, custom: true });
+
+  document.getElementById('inpIroTitle').value = '';
+  document.getElementById('inpIroDesc').value  = '';
+  renderIroList();
+  updateBadges();
+  saveSession();
+}
+
+function removeIro(id){
+  sm.iros = sm.iros.filter(i => i.id !== id);
+  // Un-check suggested if it was one
+  const sg = SUGGESTED.find(s => s.id === id);
+  if(sg){
+    document.getElementById('sug-'+id)?.classList.remove('on');
+    const chk = document.querySelector(`#sug-${id} .sug-check`);
+    if(chk) chk.innerHTML = '';
+  }
+  renderIroList();
+  updateBadges();
+  saveSession();
+}
+
+function renderIroList(){
+  const el = document.getElementById('iroList');
+  if(!sm.iros.length){
+    el.innerHTML = '<div class="iro-empty">Nessun IRO selezionato. Attiva quelli suggeriti o aggiungi un IRO personalizzato.</div>';
+    return;
+  }
+  el.innerHTML = `<div class="iro-list">${sm.iros.map((iro,i)=>`
+    <div class="iro-item">
+      <span class="iro-ic">${iro.emoji}</span>
+      <div class="iro-body">
+        <div class="iro-title">${escH(iro.title)}</div>
+        ${iro.description ? `<div class="iro-desc">${escH(iro.description)}</div>` : ''}
+        <div class="iro-meta">
+          <span class="sug-cat cat-${(iro.category||'?')[0]}">${iro.category}</span>
+          <span class="iro-num">#${i+1}</span>
+          ${iro.custom ? '<span style="font-size:.62rem;color:var(--amber);font-weight:600">Personalizzato</span>' : ''}
+        </div>
+      </div>
+      <div class="iro-actions">
+        <button class="btn btn-danger btn-xs" onclick="removeIro('${iro.id}')">✕</button>
+      </div>
+    </div>`).join('')}
+  </div>`;
+}
+
+// ══════════════════════════
+//  STAKEHOLDER MANAGEMENT
+// ══════════════════════════
+function addStakeholder(){
+  if(sm.iros.length === 0){
+    document.getElementById('iroWarn').style.display = 'flex';
+    openSec('sec2');
+    return;
+  }
+  document.getElementById('iroWarn').style.display = 'none';
+
+  const name  = document.getElementById('inpStkName').value.trim();
+  const org   = document.getElementById('inpStkOrg').value.trim();
+  const cat   = document.getElementById('inpStkCat').value;
+  const email = document.getElementById('inpStkEmail').value.trim();
+  if(!name){ flash('inpStkName'); return; }
+
+  sm.stakeholders.push({ id: uuid(), name, org, category: cat, email });
+
+  document.getElementById('inpStkName').value  = '';
+  document.getElementById('inpStkOrg').value   = '';
+  document.getElementById('inpStkEmail').value = '';
+
+  renderStkList();
+  updateBadges();
+  saveSession();
+}
+
+function removeStakeholder(id){
+  sm.stakeholders = sm.stakeholders.filter(s => s.id !== id);
+  renderStkList();
+  updateBadges();
+  saveSession();
+}
+
+function renderStkList(){
+  const el = document.getElementById('stkList');
+  if(!sm.stakeholders.length){
+    el.innerHTML = '<div class="iro-empty">Nessuno stakeholder aggiunto ancora.</div>';
+    return;
+  }
+  el.innerHTML = `<div class="stk-list">${sm.stakeholders.map(stk=>{
+    const link = `${BASE_URL}/stakeholder-survey.html?sid=${sessionId}&stk=${stk.id}`;
+    return `<div class="stk-item" id="stk-${stk.id}">
+      <div class="stk-dot dot-invitato" id="dot-${stk.id}"></div>
+      <div class="stk-body">
+        <div class="stk-name">${escH(stk.name)}</div>
+        <div class="stk-meta">
+          ${stk.org ? `<span>${escH(stk.org)}</span>` : ''}
+          <span>${escH(stk.category)}</span>
+          ${stk.email ? `<span>${escH(stk.email)}</span>` : ''}
+        </div>
+      </div>
+      <span class="stk-status status-invitato" id="status-${stk.id}">Invitato</span>
+      <div class="stk-actions">
+        <button class="btn-copy" onclick="copyLink('${stk.id}','${escH(link)}')" id="copybtn-${stk.id}">
+          <svg width="11" height="11" viewBox="0 0 12 12" fill="none"><rect x="1" y="3" width="8" height="8" rx="1.5" stroke="currentColor" stroke-width="1.2"/><path d="M3 3V2a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1h-1" stroke="currentColor" stroke-width="1.2"/></svg>
+          Copia link
+        </button>
+        <button class="btn btn-danger btn-xs" onclick="removeStakeholder('${stk.id}')">✕</button>
+      </div>
+    </div>`;
+  }).join('')}</div>`;
+
+  // Refresh statuses from responses
+  refreshStatuses();
+}
+
+async function copyLink(stkId, link){
+  await navigator.clipboard.writeText(link).catch(()=>{
+    // Fallback
+    const ta = document.createElement('textarea');
+    ta.value = link; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+  });
+  const btn = document.getElementById('copybtn-'+stkId);
+  if(btn){ btn.innerHTML = '✓ Copiato!'; btn.classList.add('copied'); setTimeout(()=>{btn.innerHTML='<svg width="11" height="11" viewBox="0 0 12 12" fill="none"><rect x="1" y="3" width="8" height="8" rx="1.5" stroke="currentColor" stroke-width="1.2"/><path d="M3 3V2a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1h-1" stroke="currentColor" stroke-width="1.2"/></svg> Copia link';btn.classList.remove('copied')},2200);}
+}
+
+async function refreshStatuses(){
+  if(!sessionId) return;
+  const { data } = await sb.from('stakeholder_responses')
+    .select('stakeholder_id, status')
+    .eq('session_id', sessionId);
+  if(!data) return;
+
+  data.forEach(r => {
+    const dot    = document.getElementById('dot-'+r.stakeholder_id);
+    const statusEl = document.getElementById('status-'+r.stakeholder_id);
+    if(!dot || !statusEl) return;
+    const s = r.status === 'completed' ? 'completato' : 'aperto';
+    dot.className = `stk-dot dot-${s}`;
+    statusEl.className = `stk-status status-${s}`;
+    statusEl.textContent = s.charAt(0).toUpperCase() + s.slice(1);
+  });
+}
+
+// ══════════════════════════
+//  RESULTS
+// ══════════════════════════
+async function loadResults(){
+  if(!sessionId){ return; }
+
+  const { data } = await sb.from('stakeholder_responses')
+    .select('stakeholder_id, scores, comments, status, submitted_at')
+    .eq('session_id', sessionId);
+
+  const container = document.getElementById('resultsContainer');
+  const completed = (data||[]).filter(r => r.status === 'completed');
+  const opened    = (data||[]).filter(r => r.status === 'opened').length;
+  const invited   = sm.stakeholders.length - (data||[]).length;
+
+  // Update badge4
+  setSectionBadge('badge4',
+    completed.length > 0 ? `${completed.length} risposte` : 'In attesa',
+    completed.length > 0 ? 'ok' : 'zero'
+  );
+
+  if(completed.length === 0){
+    container.innerHTML = `<div class="res-empty"><div class="res-empty-ic">📊</div>
+      <p><strong>Nessuna risposta completata ancora.</strong><br>
+      ${sm.stakeholders.length === 0 ? 'Aggiungi stakeholder nella sezione 3 e condividi i link.' : `${sm.stakeholders.length} stakeholder invitati${opened>0?`, ${opened} hanno aperto il link`:''}. Attendi che completino la valutazione.`}
+      </p></div>`;
+    return;
+  }
+
+  // Compute per-IRO averages
+  const iroStats = sm.iros.map(iro => {
+    const vals = completed
+      .map(r => r.scores?.[iro.id])
+      .filter(v => v != null && !isNaN(v));
+    const avg = vals.length ? (vals.reduce((a,b)=>a+b,0)/vals.length) : null;
+    return { iro, avg, count: vals.length };
+  }).filter(x => x.avg !== null)
+    .sort((a,b) => b.avg - a.avg);
+
+  container.innerHTML = `
+    <!-- Summary stats -->
+    <div class="res-summary">
+      <div class="res-stat">
+        <div class="res-stat-n">${completed.length}</div>
+        <div class="res-stat-l">Risposte completate</div>
+      </div>
+      <div class="res-stat">
+        <div class="res-stat-n">${opened}</div>
+        <div class="res-stat-l">Link aperti (in corso)</div>
+      </div>
+      <div class="res-stat">
+        <div class="res-stat-n">${sm.stakeholders.length - (data||[]).length > 0 ? sm.stakeholders.length - (data||[]).length : 0}</div>
+        <div class="res-stat-l">Non ancora aperti</div>
+      </div>
     </div>
 
-    <div class="cs-badge">
-      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="6" stroke="currentColor" stroke-width="1.3"/><path d="M7 4v3l2 2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
-      Disponibile a breve — Q3 2025
+    <!-- Per-IRO bars -->
+    <div class="section-label" style="margin-bottom:10px">Rilevanza per IRO — media voti (scala 1-5)</div>
+    <div class="res-iro-list">
+      ${iroStats.map(({iro,avg,count}) => {
+        const pct = (avg/5)*100;
+        const scoreClass = avg>=4 ? 'chip-green' : avg>=2.5 ? 'chip-amber' : 'chip-red';
+        const barClass   = avg>=4 ? 'bar-green'  : avg>=2.5 ? 'bar-amber'  : 'bar-red';
+        return `<div class="res-iro">
+          <span style="font-size:1.1rem;flex-shrink:0">${iro.emoji}</span>
+          <div class="res-iro-info">
+            <div class="res-iro-title">${escH(iro.title)}</div>
+            <div class="res-bar-wrap">
+              <div class="res-bar"><div class="res-bar-fill ${barClass}" style="width:${pct.toFixed(1)}%"></div></div>
+              <span class="res-bar-val">${avg.toFixed(1)}</span>
+            </div>
+          </div>
+          <span class="res-score-chip ${scoreClass}">${avg.toFixed(2)} / 5</span>
+          <span class="res-iro-count">${count} rispost${count===1?'a':'e'}</span>
+        </div>`;
+      }).join('')}
     </div>
 
-    <br>
-    <a class="btn-back" href="dashboard.html">
-      <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M11 7H3M7 3l-4 4 4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      Torna alla Dashboard
-    </a>
-  </div>
-</div>
+    <!-- Table -->
+    <div class="section-label" style="margin-top:24px;margin-bottom:10px">Tabella riassuntiva</div>
+    <div class="res-table-wrap">
+      <table class="res-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>IRO</th>
+            <th>Categoria</th>
+            <th class="sortable">Media ▼</th>
+            <th>Risposte</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${iroStats.map(({iro,avg,count},i)=>{
+            const sc = avg>=4?'chip-green':avg>=2.5?'chip-amber':'chip-red';
+            return `<tr>
+              <td style="color:var(--inkm);font-family:'DM Mono',monospace;font-size:.72rem">${i+1}</td>
+              <td><strong>${escH(iro.title)}</strong></td>
+              <td><span class="sug-cat cat-${(iro.category||'?')[0]}">${iro.category}</span></td>
+              <td><span class="res-score-chip ${sc}">${avg.toFixed(2)}</span></td>
+              <td style="font-family:'DM Mono',monospace;font-size:.76rem">${count}</td>
+            </tr>`;
+          }).join('')}
+        </tbody>
+      </table>
+    </div>`;
 
+  // Refresh status dots in section 3
+  refreshStatuses();
+}
+
+function exportResultsPlaceholder(){
+  alert('Funzione di export PDF/Excel disponibile a breve.\n\nPer ora puoi copiare i dati dalla tabella.');
+}
+
+// ══════════════════════════
+//  RENDER ALL
+// ══════════════════════════
+function renderAll(){
+  renderSuggestedGrid();
+  renderIroList();
+  renderStkList();
+  updateBadges();
+  if(sm.stakeholders.length > 0) loadResults();
+}
+
+function updateBadges(){
+  const n = sm.iros.length;
+  setSectionBadge('badge2', `${n} IRO attiv${n===1?'o':'i'}`, n>0?'ok':'zero');
+
+  const s = sm.stakeholders.length;
+  setSectionBadge('badge3', `${s} stakeholder`, s>0?'ok':'zero');
+}
+
+function setSectionBadge(id, text, type){
+  const el = document.getElementById(id);
+  if(!el) return;
+  el.textContent = text;
+  el.className = 'sec-badge' + (type==='ok' ? '' : type==='warn' ? ' warn' : ' zero');
+}
+
+// ══════════════════════════
+//  HELPERS
+// ══════════════════════════
+function updateCharCount(inputId, countId, max){
+  const val = document.getElementById(inputId)?.value?.length || 0;
+  const el  = document.getElementById(countId);
+  if(el) el.textContent = val;
+}
+
+function flash(id){
+  const el = document.getElementById(id);
+  if(!el) return;
+  el.classList.add('err');
+  el.focus();
+  setTimeout(()=>el.classList.remove('err'), 1800);
+}
+
+function escH(s){
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function svgCheck(){
+  return `<svg width="9" height="9" viewBox="0 0 9 9" fill="none"><path d="M1.5 4.5L3.5 6.5L7.5 2.5" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+}
+
+// ══════════════════════════
+//  ENTRY POINT
+// ══════════════════════════
+init();
+</script>
 </body>
 </html>
