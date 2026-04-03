@@ -344,6 +344,30 @@ select.inp{cursor:pointer}
 .toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--g900);color:var(--white);padding:11px 22px;border-radius:100px;font-size:.82rem;font-weight:500;white-space:nowrap;z-index:600;opacity:0;transition:all .3s ease;box-shadow:var(--sh3)}
 .toast.show{transform:translateX(-50%) translateY(0);opacity:1}
 
+/* ══ TOPIC SELECTION VIEW ══ */
+.ts-wrap{max-width:900px;margin:0 auto;padding:52px 36px 80px;position:relative;z-index:1}
+.ts-hero{text-align:center;margin-bottom:32px;animation:fadeUp .4s ease both}
+.ts-hero h2{font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:700;color:var(--g900);letter-spacing:-.03em;margin-bottom:8px}
+.ts-hero p{font-size:.88rem;color:var(--inks);max-width:520px;margin:0 auto;line-height:1.65}
+.ts-company{max-width:360px;margin:0 auto 28px;animation:fadeUp .4s .06s ease both}
+.ts-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:24px;animation:fadeUp .4s .1s ease both}
+@media(max-width:900px){.ts-grid{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:600px){.ts-grid{grid-template-columns:repeat(2,1fr)}}
+.ts-item{background:var(--white);border:2px solid var(--cd);border-radius:14px;padding:16px 10px;cursor:pointer;transition:all .2s;text-align:center;position:relative;user-select:none;animation:fadeUp .35s ease both}
+.ts-item:hover{border-color:var(--g200);transform:translateY(-2px);box-shadow:var(--sh1)}
+.ts-item.selected{border-color:var(--g600);background:var(--g50)}
+.ts-item.selected::after{content:'✓';position:absolute;top:7px;right:7px;width:18px;height:18px;background:var(--g700);border-radius:50%;font-size:.62rem;font-weight:700;color:var(--white);line-height:18px;text-align:center}
+.ts-emoji{font-size:1.5rem;margin-bottom:5px}
+.ts-code{font-family:'DM Mono',monospace;font-size:.68rem;font-weight:700;color:var(--g700);margin-bottom:3px}
+.ts-name{font-size:.7rem;font-weight:600;color:var(--ink);line-height:1.3}
+.ts-footer{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;background:var(--white);border:1px solid var(--cd);border-radius:12px;animation:fadeUp .4s .15s ease both}
+.ts-count-txt{font-size:.82rem;color:var(--inks)}
+.ts-count-txt strong{color:var(--g800);font-variant-numeric:tabular-nums}
+.btn:disabled{opacity:.4;cursor:not-allowed;transform:none !important;box-shadow:none !important}
+
+/* ══ CSRD SAVE INDICATOR ══ */
+.csrd-save-ind{font-size:.72rem;font-weight:600;color:var(--g200);opacity:0;transition:opacity .4s;white-space:nowrap}
+
 /* ══ ANIMATIONS ══ */
 @keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
 @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.6;transform:scale(1.15)}}
@@ -371,6 +395,7 @@ select.inp{cursor:pointer}
         <span class="ctx-co" id="ctxCo">Caricamento...</span>
         <span class="ctx-nc" id="ctxNc"></span>
       </div>
+      <span class="csrd-save-ind" id="csrdSaveInd"></span>
       <div class="hdr-actions">
         <button class="btn-api" id="apiBtn" onclick="openApiModal()">
           <svg width="11" height="11" viewBox="0 0 12 12" fill="none"><path d="M6 1a3 3 0 110 6 3 3 0 010-6zM2 11c0-2.21 1.79-4 4-4s4 1.79 4 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
@@ -432,6 +457,30 @@ select.inp{cursor:pointer}
     <div id="topicHeaderWrap"></div>
     <div class="tab-bar" id="tabBar"></div>
     <div id="tabContent"></div>
+  </div>
+</div>
+
+<!-- ═══ TOPIC SELECTION VIEW ═══ -->
+<div id="vTopicSelect" style="display:none">
+  <div class="ts-wrap">
+    <div class="ts-hero">
+      <div class="hub-eyebrow" style="margin:0 auto 14px;width:fit-content"><div class="edot"></div>Solo CSRD Reporting</div>
+      <h2>Seleziona i topic materiali</h2>
+      <p>Indica quali topic ESRS sono materiali per la tua azienda. Solo le disclosure corrispondenti saranno attivate nel report.</p>
+    </div>
+    <div class="ts-company">
+      <div class="f">
+        <label style="font-size:.76rem;font-weight:600;color:var(--inks)">Nome azienda <span style="color:var(--inkm);font-weight:400">(facoltativo)</span></label>
+        <input type="text" class="inp" id="tsCompanyName" placeholder="es. Acme S.r.l." oninput="csrdState._csrdOnlyCompany=this.value">
+      </div>
+    </div>
+    <div class="ts-grid" id="tsGrid"></div>
+    <div class="ts-footer">
+      <span class="ts-count-txt"><strong id="tsCount">0</strong> topic selezionati su 10</span>
+      <button class="btn btn-pri" onclick="confirmTopicSelection()" id="tsConfirmBtn" disabled>
+        Conferma selezione →
+      </button>
+    </div>
   </div>
 </div>
 
@@ -919,6 +968,8 @@ function saveState(){
     csrdState._saved = new Date().toISOString();
     localStorage.setItem('gl_csrd', JSON.stringify(csrdState));
   } catch(e){ console.warn('Save failed', e); }
+  // Fire-and-forget Supabase save
+  saveCsrdToSupabase?.();
 }
 
 function getTopicState(topicId){
@@ -2189,10 +2240,97 @@ function autoPopulateDR(topicId, drId){
 }
 
 // ══════════════════════════════════════════════
+//  TOPIC SELECTION (csrd_only mode)
+// ══════════════════════════════════════════════
+function showTopicSelect(){
+  document.getElementById('vHub').style.display = 'none';
+  document.getElementById('vTopic').style.display = 'none';
+  document.getElementById('vTopicSelect').style.display = '';
+  renderTopicSelection();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function renderTopicSelection(){
+  const grid = document.getElementById('tsGrid');
+  const saved = csrdState._manualTopics || [];
+  const companyInp = document.getElementById('tsCompanyName');
+  if(companyInp && csrdState._csrdOnlyCompany) companyInp.value = csrdState._csrdOnlyCompany;
+
+  grid.innerHTML = ALL_TOPIC_IDS.map((id,i) => {
+    const meta = TOPICS_META[id];
+    const sel = saved.includes(id);
+    return `<div class="ts-item${sel?' selected':''}" onclick="toggleTopicSelect('${id}')" id="tsi-${id}" style="animation-delay:${i*0.04}s">
+      <div class="ts-emoji">${meta.emoji}</div>
+      <div class="ts-code">${id}</div>
+      <div class="ts-name">${meta.name}</div>
+    </div>`;
+  }).join('');
+
+  updateTsCount();
+}
+
+function toggleTopicSelect(id){
+  if(!csrdState._manualTopics) csrdState._manualTopics = [];
+  const idx = csrdState._manualTopics.indexOf(id);
+  if(idx >= 0){
+    csrdState._manualTopics.splice(idx,1);
+    document.getElementById('tsi-'+id)?.classList.remove('selected');
+  } else {
+    csrdState._manualTopics.push(id);
+    document.getElementById('tsi-'+id)?.classList.add('selected');
+  }
+  updateTsCount();
+}
+
+function updateTsCount(){
+  const n = (csrdState._manualTopics||[]).length;
+  const el = document.getElementById('tsCount');
+  if(el) el.textContent = n;
+  const btn = document.getElementById('tsConfirmBtn');
+  if(btn) btn.disabled = n === 0;
+}
+
+function confirmTopicSelection(){
+  const selected = csrdState._manualTopics || [];
+  if(!selected.length) return;
+
+  const company = csrdState._csrdOnlyCompany || 'Azienda';
+
+  // Build synthetic dmaData from manual selection
+  dmaData = {
+    m1: { ragione: company, year: new Date().getFullYear() },
+    materialTopics: ALL_TOPIC_IDS.map(id => {
+      const meta = TOPICS_META[id];
+      const isMaterial = selected.includes(id);
+      return {
+        id, name: meta.name, emoji: meta.emoji,
+        pillar: meta.pillar, color: meta.color, bg: meta.bg,
+        class: isMaterial ? 'double' : 'none',
+        impactScore: isMaterial ? 3.0 : 0,
+        financialScore: isMaterial ? 3.0 : 0,
+        subtopicScores: {},
+      };
+    }),
+    m3: { stakeholders: [] },
+    m4: { threshold: 2.5, stkWeight: 0 },
+    _csrdOnlyMode: true,
+  };
+
+  localStorage.setItem('gl_dma', JSON.stringify(dmaData));
+  csrdState._csrdOnlyMode = true;
+  saveState();
+
+  document.getElementById('vTopicSelect').style.display = 'none';
+  document.getElementById('vHub').style.display = '';
+  renderHub();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// ══════════════════════════════════════════════
 //  INIT
 // ══════════════════════════════════════════════
 loadState();
-renderHub();
+// Entry point decided after Supabase loads — see second script block below
 
 // Check API key status
 if(apiKey){
@@ -2207,6 +2345,94 @@ if(apiKey){
 document.getElementById('apiModal').addEventListener('click', function(e){
   if(e.target === this) closeApiModal();
 });
+</script>
+
+<!-- SUPABASE CDN -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+// ══════════════════════════════════════════════
+//  SUPABASE SAVE / LOAD
+// ══════════════════════════════════════════════
+const _CSRD_SB_URL = 'https://sxcuhojxbqyrvouabmeo.supabase.co';
+const _CSRD_SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN4Y3Vob2p4YnF5cnZvdWFibWVvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM0NDM5MjksImV4cCI6MjA4OTAxOTkyOX0.WkjJrzL2gxFnfLXNOQo_QDt5IMgNbJxi37AXAIzPj60';
+let _csrdSb = null;
+let _csrdUser = null;
+
+async function _initCsrdSupabase(){
+  if(_csrdSb) return; // already init
+  if(typeof supabase === 'undefined') return;
+  _csrdSb = supabase.createClient(_CSRD_SB_URL, _CSRD_SB_KEY);
+  const { data: { session } } = await _csrdSb.auth.getSession();
+  _csrdUser = session?.user || null;
+}
+
+async function loadCsrdFromSupabase(){
+  await _initCsrdSupabase();
+  if(!_csrdSb || !_csrdUser) return;
+  const assessmentId = localStorage.getItem('gl_assessment_id');
+  if(!assessmentId) return;
+  try {
+    const { data } = await _csrdSb
+      .from('assessments')
+      .select('csrd_data')
+      .eq('id', assessmentId)
+      .single();
+    if(data?.csrd_data && Object.keys(data.csrd_data).length > 0){
+      // Merge Supabase data with local (Supabase wins if newer)
+      const local = csrdState;
+      const remote = data.csrd_data;
+      const localTs = local._saved ? new Date(local._saved) : new Date(0);
+      const remoteTs = remote._saved ? new Date(remote._saved) : new Date(0);
+      if(remoteTs >= localTs){
+        csrdState = remote;
+      }
+    }
+  } catch(e){ console.warn('[CSRD] Load from Supabase failed', e); }
+}
+
+async function saveCsrdToSupabase(){
+  await _initCsrdSupabase();
+  if(!_csrdSb || !_csrdUser) return;
+  const assessmentId = localStorage.getItem('gl_assessment_id');
+  if(!assessmentId) return;
+  try {
+    const { error } = await _csrdSb.from('assessments').upsert({
+      id: assessmentId,
+      user_id: _csrdUser.id,
+      csrd_data: csrdState,
+      updated_at: new Date().toISOString(),
+    }, { onConflict: 'id' });
+    if(!error){
+      const now = new Date();
+      const hhmm = now.getHours().toString().padStart(2,'0') + ':' + now.getMinutes().toString().padStart(2,'0');
+      showCsrdSaveInd('✓ Salvato ' + hhmm);
+    }
+  } catch(e){ console.warn('[CSRD] Save to Supabase failed', e); }
+}
+
+function showCsrdSaveInd(msg){
+  const el = document.getElementById('csrdSaveInd');
+  if(!el) return;
+  el.textContent = msg;
+  el.style.opacity = '1';
+  clearTimeout(el._tid);
+  el._tid = setTimeout(() => { el.style.opacity = '0'; }, 3200);
+}
+
+// ── Entry point (runs after Supabase is available) ──
+(async () => {
+  await loadCsrdFromSupabase();
+  // Re-read dmaData from localStorage in case Supabase restored _manualTopics
+  try {
+    const raw = localStorage.getItem('gl_dma');
+    if(raw && !dmaData) dmaData = JSON.parse(raw);
+  } catch(e){}
+  if (!dmaData && localStorage.getItem('gl_project_type') === 'csrd_only') {
+    showTopicSelect();
+  } else {
+    renderHub();
+  }
+})();
 </script>
 </body>
 </html>

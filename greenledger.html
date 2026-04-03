@@ -3971,6 +3971,8 @@ async function saveToSupabase() {
           return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
         }));
   }
+  // Persists so CSRD module can link CSRD data to the same assessment row
+  localStorage.setItem('gl_assessment_id', appState.id);
 
   showSaveInd('saving');
 
