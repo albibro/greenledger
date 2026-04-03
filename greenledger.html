@@ -3999,25 +3999,30 @@ async function loadFromSupabase(userId) {
   const sb = window._sb;
   if (!sb) return;
 
-  const urlId = new URLSearchParams(window.location.search).get('id');
+  // Priority: ?id= URL param → gl_assessment_id localStorage → nothing (fresh start)
+  const urlId     = new URLSearchParams(window.location.search).get('id');
+  const localId   = localStorage.getItem('gl_assessment_id');
+  const targetId  = urlId || localId;
 
-  let query = sb.from('assessments')
-    .select('id, data, step')
-    .eq('user_id', userId)
-    .not('data', 'is', null); // solo assessment salvati dall'app
+  if (!targetId) return; // no ID → fresh session, start from scratch
 
-  if (urlId) {
-    query = query.eq('id', urlId).single();
-  } else {
-    query = query.order('updated_at', { ascending: false }).limit(1).maybeSingle();
+  // Sync localStorage so other pages (greenledger-csrd.html) agree on the ID
+  if (urlId && urlId !== localId) {
+    localStorage.setItem('gl_assessment_id', urlId);
   }
 
-  const { data, error } = await query;
+  const { data, error } = await sb.from('assessments')
+    .select('id, data, step')
+    .eq('user_id', userId)
+    .eq('id', targetId)
+    .not('data', 'is', null)
+    .maybeSingle();
+
   if (error) {
     console.error('[GreenLedger] Errore caricamento:', error.message);
     return;
   }
-  if (!data) return; // nessun assessment salvato → parte da zero
+  if (!data) return; // ID not yet saved → fresh session
 
   // Ripristina appState
   Object.assign(appState, data.data);

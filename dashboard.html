@@ -591,7 +591,16 @@ function closeProjectModal() {
 }
 
 function selectProjectType(type, url) {
+  // New project → fresh ID, wipe stale data from any previous session
+  const newId = (crypto.randomUUID?.()) ||
+    'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
+      const r = crypto.getRandomValues(new Uint8Array(1))[0] % 16;
+      return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+    });
   localStorage.setItem('gl_project_type', type);
+  localStorage.setItem('gl_assessment_id', newId);
+  localStorage.removeItem('gl_dma');
+  localStorage.removeItem('gl_csrd');
   window.location.href = url;
 }
 
