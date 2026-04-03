@@ -3849,26 +3849,29 @@ async function saveToSupabase() {
   const user = window._sbUser;
   if (!sb || !user) return;
 
-  // Genera ID assessment se non esiste
+  // Genera ID assessment se non esiste ancora
   if (!appState.id) {
-    appState.id = crypto.randomUUID ? crypto.randomUUID()
-      : ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
-          (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16));
+    appState.id = (crypto.randomUUID ? crypto.randomUUID()
+      : 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
+          const r = crypto.getRandomValues(new Uint8Array(1))[0] % 16;
+          return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+        }));
   }
 
   showSaveInd('saving');
 
   const { error } = await sb.from('assessments').upsert({
-    id: appState.id,
-    user_id: user.id,
+    id:           appState.id,
+    user_id:      user.id,
     company_name: appState.m1.ragione || null,
-    step: appState.nav.current,
-    data: appState,
-    updated_at: new Date().toISOString(),
+    step:         appState.nav.current,
+    data:         appState,
+    updated_at:   new Date().toISOString(),
+    // session_key lasciato null per assessment utente autenticato
   }, { onConflict: 'id' });
 
   if (error) {
-    console.error('[GreenLedger] Errore salvataggio:', error.message, error.details, error.hint);
+    console.error('[GreenLedger] Errore salvataggio:', error.message, '|', error.details, '|', error.hint);
     showSaveInd('err');
   } else {
     showSaveInd('saved');
@@ -3880,10 +3883,13 @@ async function loadFromSupabase(userId) {
   const sb = window._sb;
   if (!sb) return;
 
-  // Cerca ID da URL (?id=xxx) oppure l'assessment più recente
   const urlId = new URLSearchParams(window.location.search).get('id');
 
-  let query = sb.from('assessments').select('id, data, step').eq('user_id', userId);
+  let query = sb.from('assessments')
+    .select('id, data, step')
+    .eq('user_id', userId)
+    .not('data', 'is', null); // solo assessment salvati dall'app
+
   if (urlId) {
     query = query.eq('id', urlId).single();
   } else {
@@ -3891,13 +3897,16 @@ async function loadFromSupabase(userId) {
   }
 
   const { data, error } = await query;
-  if (error || !data) return; // nessun assessment salvato → parte da zero
+  if (error) {
+    console.error('[GreenLedger] Errore caricamento:', error.message);
+    return;
+  }
+  if (!data) return; // nessun assessment salvato → parte da zero
 
-  // Ripristina appState mantenendo le chiavi di default per campi eventualmente nuovi
+  // Ripristina appState
   Object.assign(appState, data.data);
-  appState.id = data.id; // assicura coerenza
+  appState.id = data.id;
 
-  // Vai al modulo salvato
   goToModule(appState.nav.current || 1);
   updateHeader();
 }
