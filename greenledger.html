@@ -3824,8 +3824,13 @@ function showSaveInd(state) {
   const ind = document.getElementById('saveInd');
   const dot = document.getElementById('saveDot');
   const lbl = document.getElementById('saveLabel');
-  // Gli errori sono silenziosi: non mostrare mai UI di errore nell'header
-  if (state === 'err') return;
+  if (state === 'err') {
+    // Nascondi silenziosamente — non lasciare lo spinner bloccato
+    ind.style.opacity = '0';
+    ind.className = 'save-ind';
+    return;
+  }
+  ind.style.opacity = '';
   ind.className = 'save-ind ' + state;
   if (state === 'saving') {
     dot.className = 'save-dot spin';
@@ -3862,8 +3867,12 @@ async function saveToSupabase() {
     updated_at: new Date().toISOString(),
   }, { onConflict: 'id' });
 
-  showSaveInd(error ? 'err' : 'saved');
-  if (error) console.error('Save error:', error.message);
+  if (error) {
+    console.error('[GreenLedger] Errore salvataggio:', error.message, error.details, error.hint);
+    showSaveInd('err');
+  } else {
+    showSaveInd('saved');
+  }
 }
 
 // ── loadFromSupabase ──
