@@ -49,6 +49,41 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .save-ind.saved{opacity:1}
 .save-ind.err{color:#DC2626;opacity:1}
 .save-dot{width:6px;height:6px;border-radius:50%;background:currentColor;flex-shrink:0}
+.btn-save-manual{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:8px;font-size:.78rem;font-weight:600;color:var(--white);background:var(--g800);border:none;cursor:pointer;transition:all .2s;flex-shrink:0;font-family:'DM Sans',sans-serif}
+.btn-save-manual:hover{background:var(--g700);box-shadow:0 2px 8px rgba(26,122,74,.25)}
+.btn-save-manual.guest{background:transparent;color:var(--inkm);border:1px solid var(--cd)}
+.btn-save-manual.guest:hover{background:var(--g50);border-color:var(--g200);color:var(--g800)}
+/* M2 mobile tabs */
+.m2-tabs-mob{display:none;gap:0;background:var(--white);border:1px solid var(--cd);border-radius:10px;overflow:hidden;margin-bottom:16px}
+.m2tab{flex:1;padding:10px 6px;font-size:.78rem;font-weight:600;text-align:center;cursor:pointer;border:none;background:transparent;color:var(--inkm);transition:all .2s;font-family:'DM Sans',sans-serif}
+.m2tab.on{background:var(--g800);color:var(--white)}
+.dim-block{transition:none}
+/* IRO validation modal */
+.iro-val-modal{position:fixed;inset:0;background:rgba(15,28,20,.5);backdrop-filter:blur(4px);z-index:600;display:none;align-items:center;justify-content:center}
+.iro-val-box{background:white;border-radius:18px;padding:32px;width:480px;max-width:92vw;box-shadow:0 20px 60px rgba(15,28,20,.2)}
+.iro-val-icon{width:48px;height:48px;border-radius:12px;background:var(--ambg);border:1px solid var(--ambb);display:flex;align-items:center;justify-content:center;margin-bottom:16px;font-size:1.4rem}
+.iro-val-h{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:600;color:var(--g900);margin-bottom:10px}
+.iro-val-p{font-size:.84rem;color:var(--inks);line-height:1.65;margin-bottom:24px}
+.iro-val-acts{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap}
+/* Tour overlay */
+.tour-overlay{position:fixed;inset:0;background:rgba(10,20,14,.72);z-index:900;display:none;align-items:center;justify-content:center;backdrop-filter:blur(3px)}
+.tour-box{background:white;border-radius:20px;padding:36px;width:460px;max-width:92vw;box-shadow:0 24px 64px rgba(15,28,20,.25);position:relative}
+.tour-step-dots{display:flex;gap:6px;margin-bottom:24px}
+.tour-dot{width:8px;height:8px;border-radius:50%;background:var(--cdd);transition:background .2s}
+.tour-dot.on{background:var(--g700)}
+.tour-icon{font-size:2rem;margin-bottom:14px}
+.tour-h{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;color:var(--g900);margin-bottom:8px}
+.tour-p{font-size:.88rem;color:var(--inks);line-height:1.7;margin-bottom:28px}
+.tour-acts{display:flex;align-items:center;justify-content:space-between}
+.tour-skip{font-size:.75rem;color:var(--inkm);background:none;border:none;cursor:pointer;text-decoration:underline;padding:0}
+.tour-next{display:inline-flex;align-items:center;gap:7px;padding:10px 22px;border-radius:9px;font-size:.85rem;font-weight:600;color:white;background:var(--g800);border:none;cursor:pointer;transition:all .2s}
+.tour-next:hover{background:var(--g700)}
+@media(max-width:768px){
+  .m2-tabs-mob{display:flex}
+  .mod2-dims-desktop{display:none!important}
+  .dim-block{display:none!important}
+  .m2-dim-i .dim-i,.m2-dim-r .dim-r,.m2-dim-o .dim-o{display:block!important}
+}
 .save-dot.spin{background:none;border:1.5px solid var(--inkm);border-top-color:transparent;border-radius:50%;animation:spin .7s linear infinite;width:7px;height:7px}
 @keyframes spin{to{transform:rotate(360deg)}}
 
@@ -554,6 +589,7 @@ input.wslider::-webkit-slider-thumb{-webkit-appearance:none;width:13px;height:13
         <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M8 2L3 6.5L8 11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
         Dashboard
       </a>
+      <button class="btn-save-manual guest" id="btnSaveManual" onclick="manualSave()">💾 Accedi per salvare</button>
       <div class="save-ind" id="saveInd"><div class="save-dot" id="saveDot"></div><span id="saveLabel">Salvato</span></div>
       <div class="ctx-pill" id="ctxPill">
         <div class="ctx-dot"></div>
@@ -826,6 +862,11 @@ input.wslider::-webkit-slider-thumb{-webkit-appearance:none;width:13px;height:13
   <div class="fbar-prog"><div class="fpbar2"><div class="fpfill2" id="m2Fill" style="width:0%"></div></div><span class="fptxt2" id="m2Txt">0 / 10</span></div>
 </div>
 
+<div class="m2-tabs-mob" id="m2TabsMob">
+  <button class="m2tab on" data-dim="i" onclick="setM2Tab('i')">🌱 Impatti</button>
+  <button class="m2tab" data-dim="r" onclick="setM2Tab('r')">⚠️ Rischi</button>
+  <button class="m2tab" data-dim="o" onclick="setM2Tab('o')">💡 Opportunità</button>
+</div>
 <div class="tgrid" id="topicsGrid"></div>
 
 <div class="bbar">
@@ -2450,21 +2491,21 @@ function renderSubTopic(topicId, sub, userSectors){
       <div><div class="st-label">${sub.label}</div><div class="st-desc">${sub.desc}</div></div>
       ${done?`<span class="st-comp">✓ Completato</span>`:''}
     </div>
-    <div style="display:flex;flex-direction:column;gap:16px">
-      <div>
+    <div class="mod2-dims-desktop" style="display:flex;flex-direction:column;gap:16px">
+      <div class="dim-block dim-i">
         <div style="font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--ic);margin-bottom:8px;display:flex;align-items:center;gap:6px">
           <span style="width:18px;height:18px;background:var(--ic);border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:.7rem;color:white;font-weight:800">I</span>
           Materialità d'impatto
         </div>
         <div class="iro-sec">${iHTML}</div>
       </div>
-      <div>
-        <div style="font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--amber);margin-bottom:8px;display:flex;align-items:center;gap:6px">
-          <span style="width:18px;height:18px;background:var(--amber);border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:.7rem;color:white;font-weight:800">F</span>
-          Materialità finanziaria
-        </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div class="dim-block dim-r">
+          <div style="font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--amber);margin-bottom:8px">⚠️ Rischi finanziari</div>
           <div class="iro-sec">${rHTML}</div>
+        </div>
+        <div class="dim-block dim-o">
+          <div style="font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--oc);margin-bottom:8px">💡 Opportunità</div>
           <div class="iro-sec">${oHTML}</div>
         </div>
       </div>
@@ -2761,12 +2802,38 @@ document.getElementById('m2Search').addEventListener('input',renderTopics);
 
 // Navigation M2
 document.getElementById('m2Back').addEventListener('click',()=>goToModule(1));
-document.getElementById('m2Next').addEventListener('click',()=>{
+function countUnscoredIncluded(){
+  let n=0;
+  TOPICS.forEach(t=>{
+    t.subs.forEach(sub=>{
+      const lib=IRO_LIB[sub.id]; if(!lib) return;
+      ['i','r','o'].forEach(dim=>{
+        (lib[dim]||[]).forEach(iro=>{
+          const st=getIROState(t.id,sub.id,dim,iro.id);
+          if(st.incl && !st.na && (!st.score||st.score===0)) n++;
+        });
+      });
+    });
+  });
+  return n;
+}
+
+function proceedToM3(){
   const c=TOPICS.filter(t=>isTopicDone(t.id)).length;
-  // Save M2 state to appState summary
   appState.m2.summary = buildM2Summary();
-  showToast(c===10?'Modulo 2 completato — passaggio agli Stakeholder.': `${c}/10 topic completati — procedendo al Modulo 3.`);
+  showToast(c===10?'Modulo 2 completato — passaggio agli Stakeholder.':`${c}/10 topic completati — procedendo al Modulo 3.`);
   setTimeout(()=>{ goToModule(3); initM3(); },900);
+}
+
+document.getElementById('m2Next').addEventListener('click',()=>{
+  const unscored = countUnscoredIncluded();
+  if(unscored > 0){
+    document.getElementById('iroValMsg').textContent =
+      `Hai ${unscored} IRO inclus${unscored===1?'o':'i'} senza valutazione. Vota tutti gli IRO che hai incluso nella tua analisi. Se ritieni un IRO non rilevante, escludilo oppure assegnagli il punteggio minimo (1).`;
+    document.getElementById('iroValModal').style.display='flex';
+    return;
+  }
+  proceedToM3();
 });
 
 function buildM2Summary(){
@@ -3719,7 +3786,17 @@ ${stks.map(s=>`<tr><td>${s.name}</td><td>${s.org||'—'}</td><td>${s.cat}</td>
 </table>`:''}
 
 <h2 class="page-break">5. Matrice di Doppia Materialita</h2>
-<div style="text-align:center;margin:16px 0">${buildSVG()}</div>
+<div style="text-align:center;margin:16px 0">${(()=>{
+  const el=document.getElementById('matrixSvg');
+  if(el && el.innerHTML){
+    // Serializza il vero SVG renderizzato con viewBox e stili preservati
+    const clone=el.cloneNode(true);
+    clone.setAttribute('width','500');clone.setAttribute('height','360');
+    clone.style.cssText='max-width:100%;height:auto';
+    return clone.outerHTML;
+  }
+  return buildSVG();
+})()}</div>
 <div style="display:flex;gap:14px;justify-content:center;font-family:sans-serif;font-size:8pt;margin:10px 0">
   <span style="color:#1A7A4A">● Doppiamente materiale</span>
   <span style="color:#1D4ED8">● Mat. Impatto</span>
@@ -3789,6 +3866,37 @@ goToModule(1);
 updateHeader();
 </script>
 
+<!-- IRO validation modal -->
+<div class="iro-val-modal" id="iroValModal">
+  <div class="iro-val-box">
+    <div class="iro-val-icon">⚠️</div>
+    <div class="iro-val-h">IRO inclusi senza valutazione</div>
+    <p class="iro-val-p" id="iroValMsg">Hai degli IRO inclusi senza punteggio. Vota tutti gli IRO che hai incluso nella tua analisi. Se ritieni un IRO non rilevante, escludilo oppure assegnagli il punteggio minimo (1).</p>
+    <div class="iro-val-acts">
+      <button class="btn btn-gh" onclick="document.getElementById('iroValModal').style.display='none'">← Torna a completare</button>
+      <button class="btn btn-pri" onclick="document.getElementById('iroValModal').style.display='none';proceedToM3()">Continua comunque</button>
+    </div>
+  </div>
+</div>
+
+<!-- Onboarding tour -->
+<div class="tour-overlay" id="tourOverlay">
+  <div class="tour-box">
+    <div class="tour-step-dots">
+      <div class="tour-dot on" id="td0"></div>
+      <div class="tour-dot" id="td1"></div>
+      <div class="tour-dot" id="td2"></div>
+    </div>
+    <div class="tour-icon" id="tourIcon">🌿</div>
+    <h2 class="tour-h" id="tourH">Benvenuto su GreenLedger</h2>
+    <p class="tour-p" id="tourP">GreenLedger ti guida nella Double Materiality Assessment conforme CSRD in 6 moduli: dal profilo aziendale alla matrice IRO, fino al report PDF per il revisore.</p>
+    <div class="tour-acts">
+      <button class="tour-skip" onclick="closeTour()">Salta il tour</button>
+      <button class="tour-next" id="tourNextBtn" onclick="tourNext()">Avanti →</button>
+    </div>
+  </div>
+</div>
+
 <!-- Supabase: auth guard + save/load + logout -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
@@ -3813,6 +3921,10 @@ updateHeader();
     : user.email.slice(0,2).toUpperCase();
   const av = document.getElementById('hdrUsr');
   if (av) { av.textContent = initials; av.title = `${user.email} — Esci`; }
+
+  // Aggiorna save button per utente autenticato
+  const saveBtn = document.getElementById('btnSaveManual');
+  if(saveBtn){ saveBtn.textContent = '💾 Salva'; saveBtn.classList.remove('guest'); }
 
   // ── Load ──
   await loadFromSupabase(user.id);
@@ -3916,6 +4028,64 @@ async function supabaseLogout() {
   if (!window._sb) return;
   await window._sb.auth.signOut();
   window.location.href = 'login.html';
+}
+
+// ── Manual save button ──
+async function manualSave() {
+  if (!window._sbReady) { window.location.href = 'login.html'; return; }
+  await saveToSupabase();
+  // Aggiorna label con orario
+  const now = new Date();
+  const hhmm = now.getHours().toString().padStart(2,'0')+':'+now.getMinutes().toString().padStart(2,'0');
+  const lbl = document.getElementById('saveLabel');
+  if(lbl) lbl.textContent = `✓ Salvato ${hhmm}`;
+}
+
+// ── M2 mobile tab switcher ──
+let m2ActiveDim = 'i';
+function setM2Tab(dim) {
+  m2ActiveDim = dim;
+  document.querySelectorAll('.m2tab').forEach(b=>b.classList.toggle('on', b.dataset.dim===dim));
+  const grid = document.getElementById('topicsGrid');
+  grid.className = 'tgrid m2-dim-'+dim;
+}
+
+// ── Onboarding tour ──
+const TOUR_STEPS = [
+  { icon:'🌿', h:'Benvenuto su GreenLedger', p:'GreenLedger ti guida nella Double Materiality Assessment conforme CSRD in 6 moduli: dal profilo aziendale alla matrice IRO, fino al report PDF per il revisore.' },
+  { icon:'🏢', h:'Modulo 1 — Profilo aziendale', p:'Inizia compilando i dati della tua azienda: ragione sociale, codici NACE, dimensione e area geografica. Questi dati pre-selezionano automaticamente gli IRO rilevanti nel Modulo 2.' },
+  { icon:'📊', h:'Modulo 2 — Valuta gli IRO', p:'Per ogni topic ESRS trovi Impatti, Rischi e Opportunità pre-caricati. Includi o escludi ogni IRO e assegna un punteggio 1–5. Poi invita gli stakeholder per raccogliere la loro valutazione.' },
+];
+let tourStep = 0;
+
+function startTour() {
+  tourStep = 0;
+  renderTourStep();
+  document.getElementById('tourOverlay').style.display = 'flex';
+}
+
+function renderTourStep() {
+  const s = TOUR_STEPS[tourStep];
+  document.getElementById('tourIcon').textContent = s.icon;
+  document.getElementById('tourH').textContent = s.h;
+  document.getElementById('tourP').textContent = s.p;
+  document.getElementById('tourNextBtn').textContent = tourStep < TOUR_STEPS.length-1 ? 'Avanti →' : 'Inizia ✓';
+  TOUR_STEPS.forEach((_,i)=>document.getElementById('td'+i).classList.toggle('on', i===tourStep));
+}
+
+function tourNext() {
+  if(tourStep < TOUR_STEPS.length-1){ tourStep++; renderTourStep(); }
+  else { closeTour(); }
+}
+
+function closeTour() {
+  document.getElementById('tourOverlay').style.display = 'none';
+  localStorage.setItem('gl_onboarded','1');
+}
+
+// Avvia tour al primo accesso
+if(!localStorage.getItem('gl_onboarded')) {
+  setTimeout(startTour, 800);
 }
 </script>
 </body>

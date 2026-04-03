@@ -169,6 +169,7 @@ main{max-width:1200px;margin:0 auto;padding:44px 36px 80px;position:relative;z-i
         <div class="user-av" id="userAv">?</div>
         <span class="user-email" id="userEmail">…</span>
       </div>
+      <button class="btn-logout" style="border-color:var(--g200);color:var(--g800)" onclick="startTourFromDashboard()">❓ Tour guidato</button>
       <button class="btn-logout" onclick="handleLogout()">Esci</button>
     </div>
   </div>
@@ -359,6 +360,11 @@ async function loadAssessments(userId) {
 async function handleLogout() {
   await sb.auth.signOut();
   window.location.href = 'login.html';
+}
+
+function startTourFromDashboard() {
+  localStorage.removeItem('gl_onboarded');
+  window.location.href = 'greenledger.html';
 }
 
 function escHtml(str) {
