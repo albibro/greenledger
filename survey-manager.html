@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gestione Sessioni Stakeholder — GreenLedger</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --g900:#0D3D25;--g800:#1A7A4A;--g700:#1E8F56;--g600:#22A463;--g500:#28BB72;
+  --g200:#A8DBBF;--g100:#D4EFE0;--g50:#EEF8F3;
+  --cream:#F7F4EE;--cd:#EDE9DF;--cdd:#DDD8CC;
+  --ink:#0F1C14;--inks:#3A4D40;--inkm:#6B7F72;
+  --white:#fff;
+  --sh2:0 4px 16px rgba(15,28,20,.10),0 2px 6px rgba(15,28,20,.06);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:#0A1F12;color:var(--white);min-height:100vh}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+@keyframes float{0%,100%{transform:translate(0,0)}33%{transform:translate(20px,-20px)}66%{transform:translate(-15px,15px)}}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.6;transform:scale(1.2)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:200;background:rgba(10,31,18,.88);backdrop-filter:blur(16px);border-bottom:1px solid rgba(168,219,191,.1)}
+.nav-in{max-width:1200px;margin:0 auto;padding:0 36px;height:64px;display:flex;align-items:center;justify-content:space-between}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.lmark{width:34px;height:34px;background:var(--g800);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.ltxt{font-family:'Playfair Display',serif;font-weight:700;font-size:1.2rem;color:var(--white);letter-spacing:-.02em}
+.ltxt span{color:var(--g200)}
+.nav-r{display:flex;align-items:center;gap:12px}
+.btn-nav{padding:7px 16px;border-radius:8px;font-size:.8rem;font-weight:600;color:rgba(255,255,255,.5);background:transparent;border:1px solid rgba(255,255,255,.12);cursor:pointer;transition:all .2s;text-decoration:none}
+.btn-nav:hover{background:rgba(255,255,255,.08);color:var(--white)}
+.btn-nav.primary{background:var(--g500);color:var(--g900);border-color:transparent;box-shadow:0 3px 12px rgba(40,187,114,.3)}
+.btn-nav.primary:hover{background:var(--g200)}
+
+/* HERO */
+.hero{position:relative;overflow:hidden;padding:100px 36px 80px;text-align:center}
+.hero-orbs{position:absolute;inset:0;pointer-events:none}
+.orb{position:absolute;border-radius:50%;filter:blur(70px);animation:float 12s ease-in-out infinite}
+.orb-1{width:500px;height:500px;background:radial-gradient(circle,rgba(34,164,99,.25) 0%,transparent 70%);top:-120px;left:-80px}
+.orb-2{width:400px;height:400px;background:radial-gradient(circle,rgba(13,61,37,.4) 0%,transparent 70%);bottom:-60px;right:0;animation-delay:-6s}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(168,219,191,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(168,219,191,.04) 1px,transparent 1px);background-size:60px 60px;mask-image:radial-gradient(ellipse 70% 70% at 50% 50%,black 20%,transparent 100%)}
+.hero-inner{max-width:700px;margin:0 auto;position:relative;z-index:1;animation:fadeUp .5s ease both}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;background:rgba(168,219,191,.1);border:1px solid rgba(168,219,191,.2);border-radius:100px;padding:6px 16px;font-size:.7rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--g200);margin-bottom:20px}
+.edot{width:6px;height:6px;border-radius:50%;background:var(--g500);animation:pulse 2s ease-in-out infinite}
+.hero-inner h1{font-family:'Playfair Display',serif;font-size:clamp(2rem,5vw,3rem);font-weight:700;color:var(--white);letter-spacing:-.04em;line-height:1.1;margin-bottom:16px}
+.hero-inner p{font-size:.95rem;color:rgba(255,255,255,.5);line-height:1.7;margin-bottom:36px;max-width:520px;margin-left:auto;margin-right:auto}
+
+/* COMING SOON CARD */
+.cs-card{background:rgba(255,255,255,.04);border:1px solid rgba(168,219,191,.12);border-radius:20px;padding:48px 40px;max-width:560px;margin:0 auto;position:relative;z-index:1;animation:fadeUp .5s .1s ease both}
+.cs-icon{width:72px;height:72px;border-radius:18px;background:rgba(40,187,114,.12);border:1px solid rgba(40,187,114,.2);display:flex;align-items:center;justify-content:center;margin:0 auto 24px;font-size:2rem}
+.cs-card h2{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:600;color:var(--white);margin-bottom:10px}
+.cs-card p{font-size:.88rem;color:rgba(255,255,255,.45);line-height:1.7;margin-bottom:28px}
+.cs-features{display:flex;flex-direction:column;gap:10px;margin-bottom:32px;text-align:left}
+.cs-feat{display:flex;align-items:center;gap:10px;font-size:.82rem;color:rgba(255,255,255,.5)}
+.cs-feat-dot{width:6px;height:6px;border-radius:50%;background:var(--g500);flex-shrink:0}
+.cs-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(40,187,114,.08);border:1px solid rgba(40,187,114,.15);border-radius:8px;padding:10px 18px;font-size:.8rem;color:var(--g200);font-weight:500}
+.cs-badge svg{flex-shrink:0}
+.btn-back{display:inline-flex;align-items:center;gap:7px;padding:11px 22px;border-radius:10px;background:var(--g500);color:var(--g900);font-size:.88rem;font-weight:600;text-decoration:none;border:none;cursor:pointer;transition:all .2s;box-shadow:0 4px 16px rgba(40,187,114,.3);margin-top:24px}
+.btn-back:hover{background:var(--g200);transform:translateY(-1px)}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-in">
+    <a class="logo" href="dashboard.html">
+      <div class="lmark">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+          <path d="M9 2L4 6V14H7V10H11V14H14V6L9 2Z" fill="white" opacity=".9"/>
+          <rect x="7" y="10" width="4" height="4" rx="1" fill="white" opacity=".5"/>
+        </svg>
+      </div>
+      <span class="ltxt">Green<span>Ledger</span></span>
+    </a>
+    <div class="nav-r">
+      <a class="btn-nav" href="dashboard.html">← Dashboard</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-orbs">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+  </div>
+  <div class="hero-grid"></div>
+  <div class="hero-inner">
+    <div class="eyebrow"><span class="edot"></span>Stakeholder Engagement</div>
+    <h1>Gestione Sessioni Stakeholder</h1>
+    <p>Raccogli le opinioni degli stakeholder chiave, analizza i risultati e integra l'engagement nel processo di Double Materiality Assessment.</p>
+  </div>
+</section>
+
+<!-- COMING SOON -->
+<div style="max-width:1200px;margin:0 auto;padding:0 36px 80px;position:relative;z-index:1">
+  <div class="cs-card">
+    <div class="cs-icon">🚧</div>
+    <h2>Modulo in costruzione</h2>
+    <p>Il modulo di gestione sessioni stakeholder è attualmente in sviluppo. Sarà disponibile a breve con tutte le funzionalità previste.</p>
+
+    <div class="cs-features">
+      <div class="cs-feat"><span class="cs-feat-dot"></span>Creazione sessioni con link univoci per ogni stakeholder</div>
+      <div class="cs-feat"><span class="cs-feat-dot"></span>Survey ESRS pre-configurata con scoring automatico</div>
+      <div class="cs-feat"><span class="cs-feat-dot"></span>Dashboard risultati con visualizzazione aggregata</div>
+      <div class="cs-feat"><span class="cs-feat-dot"></span>Export dei risultati in formato PDF e Excel</div>
+      <div class="cs-feat"><span class="cs-feat-dot"></span>Integrazione con la DMA — pesi stakeholder calcolati automaticamente</div>
+    </div>
+
+    <div class="cs-badge">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="6" stroke="currentColor" stroke-width="1.3"/><path d="M7 4v3l2 2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+      Disponibile a breve — Q3 2025
+    </div>
+
+    <br>
+    <a class="btn-back" href="dashboard.html">
+      <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M11 7H3M7 3l-4 4 4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Torna alla Dashboard
+    </a>
+  </div>
+</div>
+
+</body>
+</html>

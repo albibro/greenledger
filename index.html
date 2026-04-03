@@ -229,7 +229,42 @@ footer{background:#060F09;border-top:1px solid rgba(255,255,255,.05)}
   .cta-wrap{padding:24px 20px 64px}
   .cta-card{padding:48px 28px}
   .foot-in{padding:24px 20px}
+  .pricing-grid{grid-template-columns:1fr}
 }
+
+/* ── PRICING SECTION ── */
+.pricing-wrap{background:#0A1F12;padding:96px 36px;position:relative;overflow:hidden}
+.pricing-orb{position:absolute;border-radius:50%;filter:blur(70px);pointer-events:none}
+.pricing-orb-1{width:500px;height:500px;background:radial-gradient(circle,rgba(34,164,99,.15) 0%,transparent 70%);top:-100px;right:-100px;animation:float 12s ease-in-out infinite}
+.pricing-orb-2{width:400px;height:400px;background:radial-gradient(circle,rgba(13,61,37,.3) 0%,transparent 70%);bottom:-80px;left:-60px;animation:float 12s ease-in-out infinite;animation-delay:-6s}
+.pricing-grid-bg{position:absolute;inset:0;background-image:linear-gradient(rgba(168,219,191,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(168,219,191,.04) 1px,transparent 1px);background-size:60px 60px;mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,black 20%,transparent 100%)}
+.pricing-inner{max-width:1200px;margin:0 auto;position:relative;z-index:1}
+.pricing-eyebrow{display:inline-flex;align-items:center;gap:7px;background:rgba(168,219,191,.1);border:1px solid rgba(168,219,191,.2);border-radius:100px;padding:6px 16px;font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--g200);margin-bottom:20px}
+.pricing-h{font-family:'Playfair Display',serif;font-size:clamp(1.8rem,3.5vw,2.6rem);font-weight:700;color:var(--white);letter-spacing:-.04em;line-height:1.12;margin-bottom:10px}
+.pricing-sub{font-size:.9rem;color:rgba(255,255,255,.42);line-height:1.65;max-width:480px;margin-bottom:52px}
+.pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;align-items:start}
+@media(max-width:900px){.pricing-grid{grid-template-columns:1fr 1fr}}
+
+.pc{background:rgba(255,255,255,.04);border:1.5px solid rgba(168,219,191,.1);border-radius:20px;padding:28px;transition:all .3s;position:relative;overflow:hidden}
+.pc::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(168,219,191,.2),transparent);opacity:0;transition:opacity .3s}
+.pc:hover{border-color:rgba(168,219,191,.25);background:rgba(255,255,255,.06);transform:translateY(-3px);box-shadow:0 20px 50px rgba(0,0,0,.3)}
+.pc:hover::before{opacity:1}
+.pc.featured{border-color:rgba(40,187,114,.3);background:rgba(40,187,114,.05)}
+.pc.featured::before{opacity:1;background:linear-gradient(90deg,transparent,rgba(40,187,114,.4),transparent)}
+.pc-badge{display:inline-flex;align-items:center;gap:5px;background:rgba(40,187,114,.15);border:1px solid rgba(40,187,114,.25);border-radius:6px;padding:3px 9px;font-size:.62rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--g200);margin-bottom:18px}
+.pc-icon{width:44px;height:44px;border-radius:12px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;font-size:1.3rem;margin-bottom:16px}
+.pc-name{font-family:'Playfair Display',serif;font-size:1.15rem;font-weight:700;color:var(--white);margin-bottom:6px;letter-spacing:-.02em}
+.pc-desc{font-size:.78rem;color:rgba(255,255,255,.42);line-height:1.6;margin-bottom:22px;min-height:52px}
+.pc-feats{display:flex;flex-direction:column;gap:9px;margin-bottom:26px}
+.pc-feat{display:flex;align-items:flex-start;gap:9px;font-size:.78rem;color:rgba(255,255,255,.55);line-height:1.45}
+.pc-feat-ic{width:16px;height:16px;border-radius:50%;background:rgba(40,187,114,.15);border:1px solid rgba(40,187,114,.2);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.pc-divider{height:1px;background:rgba(255,255,255,.06);margin-bottom:20px}
+.pc-price{font-size:.8rem;color:rgba(255,255,255,.3);margin-bottom:14px;font-style:italic}
+.btn-pc{display:flex;align-items:center;justify-content:center;gap:7px;padding:11px 20px;border-radius:9px;font-size:.85rem;font-weight:600;text-decoration:none;transition:all .2s;border:none;cursor:pointer;width:100%}
+.btn-pc.ghost{background:rgba(255,255,255,.06);border:1.5px solid rgba(255,255,255,.12);color:rgba(255,255,255,.7)}
+.btn-pc.ghost:hover{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.25);color:var(--white)}
+.btn-pc.filled{background:var(--g500);color:var(--g900);box-shadow:0 4px 16px rgba(40,187,114,.3)}
+.btn-pc.filled:hover{background:var(--g200);transform:translateY(-1px);box-shadow:0 6px 22px rgba(40,187,114,.4)}
 </style>
 </head>
 <body>
@@ -597,6 +632,135 @@ footer{background:#060F09;border-top:1px solid rgba(255,255,255,.05)}
     </div>
   </div>
 </div>
+
+<!-- PRICING SECTION -->
+<section class="pricing-wrap">
+  <div class="pricing-orb pricing-orb-1"></div>
+  <div class="pricing-orb pricing-orb-2"></div>
+  <div class="pricing-grid-bg"></div>
+  <div class="pricing-inner">
+    <div class="pricing-eyebrow">
+      <span class="badge-dot" style="background:var(--g500)"></span>
+      I nostri piani
+    </div>
+    <h2 class="pricing-h reveal">Scegli il percorso<br>giusto per la tua azienda</h2>
+    <p class="pricing-sub reveal">Ogni piano include accesso alla piattaforma, supporto dedicato e aggiornamenti ESRS continui. I prezzi sono su richiesta e calibrati sulla dimensione aziendale.</p>
+
+    <div class="pricing-grid">
+
+      <!-- PLAN 1: DMA + CSRD -->
+      <div class="pc featured reveal">
+        <div class="pc-badge">⭐ Più completo</div>
+        <div class="pc-icon">🔄</div>
+        <div class="pc-name">DMA + CSRD Completo</div>
+        <div class="pc-desc">Il percorso guidato completo: dalla Double Materiality Assessment fino al report di sostenibilità CSRD-conforme.</div>
+        <div class="pc-feats">
+          <div class="pc-feat">
+            <div class="pc-feat-ic"><svg width="8" height="8" viewBox="0 0 8 8" fill="none"><path d="M1.5 4L3.5 6L6.5 2" stroke="#28BB72" stroke-width="1.3" stroke-linecap="round"/></svg></div>
+            Assessment guidata in 6 moduli EFRAG
+          </div>
+          <div class="pc-feat">
+            <div class="pc-feat-ic"><svg width="8" height="8" viewBox="0 0 8 8" fill="none"><path d="M1.5 4L3.5 6L6.5 2" stroke="#28BB72" stroke-width="1.3" stroke-linecap="round"/></svg></div>
+            Matrice di doppia materialità interattiva
+          </div>
+          <div class="pc-feat">
+            <div class="pc-feat-ic"><svg width="8" height="8" viewBox="0 0 8 8" fill="none"><path d="M1.5 4L3.5 6L6.5 2" stroke="#28BB72" stroke-width="1.3" stroke-linecap="round"/></svg></div>
+            Stakeholder engagement integrato
+          </div>
+          <div class="pc-feat">
+            <div class="pc-feat-ic"><svg width="8" height="8" viewBox="0 0 8 8" fill="none"><path d="M1.5 4L3.5 6L6.5 2" stroke="#28BB72" stroke-width="1.3" stroke-linecap="round"/></svg></div>
+            DR ESRS attivate automaticamente (EFRAG ID177)
+          </div>
+          <div class="pc-feat">
+            <div class="pc-feat-ic"><svg width="8" height="8" viewBox="0 0 8 8" fill="none"><path d="M1.5 4L3.5 6L6.5 2" stroke="#28BB72" stroke-width="1.3" stroke-linecap="round"/></svg></div>
+            PDF audit-ready con audit trail completo
+          </div>
+          <div class="pc-feat">
+            <div class="pc-feat-ic"><svg width="8" height="8" viewBox="0 0 8 8" fill="none"><path d="M1.5 4L3.5 6L6.5 2" stroke="#28BB72" stroke-width="1.3" stroke-linecap="round"/></svg></div>
+            Salvataggio automatico su cloud
+          </div>
+        </div>
+        <div class="pc-divider"></div>
+        <div class="pc-price">Prezzo su richiesta · Calibrato sulla dimensione aziendale</div>
+        <a class="btn-pc filled" href="login.html">
+          Richiedi accesso
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2.5 6h7M6 2.5l3.5 3.5L6 9.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+
+      <!-- PLAN 2: CSRD ONLY -->
+      <div class="pc reveal">
+        <div class="pc-icon">📊</div>
+        <div class="pc-name">CSRD Reporting</div>
+        <div class="pc-desc">Rendicontazione strutturata conforme ESRS. Seleziona manualmente i topic materiali e compila le disclosure obbligatorie.</div>
+        <div class="pc-feats">
+          <div class="pc-feat">
+            <div class="pc-feat-ic"><svg width="8" height="8" viewBox="0 0 8 8" fill="none"><path d="M1.5 4L3.5 6L6.5 2" stroke="#28BB72" stroke-width="1.3" stroke-linecap="round"/></svg></div>
+            Selezione manuale dei topic ESRS materiali
+          </div>
+          <div class="pc-feat">
+            <div class="pc-feat-ic"><svg width="8" height="8" viewBox="0 0 8 8" fill="none"><path d="M1.5 4L3.5 6L6.5 2" stroke="#28BB72" stroke-width="1.3" stroke-linecap="round"/></svg></div>
+            Disclosure requirements E1-E5, S1-S4, G1
+          </div>
+          <div class="pc-feat">
+            <div class="pc-feat-ic"><svg width="8" height="8" viewBox="0 0 8 8" fill="none"><path d="M1.5 4L3.5 6L6.5 2" stroke="#28BB72" stroke-width="1.3" stroke-linecap="round"/></svg></div>
+            ESRS 2 governance e strategia
+          </div>
+          <div class="pc-feat">
+            <div class="pc-feat-ic"><svg width="8" height="8" viewBox="0 0 8 8" fill="none"><path d="M1.5 4L3.5 6L6.5 2" stroke="#28BB72" stroke-width="1.3" stroke-linecap="round"/></svg></div>
+            Metriche quantitative e KPI
+          </div>
+          <div class="pc-feat">
+            <div class="pc-feat-ic"><svg width="8" height="8" viewBox="0 0 8 8" fill="none"><path d="M1.5 4L3.5 6L6.5 2" stroke="#28BB72" stroke-width="1.3" stroke-linecap="round"/></svg></div>
+            Salvataggio su cloud Supabase
+          </div>
+        </div>
+        <div class="pc-divider"></div>
+        <div class="pc-price">Prezzo su richiesta · Calibrato sulla dimensione aziendale</div>
+        <a class="btn-pc ghost" href="login.html">
+          Richiedi accesso
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2.5 6h7M6 2.5l3.5 3.5L6 9.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+
+      <!-- PLAN 3: STAKEHOLDER -->
+      <div class="pc reveal">
+        <div class="pc-icon">👥</div>
+        <div class="pc-name">Stakeholder Engagement</div>
+        <div class="pc-desc">Raccolta strutturata delle opinioni degli stakeholder. Ideale come fase preparatoria alla DMA o come strumento autonomo.</div>
+        <div class="pc-feats">
+          <div class="pc-feat">
+            <div class="pc-feat-ic"><svg width="8" height="8" viewBox="0 0 8 8" fill="none"><path d="M1.5 4L3.5 6L6.5 2" stroke="#28BB72" stroke-width="1.3" stroke-linecap="round"/></svg></div>
+            Sessioni con link univoci per stakeholder
+          </div>
+          <div class="pc-feat">
+            <div class="pc-feat-ic"><svg width="8" height="8" viewBox="0 0 8 8" fill="none"><path d="M1.5 4L3.5 6L6.5 2" stroke="#28BB72" stroke-width="1.3" stroke-linecap="round"/></svg></div>
+            Survey ESRS pre-configurata con scoring
+          </div>
+          <div class="pc-feat">
+            <div class="pc-feat-ic"><svg width="8" height="8" viewBox="0 0 8 8" fill="none"><path d="M1.5 4L3.5 6L6.5 2" stroke="#28BB72" stroke-width="1.3" stroke-linecap="round"/></svg></div>
+            Dashboard risultati aggregati
+          </div>
+          <div class="pc-feat">
+            <div class="pc-feat-ic"><svg width="8" height="8" viewBox="0 0 8 8" fill="none"><path d="M1.5 4L3.5 6L6.5 2" stroke="#28BB72" stroke-width="1.3" stroke-linecap="round"/></svg></div>
+            Export risultati PDF ed Excel
+          </div>
+          <div class="pc-feat">
+            <div class="pc-feat-ic" style="background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.1)"><svg width="8" height="8" viewBox="0 0 8 8" fill="none"><circle cx="4" cy="4" r="3" stroke="rgba(255,255,255,.25)" stroke-width="1.1"/></svg></div>
+            <span style="color:rgba(255,255,255,.3)">Integrazione con DMA — disponibile a breve</span>
+          </div>
+        </div>
+        <div class="pc-divider"></div>
+        <div class="pc-price">Prezzo su richiesta · Calibrato sulla dimensione aziendale</div>
+        <a class="btn-pc ghost" href="login.html">
+          Richiedi accesso
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2.5 6h7M6 2.5l3.5 3.5L6 9.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+
+    </div>
+  </div>
+</section>
 
 <!-- CTA FINALE -->
 <div class="cta-wrap">

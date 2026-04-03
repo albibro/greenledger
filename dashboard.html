@@ -53,6 +53,7 @@ nav{position:sticky;top:0;z-index:200;background:rgba(10,31,18,.88);backdrop-fil
 .user-email{font-size:.75rem;font-weight:500;color:rgba(255,255,255,.6);max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .btn-logout{padding:7px 14px;border-radius:8px;font-size:.78rem;font-weight:500;color:rgba(255,255,255,.5);background:transparent;border:1px solid rgba(255,255,255,.12);cursor:pointer;transition:all .2s}
 .btn-logout:hover{background:rgba(220,38,38,.1);border-color:rgba(220,38,38,.3);color:#FCA5A5}
+.plan-chip{display:inline-flex;align-items:center;gap:5px;background:rgba(40,187,114,.1);border:1px solid rgba(40,187,114,.2);border-radius:100px;padding:3px 10px;font-size:.66rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--g200);white-space:nowrap}
 
 /* ── DARK HERO SECTION ── */
 .dash-hero-dark{position:relative;background:#0A1F12;overflow:hidden;padding:80px 36px 60px}
@@ -199,6 +200,7 @@ main{max-width:1200px;margin:0 auto;padding:44px 36px 80px;position:relative;z-i
       <span class="ltxt">Green<span>Ledger</span></span>
     </a>
     <div class="nav-r">
+      <span class="plan-chip" id="planChip" style="display:none"></span>
       <div class="user-pill">
         <div class="user-av" id="userAv">?</div>
         <span class="user-email" id="userEmail">…</span>
@@ -251,7 +253,7 @@ main{max-width:1200px;margin:0 auto;padding:44px 36px 80px;position:relative;z-i
   </div>
 
   <!-- QUICK ACTIONS -->
-  <div class="quick-grid">
+  <div class="quick-grid" id="quickGrid">
     <div class="quick-card primary" style="cursor:pointer" onclick="openProjectModal()">
       <div class="qc-icon">
         <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 4v12M4 10h12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
@@ -340,7 +342,7 @@ main{max-width:1200px;margin:0 auto;padding:44px 36px 80px;position:relative;z-i
         <svg class="pt-arr" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M7 3l4 4-4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </div>
 
-      <div class="pt-card" onclick="selectProjectType('stakeholder_only','greenledger.html')">
+      <div class="pt-card" onclick="selectProjectType('stakeholder_only','survey-manager.html')">
         <div class="pt-card-ic">👥</div>
         <div class="pt-card-body">
           <div class="pt-card-h">Solo Stakeholder Engagement</div>
@@ -370,27 +372,121 @@ async function init() {
     return;
   }
   renderUser(session.user);
-  await loadAssessments(session.user.id);
+  await loadAssessments(session.user.id, session.user.user_metadata?.plan || 'dma_full');
   document.getElementById('loadingScreen').style.display = 'none';
   document.getElementById('mainContent').style.display = 'block';
 }
 
+const PLAN_META = {
+  dma_full:         { label: 'DMA + CSRD',      icon: '🔄' },
+  csrd_only:        { label: 'CSRD Reporting',   icon: '📊' },
+  stakeholder_only: { label: 'Stakeholder',      icon: '👥' },
+};
+
 function renderUser(user) {
   const email = user.email || '';
-  const name = user.user_metadata?.full_name || '';
+  const name  = user.user_metadata?.full_name || '';
+  const plan  = user.user_metadata?.plan || 'dma_full';
   const initials = name
     ? name.split(' ').map(p => p[0]).join('').slice(0, 2).toUpperCase()
     : email.slice(0, 2).toUpperCase();
 
-  document.getElementById('userAv').textContent = initials;
+  document.getElementById('userAv').textContent    = initials;
   document.getElementById('userEmail').textContent = email;
 
   const greeting = name ? `Bentornato, ${name.split(' ')[0]}` : 'Bentornato';
   document.getElementById('welcomeMsg').textContent = greeting;
+
+  // Plan badge in nav
+  const pm = PLAN_META[plan] || PLAN_META.dma_full;
+  const chip = document.getElementById('planChip');
+  chip.textContent = pm.icon + ' ' + pm.label;
+  chip.style.display = 'inline-flex';
+
+  adaptToPlan(plan);
+}
+
+function adaptToPlan(plan) {
+  const grid = document.getElementById('quickGrid');
+  if (!grid) return;
+
+  if (plan === 'stakeholder_only') {
+    grid.innerHTML = `
+      <div class="quick-card primary" style="cursor:pointer" onclick="openProjectModal()">
+        <div class="qc-icon">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="7" cy="7" r="3" stroke="currentColor" stroke-width="1.6"/><circle cx="14" cy="7" r="3" stroke="currentColor" stroke-width="1.6"/><path d="M1 17c0-3 2.7-5 6-5M10 12c3.3 0 9 2 9 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+        </div>
+        <div>
+          <div class="qc-h">Nuova sessione stakeholder</div>
+          <div class="qc-p">Avvia una raccolta opinioni per la materialità</div>
+        </div>
+        <svg class="qc-arr" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <div class="quick-card" onclick="document.getElementById('assessList').scrollIntoView({behavior:'smooth'})">
+        <div class="qc-icon">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><rect x="3" y="4" width="14" height="3" rx="1.5" fill="currentColor" opacity=".3"/><rect x="3" y="9" width="10" height="3" rx="1.5" fill="currentColor" opacity=".5"/><rect x="3" y="14" width="7" height="3" rx="1.5" fill="currentColor"/></svg>
+        </div>
+        <div>
+          <div class="qc-h">Le mie sessioni</div>
+          <div class="qc-p">Visualizza e gestisci le sessioni salvate</div>
+        </div>
+        <svg class="qc-arr" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <div class="quick-card" style="cursor:default;opacity:.5">
+        <div class="qc-icon">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M4 16L7 13H16V5H4V16Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+        </div>
+        <div>
+          <div class="qc-h">Report risultati</div>
+          <div class="qc-p">Esporta i risultati — prossimamente</div>
+        </div>
+      </div>`;
+
+    // Update section labels
+    const secH2 = document.querySelector('#assessList .sec-hd h2');
+    if (secH2) secH2.textContent = 'Sessioni recenti';
+
+  } else if (plan === 'csrd_only') {
+    grid.innerHTML = `
+      <div class="quick-card primary" style="cursor:pointer" onclick="openProjectModal()">
+        <div class="qc-icon">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 4v12M4 10h12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        </div>
+        <div>
+          <div class="qc-h">Nuovo progetto CSRD</div>
+          <div class="qc-p">Avvia la rendicontazione ESRS per la tua azienda</div>
+        </div>
+        <svg class="qc-arr" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <div class="quick-card" onclick="document.getElementById('assessList').scrollIntoView({behavior:'smooth'})">
+        <div class="qc-icon">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><rect x="3" y="4" width="14" height="3" rx="1.5" fill="currentColor" opacity=".3"/><rect x="3" y="9" width="10" height="3" rx="1.5" fill="currentColor" opacity=".5"/><rect x="3" y="14" width="7" height="3" rx="1.5" fill="currentColor"/></svg>
+        </div>
+        <div>
+          <div class="qc-h">I miei progetti CSRD</div>
+          <div class="qc-p">Riprendi o visualizza i report salvati</div>
+        </div>
+        <svg class="qc-arr" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <div class="quick-card" style="cursor:default;opacity:.5">
+        <div class="qc-icon">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M4 16L7 13H16V5H4V16Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+        </div>
+        <div>
+          <div class="qc-h">Team & Stakeholder</div>
+          <div class="qc-p">Gestione collaboratori — prossimamente</div>
+        </div>
+      </div>`;
+
+    const secH2 = document.querySelector('#assessList .sec-hd h2');
+    if (secH2) secH2.textContent = 'Progetti CSRD recenti';
+
+  }
+  // dma_full: HTML already in DOM from static markup
 }
 
 // ── Load assessments from Supabase ──
-async function loadAssessments(userId) {
+async function loadAssessments(userId, plan) {
   const { data, error } = await sb
     .from('assessments')
     .select('id, company_name, created_at, updated_at, step, export_data')
@@ -399,17 +495,24 @@ async function loadAssessments(userId) {
 
   const container = document.getElementById('assessContainer');
 
+  const emptyLabels = {
+    stakeholder_only: { h: 'Nessuna sessione ancora',     p: 'Avvia la tua prima sessione di raccolta opinioni stakeholder.', btn: 'Nuova sessione' },
+    csrd_only:        { h: 'Nessun progetto CSRD ancora', p: 'Crea il tuo primo progetto di rendicontazione CSRD conforme ESRS.', btn: 'Nuovo progetto CSRD' },
+    dma_full:         { h: 'Nessuna assessment ancora',   p: 'Crea la tua prima Double Materiality Assessment e inizia il percorso verso la conformità CSRD.', btn: 'Nuova Assessment' },
+  };
+  const el = emptyLabels[plan] || emptyLabels.dma_full;
+
   if (error || !data || data.length === 0) {
     container.innerHTML = `
       <div class="empty-state">
         <div class="empty-icon">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2" stroke="currentColor" stroke-width="1.5"/><rect x="9" y="3" width="6" height="4" rx="1" stroke="currentColor" stroke-width="1.5"/><path d="M9 12h6M9 16h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
         </div>
-        <h3 class="empty-h">Nessuna assessment ancora</h3>
-        <p class="empty-p">Crea la tua prima Double Materiality Assessment e inizia il percorso verso la conformità CSRD.</p>
+        <h3 class="empty-h">${el.h}</h3>
+        <p class="empty-p">${el.p}</p>
         <button class="btn-new" onclick="openProjectModal()">
           <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 2v10M2 7h10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
-          Nuova Assessment
+          ${el.btn}
         </button>
       </div>`;
     document.getElementById('assessCount').textContent = '0 assessment';
