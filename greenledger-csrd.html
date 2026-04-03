@@ -53,9 +53,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .ctx-nc{font-size:.72rem;color:rgba(255,255,255,.4);white-space:nowrap}
 .hdr-usr{width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.1);border:2px solid rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-size:.78rem;font-weight:600;color:var(--white);cursor:pointer;flex-shrink:0}
 .hdr-actions{display:flex;align-items:center;gap:8px}
-.btn-api{display:flex;align-items:center;gap:5px;padding:5px 11px;border-radius:7px;border:1.5px solid var(--cd);background:var(--white);font-size:.74rem;font-weight:600;color:var(--inks);cursor:pointer;transition:all .15s;font-family:'DM Sans',sans-serif}
-.btn-api:hover{border-color:var(--g200);background:var(--g50);color:var(--g800)}
-.btn-api.configured{border-color:var(--g200);color:var(--g700);background:var(--g50)}
+
 
 /* ══ PHASE BAR (2 macro-fasi) ══ */
 .pbar{background:rgba(10,31,18,.85);backdrop-filter:blur(12px);border-bottom:1px solid rgba(168,219,191,.1);box-shadow:none}
@@ -276,33 +274,6 @@ select.inp{cursor:pointer}
 .method-note textarea{width:100%;border:1.5px solid var(--obd);border-radius:6px;padding:8px 10px;font-family:'DM Sans',sans-serif;font-size:.78rem;color:var(--ink);background:var(--white);resize:vertical;min-height:60px;outline:none;transition:border-color .2s}
 .method-note textarea:focus{border-color:var(--oc)}
 
-/* ══ UPLOAD ZONE ══ */
-.upload-section{background:var(--ambg);border:1.5px solid var(--ambb);border-radius:12px;padding:18px;margin-bottom:16px}
-.upload-section-title{display:flex;align-items:center;gap:8px;margin-bottom:12px}
-.upload-section-title .ust-ic{width:26px;height:26px;background:var(--amber);border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.upload-section-title h4{font-size:.82rem;font-weight:700;color:#78350F}
-.upload-section-title span{font-size:.72rem;color:#92400E}
-.upload-zone{border:2px dashed var(--ambb);border-radius:10px;padding:20px;text-align:center;cursor:pointer;transition:all .2s;background:rgba(255,255,255,.5)}
-.upload-zone:hover,.upload-zone.dragover{border-color:var(--amber);background:rgba(251,191,36,.08)}
-.upload-zone input[type=file]{display:none}
-.upload-zone-ic{font-size:1.8rem;margin-bottom:6px}
-.upload-zone p{font-size:.78rem;color:#92400E;line-height:1.5}
-.upload-zone strong{font-weight:700;color:#78350F}
-.btn-upload{display:inline-flex;align-items:center;gap:6px;margin-top:10px;padding:7px 14px;border-radius:7px;background:var(--amber);color:var(--white);border:none;font-family:'DM Sans',sans-serif;font-size:.78rem;font-weight:600;cursor:pointer;transition:all .15s}
-.btn-upload:hover{background:#B45309;transform:translateY(-1px)}
-
-/* Uploaded files list */
-.uploads-list{display:flex;flex-direction:column;gap:6px;margin-top:10px}
-.upload-item{background:var(--white);border:1px solid var(--ambb);border-radius:8px;padding:10px 12px;display:flex;align-items:center;gap:10px}
-.upload-item-ic{font-size:.9rem;flex-shrink:0}
-.upload-item-info{flex:1;min-width:0}
-.upload-item-name{font-size:.76rem;font-weight:600;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.upload-item-meta{font-size:.68rem;color:var(--inkm);margin-top:1px}
-.upload-item-val{font-family:'DM Mono',monospace;font-size:.8rem;font-weight:700;color:var(--g700);flex-shrink:0}
-.upload-item-del{width:20px;height:20px;border-radius:50%;border:1.5px solid var(--cdd);background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--inkm);transition:all .15s;flex-shrink:0}
-.upload-item-del:hover{border-color:var(--red);color:var(--red)}
-.upload-extracting{display:flex;align-items:center;gap:8px;font-size:.76rem;color:var(--amber);padding:8px 12px;background:var(--ambg);border-radius:7px;margin-top:6px}
-.spinner{width:14px;height:14px;border:2px solid var(--ambb);border-top-color:var(--amber);border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0}
 
 /* Monthly accumulator table */
 .monthly-table{width:100%;border-collapse:collapse;font-size:.78rem;margin-top:10px}
@@ -317,8 +288,6 @@ select.inp{cursor:pointer}
 .month-status.ok{background:var(--g600)}
 .month-status.partial{background:var(--amber)}
 .month-status.empty{background:var(--cdd)}
-.btn-month-upload{width:24px;height:24px;border-radius:4px;border:1.5px solid var(--ambb);background:var(--ambg);cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--amber);transition:all .15s;flex-shrink:0}
-.btn-month-upload:hover{background:var(--amber);color:var(--white)}
 
 /* S1 headcount special table */
 .headcount-table{width:100%;border-collapse:collapse;font-size:.8rem}
@@ -331,12 +300,6 @@ select.inp{cursor:pointer}
 .hc-inp{width:60px;border:1.5px solid var(--cd);border-radius:5px;padding:4px 6px;font-family:'DM Mono',monospace;font-size:.8rem;color:var(--ink);background:var(--cream);outline:none;text-align:center}
 .hc-inp:focus{border-color:var(--g700);background:var(--white)}
 
-/* ══ API MODAL ══ */
-.modal-overlay{display:none;position:fixed;inset:0;background:rgba(15,28,20,.5);backdrop-filter:blur(4px);z-index:500;align-items:center;justify-content:center}
-.modal-overlay.open{display:flex}
-.modal-box{background:var(--white);border-radius:18px;padding:28px;width:480px;max-width:90vw;box-shadow:var(--sh3);animation:fadeUp .25s ease}
-.modal-box h3{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:600;color:var(--g900);margin-bottom:6px}
-.modal-box p{font-size:.8rem;color:var(--inks);line-height:1.6;margin-bottom:18px}
 .modal-warn{background:#FFF7ED;border:1px solid #FED7AA;border-radius:8px;padding:10px 14px;font-size:.76rem;color:#92400E;line-height:1.55;margin-bottom:16px}
 .modal-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:18px}
 
@@ -396,12 +359,6 @@ select.inp{cursor:pointer}
         <span class="ctx-nc" id="ctxNc"></span>
       </div>
       <span class="csrd-save-ind" id="csrdSaveInd"></span>
-      <div class="hdr-actions">
-        <button class="btn-api" id="apiBtn" onclick="openApiModal()">
-          <svg width="11" height="11" viewBox="0 0 12 12" fill="none"><path d="M6 1a3 3 0 110 6 3 3 0 010-6zM2 11c0-2.21 1.79-4 4-4s4 1.79 4 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
-          API Key
-        </button>
-      </div>
       <div class="hdr-usr" id="hdrUsr">GL</div>
     </div>
   </div>
@@ -484,22 +441,6 @@ select.inp{cursor:pointer}
   </div>
 </div>
 
-<!-- ═══ API KEY MODAL ═══ -->
-<div class="modal-overlay" id="apiModal">
-  <div class="modal-box">
-    <h3>Configurazione API Key</h3>
-    <p>Inserisci la tua Anthropic API Key per abilitare l'estrazione automatica dei dati da bollette e cedolini tramite AI.</p>
-    <div class="modal-warn">⚠️ <strong>Solo per demo/sviluppo.</strong> In produzione l'API Key deve essere gestita lato server. Non condividere questa configurazione con terzi.</div>
-    <div class="f">
-      <label>Anthropic API Key</label>
-      <input type="password" class="inp" id="apiKeyInput" placeholder="sk-ant-...">
-    </div>
-    <div class="modal-actions">
-      <button class="btn btn-gh btn-sm" onclick="closeApiModal()">Annulla</button>
-      <button class="btn btn-pri btn-sm" onclick="saveApiKey()">Salva e chiudi</button>
-    </div>
-  </div>
-</div>
 
 <!-- ═══ TOAST ═══ -->
 <div class="toast" id="toast"><span id="toastMsg"></span></div>
@@ -940,8 +881,6 @@ let dmaData = null;
 let csrdState = {};
 let currentTopicId = null;
 let currentTab = 'gov';
-let apiKey = '';
-
 function loadState(){
   // Load DMA data — ONLY from localStorage (real data from greenledger.html)
   try {
@@ -959,8 +898,6 @@ function loadState(){
     csrdState = raw ? JSON.parse(raw) : {};
   } catch(e){ csrdState = {}; }
 
-  // Load API key
-  apiKey = localStorage.getItem('gl_apikey') || '';
 }
 
 function saveState(){
@@ -1453,46 +1390,7 @@ function renderMetricTable(topicId, drId, dr, st){
   const metrics = st.metrics || {};
   const rows = dr.rows || [];
   const monthly = dr.monthly;
-  const uploadType = dr.uploadType;
   const year = dmaData.m1?.year || 2024;
-
-  // Upload zone
-  let uploadHtml = '';
-  if(uploadType){
-    const typeLabels = {energy:'bollette energetiche',water:'bollette idriche'};
-    const uploads = st.uploads || [];
-    const uploadsList = uploads.map((u,i)=>`
-      <div class="upload-item">
-        <span class="upload-item-ic">📄</span>
-        <div class="upload-item-info">
-          <div class="upload-item-name">${escHtml(u.filename||'Documento')}</div>
-          <div class="upload-item-meta">${u.period||'—'} · Estratto con AI</div>
-        </div>
-        <span class="upload-item-val">${u.value ? u.value.toLocaleString('it-IT') : '—'} ${dr.monthlyUnit||''}</span>
-        <button class="upload-item-del" onclick="removeUpload('${topicId}','${drId}',${i})">×</button>
-      </div>`).join('');
-
-    uploadHtml = `
-      <div class="upload-section">
-        <div class="upload-section-title">
-          <div class="ust-ic"><svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M7 1l4 4H8v5H6V5H3L7 1z" fill="white"/><path d="M1 11v1a1 1 0 001 1h10a1 1 0 001-1v-1" stroke="white" stroke-width="1.2" stroke-linecap="round"/></svg></div>
-          <h4>Carica ${typeLabels[uploadType]||'documenti'}</h4>
-          <span>· Estrazione automatica con AI</span>
-        </div>
-        <div class="upload-zone" id="dropzone-${drId}" onclick="document.getElementById('file-${drId}').click()" 
-          ondragover="event.preventDefault();this.classList.add('dragover')" 
-          ondragleave="this.classList.remove('dragover')"
-          ondrop="handleDrop(event,'${topicId}','${drId}','${uploadType}')">
-          <input type="file" id="file-${drId}" accept=".pdf,.jpg,.jpeg,.png" multiple style="display:none"
-            onchange="handleFileSelect(event,'${topicId}','${drId}','${uploadType}')">
-          <div class="upload-zone-ic">📂</div>
-          <p>Trascina qui le <strong>${typeLabels[uploadType]||'bollette'}</strong> oppure<br>
-          <button class="btn-upload" onclick="event.stopPropagation();document.getElementById('file-${drId}').click()">Scegli file</button></p>
-          <p style="margin-top:6px;font-size:.7rem;color:#B45309">PDF, JPG, PNG · Max 10MB per file · AI estrae i dati automaticamente</p>
-        </div>
-        ${uploads.length > 0 ? `<div class="uploads-list">${uploadsList}</div>` : ''}
-      </div>`;
-  }
 
   // Monthly table
   let monthlyHtml = '';
@@ -1585,7 +1483,6 @@ function renderMetricTable(topicId, drId, dr, st){
     </div>` : '';
 
   return `<div>
-    ${uploadHtml}
     ${monthlyHtml}
     <div class="metric-table-wrap">
       <table class="metric-table">
@@ -1606,42 +1503,10 @@ function renderMetricTable(topicId, drId, dr, st){
 
 function renderHeadcount(topicId, drId, dr, st){
   const hc = st.headcount || {};
-  const uploadType = dr.uploadType;
   const year = dmaData.m1?.year || 2024;
-  const uploads = st.uploads || [];
-  const uploadsList = uploads.map((u,i)=>`
-    <div class="upload-item">
-      <span class="upload-item-ic">📄</span>
-      <div class="upload-item-info">
-        <div class="upload-item-name">${escHtml(u.filename||'Cedolino/LUL')}</div>
-        <div class="upload-item-meta">${u.period||'—'} · Estratto con AI</div>
-      </div>
-      <span class="upload-item-val">${u.total||0} FTE</span>
-      <button class="upload-item-del" onclick="removeUpload('${topicId}','${drId}',${i})">×</button>
-    </div>`).join('');
-
   const cats = ['Dirigenti','Quadri','Impiegati','Operai'];
 
   return `<div>
-    <div class="upload-section">
-      <div class="upload-section-title">
-        <div class="ust-ic"><svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M7 1l4 4H8v5H6V5H3L7 1z" fill="white"/><path d="M1 11v1a1 1 0 001 1h10a1 1 0 001-1v-1" stroke="white" stroke-width="1.2" stroke-linecap="round"/></svg></div>
-        <h4>Carica cedolini / LUL</h4>
-        <span>· AI estrae headcount, genere, contratti</span>
-      </div>
-      <div class="upload-zone" onclick="document.getElementById('file-${drId}').click()"
-        ondragover="event.preventDefault();this.classList.add('dragover')" 
-        ondragleave="this.classList.remove('dragover')"
-        ondrop="handleDrop(event,'${topicId}','${drId}','personnel')">
-        <input type="file" id="file-${drId}" accept=".pdf,.jpg,.jpeg,.png" multiple style="display:none"
-          onchange="handleFileSelect(event,'${topicId}','${drId}','personnel')">
-        <div class="upload-zone-ic">👥</div>
-        <p>Trascina i <strong>cedolini, LUL o report HR</strong> mensili<br>
-        <button class="btn-upload" onclick="event.stopPropagation();document.getElementById('file-${drId}').click()">Scegli file</button></p>
-      </div>
-      ${uploads.length > 0 ? `<div class="uploads-list">${uploadsList}</div>` : ''}
-    </div>
-
     <div style="margin-bottom:14px">
       <div style="font-size:.76rem;font-weight:600;color:var(--inks);margin-bottom:10px">Tabella headcount per categoria — Anno ${year}</div>
       <table class="headcount-table">
@@ -1986,169 +1851,7 @@ function openDR(drId){
   }, 50);
 }
 
-// ══════════════════════════════════════════════
-//  UPLOAD & CLAUDE API
-// ══════════════════════════════════════════════
-function handleFileSelect(event, topicId, drId, uploadType){
-  const files = Array.from(event.target.files);
-  if(!files.length) return;
-  files.forEach(f => processUploadedFile(f, topicId, drId, uploadType));
-  event.target.value = ''; // reset
-}
 
-function handleDrop(event, topicId, drId, uploadType){
-  event.preventDefault();
-  const zone = document.getElementById('dropzone-'+drId);
-  if(zone) zone.classList.remove('dragover');
-  const files = Array.from(event.dataTransfer.files);
-  files.forEach(f => processUploadedFile(f, topicId, drId, uploadType));
-}
-
-async function processUploadedFile(file, topicId, drId, uploadType){
-  if(false){
-    showToast('API Key non configurata — imposta la chiave AI nelle impostazioni');
-    openApiModal();
-    return;
-  }
-  if(file.size > 10 * 1024 * 1024){
-    showToast('File troppo grande (max 10MB)');
-    return;
-  }
-
-  // Show extracting indicator
-  const zone = document.getElementById('dropzone-'+drId);
-  const indicator = document.createElement('div');
-  indicator.className = 'upload-extracting';
-  indicator.innerHTML = `<div class="spinner"></div> Estrazione AI in corso: <strong>${file.name}</strong>...`;
-  zone?.parentNode?.insertBefore(indicator, zone.nextSibling);
-
-  try {
-    const base64 = await fileToBase64(file);
-    const isImage = file.type.startsWith('image/');
-    const mediaType = file.type || (file.name.endsWith('.pdf') ? 'application/pdf' : 'image/jpeg');
-
-    const prompts = {
-      energy: `Sei un esperto di rendicontazione ESRS/CSRD. Analizza questo documento (bolletta energetica o report energetico). 
-Estrai SOLO i dati seguenti in formato JSON valido:
-{"total_kwh": numero_o_null, "renewable_kwh": numero_o_null, "period": "MM/YYYY_o_null", "supplier": "stringa_o_null", "notes": "eventuali_osservazioni"}
-Rispondi SOLO con il JSON puro, senza markdown, senza testo aggiuntivo.`,
-      water: `Sei un esperto di rendicontazione ESRS/CSRD. Analizza questa bolletta idrica.
-Estrai SOLO i dati seguenti in formato JSON valido:
-{"total_m3": numero_o_null, "period": "MM/YYYY_o_null", "supplier": "stringa_o_null", "notes": "eventuali_osservazioni"}
-Rispondi SOLO con il JSON puro, senza markdown, senza testo aggiuntivo.`,
-      personnel: `Sei un esperto di rendicontazione ESRS/CSRD. Analizza questo documento HR (cedolino, LUL, prospetto dipendenti).
-Estrai SOLO i dati seguenti in formato JSON valido:
-{"total": numero_o_null, "women": numero_o_null, "men": numero_o_null, "permanent": numero_o_null, "temporary": numero_o_null, "fulltime": numero_o_null, "parttime": numero_o_null, "period": "MM/YYYY_o_null", "notes": "eventuali_osservazioni"}
-Rispondi SOLO con il JSON puro, senza markdown, senza testo aggiuntivo.`,
-    };
-
-    const msgContent = isImage
-      ? [{type:'image',source:{type:'base64',media_type:mediaType,data:base64}},{type:'text',text:prompts[uploadType]}]
-      : [{type:'document',source:{type:'base64',media_type:'application/pdf',data:base64}},{type:'text',text:prompts[uploadType]}];
-
-    const response = await fetch('/api/extract', {
-      method: 'POST',
-      headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 1000,
-        messages: [{role:'user', content: msgContent}]
-      })
-    });
-
-    indicator.remove();
-
-    if(!response.ok){
-      const err = await response.json().catch(()=>({}));
-      throw new Error(err.error?.message || 'API error ' + response.status);
-    }
-
-    const data = await response.json();
-    const text = data.content.map(b=>b.text||'').join('').replace(/```json|```/g,'').trim();
-    const extracted = JSON.parse(text);
-
-    // Store the upload
-    const st = getDRState(topicId, drId);
-    if(!st.uploads) st.uploads = [];
-
-    if(uploadType === 'energy'){
-      const val = extracted.total_kwh ? extracted.total_kwh / 1000 : null; // Wh → kWh already, convert to MWh
-      st.uploads.push({filename:file.name, period:extracted.period||'—', value:extracted.total_kwh, renewableKwh:extracted.renewable_kwh, source:'upload'});
-      // Store in monthly if period available
-      if(extracted.period && st.uploads[st.uploads.length-1].value){
-        if(!st.monthly) st.monthly = {};
-        const mwhVal = (extracted.total_kwh||0)/1000;
-        st.monthly[extracted.period] = {value: mwhVal, source:'upload', filename:file.name};
-      }
-    } else if(uploadType === 'water'){
-      st.uploads.push({filename:file.name, period:extracted.period||'—', value:extracted.total_m3, source:'upload'});
-      if(extracted.period && extracted.total_m3){
-        if(!st.monthly) st.monthly = {};
-        st.monthly[extracted.period] = {value: extracted.total_m3, source:'upload', filename:file.name};
-      }
-    } else if(uploadType === 'personnel'){
-      st.uploads.push({filename:file.name, period:extracted.period||'—', total:extracted.total, data:extracted, source:'upload'});
-    }
-
-    saveState();
-    showToast(`✓ Dati estratti da ${file.name}`);
-    renderTabContent();
-    openDR(drId);
-
-  } catch(err){
-    indicator.remove();
-    console.error('Upload error:', err);
-    showToast('Errore estrazione AI: ' + (err.message||'Verifica la API Key'));
-  }
-}
-
-function removeUpload(topicId, drId, idx){
-  const st = getDRState(topicId, drId);
-  if(st.uploads) st.uploads.splice(idx,1);
-  saveState();
-  renderTabContent();
-  openDR(drId);
-}
-
-async function fileToBase64(file){
-  return new Promise((res,rej)=>{
-    const r = new FileReader();
-    r.onload = () => res(r.result.split(',')[1]);
-    r.onerror = () => rej(new Error('Read failed'));
-    r.readAsDataURL(file);
-  });
-}
-
-// ══════════════════════════════════════════════
-//  API KEY MODAL
-// ══════════════════════════════════════════════
-function openApiModal(){
-  document.getElementById('apiModal').classList.add('open');
-  document.getElementById('apiKeyInput').value = apiKey || '';
-}
-
-function closeApiModal(){
-  document.getElementById('apiModal').classList.remove('open');
-}
-
-function saveApiKey(){
-  const key = document.getElementById('apiKeyInput').value.trim();
-  if(key && !key.startsWith('sk-ant-') && !key.startsWith('sk-')){
-    showToast('API Key non valida — deve iniziare con sk-ant-');
-    return;
-  }
-  apiKey = key;
-  localStorage.setItem('gl_apikey', key);
-  closeApiModal();
-  const btn = document.getElementById('apiBtn');
-  if(btn){
-    btn.classList.toggle('configured', !!key);
-    btn.innerHTML = key 
-      ? `<svg width="11" height="11" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg> API Key ✓`
-      : `<svg width="11" height="11" viewBox="0 0 12 12" fill="none"><path d="M6 1a3 3 0 110 6 3 3 0 010-6zM2 11c0-2.21 1.79-4 4-4s4 1.79 4 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg> API Key`;
-  }
-  showToast(key ? '✓ API Key salvata' : 'API Key rimossa');
-}
 
 // ══ TOAST ══
 function showToast(msg, dur=3200){
@@ -2332,19 +2035,7 @@ function confirmTopicSelection(){
 loadState();
 // Entry point decided after Supabase loads — see second script block below
 
-// Check API key status
-if(apiKey){
-  const btn = document.getElementById('apiBtn');
-  if(btn){
-    btn.classList.add('configured');
-    btn.innerHTML = `<svg width="11" height="11" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg> API Key ✓`;
-  }
-}
 
-// Close modal on overlay click
-document.getElementById('apiModal').addEventListener('click', function(e){
-  if(e.target === this) closeApiModal();
-});
 </script>
 
 <!-- SUPABASE CDN -->
