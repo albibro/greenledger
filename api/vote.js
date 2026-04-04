@@ -1,6 +1,15 @@
 const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_KEY = process.env.SUPABASE_ANON_KEY;
 
+const _rl = new Map();
+function rateLimit(ip) {
+  const now = Date.now();
+  const e = _rl.get(ip);
+  if (!e || now > e.r) { _rl.set(ip, { c: 1, r: now + 60000 }); return true; }
+  if (e.c >= 10) return false;
+  e.c++; return true;
+}
+
 async function supabase(path, method, body) {
   const res = await fetch(`${SUPABASE_URL}/rest/v1/${path}`, {
     method,
@@ -20,6 +29,9 @@ export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   if (req.method === 'OPTIONS') return res.status(200).end();
+
+  const ip = (req.headers['x-forwarded-for'] || '').split(',')[0].trim() || req.socket?.remoteAddress || 'unknown';
+  if (!rateLimit(ip)) return res.status(429).json({ error: 'Troppe richieste. Riprova tra un minuto.' });
 
   // GET /api/vote?token=XXX — carica dati per lo stakeholder
   if (req.method === 'GET') {

@@ -7,7 +7,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root{
-  --g900:#0D3D25;--g800:#1A7A4A;--g700:#1E8F56;--g600:#22A463;
+  --g900:#0D3D25;--g800:#1A7A4A;--g700:#1E8F56;--g600:#22A463;--g500:#28BB72;
   --g200:#A8DBBF;--g100:#D4EFE0;--g50:#EEF8F3;
   --cream:#F7F4EE;--cd:#EDE9DF;--cdd:#DDD8CC;
   --ink:#0F1C14;--inks:#3A4D40;--inkm:#6B7F72;
@@ -22,7 +22,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--ink);m
 .lmark{width:30px;height:30px;background:var(--g800);border-radius:8px;display:flex;align-items:center;justify-content:center}
 .ltxt{font-family:'Playfair Display',serif;font-weight:700;font-size:1.1rem;color:var(--g900)}
 .ltxt span{color:var(--g800)}
-.wrap{max-width:680px;margin:0 auto;padding:32px 24px 80px}
+.wrap{max-width:680px;margin:0 auto;padding:32px 24px 100px}
 .hero{margin-bottom:28px}
 .eyebrow{display:inline-flex;align-items:center;gap:6px;background:var(--g50);border:1px solid var(--g200);border-radius:100px;padding:4px 12px;font-size:.7rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--g700);margin-bottom:12px}
 .hero h1{font-family:'Playfair Display',serif;font-size:1.7rem;font-weight:700;color:var(--g900);margin-bottom:6px}
@@ -31,27 +31,58 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--ink);m
 .pb-bar{flex:1;height:6px;background:var(--cdd);border-radius:3px;overflow:hidden}
 .pb-fill{height:100%;background:linear-gradient(90deg,var(--g700),var(--g600));border-radius:3px;transition:width .4s ease}
 .pb-txt{font-size:.76rem;font-family:'DM Mono',monospace;color:var(--inkm);white-space:nowrap}
-.topic-card{background:var(--white);border:1.5px solid var(--cd);border-radius:14px;margin-bottom:14px;overflow:hidden;box-shadow:var(--sh1)}
+
+/* ── TOPIC CARD ── */
+.topic-card{background:var(--white);border:1.5px solid var(--cd);border-radius:14px;margin-bottom:14px;overflow:hidden;box-shadow:var(--sh1);transition:border-color .2s}
+.topic-card.rated{border-color:var(--g200)}
 .tc-head{display:flex;align-items:center;gap:12px;padding:16px 18px;border-bottom:1px solid var(--cd)}
-.tc-emoji{width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0}
+.tc-emoji{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;background:var(--g50)}
 .tc-info h3{font-size:.9rem;font-weight:700;color:var(--ink)}
 .tc-info p{font-size:.74rem;color:var(--inkm);margin-top:2px}
+.tc-check{margin-left:auto;width:22px;height:22px;border-radius:50%;background:var(--g500);display:none;align-items:center;justify-content:center;flex-shrink:0}
+.topic-card.rated .tc-check{display:flex}
+
+/* ── SCORE SCALE ── */
 .tc-body{padding:16px 18px}
-.dim-label{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;margin-bottom:8px;display:flex;align-items:center;gap:6px}
-.score-btns{display:flex;gap:6px;margin-bottom:14px}
-.sbtn{flex:1;height:40px;border-radius:8px;border:1.5px solid var(--cd);background:var(--cream);font-family:'DM Mono',monospace;font-size:.85rem;font-weight:600;color:var(--inkm);cursor:pointer;transition:all .15s}
-.sbtn:hover{border-color:var(--g200);background:var(--g50)}
-.sbtn.sel-i{background:#EEF8F3;border-color:#1A7A4A;color:#1A7A4A}
-.sbtn.sel-r{background:#FFF7ED;border-color:#C2410C;color:#C2410C}
-.sbtn.sel-o{background:#EFF6FF;border-color:#1D4ED8;color:#1D4ED8}
-.na-btn{padding:6px 12px;border-radius:6px;border:1.5px solid var(--cdd);background:transparent;font-size:.72rem;font-weight:600;color:var(--inkm);cursor:pointer;transition:all .15s}
-.na-btn.sel{background:var(--cdd);color:var(--inks)}
-.submit-wrap{position:fixed;bottom:0;left:0;right:0;background:rgba(247,244,238,.95);backdrop-filter:blur(12px);border-top:1px solid var(--cd);padding:16px 24px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.scale-label{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--inkm);margin-bottom:10px}
+.scale-row{display:flex;gap:6px;margin-bottom:8px}
+.scale-labels{display:flex;gap:6px;margin-bottom:14px}
+.scale-lbl{flex:1;text-align:center;font-size:.6rem;color:var(--inkm);line-height:1.2}
+.sbtn{
+  flex:1;height:44px;border-radius:9px;
+  border:1.5px solid var(--cd);background:var(--cream);
+  font-family:'DM Mono',monospace;font-size:.9rem;font-weight:600;color:var(--inks);
+  cursor:pointer;transition:all .15s;display:flex;align-items:center;justify-content:center;
+}
+.sbtn:hover{border-color:var(--g200);background:var(--g50);color:var(--g800)}
+.sbtn.selected{background:var(--g700);border-color:var(--g700);color:#fff;box-shadow:0 2px 8px rgba(26,122,74,.3)}
+
+/* score 1-2 = light red when selected */
+.sbtn[data-val="1"].selected,.sbtn[data-val="2"].selected{background:#C2410C;border-color:#C2410C;box-shadow:0 2px 8px rgba(194,65,12,.3)}
+/* score 3 = amber */
+.sbtn[data-val="3"].selected{background:#D97706;border-color:#D97706;box-shadow:0 2px 8px rgba(217,119,6,.3)}
+
+/* ── COMMENT ── */
+.comment-field{margin-top:4px}
+.comment-field label{font-size:.72rem;font-weight:600;color:var(--inkm);display:block;margin-bottom:6px}
+.comment-field textarea{
+  width:100%;min-height:64px;resize:vertical;
+  border:1.5px solid var(--cd);border-radius:8px;
+  background:var(--cream);padding:9px 12px;
+  font-family:'DM Sans',sans-serif;font-size:.82rem;color:var(--ink);
+  outline:none;transition:border-color .2s;line-height:1.5;
+}
+.comment-field textarea:focus{border-color:var(--g500)}
+.comment-field textarea::placeholder{color:rgba(15,28,20,.3)}
+
+/* ── SUBMIT BAR ── */
+.submit-wrap{position:fixed;bottom:0;left:0;right:0;background:rgba(247,244,238,.97);backdrop-filter:blur(12px);border-top:1px solid var(--cd);padding:14px 24px;display:flex;align-items:center;justify-content:space-between;gap:12px}
 .btn-submit{flex:1;max-width:300px;padding:13px 24px;background:var(--g800);color:white;border:none;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:.9rem;font-weight:600;cursor:pointer;transition:all .2s}
-.btn-submit:hover{background:var(--g700);transform:translateY(-1px)}
-.btn-submit:disabled{background:var(--cdd);color:var(--inkm);cursor:not-allowed;transform:none}
+.btn-submit:hover:not(:disabled){background:var(--g700);transform:translateY(-1px)}
+.btn-submit:disabled{background:var(--cdd);color:var(--inkm);cursor:not-allowed}
 .submit-info{font-size:.76rem;color:var(--inkm)}
 .done-screen{text-align:center;padding:60px 24px}
+.done-icon{font-size:3rem;margin-bottom:16px}
 .done-screen h2{font-family:'Playfair Display',serif;font-size:1.6rem;color:var(--g900);margin-bottom:10px}
 .done-screen p{font-size:.88rem;color:var(--inks);line-height:1.65}
 .loading{text-align:center;padding:80px 24px;color:var(--inkm)}
@@ -62,192 +93,210 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--ink);m
 <body>
 <header class="hdr">
   <div class="logo">
-    <div class="lmark"><svg width="15" height="15" viewBox="0 0 18 18" fill="none"><path d="M9 2C9 2 4 5 4 9.5C4 12.5 6.24 15 9 15C11.76 15 14 12.5 14 9.5C14 5 9 2 9 2Z" fill="white" opacity=".9"/><path d="M9 6V12M6.5 9.5H11.5" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+    <div class="lmark">
+      <svg width="15" height="15" viewBox="0 0 18 18" fill="none"><path d="M9 2L4 6V14H7V10H11V14H14V6L9 2Z" fill="white" opacity=".9"/></svg>
+    </div>
     <span class="ltxt">Green<span>Ledger</span></span>
   </div>
   <span id="companyName" style="font-size:.8rem;color:var(--inkm)"></span>
 </header>
 
 <div class="wrap" id="mainWrap">
-  <div class="loading">Caricamento in corso...</div>
+  <div class="loading">Caricamento in corso…</div>
 </div>
 
 <div class="submit-wrap" id="submitBar" style="display:none">
   <div class="submit-info" id="submitInfo">0 / 0 topic valutati</div>
-  <button class="btn-submit" id="submitBtn" onclick="submitVotes()" disabled>Invia valutazione</button>
+  <button class="btn-submit" id="submitBtn" onclick="submitVotes()" disabled>Invia valutazione →</button>
 </div>
 
 <script>
-const TOPICS_META = {
-  E1:{emoji:'🌡️',name:'Cambiamenti climatici',sub:'Mitigazione, adattamento, energia',bg:'#ECFDF5'},
-  E2:{emoji:'🏭',name:'Inquinamento',sub:'Aria, acqua, suolo',bg:'#FFFBEB'},
-  E3:{emoji:'💧',name:'Risorse idriche',sub:'Prelievo, consumo, ecosistemi',bg:'#EFF6FF'},
-  E4:{emoji:'🌿',name:'Biodiversità',sub:'Specie, habitat, territorio',bg:'#F0FDF4'},
-  E5:{emoji:'♻️',name:'Economia circolare',sub:'Materiali, rifiuti, fine vita',bg:'#F7FEE7'},
-  S1:{emoji:'👷',name:'Forza lavoro',sub:'Dipendenti, sicurezza, inclusione',bg:'#FFF7ED'},
-  S2:{emoji:'🌐',name:'Lavoratori value chain',sub:'Fornitori, downstream',bg:'#FFF1F2'},
-  S3:{emoji:'🏘️',name:'Comunità locali',sub:'Territorio, licenza sociale',bg:'#FAF5FF'},
-  S4:{emoji:'👤',name:'Consumatori',sub:'Sicurezza prodotti, privacy',bg:'#ECFEFF'},
-  G1:{emoji:'⚖️',name:'Condotta aziendale',sub:'Etica, anticorruzione',bg:'#F9FAFB'},
-};
+const SCALE_LABELS = { 1:'Basso', 2:'Poco', 3:'Medio', 4:'Alto', 5:'Molto alto' };
 
-const ALL_TOPICS = ['E1','E2','E3','E4','E5','S1','S2','S3','S4','G1'];
 let token = '';
-let scores = {};
+let topics = [];
+let scores = {};   // topicId → { score: N, comment: '' }
 let stakeholderName = '';
 
-function getToken(){
-  const params = new URLSearchParams(window.location.search);
-  return params.get('token') || '';
+function getToken() {
+  return new URLSearchParams(window.location.search).get('token') || '';
 }
 
-async function loadSurvey(){
+async function loadSurvey() {
   token = getToken();
-  if(!token){
-    showError('Link non valido', 'Il link che hai usato non contiene un token valido. Contatta chi ti ha invitato.');
-    return;
-  }
+  if (!token) { showError('Link non valido', 'Il link non contiene un token. Contatta chi ti ha invitato.'); return; }
 
   try {
-    const res = await fetch(`/api/vote?token=${token}`);
+    const res  = await fetch(`/api/vote?token=${encodeURIComponent(token)}`);
     const data = await res.json();
 
-    if(data.error){
-      showError('Link non valido', data.error);
-      return;
+    if (data.error) { showError('Link non valido', data.error); return; }
+    if (data.stakeholder.status === 'done') { showDone(true); return; }
+
+    stakeholderName = data.stakeholder.name || 'Stakeholder';
+    document.getElementById('companyName').textContent = data.company || '';
+
+    // Use topics from assessment; fallback to ESRS top-level if empty
+    topics = (data.topics || []).filter(t => t && t.id);
+    if (!topics.length) {
+      topics = [
+        {id:'E1',name:'Cambiamenti climatici',emoji:'🌡️',description:'Mitigazione, adattamento, energia'},
+        {id:'E2',name:'Inquinamento',emoji:'🏭',description:'Aria, acqua, suolo'},
+        {id:'E3',name:'Risorse idriche',emoji:'💧',description:'Prelievo, consumo, ecosistemi'},
+        {id:'E4',name:'Biodiversità',emoji:'🌿',description:'Specie, habitat, territorio'},
+        {id:'E5',name:'Economia circolare',emoji:'♻️',description:'Materiali, rifiuti, fine vita'},
+        {id:'S1',name:'Forza lavoro',emoji:'👷',description:'Dipendenti, sicurezza, inclusione'},
+        {id:'S2',name:'Lavoratori value chain',emoji:'🌐',description:'Fornitori, downstream'},
+        {id:'S3',name:'Comunità locali',emoji:'🏘️',description:'Territorio, licenza sociale'},
+        {id:'S4',name:'Consumatori',emoji:'👤',description:'Sicurezza prodotti, privacy'},
+        {id:'G1',name:'Condotta aziendale',emoji:'⚖️',description:'Etica, anticorruzione'},
+      ];
     }
 
-    if(data.stakeholder.status === 'done'){
-      showDone(true);
-      return;
-    }
-
-    stakeholderName = data.stakeholder.name;
-    document.getElementById('companyName').textContent = data.company;
-
-    // Segna come aperto
-    await fetch('/api/vote', {
-      method: 'POST',
-      headers: {'Content-Type':'application/json'},
+    // Mark as opened (fire-and-forget)
+    fetch('/api/vote', {
+      method:'POST', headers:{'Content-Type':'application/json'},
       body: JSON.stringify({ token, scores: null, status_only: true })
-    });
+    }).catch(()=>{});
 
     renderSurvey();
-  } catch(e){
+  } catch(e) {
     showError('Errore di connessione', 'Riprova tra qualche secondo.');
   }
 }
 
-function renderSurvey(){
+function renderSurvey() {
   const wrap = document.getElementById('mainWrap');
   wrap.innerHTML = `
     <div class="hero">
       <div class="eyebrow">Valutazione materialità</div>
-      <h1>Ciao ${stakeholderName}!</h1>
-      <p>Valuta l'importanza di questi temi ESG per l'azienda. Per ogni tema indica quanto ritieni significativi <strong>impatti</strong>, <strong>rischi finanziari</strong> e <strong>opportunità</strong> su una scala da 1 (basso) a 5 (alto).</p>
+      <h1>Ciao, ${escHtml(stakeholderName)}!</h1>
+      <p>Per ogni tema ESG indica quanto lo ritieni <strong>materiale per questa azienda</strong>, su una scala da <strong>1</strong> (per niente rilevante) a <strong>5</strong> (molto rilevante).<br>Il commento è facoltativo ma aiuta a motivare la tua valutazione.</p>
     </div>
     <div class="progress-bar">
       <div class="pb-bar"><div class="pb-fill" id="pbFill" style="width:0%"></div></div>
-      <span class="pb-txt" id="pbTxt">0 / ${ALL_TOPICS.length}</span>
+      <span class="pb-txt" id="pbTxt">0 / ${topics.length}</span>
     </div>
     <div id="topicsContainer">
-      ${ALL_TOPICS.map(id => renderTopicCard(id)).join('')}
-    </div>
-  `;
+      ${topics.map(t => renderTopicCard(t)).join('')}
+    </div>`;
   document.getElementById('submitBar').style.display = 'flex';
-  attachEvents();
+  updateProgress();
 }
 
-function renderTopicCard(id){
-  const m = TOPICS_META[id];
-  return `<div class="topic-card" id="card-${id}">
+function renderTopicCard(t) {
+  const sub = t.description || t.subs?.map?.(s=>s.label||s.id).join(', ') || '';
+  return `<div class="topic-card" id="card-${t.id}">
     <div class="tc-head">
-      <div class="tc-emoji" style="background:${m.bg}">${m.emoji}</div>
+      <div class="tc-emoji">${t.emoji || '🌱'}</div>
       <div class="tc-info">
-        <h3>${id} — ${m.name}</h3>
-        <p>${m.sub}</p>
+        <h3>${t.id} — ${escHtml(t.name)}</h3>
+        ${sub ? `<p>${escHtml(sub)}</p>` : ''}
+      </div>
+      <div class="tc-check">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </div>
     </div>
     <div class="tc-body">
-      <div class="dim-label" style="color:#1A7A4A">🌍 Materialità d'Impatto <span style="font-weight:400;color:var(--inkm)">(effetti su persone e ambiente)</span></div>
-      <div class="score-btns" id="btns-${id}-i">
-        ${[1,2,3,4,5].map(v=>`<button class="sbtn" data-id="${id}" data-dim="i" data-val="${v}" onclick="setScore('${id}','i',${v})">${v}</button>`).join('')}
+      <div class="scale-label">Livello di materialità</div>
+      <div class="scale-row" id="scale-${t.id}">
+        ${[1,2,3,4,5].map(v=>`<button class="sbtn" data-id="${t.id}" data-val="${v}" onclick="setScore('${t.id}',${v})">${v}</button>`).join('')}
       </div>
-      <div class="dim-label" style="color:#C2410C">💰 Materialità Finanziaria <span style="font-weight:400;color:var(--inkm)">(rischi e opportunità economiche)</span></div>
-      <div class="score-btns" id="btns-${id}-f">
-        ${[1,2,3,4,5].map(v=>`<button class="sbtn" data-id="${id}" data-dim="f" data-val="${v}" onclick="setScore('${id}','f',${v})">${v}</button>`).join('')}
+      <div class="scale-labels">
+        <span class="scale-lbl">Basso</span>
+        <span class="scale-lbl"></span>
+        <span class="scale-lbl">Medio</span>
+        <span class="scale-lbl"></span>
+        <span class="scale-lbl">Molto alto</span>
+      </div>
+      <div class="comment-field">
+        <label>Commento (facoltativo)</label>
+        <textarea id="cmt-${t.id}" placeholder="Motivazione, evidenze raccolte…" oninput="saveComment('${t.id}')"></textarea>
       </div>
     </div>
   </div>`;
 }
 
-function setScore(id, dim, val){
-  if(!scores[id]) scores[id] = {};
-  scores[id][dim] = val;
+function setScore(id, val) {
+  if (!scores[id]) scores[id] = { score: 0, comment: '' };
+  scores[id].score = val;
 
-  // Aggiorna UI bottoni
-  document.querySelectorAll(`#btns-${id}-${dim} .sbtn`).forEach(btn => {
-    btn.classList.remove('sel-i','sel-r','sel-o');
-    if(parseInt(btn.dataset.val) === val){
-      btn.classList.add(dim === 'i' ? 'sel-i' : 'sel-r');
-    }
+  document.querySelectorAll(`#scale-${id} .sbtn`).forEach(btn => {
+    btn.classList.toggle('selected', parseInt(btn.dataset.val) === val);
   });
+
+  const card = document.getElementById(`card-${id}`);
+  if (card) card.classList.add('rated');
 
   updateProgress();
 }
 
-function updateProgress(){
-  const total = ALL_TOPICS.length;
-  const done = ALL_TOPICS.filter(id => scores[id]?.i && scores[id]?.f).length;
-  const pct = Math.round(done/total*100);
+function saveComment(id) {
+  if (!scores[id]) scores[id] = { score: 0, comment: '' };
+  scores[id].comment = document.getElementById(`cmt-${id}`)?.value || '';
+}
+
+function updateProgress() {
+  const done = topics.filter(t => scores[t.id]?.score > 0).length;
+  const total = topics.length;
+  const pct = total ? Math.round(done / total * 100) : 0;
   document.getElementById('pbFill').style.width = pct + '%';
   document.getElementById('pbTxt').textContent = `${done} / ${total}`;
   document.getElementById('submitInfo').textContent = `${done} / ${total} topic valutati`;
   document.getElementById('submitBtn').disabled = done < total;
 }
 
-function attachEvents(){ updateProgress(); }
-
-async function submitVotes(){
+async function submitVotes() {
   const btn = document.getElementById('submitBtn');
   btn.disabled = true;
-  btn.textContent = 'Invio in corso...';
+  btn.textContent = 'Invio in corso…';
+
+  // Store scores as {i: score, f: score, comment} for backward compatibility
+  const payload = {};
+  topics.forEach(t => {
+    const s = scores[t.id];
+    if (s) payload[t.id] = { i: s.score, f: s.score, comment: s.comment || '' };
+  });
 
   try {
     await fetch('/api/vote', {
       method: 'POST',
       headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({ token, scores })
+      body: JSON.stringify({ token, scores: payload })
     });
     showDone(false);
-  } catch(e){
+  } catch(e) {
     btn.disabled = false;
-    btn.textContent = 'Invia valutazione';
+    btn.textContent = 'Invia valutazione →';
     alert('Errore durante l\'invio. Riprova.');
   }
 }
 
-function showDone(alreadyDone){
+function showDone(alreadyDone) {
   document.getElementById('submitBar').style.display = 'none';
   document.getElementById('mainWrap').innerHTML = `
     <div class="done-screen">
-      <div style="font-size:3rem;margin-bottom:16px">✅</div>
+      <div class="done-icon">${alreadyDone ? '📋' : '✅'}</div>
       <h2>${alreadyDone ? 'Hai già risposto!' : 'Grazie per la tua valutazione!'}</h2>
-      <p>${alreadyDone 
+      <p>${alreadyDone
         ? 'Hai già completato questo questionario. I tuoi voti sono stati registrati.'
-        : 'La tua valutazione è stata registrata con successo e contribuirà alla Double Materiality Assessment dell\'azienda.'
+        : 'La tua valutazione è stata salvata e contribuirà alla Double Materiality Assessment dell\'azienda.'
       }</p>
       <p style="margin-top:16px;font-size:.78rem;color:var(--inkm)">Puoi chiudere questa pagina.</p>
     </div>`;
 }
 
-function showError(title, msg){
+function showError(title, msg) {
   document.getElementById('mainWrap').innerHTML = `
     <div class="error-screen">
       <div style="font-size:3rem;margin-bottom:16px">⚠️</div>
       <h2>${title}</h2>
-      <p>${msg}</p>
+      <p>${escHtml(msg)}</p>
     </div>`;
+}
+
+function escHtml(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 }
 
 loadSurvey();

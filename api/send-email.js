@@ -14,6 +14,15 @@
 const SB_URL     = process.env.SUPABASE_URL     || 'https://sxcuhojxbqyrvouabmeo.supabase.co';
 const PUBLIC_URL = process.env.PUBLIC_URL        || 'https://greenledger-six.vercel.app';
 
+const _rl = new Map();
+function rateLimit(ip) {
+  const now = Date.now();
+  const e = _rl.get(ip);
+  if (!e || now > e.r) { _rl.set(ip, { c: 1, r: now + 60000 }); return true; }
+  if (e.c >= 10) return false;
+  e.c++; return true;
+}
+
 module.exports = async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
@@ -23,6 +32,9 @@ module.exports = async function handler(req, res) {
 
   const RESEND_KEY     = process.env.RESEND_API_KEY;
   const SB_SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+  const ip = (req.headers['x-forwarded-for'] || '').split(',')[0].trim() || req.socket?.remoteAddress || 'unknown';
+  if (!rateLimit(ip)) return res.status(429).json({ error: 'Troppe richieste. Riprova tra un minuto.' });
 
   if (!RESEND_KEY)     return res.status(500).json({ error: 'RESEND_API_KEY non configurata' });
   if (!SB_SERVICE_KEY) return res.status(500).json({ error: 'SUPABASE_SERVICE_ROLE_KEY non configurata' });

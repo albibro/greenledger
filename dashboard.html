@@ -158,6 +158,64 @@ main{max-width:1200px;margin:0 auto;padding:44px 36px 80px;position:relative;z-i
 .dash-footer-links a:hover{color:var(--g700)}
 @media(max-width:600px){.dash-footer{padding:14px 20px}.dash-footer-copy{display:none}}
 
+/* ── TOPIC BADGES (card) ── */
+.ac-topics{display:flex;flex-wrap:wrap;gap:4px;margin-top:7px}
+.ac-tb{font-size:.58rem;font-weight:700;letter-spacing:.05em;padding:2px 7px;border-radius:100px}
+.ac-tb-E{background:#ECFDF5;color:#1A7A4A;border:1px solid #A7F3D0}
+.ac-tb-S{background:#FFF7ED;color:#C2410C;border:1px solid #FDE68A}
+.ac-tb-G{background:#F9FAFB;color:#374151;border:1px solid #E5E7EB}
+.ac-tb-none{font-size:.58rem;color:var(--inkm);font-style:italic}
+
+/* ── NEXT ACTION (card) ── */
+.ac-next{font-size:.7rem;color:var(--g700);margin-top:5px;font-weight:500}
+
+/* ── DEADLINE (card) ── */
+.ac-dl{display:inline-flex;align-items:center;gap:3px;font-size:.7rem;color:var(--inkm)}
+.ac-dl.urgent{color:var(--amber);font-weight:600}
+
+/* ── DELETE BUTTON (card) ── */
+.ac-del{width:30px;height:30px;border-radius:8px;background:transparent;border:1px solid transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--cdd);transition:all .2s;flex-shrink:0;padding:0}
+.ac-del:hover{background:var(--redbg);border-color:#FECACA;color:var(--red)}
+
+/* ── ONBOARDING BANNER ── */
+.ob-banner{background:linear-gradient(90deg,var(--g50) 0%,#fff 100%);border:1px solid var(--g200);border-radius:14px;padding:14px 20px;display:flex;align-items:center;gap:14px;margin-bottom:24px;animation:fadeUp .4s ease}
+.ob-banner-txt{flex:1;font-size:.85rem;color:var(--g900);line-height:1.5}
+.ob-banner-btn{padding:8px 18px;border-radius:8px;background:var(--g700);color:#fff;border:none;font-size:.82rem;font-weight:600;cursor:pointer;white-space:nowrap;flex-shrink:0;transition:background .2s}
+.ob-banner-btn:hover{background:var(--g800)}
+.ob-banner-close{width:24px;height:24px;border-radius:50%;background:transparent;border:none;cursor:pointer;color:var(--inkm);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.75rem}
+.ob-banner-close:hover{background:var(--cd)}
+
+/* ── ONBOARDING MODAL ── */
+.ob-overlay{display:none;position:fixed;inset:0;background:rgba(10,31,18,.7);backdrop-filter:blur(6px);z-index:600;align-items:center;justify-content:center;padding:20px}
+.ob-overlay.open{display:flex}
+.ob-modal{background:#fff;border-radius:20px;padding:36px;max-width:460px;width:100%;box-shadow:0 40px 100px rgba(15,28,20,.2);animation:fadeUp .3s ease}
+.ob-modal-h{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;color:var(--g900);margin-bottom:6px}
+.ob-modal-sub{font-size:.82rem;color:var(--inkm);margin-bottom:28px;line-height:1.6}
+.ob-steps{display:flex;flex-direction:column;gap:14px;margin-bottom:28px}
+.ob-step{display:flex;align-items:flex-start;gap:12px}
+.ob-step-num{width:28px;height:28px;border-radius:50%;background:var(--g50);border:1.5px solid var(--g200);display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:700;color:var(--g700);flex-shrink:0}
+.ob-step-body{font-size:.84rem;color:var(--inks);line-height:1.55;padding-top:4px}
+.ob-step-body strong{color:var(--ink)}
+.ob-btn-pri{width:100%;padding:12px;border-radius:10px;background:var(--g700);color:#fff;border:none;font-family:'DM Sans',sans-serif;font-size:.9rem;font-weight:600;cursor:pointer;transition:background .2s}
+.ob-btn-pri:hover{background:var(--g800)}
+
+/* ── TEAM MODAL ── */
+.team-overlay{display:none;position:fixed;inset:0;background:rgba(10,31,18,.7);backdrop-filter:blur(6px);z-index:600;align-items:center;justify-content:center;padding:20px}
+.team-overlay.open{display:flex}
+.team-modal{background:#fff;border-radius:20px;padding:32px;max-width:440px;width:100%;box-shadow:0 40px 100px rgba(15,28,20,.2);animation:fadeUp .3s ease;position:relative}
+.team-modal-h{font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:700;color:var(--g900);margin-bottom:6px}
+.team-modal-sub{font-size:.8rem;color:var(--inkm);margin-bottom:24px;line-height:1.5}
+.tm-group{margin-bottom:14px}
+.tm-label{display:block;font-size:.74rem;font-weight:600;color:var(--inks);margin-bottom:5px}
+.tm-input,.tm-select{width:100%;padding:9px 12px;border-radius:8px;border:1.5px solid var(--cd);background:#fff;font-family:'DM Sans',sans-serif;font-size:.85rem;color:var(--ink);outline:none;transition:border-color .2s}
+.tm-input:focus,.tm-select:focus{border-color:var(--g500)}
+.tm-submit{width:100%;padding:11px;border-radius:9px;background:var(--g700);color:#fff;border:none;font-family:'DM Sans',sans-serif;font-size:.88rem;font-weight:600;cursor:pointer;transition:background .2s;margin-top:6px}
+.tm-submit:hover{background:var(--g800)}
+.tm-close{position:absolute;top:16px;right:16px;width:28px;height:28px;border-radius:50%;background:var(--cd);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.7rem;color:var(--inkm)}
+.tm-close:hover{background:var(--cdd)}
+.tm-ok{background:var(--g50);border:1px solid var(--g200);border-radius:8px;padding:12px;font-size:.82rem;color:var(--g700);margin-top:12px;display:none}
+.tm-ok.show{display:block}
+
 /* ── PROJECT TYPE MODAL ── */
 .pt-overlay{display:none;position:fixed;inset:0;background:rgba(10,31,18,.78);backdrop-filter:blur(8px);z-index:500;align-items:center;justify-content:center;padding:20px}
 .pt-overlay.open{display:flex}
@@ -260,6 +318,14 @@ main{max-width:1200px;margin:0 auto;padding:44px 36px 80px;position:relative;z-i
     <p>Le tue Double Materiality Assessment</p>
   </div>
 
+  <!-- ONBOARDING BANNER -->
+  <div class="ob-banner" id="obBanner" style="display:none">
+    <span style="font-size:1.4rem;flex-shrink:0">👋</span>
+    <div class="ob-banner-txt"><strong>Benvenuto in GreenLedger!</strong> Inizia creando la tua prima assessment conforme ESRS.</div>
+    <button class="ob-banner-btn" onclick="openProjectModal();closeObBanner()">Inizia ora</button>
+    <button class="ob-banner-close" onclick="closeObBanner()" title="Chiudi">✕</button>
+  </div>
+
   <!-- QUICK ACTIONS -->
   <div class="quick-grid" id="quickGrid">
     <div class="quick-card primary" style="cursor:pointer" onclick="openProjectModal()">
@@ -282,14 +348,15 @@ main{max-width:1200px;margin:0 auto;padding:44px 36px 80px;position:relative;z-i
       </div>
       <svg class="qc-arr" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
     </div>
-    <div class="quick-card" style="cursor:default;opacity:.6">
+    <div class="quick-card" onclick="openTeamModal()">
       <div class="qc-icon">
-        <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M4 16L7 13H16V5H4V16Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M8 9h5M8 11.5h3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="7" cy="7" r="3" stroke="currentColor" stroke-width="1.6"/><circle cx="14" cy="7" r="3" stroke="currentColor" stroke-width="1.6"/><path d="M1 17c0-3 2.7-5 6-5M10 12c3.3 0 9 2 9 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
       </div>
       <div>
-        <div class="qc-h">Team & Stakeholder</div>
-        <div class="qc-p">Gestione collaboratori — prossimamente</div>
+        <div class="qc-h">Invita collaboratore</div>
+        <div class="qc-p">Aggiungi membri del team alla tua assessment</div>
       </div>
+      <svg class="qc-arr" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
     </div>
   </div>
 
@@ -321,6 +388,51 @@ main{max-width:1200px;margin:0 auto;padding:44px 36px 80px;position:relative;z-i
   </div>
 
 </main>
+
+<!-- ONBOARDING MODAL -->
+<div class="ob-overlay" id="obOverlay">
+  <div class="ob-modal">
+    <h3 class="ob-modal-h">Benvenuto in GreenLedger</h3>
+    <p class="ob-modal-sub">La piattaforma per la Double Materiality Assessment conforme EFRAG/ESRS. Ecco come funziona:</p>
+    <div class="ob-steps">
+      <div class="ob-step">
+        <div class="ob-step-num">1</div>
+        <div class="ob-step-body"><strong>Definisci il contesto aziendale</strong> — settore NACE, dimensione, geografie e stakeholder chiave.</div>
+      </div>
+      <div class="ob-step">
+        <div class="ob-step-num">2</div>
+        <div class="ob-step-body"><strong>Valuta i topic materiali ESRS</strong> — impatti, rischi e opportunità per ciascun tema E, S, G.</div>
+      </div>
+      <div class="ob-step">
+        <div class="ob-step-num">3</div>
+        <div class="ob-step-body"><strong>Genera il report CSRD</strong> — matrice di materialità, DR attivati e PDF audit-ready per il revisore.</div>
+      </div>
+    </div>
+    <button class="ob-btn-pri" onclick="closeObModal();openProjectModal()">Crea la prima assessment →</button>
+  </div>
+</div>
+
+<!-- TEAM MODAL -->
+<div class="team-overlay" id="teamOverlay">
+  <div class="team-modal">
+    <button class="tm-close" onclick="closeTeamModal()">✕</button>
+    <h3 class="team-modal-h">Invita collaboratore</h3>
+    <p class="team-modal-sub">Aggiungi un membro del team alla tua assessment. Il collaboratore dovrà registrarsi autonomamente con questa email.</p>
+    <div class="tm-group">
+      <label class="tm-label">Email collaboratore</label>
+      <input type="email" class="tm-input" id="tmEmail" placeholder="mario@azienda.it">
+    </div>
+    <div class="tm-group">
+      <label class="tm-label">Ruolo</label>
+      <select class="tm-select" id="tmRole">
+        <option value="viewer">Visualizzatore — può solo leggere</option>
+        <option value="editor">Editor — può modificare</option>
+      </select>
+    </div>
+    <button class="tm-submit" onclick="inviteTeamMember()">Invia invito →</button>
+    <div class="tm-ok" id="tmOk">✓ Invito salvato! Il collaboratore potrà accedere una volta registrato.</div>
+  </div>
+</div>
 
 <!-- PROJECT TYPE MODAL -->
 <div class="pt-overlay" id="ptOverlay">
@@ -383,6 +495,16 @@ async function init() {
   await loadAssessments(session.user.id, session.user.user_metadata?.plan || 'dma_full');
   document.getElementById('loadingScreen').style.display = 'none';
   document.getElementById('mainContent').style.display = 'block';
+
+  // Onboarding: show if account created within last 5 minutes
+  const createdAt = new Date(session.user.created_at);
+  const minsAgo = (Date.now() - createdAt.getTime()) / 60000;
+  if (minsAgo < 5) {
+    showOnboarding();
+    logAudit('login', { first: true });
+  } else {
+    logAudit('login');
+  }
 }
 
 const PLAN_META = {
@@ -493,11 +615,43 @@ function adaptToPlan(plan) {
   // dma_full: HTML already in DOM from static markup
 }
 
+// ── Audit log ──
+async function logAudit(action, metadata) {
+  try {
+    const { data: { session } } = await sb.auth.getSession();
+    if (!session) return;
+    await sb.from('audit_logs').insert({ user_id: session.user.id, action, metadata: metadata || null });
+  } catch(e) {}
+}
+
+// ── Card helpers ──
+const NEXT_ACTIONS = { 1:'Completa contesto aziendale', 2:'Valuta gli IRO', 3:'Invita stakeholder', 4:'Genera matrice', 5:'Redigi narrative', 6:'Esporta report' };
+
+function topicBadgesHtml(exportData) {
+  const all = exportData?.materialTopics || [];
+  const mat = all.filter(t => t.class && t.class !== 'none');
+  if (!mat.length) return '<span class="ac-tb-none">topic da valutare</span>';
+  return mat.slice(0, 4).map(t => `<span class="ac-tb ac-tb-${t.id[0]}">${t.id}</span>`).join('') +
+    (mat.length > 4 ? `<span class="ac-tb-none">+${mat.length - 4}</span>` : '');
+}
+
+function deadlineHtml(assessData) {
+  const year = assessData?.m1?.year || (new Date().getFullYear() + 1);
+  const dl = new Date(`${year}-12-31`);
+  const daysLeft = Math.ceil((dl - new Date()) / 86400000);
+  const urgent = daysLeft >= 0 && daysLeft < 30;
+  const str = dl.toLocaleDateString('it-IT', { day:'2-digit', month:'short', year:'numeric' });
+  return `<span class="ac-dl${urgent?' urgent':''}">` +
+    `<svg width="10" height="10" viewBox="0 0 10 10" fill="none"><rect x="1" y="2" width="8" height="7" rx="1.2" stroke="currentColor" stroke-width="1"/><path d="M3 1v2M7 1v2M1 4.5h8" stroke="currentColor" stroke-width="1" stroke-linecap="round"/></svg>` +
+    ` ${str}${urgent?' ⚠':''}` +
+    `</span>`;
+}
+
 // ── Load assessments from Supabase ──
 async function loadAssessments(userId, plan) {
   const { data, error } = await sb
     .from('assessments')
-    .select('id, company_name, created_at, updated_at, step, export_data')
+    .select('id, company_name, created_at, updated_at, step, export_data, data')
     .eq('user_id', userId)
     .order('updated_at', { ascending: false });
 
@@ -540,11 +694,14 @@ async function loadAssessments(userId, plan) {
     const statusLabel = isDone ? 'Completata' : step > 1 ? 'In corso' : 'Nuova';
     const date = new Date(a.updated_at || a.created_at).toLocaleDateString('it-IT', { day:'2-digit', month:'short', year:'numeric' });
     const company = a.company_name || 'Azienda senza nome';
+    const nextAction = NEXT_ACTIONS[Math.min(step, 6)] || NEXT_ACTIONS[6];
+    const badges = topicBadgesHtml(a.export_data);
+    const dl = deadlineHtml(a.data);
 
     if (isDone) done++; else if (step > 1) wip++;
 
     return `
-      <a class="assess-card" href="greenledger.html?id=${encodeURIComponent(a.id)}">
+      <div class="assess-card" onclick="window.location.href='greenledger.html?id=${encodeURIComponent(a.id)}'">
         <div class="ac-status ${statusClass}"></div>
         <div class="ac-body">
           <div class="ac-co">${escHtml(company)}</div>
@@ -557,15 +714,20 @@ async function loadAssessments(userId, plan) {
               <svg width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M1 5.5L3.5 8L10 2" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg>
               Modulo ${step} di ${totalSteps}
             </span>
+            ${dl}
           </div>
+          <div class="ac-topics">${badges}</div>
+          <div class="ac-next">→ ${nextAction}</div>
         </div>
         <div class="ac-prog">
           <div class="ac-prog-bar"><div class="ac-prog-fill" style="width:${pct}%"></div></div>
           <div class="ac-prog-lbl">${pct}%</div>
         </div>
         <span class="ac-badge ${statusClass}">${statusLabel}</span>
-        <svg class="ac-arr" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </a>`;
+        <button class="ac-del" onclick="deleteAssessment(event,'${a.id}')" title="Elimina assessment">
+          <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M2 3.5h9M4.5 3.5V2.5h4v1M5 5.5v4M8 5.5v4M2.5 3.5L3 10.5h7l.5-7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>`;
   }).join('');
 
   document.getElementById('assessCount').textContent = `${data.length} assessment`;
@@ -574,8 +736,61 @@ async function loadAssessments(userId, plan) {
   document.getElementById('statDone').textContent = done;
 }
 
+// ── Delete assessment ──
+async function deleteAssessment(e, id) {
+  e.preventDefault(); e.stopPropagation();
+  if (!confirm('Eliminare questa assessment? Azione irreversibile.')) return;
+  const { error } = await sb.from('assessments').delete().eq('id', id);
+  if (!error) {
+    logAudit('delete_assessment', { id });
+    const { data: { session } } = await sb.auth.getSession();
+    if (session) await loadAssessments(session.user.id, session.user.user_metadata?.plan || 'dma_full');
+  }
+}
+
+// ── Onboarding ──
+function showOnboarding() {
+  document.getElementById('obBanner').style.display = 'flex';
+  document.getElementById('obOverlay').classList.add('open');
+}
+function closeObBanner() { document.getElementById('obBanner').style.display = 'none'; }
+function closeObModal()   { document.getElementById('obOverlay').classList.remove('open'); }
+
+// ── Team modal ──
+function openTeamModal()  { document.getElementById('teamOverlay').classList.add('open'); }
+function closeTeamModal() {
+  document.getElementById('teamOverlay').classList.remove('open');
+  document.getElementById('tmEmail').value = '';
+  document.getElementById('tmRole').value  = 'viewer';
+  document.getElementById('tmOk').classList.remove('show');
+}
+
+async function inviteTeamMember() {
+  const email = document.getElementById('tmEmail').value.trim();
+  const role  = document.getElementById('tmRole').value;
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    alert('Inserisci un indirizzo email valido.');
+    return;
+  }
+  const assessId = localStorage.getItem('gl_assessment_id') || null;
+  const { error } = await sb.from('team_members').insert({
+    assessment_id: assessId,
+    invited_email: email,
+    role,
+    invited_at:    new Date().toISOString(),
+    accepted:      false,
+  });
+  if (!error) {
+    document.getElementById('tmOk').classList.add('show');
+    document.getElementById('tmEmail').value = '';
+  } else {
+    alert('Errore: ' + (error.message || 'Riprova.'));
+  }
+}
+
 // ── Logout ──
 async function handleLogout() {
+  logAudit('logout');
   await sb.auth.signOut();
   window.location.href = 'login.html';
 }
@@ -609,6 +824,7 @@ function selectProjectType(type, url) {
   localStorage.setItem('gl_assessment_id', newId);
   localStorage.removeItem('gl_dma');
   localStorage.removeItem('gl_csrd');
+  logAudit('create_assessment', { type, id: newId });
   window.location.href = url;
 }
 
@@ -616,6 +832,12 @@ function selectProjectType(type, url) {
 document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('ptOverlay').addEventListener('click', function(e) {
     if (e.target === this) closeProjectModal();
+  });
+  document.getElementById('obOverlay').addEventListener('click', function(e) {
+    if (e.target === this) closeObModal();
+  });
+  document.getElementById('teamOverlay').addEventListener('click', function(e) {
+    if (e.target === this) closeTeamModal();
   });
 });
 

@@ -2983,7 +2983,7 @@ async function confirmAddStk(){
     if(data.stakeholders && data.stakeholders.length){
       const added = data.stakeholders[data.stakeholders.length-1];
       newStk.token = added?.token||'';
-      newStk.surveyLink = window.location.origin+'/survey.html?token='+(added?.token||'');
+      newStk.surveyLink = 'https://greenledger-six.vercel.app/survey.html?token='+(added?.token||'');
     }
   } catch(e){ console.warn('offline',e); }
   stakeholders.push(newStk);
@@ -3508,8 +3508,8 @@ async function pollStakeholderStatus(){
   } catch(e){}
 }
 
-// Polling ogni 10 secondi quando siamo nel modulo 3
-setInterval(()=>{ if(appState.nav.current === 3) pollStakeholderStatus(); }, 10000);
+// Polling ogni 30 secondi quando siamo nel modulo 3
+setInterval(()=>{ if(appState.nav.current === 3) pollStakeholderStatus(); }, 30000);
 
 async function pollStakeholderStatus(){
   if(!sessionKey) return;
@@ -3529,8 +3529,8 @@ async function pollStakeholderStatus(){
   } catch(e){}
 }
 
-// Polling ogni 10s quando siamo nel modulo 3
-setInterval(()=>{ if(appState.nav.current===3) pollStakeholderStatus(); }, 10000);
+// Polling ogni 30s quando siamo nel modulo 3
+setInterval(()=>{ if(appState.nav.current===3) pollStakeholderStatus(); }, 30000);
 
 function handlePrevReport(event){
   const file = event.target.files[0];
@@ -3559,7 +3559,7 @@ async function pollStakeholderStatus(){
   }catch(e){}
 }
 
-setInterval(()=>{if(appState.nav.current===3)pollStakeholderStatus();},10000);
+setInterval(()=>{if(appState.nav.current===3)pollStakeholderStatus();},30000);
 
 function downloadFullPDF(){
   const m1 = appState.m1;
@@ -3791,11 +3791,12 @@ ${stks.map(s=>`<tr><td>${s.name}</td><td>${s.org||'—'}</td><td>${s.cat}</td>
 <div style="text-align:center;margin:16px 0">${(()=>{
   const el=document.getElementById('matrixSvg');
   if(el && el.innerHTML){
-    // Serializza il vero SVG renderizzato con viewBox e stili preservati
     const clone=el.cloneNode(true);
     clone.setAttribute('width','500');clone.setAttribute('height','360');
-    clone.style.cssText='max-width:100%;height:auto';
-    return clone.outerHTML;
+    clone.removeAttribute('style');
+    const svgStr=new XMLSerializer().serializeToString(clone);
+    const b64=btoa(unescape(encodeURIComponent(svgStr)));
+    return `<img src="data:image/svg+xml;base64,${b64}" style="width:100%;max-width:560px;height:auto">`;
   }
   return buildSVG();
 })()}</div>
