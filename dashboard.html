@@ -150,6 +150,14 @@ main{max-width:1200px;margin:0 auto;padding:44px 36px 80px;position:relative;z-i
   .user-email{display:none}
 }
 
+/* ── FOOTER ── */
+.dash-footer{border-top:1px solid var(--cd);padding:16px 36px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.dash-footer-copy{font-size:.72rem;color:var(--inkm)}
+.dash-footer-links{display:flex;gap:18px}
+.dash-footer-links a{font-size:.72rem;color:var(--inkm);text-decoration:none}
+.dash-footer-links a:hover{color:var(--g700)}
+@media(max-width:600px){.dash-footer{padding:14px 20px}.dash-footer-copy{display:none}}
+
 /* ── PROJECT TYPE MODAL ── */
 .pt-overlay{display:none;position:fixed;inset:0;background:rgba(10,31,18,.78);backdrop-filter:blur(8px);z-index:500;align-items:center;justify-content:center;padding:20px}
 .pt-overlay.open{display:flex}
@@ -655,5 +663,13 @@ document.addEventListener('DOMContentLoaded',()=>{
   });
 });
 </script>
+
+<footer class="dash-footer">
+  <span class="dash-footer-copy">© 2025 GreenLedger · Double Materiality Assessment Platform</span>
+  <div class="dash-footer-links">
+    <a href="privacy.html">Privacy Policy</a>
+    <a href="terms.html">Termini di servizio</a>
+  </div>
+</footer>
 </body>
 </html>

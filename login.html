@@ -374,7 +374,7 @@ input.err{border-color:var(--red);box-shadow:0 0 0 3px rgba(220,38,38,.08)}
 
       <!-- TERMS -->
       <p class="terms-note" id="termsNote" style="display:none">
-        Registrandoti accetti i <a href="#">Termini di servizio</a> e la <a href="#">Privacy Policy</a>.
+        Registrandoti accetti i <a href="terms.html">Termini di servizio</a> e la <a href="privacy.html">Privacy Policy</a>.
       </p>
 
       <!-- SUCCESS STATE (magic link sent) -->
@@ -548,12 +548,9 @@ async function handleSubmit(e) {
       const name = document.getElementById('nameInput').value.trim();
       const plan = pendingPlan || 'dma_full';
 
-      const { data: signUpData, error } = await sb.auth.signUp({
+      const { error } = await sb.auth.signUp({
         email, password,
-        options: {
-          data: { full_name: name, plan },
-          emailRedirectTo: 'https://greenledger-six.vercel.app/dashboard.html',
-        }
+        options: { data: { full_name: name, plan } }
       });
       if (error) throw error;
 
@@ -569,6 +566,13 @@ async function handleSubmit(e) {
               .eq('id', pendingCodeId);
           });
       }
+
+      // Send branded confirmation email via Resend
+      await fetch('/api/send-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, type: 'confirm' }),
+      });
 
       showSuccess('Controlla la tua email', `Abbiamo inviato un link di conferma a <strong>${email}</strong>. Clicca sul link per attivare il tuo account.`);
 
@@ -621,10 +625,15 @@ async function handleForgot(e) {
     return;
   }
   try {
-    const { error } = await sb.auth.resetPasswordForEmail(email, {
-      redirectTo: 'https://greenledger-six.vercel.app/dashboard.html'
+    const resp = await fetch('/api/send-email', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, type: 'reset' }),
     });
-    if (error) throw error;
+    if (!resp.ok) {
+      const err = await resp.json().catch(() => ({}));
+      throw new Error(err.error || 'Invio email fallito');
+    }
     showAlertOk(`Email di reset inviata a <strong>${email}</strong>. Controlla la posta.`);
   } catch (err) {
     showErr(translateError(err.message));

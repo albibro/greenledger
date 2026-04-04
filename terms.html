@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Termini di Servizio — GreenLedger</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --g900:#0D3D25;--g800:#1A7A4A;--g700:#1E8F56;--g600:#22A463;--g500:#28BB72;
+  --g200:#A8DBBF;--g100:#D4EFE0;--g50:#EEF8F3;
+  --cream:#F7F4EE;--cd:#EDE9DF;--cdd:#DDD8CC;
+  --ink:#0F1C14;--inks:#3A4D40;--inkm:#6B7F72;
+  --white:#fff;
+  --amber:#D97706;--ambg:#FFFBEB;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--ink);min-height:100vh}
+
+/* ── NAV ── */
+nav{position:sticky;top:0;z-index:200;background:rgba(10,31,18,.92);backdrop-filter:blur(16px);border-bottom:1px solid rgba(168,219,191,.1)}
+.nav-in{max-width:820px;margin:0 auto;padding:0 32px;height:62px;display:flex;align-items:center;justify-content:space-between}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.lmark{width:32px;height:32px;background:var(--g800);border-radius:9px;display:flex;align-items:center;justify-content:center}
+.ltxt{font-family:'Playfair Display',serif;font-weight:700;font-size:1.1rem;color:#fff;letter-spacing:-.02em}
+.ltxt span{color:var(--g200)}
+.btn-nav{padding:7px 16px;border-radius:8px;font-size:.78rem;font-weight:500;color:rgba(255,255,255,.65);background:transparent;border:1px solid rgba(255,255,255,.15);cursor:pointer;text-decoration:none;transition:all .2s}
+.btn-nav:hover{background:rgba(255,255,255,.08);color:#fff}
+
+/* ── LAYOUT ── */
+.wrap{max-width:820px;margin:0 auto;padding:52px 32px 80px}
+@media(max-width:600px){.wrap{padding:36px 20px 60px}.nav-in{padding:0 20px}}
+
+/* ── HERO ── */
+.hero{margin-bottom:40px}
+.eyebrow{display:inline-flex;align-items:center;gap:6px;background:var(--g50);border:1px solid var(--g200);border-radius:100px;padding:4px 12px;font-size:.68rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--g700);margin-bottom:14px}
+.hero h1{font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;color:var(--g900);letter-spacing:-.03em;line-height:1.2;margin-bottom:10px}
+.hero-meta{font-size:.8rem;color:var(--inkm)}
+
+/* ── CONTENT ── */
+.card{background:var(--white);border:1px solid var(--cd);border-radius:16px;padding:40px 44px;margin-bottom:20px}
+@media(max-width:600px){.card{padding:28px 24px}}
+
+h2{font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:700;color:var(--g900);margin-bottom:14px;margin-top:36px;padding-top:36px;border-top:1px solid var(--cd)}
+h2:first-child{margin-top:0;padding-top:0;border-top:none}
+h3{font-size:.92rem;font-weight:700;color:var(--ink);margin-bottom:8px;margin-top:20px}
+p{font-size:.88rem;color:var(--inks);line-height:1.75;margin-bottom:12px}
+p:last-child{margin-bottom:0}
+ul,ol{padding-left:20px;margin-bottom:12px}
+li{font-size:.88rem;color:var(--inks);line-height:1.75;margin-bottom:4px}
+strong{font-weight:600;color:var(--ink)}
+a{color:var(--g700);text-decoration:none}
+a:hover{text-decoration:underline}
+
+.warn-box{background:var(--ambg);border:1px solid #FDE68A;border-radius:10px;padding:16px 20px;margin-bottom:16px}
+.warn-box p{font-size:.82rem;color:#78350F;margin:0}
+
+/* ── FOOTER ── */
+footer{border-top:1px solid var(--cd);padding:20px 32px;max-width:820px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+.foot-copy{font-size:.72rem;color:var(--inkm)}
+.foot-links{display:flex;gap:18px}
+.foot-links a{font-size:.72rem;color:var(--inkm);text-decoration:none}
+.foot-links a:hover{color:var(--g700)}
+@media(max-width:600px){footer{padding:16px 20px;flex-direction:column;text-align:center}}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-in">
+    <a class="logo" href="index.html">
+      <div class="lmark">
+        <svg width="17" height="17" viewBox="0 0 18 18" fill="none"><path d="M9 2L4 6V14H7V10H11V14H14V6L9 2Z" fill="white" opacity=".9"/></svg>
+      </div>
+      <div class="ltxt">Green<span>Ledger</span></div>
+    </a>
+    <a class="btn-nav" href="dashboard.html">Dashboard →</a>
+  </div>
+</nav>
+
+<div class="wrap">
+
+  <div class="hero">
+    <div class="eyebrow">Documento legale</div>
+    <h1>Termini di Servizio</h1>
+    <p class="hero-meta">Ultimo aggiornamento: aprile 2025 &nbsp;·&nbsp; Versione 1.0</p>
+  </div>
+
+  <div class="card">
+
+    <h2>1. Accettazione dei Termini</h2>
+    <p>Accedendo e utilizzando la piattaforma GreenLedger ("Servizio"), disponibile all'indirizzo <strong>greenledger-six.vercel.app</strong> e operata da <strong>[NOME SOCIETÀ]</strong>, P.IVA [P.IVA], con sede in [INDIRIZZO] ("Fornitore"), l'Utente dichiara di aver letto, compreso e di accettare integralmente i presenti Termini di Servizio ("Termini").</p>
+    <p>Se non si accettano i presenti Termini, è necessario cessare immediatamente l'utilizzo del Servizio.</p>
+
+    <h2>2. Descrizione del Servizio</h2>
+    <p>GreenLedger è una piattaforma SaaS (Software as a Service) che supporta le imprese nell'esecuzione della <strong>Double Materiality Assessment (DMA)</strong> e nella rendicontazione di sostenibilità conforme agli <strong>European Sustainability Reporting Standards (ESRS)</strong> previsti dalla direttiva CSRD (Corporate Sustainability Reporting Directive, Direttiva UE 2022/2464).</p>
+    <p>Il Servizio include, in base al piano sottoscritto:</p>
+    <ul>
+      <li>Strumenti per la valutazione della doppia materialità (impatto e finanziaria).</li>
+      <li>Moduli di reportistica CSRD con Disclosure Requirements ESRS.</li>
+      <li>Funzionalità di engagement stakeholder e raccolta di valutazioni.</li>
+      <li>Esportazione dei dati in formato PDF e strutturato.</li>
+    </ul>
+
+    <h2>3. Account e Responsabilità dell'Utente</h2>
+
+    <h3>3.1 Registrazione</h3>
+    <p>Per accedere al Servizio è necessario creare un account fornendo informazioni veritiere, accurate e aggiornate. L'Utente è responsabile della riservatezza delle proprie credenziali di accesso e di tutte le attività svolte tramite il proprio account.</p>
+
+    <h3>3.2 Uso consentito</h3>
+    <p>L'Utente si impegna a utilizzare il Servizio esclusivamente per scopi leciti e in conformità con i presenti Termini. È vietato:</p>
+    <ul>
+      <li>Accedere al Servizio in modo non autorizzato o tentare di compromettere la sicurezza della piattaforma.</li>
+      <li>Utilizzare strumenti automatizzati (bot, scraper) per raccogliere dati dalla piattaforma.</li>
+      <li>Condividere le credenziali di accesso con soggetti non autorizzati.</li>
+      <li>Inserire dati falsi, fraudolenti o che violino diritti di terzi.</li>
+      <li>Violare qualsiasi legge o regolamento applicabile.</li>
+    </ul>
+
+    <h3>3.3 Responsabilità per il contenuto</h3>
+    <p>L'Utente è l'unico responsabile dei dati, delle informazioni e dei contenuti inseriti nella piattaforma. Il Fornitore non verifica la correttezza, completezza o conformità normativa delle informazioni ESG inserite dall'Utente.</p>
+
+    <h2>4. Proprietà dei Dati</h2>
+    <p>Tutti i dati aziendali, le valutazioni di materialità, le narrative ESRS e qualsiasi altro contenuto inserito dall'Utente nella piattaforma (<strong>"Dati dell'Utente"</strong>) rimangono di esclusiva proprietà dell'Utente.</p>
+    <p>L'Utente concede al Fornitore una licenza limitata, non esclusiva e non cedibile, necessaria esclusivamente per l'erogazione del Servizio (salvataggio, elaborazione, visualizzazione, esportazione dei dati).</p>
+    <p>Il Fornitore non utilizzerà i Dati dell'Utente per finalità diverse dall'erogazione del Servizio, ad eccezione di analisi aggregate e anonimizzate per il miglioramento del prodotto.</p>
+    <p>Alla cessazione del contratto, l'Utente può richiedere l'esportazione completa dei propri dati entro 30 giorni. Trascorso tale termine, i dati saranno cancellati secondo quanto previsto dalla <a href="privacy.html">Privacy Policy</a>.</p>
+
+    <h2>5. Piani e Pagamenti</h2>
+    <p>Il Servizio è disponibile in piani a pagamento. I dettagli dei piani, i prezzi e le condizioni di rinnovo sono indicati nella pagina di pricing del sito. I prezzi si intendono IVA esclusa salvo diversa indicazione.</p>
+    <p>Il mancato pagamento del canone comporta la sospensione dell'accesso al Servizio dopo 14 giorni dalla scadenza non saldata. I dati dell'Utente rimangono conservati per ulteriori 30 giorni dalla sospensione, dopodiché possono essere cancellati.</p>
+
+    <h2>6. Limitazione di Responsabilità</h2>
+
+    <div class="warn-box">
+      <p><strong>⚠️ Nota importante:</strong> GreenLedger è uno <strong>strumento di supporto</strong> per la gestione e la rendicontazione ESG. Non sostituisce la consulenza professionale di commercialisti, revisori legali, consulenti di sostenibilità o legali specializzati. Le informazioni generate dalla piattaforma non costituiscono pareri professionali e non devono essere utilizzate come unica base per decisioni aziendali o per la presentazione di report agli organi di vigilanza.</p>
+    </div>
+
+    <p>Nei limiti massimi consentiti dalla legge applicabile, il Fornitore non è responsabile per:</p>
+    <ul>
+      <li>Danni indiretti, consequenziali, punitivi o perdite di profitto derivanti dall'uso o dall'impossibilità di utilizzare il Servizio.</li>
+      <li>Errori, omissioni o inesattezze nei dati inseriti dall'Utente.</li>
+      <li>La conformità normativa delle informazioni ESG prodotte tramite il Servizio.</li>
+      <li>Interruzioni del Servizio dovute a manutenzione pianificata o eventi di forza maggiore.</li>
+    </ul>
+    <p>La responsabilità complessiva del Fornitore nei confronti dell'Utente, per qualsiasi causa, non potrà in nessun caso superare l'importo dei canoni pagati dall'Utente nei 12 mesi precedenti all'evento che ha dato origine alla responsabilità.</p>
+
+    <h2>7. Disponibilità del Servizio</h2>
+    <p>Il Fornitore si impegna a garantire un livello di disponibilità della piattaforma (uptime) adeguato alla natura del Servizio. Non si garantisce tuttavia una disponibilità ininterrotta. Manutenzioni programmate saranno comunicate con ragionevole anticipo.</p>
+
+    <h2>8. Sospensione e Risoluzione dell'Account</h2>
+    <p>Il Fornitore si riserva il diritto di sospendere o terminare l'accesso al Servizio, con o senza preavviso, nei seguenti casi:</p>
+    <ul>
+      <li>Violazione dei presenti Termini.</li>
+      <li>Uso fraudolento o illecito del Servizio.</li>
+      <li>Mancato pagamento del canone.</li>
+      <li>Su richiesta dell'Utente (cancellazione volontaria dell'account).</li>
+    </ul>
+    <p>In caso di risoluzione per inadempimento dell'Utente, non è previsto rimborso dei canoni già versati.</p>
+
+    <h2>9. Proprietà Intellettuale</h2>
+    <p>Il Servizio, inclusi il software, il design, i testi, i loghi, le icone e qualsiasi altro elemento della piattaforma GreenLedger, è protetto da diritti di proprietà intellettuale di titolarità del Fornitore o dei rispettivi licenziatari. È vietata qualsiasi riproduzione, distribuzione o utilizzo non autorizzato.</p>
+
+    <h2>10. Modifiche ai Termini</h2>
+    <p>Il Fornitore si riserva il diritto di modificare i presenti Termini. In caso di modifiche sostanziali, l'Utente sarà informato via email con almeno <strong>30 giorni</strong> di anticipo. L'utilizzo continuato del Servizio dopo la data di efficacia delle modifiche costituisce accettazione dei nuovi Termini. In caso di disaccordo, l'Utente può recedere dal contratto entro il termine di preavviso indicato.</p>
+
+    <h2>11. Legge Applicabile e Foro Competente</h2>
+    <p>I presenti Termini sono regolati dalla <strong>legge italiana</strong>. Per qualsiasi controversia relativa all'interpretazione, esecuzione o risoluzione del contratto, le parti eleggono quale foro esclusivamente competente il <strong>Tribunale di Milano</strong>, salvo diversa previsione di legge inderogabile a favore del consumatore.</p>
+
+    <h2>12. Contatti</h2>
+    <p>Per informazioni sui presenti Termini o per esercitare i propri diritti:<br>
+    Email: <a href="mailto:privacy@greenledger.io">privacy@greenledger.io</a><br>
+    Titolare: [NOME SOCIETÀ], [INDIRIZZO]</p>
+
+  </div><!-- /card -->
+
+</div><!-- /wrap -->
+
+<footer>
+  <span class="foot-copy">© 2025 GreenLedger · Double Materiality Assessment Platform</span>
+  <div class="foot-links">
+    <a href="index.html">Home</a>
+    <a href="privacy.html">Privacy Policy</a>
+    <a href="terms.html">Termini di servizio</a>
+    <a href="login.html">Accedi</a>
+  </div>
+</footer>
+
+</body>
+</html>
