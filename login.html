@@ -591,17 +591,7 @@ async function createAccount() {
         });
     }
 
-    // Auto sign-in (Supabase signUp returns session when email confirm is disabled)
-    if (data.session) {
-      window.location.replace('dashboard.html');
-      return;
-    }
-
-    // Email confirmation required — show success state
-    document.getElementById('successTitle').textContent = 'Account creato!';
-    document.getElementById('successMsg').textContent   = 'Controlla la tua email per confermare l\'account, poi accedi.';
-    document.querySelector('#stepSuccess a').style.display = 'none';
-    goToStep('success');
+    window.location.replace('dashboard.html');
 
   } catch (e) {
     showErr('err3', e.message || 'Si è verificato un errore. Riprova.');
@@ -633,7 +623,6 @@ async function doLogin() {
   } catch (err) {
     const map = {
       'Invalid login credentials': 'Email o password non corretti.',
-      'Email not confirmed':       'Conferma prima la tua email. Controlla la posta.',
     };
     let msg = err.message || 'Errore di accesso.';
     for (const [k, v] of Object.entries(map)) {
