@@ -86,20 +86,29 @@ body{
   background:rgba(255,255,255,.03);
   border-left:1px solid rgba(168,219,191,.08);
 }
-.auth-box{max-width:400px;width:100%;animation:fadeUp .4s ease}
-.auth-header{margin-bottom:32px}
+.auth-box{max-width:400px;width:100%}
+.auth-right-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(168,219,191,.1);border:1px solid rgba(168,219,191,.2);border-radius:100px;padding:6px 16px;font-size:.7rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--g200);margin-bottom:32px}
+
+/* STEP CONTAINER */
+.step{animation:fadeUp .32s ease both}
+
+/* STEP INDICATOR */
+.step-dots{display:flex;gap:6px;margin-bottom:28px}
+.step-dot{width:24px;height:4px;border-radius:2px;background:rgba(255,255,255,.12);transition:background .3s,width .3s}
+.step-dot.active{background:var(--g500);width:32px}
+.step-dot.done{background:rgba(40,187,114,.4)}
+
+/* HEADER */
 .auth-title{font-family:'Playfair Display',serif;font-size:1.7rem;font-weight:700;color:var(--white);letter-spacing:-.03em;margin-bottom:6px}
-.auth-sub{font-size:.85rem;color:rgba(255,255,255,.5);line-height:1.55}
+.auth-sub{font-size:.85rem;color:rgba(255,255,255,.5);line-height:1.55;margin-bottom:28px}
 .auth-sub a{color:var(--g500);text-decoration:none;font-weight:500}
 .auth-sub a:hover{text-decoration:underline}
 
-/* HERO BADGE in right panel */
-.auth-right-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(168,219,191,.1);border:1px solid rgba(168,219,191,.2);border-radius:100px;padding:6px 16px;font-size:.7rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--g200);margin-bottom:32px}
-
-/* TABS */
-.auth-tabs{display:flex;background:rgba(255,255,255,.06);border-radius:10px;padding:3px;margin-bottom:28px}
-.tab{flex:1;padding:9px;border-radius:8px;font-size:.82rem;font-weight:500;color:rgba(255,255,255,.45);background:transparent;border:none;cursor:pointer;transition:all .2s;text-align:center}
-.tab.active{background:rgba(255,255,255,.12);color:var(--white);font-weight:600}
+/* PLAN BADGE (step 2) */
+.plan-badge{display:flex;align-items:center;gap:10px;background:rgba(40,187,114,.08);border:1px solid rgba(40,187,114,.2);border-radius:10px;padding:12px 14px;margin-bottom:24px}
+.pb-ic{width:28px;height:28px;background:rgba(40,187,114,.15);border-radius:7px;display:flex;align-items:center;justify-content:center;color:var(--g500);flex-shrink:0}
+.pb-lbl{font-size:.65rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--g200);margin-bottom:1px}
+.pb-val{font-size:.83rem;font-weight:600;color:var(--white)}
 
 /* FORM */
 .form-group{margin-bottom:18px}
@@ -114,21 +123,17 @@ input:focus{border-color:var(--g500);box-shadow:0 0 0 3px rgba(40,187,114,.15)}
 input::placeholder{color:rgba(255,255,255,.25)}
 input.err{border-color:var(--red);box-shadow:0 0 0 3px rgba(220,38,38,.08)}
 
-/* DIVIDER */
-.divider{display:flex;align-items:center;gap:12px;margin:22px 0}
-.divider::before,.divider::after{content:'';flex:1;height:1px;background:rgba(255,255,255,.08)}
-.divider span{font-size:.72rem;color:rgba(255,255,255,.3);white-space:nowrap}
+/* CODE INPUT */
+.code-input{font-family:'DM Mono',monospace !important;font-size:1.05rem !important;font-weight:500;letter-spacing:.12em;text-align:center;text-transform:uppercase;padding:14px !important}
 
-/* MAGIC LINK */
-.magic-btn{
-  width:100%;padding:11px;border-radius:9px;
-  border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.06);
-  font-family:'DM Sans',sans-serif;font-size:.85rem;font-weight:500;
-  color:rgba(255,255,255,.7);cursor:pointer;transition:all .2s;
-  display:flex;align-items:center;justify-content:center;gap:8px;
-}
-.magic-btn:hover{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.2)}
-.magic-btn:disabled{opacity:.5;cursor:not-allowed}
+/* PASSWORD TOGGLE */
+.pw-wrap{position:relative}
+.pw-wrap input{padding-right:42px}
+.pw-eye{position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:rgba(255,255,255,.4);padding:2px;transition:color .2s}
+.pw-eye:hover{color:rgba(255,255,255,.8)}
+
+/* PASSWORD HINT */
+.pw-hint{font-size:.72rem;color:rgba(255,255,255,.3);margin-top:6px;line-height:1.5}
 
 /* SUBMIT */
 .submit-btn{
@@ -140,50 +145,35 @@ input.err{border-color:var(--red);box-shadow:0 0 0 3px rgba(220,38,38,.08)}
   box-shadow:0 4px 20px rgba(40,187,114,.35);
 }
 .submit-btn:hover{background:var(--g200);box-shadow:0 6px 24px rgba(40,187,114,.4);transform:translateY(-1px)}
-.submit-btn:disabled{opacity:.6;cursor:not-allowed;transform:none}
+.submit-btn:disabled{opacity:.6;cursor:not-allowed;transform:none;box-shadow:none}
 .submit-btn .spinner{width:16px;height:16px;border:2px solid rgba(13,61,37,.3);border-top-color:var(--g900);border-radius:50%;animation:spin .7s linear infinite;display:none}
 .submit-btn.loading .btn-label{display:none}
 .submit-btn.loading .spinner{display:block}
 
 /* ALERT */
 .alert{padding:12px 14px;border-radius:9px;font-size:.8rem;line-height:1.5;margin-bottom:18px;display:none}
-.alert.err{background:rgba(220,38,38,.1);border:1px solid rgba(220,38,38,.3);color:#FCA5A5;display:flex;gap:8px;align-items:flex-start}
-.alert.ok{background:rgba(40,187,114,.1);border:1px solid rgba(40,187,114,.25);color:var(--g200);display:flex;gap:8px;align-items:flex-start}
+.alert.err{background:rgba(220,38,38,.1);border:1px solid rgba(220,38,38,.3);color:#FCA5A5;display:none}
+.alert.ok{background:rgba(40,187,114,.1);border:1px solid rgba(40,187,114,.25);color:var(--g200);display:none}
+.alert.visible{display:flex;gap:8px;align-items:flex-start}
 .alert svg{flex-shrink:0;margin-top:1px}
 
-/* PASSWORD TOGGLE */
-.pw-wrap{position:relative}
-.pw-wrap input{padding-right:42px}
-.pw-eye{position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:rgba(255,255,255,.4);padding:2px;transition:color .2s}
-.pw-eye:hover{color:rgba(255,255,255,.8)}
-
-/* FORGOT LINK */
-#forgotLink{color:var(--g200) !important;font-size:.75rem;text-decoration:none;font-weight:500}
-#forgotLink:hover{text-decoration:underline}
+/* BACK / SECONDARY LINKS */
+.step-back{display:inline-flex;align-items:center;gap:5px;font-size:.76rem;color:rgba(255,255,255,.35);background:none;border:none;cursor:pointer;padding:0;margin-top:16px;font-family:'DM Sans',sans-serif;transition:color .2s}
+.step-back:hover{color:rgba(255,255,255,.7)}
+.step-secondary{font-size:.76rem;color:rgba(255,255,255,.35);text-align:center;margin-top:20px;line-height:1.6}
+.step-secondary a{color:var(--g200);text-decoration:none;font-weight:600}
+.step-secondary a:hover{text-decoration:underline}
 
 /* TERMS */
 .terms-note{font-size:.72rem;color:rgba(255,255,255,.3);text-align:center;margin-top:16px;line-height:1.55}
 .terms-note a{color:var(--g200);text-decoration:none}
 .terms-note a:hover{text-decoration:underline}
 
-/* CODE INPUT */
-.code-input{font-family:'DM Mono',monospace !important;font-size:1.05rem !important;font-weight:500;letter-spacing:.12em;text-align:center;text-transform:uppercase;padding:14px !important}
-.code-hint{font-size:.7rem;color:rgba(255,255,255,.25);text-align:center;margin-top:8px;font-family:'DM Mono',monospace}
-.code-skip{font-size:.76rem;color:rgba(255,255,255,.35);text-align:center;margin-top:18px;line-height:1.6}
-.code-skip a{color:var(--g200);text-decoration:none;font-weight:600}
-.code-skip a:hover{text-decoration:underline}
-
-/* PLAN VERIFIED BADGE */
-.plan-vbadge{display:flex;align-items:center;gap:10px;background:rgba(40,187,114,.08);border:1px solid rgba(40,187,114,.2);border-radius:10px;padding:12px 14px;margin-bottom:22px;animation:fadeUp .28s ease}
-.pvb-ic{width:28px;height:28px;background:rgba(40,187,114,.15);border-radius:7px;display:flex;align-items:center;justify-content:center;color:var(--g500);flex-shrink:0}
-.pvb-label{font-size:.66rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--g200);margin-bottom:1px}
-.pvb-plan{font-size:.82rem;font-weight:600;color:var(--white)}
-
-/* SUCCESS STATE */
-.auth-success{display:none;text-align:center;padding:20px 0}
+/* SUCCESS */
+.success-card{text-align:center;padding:20px 0;animation:fadeUp .4s ease}
 .success-icon{width:64px;height:64px;border-radius:50%;background:rgba(40,187,114,.1);border:1px solid rgba(40,187,114,.25);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;color:var(--g200)}
 .success-h{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:600;color:var(--white);margin-bottom:8px}
-.success-p{font-size:.84rem;color:rgba(255,255,255,.5);line-height:1.6;max-width:320px;margin:0 auto}
+.success-p{font-size:.84rem;color:rgba(255,255,255,.5);line-height:1.6;max-width:320px;margin:0 auto 24px}
 
 /* RESPONSIVE */
 @media(max-width:800px){
@@ -257,18 +247,23 @@ input.err{border-color:var(--red);box-shadow:0 0 0 3px rgba(220,38,38,.08)}
     <span class="badge-dot"></span>
     ⚡ Conforme ESRS · CSRD 2024/2025
   </div>
+
   <div class="auth-box">
 
-    <!-- ══ STEP 1: CODE ENTRY ══ -->
-    <div id="stepCode">
-      <div class="auth-header">
-        <h1 class="auth-title">Codice di accesso</h1>
-        <p class="auth-sub">Inserisci il codice ricevuto per attivare il tuo piano GreenLedger.</p>
+    <!-- ══ STEP 1: CODICE ══ -->
+    <div id="step1" class="step">
+      <div class="step-dots">
+        <div class="step-dot active" id="dot1"></div>
+        <div class="step-dot" id="dot2"></div>
+        <div class="step-dot" id="dot3"></div>
       </div>
 
-      <div class="alert err" id="codeAlertErr" style="display:none">
-        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" style="flex-shrink:0;margin-top:1px"><circle cx="7" cy="7" r="6" stroke="currentColor" stroke-width="1.3"/><path d="M7 4.5V7.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><circle cx="7" cy="9.5" r=".6" fill="currentColor"/></svg>
-        <span id="codeAlertErrText"></span>
+      <h1 class="auth-title">Codice di accesso</h1>
+      <p class="auth-sub">Inserisci il codice ricevuto per attivare il tuo piano GreenLedger.</p>
+
+      <div class="alert err" id="err1">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="6" stroke="currentColor" stroke-width="1.3"/><path d="M7 4.5V7.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><circle cx="7" cy="9.5" r=".6" fill="currentColor"/></svg>
+        <span id="err1Text"></span>
       </div>
 
       <div class="form-group">
@@ -276,433 +271,409 @@ input.err{border-color:var(--red);box-shadow:0 0 0 3px rgba(220,38,38,.08)}
         <input type="text" id="codeInput" class="code-input" placeholder="GL-XXXX-000" autocomplete="off"
           oninput="this.value=this.value.toUpperCase()"
           onkeydown="if(event.key==='Enter'){event.preventDefault();verifyCode()}">
-        <div class="code-hint">es. GL-FULL-001 · GL-CSRD-001 · GL-STK-001</div>
       </div>
 
-      <button class="submit-btn" id="codeBtnVerify" onclick="verifyCode()">
+      <button class="submit-btn" id="btnVerify" onclick="verifyCode()">
         <span class="btn-label">Verifica codice →</span>
         <div class="spinner"></div>
       </button>
 
-      <p class="code-skip">Hai già un account? <a href="#" onclick="skipToLogin(event)">Accedi direttamente →</a></p>
+      <p class="step-secondary">Hai già un account? <a href="#" onclick="showLogin(event)">Accedi →</a></p>
     </div>
 
-    <!-- ══ STEP 2: AUTH ══ -->
-    <div id="stepAuth" style="display:none">
+    <!-- ══ STEP 2: EMAIL ══ -->
+    <div id="step2" class="step" style="display:none">
+      <div class="step-dots">
+        <div class="step-dot done"></div>
+        <div class="step-dot active"></div>
+        <div class="step-dot"></div>
+      </div>
 
-      <!-- Plan verified badge -->
-      <div class="plan-vbadge" id="planVBadge" style="display:none">
-        <div class="pvb-ic">
+      <h1 class="auth-title">Ottimo! Codice valido ✓</h1>
+
+      <div class="plan-badge" id="planBadge">
+        <div class="pb-ic">
           <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.5 7L5.5 10L11.5 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </div>
         <div>
-          <div class="pvb-label">Codice verificato</div>
-          <div class="pvb-plan" id="planVLabel">—</div>
+          <div class="pb-lbl">Piano attivato</div>
+          <div class="pb-val" id="planLabel">—</div>
         </div>
       </div>
 
-      <!-- HEADER -->
-      <div class="auth-header" id="authHeader">
-        <h1 class="auth-title" id="authTitle">Bentornato</h1>
-        <p class="auth-sub" id="authSubtitle">Non hai un account? <a href="#" id="switchLink">Registrati gratis</a></p>
+      <div class="alert err" id="err2">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="6" stroke="currentColor" stroke-width="1.3"/><path d="M7 4.5V7.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><circle cx="7" cy="9.5" r=".6" fill="currentColor"/></svg>
+        <span id="err2Text"></span>
       </div>
 
-      <!-- TABS -->
-      <div class="auth-tabs">
-        <button class="tab active" id="tabLogin" onclick="setMode('login')">Accedi</button>
-        <button class="tab" id="tabSignup" onclick="setMode('signup')">Registrati</button>
+      <div class="form-group">
+        <label for="emailInput">Il tuo indirizzo email</label>
+        <input type="email" id="emailInput" placeholder="mario@azienda.it" autocomplete="email"
+          onkeydown="if(event.key==='Enter'){event.preventDefault();goToStep3()}">
       </div>
 
-      <!-- ALERT -->
-      <div class="alert err" id="alertErr">
-        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" style="flex-shrink:0;margin-top:1px"><circle cx="7" cy="7" r="6" stroke="currentColor" stroke-width="1.3"/><path d="M7 4.5V7.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><circle cx="7" cy="9.5" r=".6" fill="currentColor"/></svg>
-        <span id="alertErrText"></span>
-      </div>
-      <div class="alert ok" id="alertOk">
-        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" style="flex-shrink:0;margin-top:1px"><path d="M2.5 7L5.5 10L11.5 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        <span id="alertOkText"></span>
-      </div>
-
-      <!-- FORM -->
-      <form id="authForm" onsubmit="handleSubmit(event)">
-        <!-- Name field (signup only) -->
-        <div class="form-group" id="nameGroup" style="display:none">
-          <label for="nameInput">Nome e cognome</label>
-          <input type="text" id="nameInput" placeholder="Mario Rossi" autocomplete="name">
-        </div>
-
-        <!-- Email -->
-        <div class="form-group">
-          <label for="emailInput">Email</label>
-          <input type="email" id="emailInput" placeholder="mario@azienda.it" autocomplete="email" required>
-        </div>
-
-        <!-- Password -->
-        <div class="form-group">
-          <label for="pwInput">Password</label>
-          <div class="pw-wrap">
-            <input type="password" id="pwInput" placeholder="••••••••" autocomplete="current-password" required minlength="8">
-            <button type="button" class="pw-eye" onclick="togglePw()" title="Mostra/nascondi password">
-              <svg id="eyeIcon" width="16" height="16" viewBox="0 0 16 16" fill="none">
-                <path d="M1 8C1 8 3.5 3 8 3C12.5 3 15 8 15 8C15 8 12.5 13 8 13C3.5 13 1 8 1 8Z" stroke="currentColor" stroke-width="1.3"/>
-                <circle cx="8" cy="8" r="2.2" stroke="currentColor" stroke-width="1.3"/>
-              </svg>
-            </button>
-          </div>
-        </div>
-
-        <!-- Forgot password (login only) -->
-        <div id="forgotGroup" style="margin-top:-10px;margin-bottom:18px;text-align:right">
-          <a href="#" id="forgotLink" onclick="handleForgot(event)" style="font-size:.75rem;color:var(--g200);text-decoration:none;font-weight:500">Password dimenticata?</a>
-        </div>
-
-        <!-- Submit -->
-        <button type="submit" class="submit-btn" id="submitBtn">
-          <span class="btn-label" id="btnLabel">Accedi</span>
-          <div class="spinner"></div>
-        </button>
-      </form>
-
-      <!-- DIVIDER -->
-      <div class="divider"><span>oppure</span></div>
-
-      <!-- MAGIC LINK -->
-      <button class="magic-btn" id="magicBtn" onclick="handleMagicLink()">
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 8h12M8 2l6 6-6 6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        Accedi con Magic Link (senza password)
+      <button class="submit-btn" id="btnEmail" onclick="goToStep3()">
+        <span class="btn-label">Continua →</span>
+        <div class="spinner"></div>
       </button>
 
-      <!-- TERMS -->
-      <p class="terms-note" id="termsNote" style="display:none">
-        Registrandoti accetti i <a href="terms.html">Termini di servizio</a> e la <a href="privacy.html">Privacy Policy</a>.
-      </p>
+      <button class="step-back" onclick="goToStep(1)">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M7.5 2L3.5 6L7.5 10" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Torna al codice
+      </button>
+    </div>
 
-      <!-- SUCCESS STATE (magic link sent) -->
-      <div class="auth-success" id="successState">
+    <!-- ══ STEP 3: PASSWORD ══ -->
+    <div id="step3" class="step" style="display:none">
+      <div class="step-dots">
+        <div class="step-dot done"></div>
+        <div class="step-dot done"></div>
+        <div class="step-dot active"></div>
+      </div>
+
+      <h1 class="auth-title">Imposta una password</h1>
+      <p class="auth-sub" id="step3Sub">Account per <strong id="step3Email"></strong></p>
+
+      <div class="alert err" id="err3">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="6" stroke="currentColor" stroke-width="1.3"/><path d="M7 4.5V7.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><circle cx="7" cy="9.5" r=".6" fill="currentColor"/></svg>
+        <span id="err3Text"></span>
+      </div>
+
+      <div class="form-group">
+        <label for="pw1Input">Password</label>
+        <div class="pw-wrap">
+          <input type="password" id="pw1Input" placeholder="Minimo 8 caratteri" autocomplete="new-password" minlength="8"
+            onkeydown="if(event.key==='Enter'){event.preventDefault();createAccount()}">
+          <button type="button" class="pw-eye" onclick="togglePw('pw1Input','eye1')">
+            <svg id="eye1" width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <path d="M1 8C1 8 3.5 3 8 3C12.5 3 15 8 15 8C15 8 12.5 13 8 13C3.5 13 1 8 1 8Z" stroke="currentColor" stroke-width="1.3"/>
+              <circle cx="8" cy="8" r="2.2" stroke="currentColor" stroke-width="1.3"/>
+            </svg>
+          </button>
+        </div>
+        <div class="pw-hint">Almeno 8 caratteri</div>
+      </div>
+
+      <div class="form-group">
+        <label for="pw2Input">Conferma password</label>
+        <div class="pw-wrap">
+          <input type="password" id="pw2Input" placeholder="Ripeti la password" autocomplete="new-password"
+            onkeydown="if(event.key==='Enter'){event.preventDefault();createAccount()}">
+          <button type="button" class="pw-eye" onclick="togglePw('pw2Input','eye2')">
+            <svg id="eye2" width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <path d="M1 8C1 8 3.5 3 8 3C12.5 3 15 8 15 8C15 8 12.5 13 8 13C3.5 13 1 8 1 8Z" stroke="currentColor" stroke-width="1.3"/>
+              <circle cx="8" cy="8" r="2.2" stroke="currentColor" stroke-width="1.3"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <button class="submit-btn" id="btnCreate" onclick="createAccount()">
+        <span class="btn-label">Crea account →</span>
+        <div class="spinner"></div>
+      </button>
+
+      <div class="terms-note">
+        Registrandoti accetti i <a href="terms.html">Termini di servizio</a> e la <a href="privacy.html">Privacy Policy</a>.
+      </div>
+
+      <button class="step-back" onclick="goToStep(2)" style="display:block;margin:8px auto 0">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M7.5 2L3.5 6L7.5 10" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Torna all'email
+      </button>
+    </div>
+
+    <!-- ══ LOGIN (utenti esistenti) ══ -->
+    <div id="stepLogin" class="step" style="display:none">
+
+      <h1 class="auth-title">Bentornato</h1>
+      <p class="auth-sub">Accedi al tuo account GreenLedger.</p>
+
+      <div class="alert err" id="errLogin">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="6" stroke="currentColor" stroke-width="1.3"/><path d="M7 4.5V7.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><circle cx="7" cy="9.5" r=".6" fill="currentColor"/></svg>
+        <span id="errLoginText"></span>
+      </div>
+
+      <div class="form-group">
+        <label for="loginEmail">Email</label>
+        <input type="email" id="loginEmail" placeholder="mario@azienda.it" autocomplete="email">
+      </div>
+
+      <div class="form-group">
+        <label for="loginPw">Password</label>
+        <div class="pw-wrap">
+          <input type="password" id="loginPw" placeholder="••••••••" autocomplete="current-password"
+            onkeydown="if(event.key==='Enter'){event.preventDefault();doLogin()}">
+          <button type="button" class="pw-eye" onclick="togglePw('loginPw','eyeLogin')">
+            <svg id="eyeLogin" width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <path d="M1 8C1 8 3.5 3 8 3C12.5 3 15 8 15 8C15 8 12.5 13 8 13C3.5 13 1 8 1 8Z" stroke="currentColor" stroke-width="1.3"/>
+              <circle cx="8" cy="8" r="2.2" stroke="currentColor" stroke-width="1.3"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <button class="submit-btn" id="btnLogin" onclick="doLogin()">
+        <span class="btn-label">Accedi →</span>
+        <div class="spinner"></div>
+      </button>
+
+      <p class="step-secondary">Non hai ancora un account? <a href="#" onclick="goToStep(1);return false">Inizia con un codice →</a></p>
+    </div>
+
+    <!-- ══ SUCCESS ══ -->
+    <div id="stepSuccess" style="display:none">
+      <div class="success-card">
         <div class="success-icon">
           <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><path d="M4 14L10 20L24 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </div>
-        <h3 class="success-h">Controlla la tua email</h3>
-        <p class="success-p" id="successMsg">Ti abbiamo inviato un link di accesso. Clicca sul link per entrare in GreenLedger.</p>
+        <h3 class="success-h" id="successTitle">Account creato!</h3>
+        <p class="success-p" id="successMsg">Accesso in corso…</p>
+        <a href="dashboard.html" class="submit-btn" style="text-decoration:none;margin-top:8px">Vai alla dashboard →</a>
       </div>
+    </div>
 
-    </div><!-- /stepAuth -->
-
-  </div>
-</div>
+  </div><!-- /auth-box -->
+</div><!-- /auth-right -->
 
 <!-- SUPABASE CDN -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const SUPABASE_URL = 'https://sxcuhojxbqyrvouabmeo.supabase.co';
+'use strict';
+
+const SUPABASE_URL      = 'https://sxcuhojxbqyrvouabmeo.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN4Y3Vob2p4YnF5cnZvdWFibWVvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM0NDM5MjksImV4cCI6MjA4OTAxOTkyOX0.WkjJrzL2gxFnfLXNOQo_QDt5IMgNbJxi37AXAIzPj60';
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-const { createClient } = supabase;
-const sb = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-let mode = 'login';      // 'login' | 'signup'
-let pendingPlan = null;  // plan from verified code
-let pendingCode = null;  // the actual code string
-let pendingCodeId = null;// code UUID from DB
+// ── State ──
+let pendingPlan   = null;
+let pendingCodeId = null;
+let pendingEmail  = null;
 
 const PLAN_LABELS = {
-  dma_full:          '✓ Codice valido — Piano DMA + CSRD Completo',
-  csrd_only:         '✓ Codice valido — Piano CSRD Reporting',
-  stakeholder_only:  '✓ Codice valido — Piano Stakeholder Engagement',
+  dma_full:         'DMA + CSRD Completo',
+  csrd_only:        'CSRD Reporting',
+  stakeholder_only: 'Stakeholder Engagement',
 };
 
-// ── Auth callback ──
-sb.auth.onAuthStateChange((event, session) => {
-  if ((event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') && session) {
-    window.location.href = 'https://greenledger-six.vercel.app/dashboard.html';
-  }
-});
-
-// ── Init ──
+// ── Init: redirect if already logged in ──
 (async () => {
   const { data: { session } } = await sb.auth.getSession();
-  if (session) {
-    window.location.href = 'https://greenledger-six.vercel.app/dashboard.html';
-    return;
-  }
-  // If URL has #signup skip code step and go directly to signup
-  if (window.location.hash === '#signup') {
-    showAuthStep();
-    setMode('signup');
-  }
+  if (session) window.location.replace('dashboard.html');
 })();
 
 // ══════════════════════════════════════════════
-//  STEP 1: CODE VERIFICATION
+//  NAVIGATION
+// ══════════════════════════════════════════════
+function goToStep(n) {
+  ['step1','step2','step3','stepLogin','stepSuccess'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.style.display = 'none';
+  });
+  const target = n === 'login' ? 'stepLogin' : n === 'success' ? 'stepSuccess' : 'step' + n;
+  const el = document.getElementById(target);
+  if (el) {
+    el.style.display = '';
+    el.style.animation = 'none';
+    requestAnimationFrame(() => {
+      el.style.animation = '';
+    });
+  }
+  clearAllErrors();
+}
+
+function showLogin(e) {
+  if (e) e.preventDefault();
+  goToStep('login');
+}
+
+// ══════════════════════════════════════════════
+//  STEP 1 — Verifica codice
 // ══════════════════════════════════════════════
 async function verifyCode() {
   const code = document.getElementById('codeInput').value.trim().toUpperCase();
-  if (!code) {
-    showCodeErr('Inserisci il codice di accesso.');
-    return;
-  }
+  if (!code) { showErr('err1', 'Inserisci il codice di accesso.'); return; }
 
-  const btn = document.getElementById('codeBtnVerify');
+  const btn = document.getElementById('btnVerify');
   setLoading(btn, true);
-  clearCodeAlert();
+  clearAllErrors();
 
   try {
     const { data, error } = await sb
       .from('access_codes')
-      .select('id, code, plan, label, max_uses, use_count')
+      .select('id, plan, max_uses, use_count')
       .eq('code', code)
       .single();
 
     if (error || !data) {
-      showCodeErr('Codice non valido. Verifica di averlo scritto correttamente.');
+      showErr('err1', 'Codice non valido o già utilizzato.');
       return;
     }
     if (data.use_count >= data.max_uses) {
-      showCodeErr('Codice già utilizzato. Contatta il supporto per un nuovo codice.');
+      showErr('err1', 'Codice non valido o già utilizzato.');
       return;
     }
 
-    // Valid — proceed to auth step
     pendingPlan   = data.plan;
-    pendingCode   = data.code;
     pendingCodeId = data.id;
 
-    showAuthStep();
-    // Auto-switch to signup since they have a fresh code
-    setMode('signup');
+    document.getElementById('planLabel').textContent = PLAN_LABELS[data.plan] || data.plan;
+    goToStep(2);
 
-    // Show verified badge
-    const badge = document.getElementById('planVBadge');
-    document.getElementById('planVLabel').textContent = PLAN_LABELS[data.plan] || '✓ Codice verificato';
-    badge.style.display = 'flex';
-
-  } catch (err) {
-    showCodeErr('Errore di connessione. Riprova tra qualche secondo.');
+  } catch {
+    showErr('err1', 'Errore di connessione. Riprova tra qualche secondo.');
   } finally {
     setLoading(btn, false);
   }
 }
 
-function showAuthStep() {
-  document.getElementById('stepCode').style.display = 'none';
-  document.getElementById('stepAuth').style.display = '';
-}
-
-function skipToLogin(e) {
-  e.preventDefault();
-  showAuthStep();
-  setMode('login');
-}
-
-function showCodeErr(msg) {
-  const el = document.getElementById('codeAlertErr');
-  document.getElementById('codeAlertErrText').textContent = msg;
-  el.style.display = 'flex';
-}
-
-function clearCodeAlert() {
-  document.getElementById('codeAlertErr').style.display = 'none';
+// ══════════════════════════════════════════════
+//  STEP 2 — Email
+// ══════════════════════════════════════════════
+function goToStep3() {
+  const email = document.getElementById('emailInput').value.trim();
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    showErr('err2', 'Inserisci un indirizzo email valido.');
+    return;
+  }
+  pendingEmail = email;
+  document.getElementById('step3Email').textContent = email;
+  goToStep(3);
 }
 
 // ══════════════════════════════════════════════
-//  STEP 2: AUTH
+//  STEP 3 — Crea account
 // ══════════════════════════════════════════════
-function setMode(m) {
-  mode = m;
-  clearAlerts();
+async function createAccount() {
+  const pw1 = document.getElementById('pw1Input').value;
+  const pw2 = document.getElementById('pw2Input').value;
 
-  const isSignup = m === 'signup';
-  document.getElementById('tabLogin').classList.toggle('active', !isSignup);
-  document.getElementById('tabSignup').classList.toggle('active', isSignup);
-  document.getElementById('nameGroup').style.display = isSignup ? '' : 'none';
-  document.getElementById('forgotGroup').style.display = isSignup ? 'none' : '';
-  document.getElementById('btnLabel').textContent = isSignup ? 'Crea account' : 'Accedi';
-  document.getElementById('authTitle').textContent = isSignup ? 'Crea il tuo account' : 'Bentornato';
-  document.getElementById('authSubtitle').innerHTML = isSignup
-    ? 'Hai già un account? <a href="#" id="switchLink">Accedi</a>'
-    : 'Non hai un account? <a href="#" id="switchLink">Registrati</a>';
-  document.getElementById('termsNote').style.display = isSignup ? '' : 'none';
-  document.getElementById('pwInput').setAttribute('autocomplete', isSignup ? 'new-password' : 'current-password');
+  if (pw1.length < 8) {
+    showErr('err3', 'La password deve essere di almeno 8 caratteri.');
+    return;
+  }
+  if (pw1 !== pw2) {
+    showErr('err3', 'Le password non coincidono.');
+    document.getElementById('pw2Input').classList.add('err');
+    return;
+  }
 
-  // Hide plan badge on login (no code needed)
-  if (!isSignup) document.getElementById('planVBadge').style.display = 'none';
-
-  document.getElementById('switchLink').onclick = (e) => {
-    e.preventDefault();
-    setMode(isSignup ? 'login' : 'signup');
-  };
-}
-
-async function handleSubmit(e) {
-  e.preventDefault();
-  clearAlerts();
-
-  const email    = document.getElementById('emailInput').value.trim();
-  const password = document.getElementById('pwInput').value;
-  const btn      = document.getElementById('submitBtn');
-
+  const btn = document.getElementById('btnCreate');
   setLoading(btn, true);
+  clearAllErrors();
 
   try {
-    if (mode === 'signup') {
-      const name = document.getElementById('nameInput').value.trim();
-      const plan = pendingPlan || 'dma_full';
+    const { data, error } = await sb.auth.signUp({
+      email:    pendingEmail,
+      password: pw1,
+      options:  { data: { plan: pendingPlan } }
+    });
 
-      const { error } = await sb.auth.signUp({
-        email, password,
-        options: { data: { full_name: name, plan } }
-      });
-      if (error) throw error;
-
-      // Increment use_count on the code row (fire-and-forget)
-      if (pendingCodeId) {
-        sb.from('access_codes')
-          .select('use_count')
-          .eq('id', pendingCodeId)
-          .single()
-          .then(({ data: cd }) => {
-            if (cd) sb.from('access_codes')
-              .update({ use_count: (cd.use_count || 0) + 1 })
-              .eq('id', pendingCodeId);
-          });
+    if (error) {
+      if (error.message.includes('already registered') || error.message.includes('User already registered')) {
+        showErr('err3', 'Email già registrata — <a href="#" onclick="showLogin(event)" style="color:#FCA5A5">accedi →</a>');
+      } else {
+        showErr('err3', error.message);
       }
-
-      // Send branded confirmation email via Resend
-      await fetch('/api/send-email', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, type: 'confirm' }),
-      });
-
-      showSuccess('Controlla la tua email', `Abbiamo inviato un link di conferma a <strong>${email}</strong>. Clicca sul link per attivare il tuo account.`);
-
-    } else {
-      const { error } = await sb.auth.signInWithPassword({ email, password });
-      if (error) throw error;
-      window.location.href = 'dashboard.html';
+      return;
     }
-  } catch (err) {
-    showErr(translateError(err.message));
+
+    // Increment use_count (fire-and-forget)
+    if (pendingCodeId) {
+      sb.from('access_codes')
+        .select('use_count')
+        .eq('id', pendingCodeId)
+        .single()
+        .then(({ data: cd }) => {
+          if (cd) sb.from('access_codes')
+            .update({ use_count: (cd.use_count || 0) + 1 })
+            .eq('id', pendingCodeId);
+        });
+    }
+
+    // Auto sign-in (Supabase signUp returns session when email confirm is disabled)
+    if (data.session) {
+      window.location.replace('dashboard.html');
+      return;
+    }
+
+    // Email confirmation required — show success state
+    document.getElementById('successTitle').textContent = 'Account creato!';
+    document.getElementById('successMsg').textContent   = 'Controlla la tua email per confermare l\'account, poi accedi.';
+    document.querySelector('#stepSuccess a').style.display = 'none';
+    goToStep('success');
+
+  } catch (e) {
+    showErr('err3', e.message || 'Si è verificato un errore. Riprova.');
   } finally {
     setLoading(btn, false);
   }
 }
 
-async function handleMagicLink() {
-  clearAlerts();
-  const email = document.getElementById('emailInput').value.trim();
-  if (!email) {
-    showErr('Inserisci la tua email prima di richiedere il Magic Link.');
-    document.getElementById('emailInput').focus();
+// ══════════════════════════════════════════════
+//  LOGIN (utenti esistenti)
+// ══════════════════════════════════════════════
+async function doLogin() {
+  const email = document.getElementById('loginEmail').value.trim();
+  const pw    = document.getElementById('loginPw').value;
+
+  if (!email || !pw) {
+    showErr('errLogin', 'Inserisci email e password.');
     return;
   }
 
-  const btn = document.getElementById('magicBtn');
-  btn.disabled = true;
-  btn.textContent = 'Invio in corso…';
+  const btn = document.getElementById('btnLogin');
+  setLoading(btn, true);
+  clearAllErrors();
 
   try {
-    const { error } = await sb.auth.signInWithOtp({
-      email,
-      options: { emailRedirectTo: 'https://greenledger-six.vercel.app/dashboard.html' }
-    });
+    const { error } = await sb.auth.signInWithPassword({ email, password: pw });
     if (error) throw error;
-    showSuccess('Magic Link inviato', `Abbiamo inviato il link di accesso a <strong>${email}</strong>. Controlla anche la cartella spam.`);
+    window.location.replace('dashboard.html');
   } catch (err) {
-    showErr(translateError(err.message));
-    btn.disabled = false;
-    btn.innerHTML = `<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 8h12M8 2l6 6-6 6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg> Accedi con Magic Link (senza password)`;
-  }
-}
-
-async function handleForgot(e) {
-  e.preventDefault();
-  clearAlerts();
-  const email = document.getElementById('emailInput').value.trim();
-  if (!email) {
-    showErr('Inserisci la tua email per reimpostare la password.');
-    document.getElementById('emailInput').focus();
-    return;
-  }
-  try {
-    const resp = await fetch('/api/send-email', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, type: 'reset' }),
-    });
-    if (!resp.ok) {
-      const err = await resp.json().catch(() => ({}));
-      throw new Error(err.error || 'Invio email fallito');
+    const map = {
+      'Invalid login credentials': 'Email o password non corretti.',
+      'Email not confirmed':       'Conferma prima la tua email. Controlla la posta.',
+    };
+    let msg = err.message || 'Errore di accesso.';
+    for (const [k, v] of Object.entries(map)) {
+      if (msg.includes(k)) { msg = v; break; }
     }
-    showAlertOk(`Email di reset inviata a <strong>${email}</strong>. Controlla la posta.`);
-  } catch (err) {
-    showErr(translateError(err.message));
+    showErr('errLogin', msg);
+  } finally {
+    setLoading(btn, false);
   }
 }
 
-function togglePw() {
-  const inp  = document.getElementById('pwInput');
-  const ico  = document.getElementById('eyeIcon');
-  const show = inp.type === 'password';
-  inp.type   = show ? 'text' : 'password';
-  ico.innerHTML = show
-    ? `<path d="M1 1L15 15M6.5 6.7A2.2 2.2 0 0110.5 9.7M3.5 3.8C2.1 5 1 8 1 8C1 8 3.5 13 8 13C9.3 13 10.5 12.6 11.5 12" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><path d="M13 10.3C14.1 9 15 8 15 8C15 8 12.5 3 8 3C7.3 3 6.6 3.1 6 3.4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>`
-    : `<path d="M1 8C1 8 3.5 3 8 3C12.5 3 15 8 15 8C15 8 12.5 13 8 13C3.5 13 1 8 1 8Z" stroke="currentColor" stroke-width="1.3"/><circle cx="8" cy="8" r="2.2" stroke="currentColor" stroke-width="1.3"/>`;
-}
-
-// ── Helpers ──
+// ══════════════════════════════════════════════
+//  HELPERS
+// ══════════════════════════════════════════════
 function setLoading(btn, on) {
   btn.classList.toggle('loading', on);
   btn.disabled = on;
 }
 
-function clearAlerts() {
-  document.getElementById('alertErr').style.display = 'none';
-  document.getElementById('alertOk').style.display  = 'none';
-}
-
-function showErr(msg) {
-  const el = document.getElementById('alertErr');
-  document.getElementById('alertErrText').innerHTML = msg;
-  el.style.display = 'flex';
+function showErr(id, msg) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.querySelector('span').innerHTML = msg;
+  el.classList.add('visible');
   el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
 
-function showAlertOk(msg) {
-  const el = document.getElementById('alertOk');
-  document.getElementById('alertOkText').innerHTML = msg;
-  el.style.display = 'flex';
+function clearAllErrors() {
+  document.querySelectorAll('.alert.err').forEach(el => el.classList.remove('visible'));
+  document.querySelectorAll('input.err').forEach(el => el.classList.remove('err'));
 }
 
-function showSuccess(title, msg) {
-  document.getElementById('authForm').style.display   = 'none';
-  document.querySelector('.auth-tabs').style.display  = 'none';
-  document.querySelector('.divider').style.display    = 'none';
-  document.getElementById('magicBtn').style.display   = 'none';
-  document.getElementById('termsNote').style.display  = 'none';
-  document.getElementById('planVBadge').style.display = 'none';
-  clearAlerts();
-
-  document.getElementById('authTitle').textContent       = title;
-  document.getElementById('authSubtitle').style.display  = 'none';
-  document.getElementById('successMsg').innerHTML        = msg;
-  document.getElementById('successState').style.display  = 'block';
-}
-
-function translateError(msg) {
-  const map = {
-    'Invalid login credentials':  'Email o password non corretti. Riprova.',
-    'Email not confirmed':        'Conferma prima la tua email. Controlla la posta.',
-    'User already registered':    "Esiste già un account con questa email. <a href='#' onclick=\"setMode('login');return false\">Accedi</a>",
-    'Password should be at least 6 characters': 'La password deve essere di almeno 8 caratteri.',
-    'Unable to validate email address: invalid format': 'Formato email non valido.',
-    'signup is disabled':         'Le registrazioni sono temporaneamente disabilitate.',
-    'Email rate limit exceeded':  'Troppe richieste. Attendi qualche minuto e riprova.',
-  };
-  for (const [k, v] of Object.entries(map)) {
-    if (msg.includes(k)) return v;
-  }
-  return msg || 'Si è verificato un errore. Riprova.';
+function togglePw(inputId, iconId) {
+  const inp  = document.getElementById(inputId);
+  const ico  = document.getElementById(iconId);
+  const show = inp.type === 'password';
+  inp.type   = show ? 'text' : 'password';
+  ico.innerHTML = show
+    ? `<path d="M1 1L15 15M6.5 6.7A2.2 2.2 0 0110.5 9.7M3.5 3.8C2.1 5 1 8 1 8C1 8 3.5 13 8 13C9.3 13 10.5 12.6 11.5 12" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><path d="M13 10.3C14.1 9 15 8 15 8C15 8 12.5 3 8 3C7.3 3 6.6 3.1 6 3.4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>`
+    : `<path d="M1 8C1 8 3.5 3 8 3C12.5 3 15 8 15 8C15 8 12.5 13 8 13C3.5 13 1 8 1 8Z" stroke="currentColor" stroke-width="1.3"/><circle cx="8" cy="8" r="2.2" stroke="currentColor" stroke-width="1.3"/>`;
 }
 </script>
 </body>
