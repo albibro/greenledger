@@ -150,6 +150,29 @@ main{max-width:1200px;margin:0 auto;padding:44px 36px 80px;position:relative;z-i
   .user-email{display:none}
 }
 
+/* ── DEV PLAN SWITCHER ── */
+.dev-bar{background:#F1F5F9;border-bottom:1px solid #E2E8F0;padding:6px 36px;display:flex;align-items:center;gap:10px}
+.dev-bar-label{font-size:.68rem;color:#64748B;font-family:'DM Mono',monospace;display:flex;align-items:center;gap:6px}
+.dev-plan-chip{font-size:.64rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:2px 8px;border-radius:4px;background:#E2E8F0;color:#475569;font-family:'DM Mono',monospace}
+.dev-btn{padding:4px 12px;border-radius:6px;font-size:.7rem;font-weight:600;color:#475569;background:transparent;border:1px solid #CBD5E1;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:5px;font-family:'DM Sans',sans-serif}
+.dev-btn:hover{background:#E2E8F0;color:#334155}
+.dev-modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.35);backdrop-filter:blur(4px);z-index:700;align-items:center;justify-content:center;padding:20px}
+.dev-modal-overlay.open{display:flex}
+.dev-modal{background:#fff;border-radius:16px;padding:28px;max-width:380px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.18);animation:fadeUp .2s ease;border-top:3px solid #94A3B8}
+.dev-modal-h{font-size:.78rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#94A3B8;margin-bottom:4px;display:flex;align-items:center;gap:6px}
+.dev-modal-title{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:700;color:var(--ink);margin-bottom:16px}
+.dev-option{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:10px;border:1.5px solid var(--cd);margin-bottom:8px;cursor:pointer;transition:all .15s}
+.dev-option:hover{border-color:#94A3B8;background:#F8FAFC}
+.dev-option.active{border-color:#334155;background:#F1F5F9}
+.dev-option-code{font-family:'DM Mono',monospace;font-size:.72rem;font-weight:700;color:#475569;background:#E2E8F0;padding:3px 8px;border-radius:5px;flex-shrink:0}
+.dev-option-body{flex:1}
+.dev-option-name{font-size:.85rem;font-weight:600;color:var(--ink)}
+.dev-option-sub{font-size:.72rem;color:var(--inkm);margin-top:1px}
+.dev-apply{width:100%;padding:10px;border-radius:8px;background:#334155;color:#fff;border:none;font-family:'DM Sans',sans-serif;font-size:.85rem;font-weight:600;cursor:pointer;transition:background .2s;margin-top:4px}
+.dev-apply:hover{background:#1E293B}
+.dev-apply:disabled{opacity:.5;cursor:not-allowed}
+@media(max-width:600px){.dev-bar{padding:6px 20px}}
+
 /* ── FOOTER ── */
 .dash-footer{border-top:1px solid var(--cd);padding:16px 36px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
 .dash-footer-copy{font-size:.72rem;color:var(--inkm)}
@@ -340,6 +363,49 @@ main{max-width:1200px;margin:0 auto;padding:44px 36px 80px;position:relative;z-i
     </div>
   </div>
 </nav>
+
+<!-- DEV PLAN SWITCHER BAR -->
+<div class="dev-bar" id="devBar" style="display:none">
+  <span class="dev-bar-label">
+    ⚙️ Dev
+    <span class="dev-plan-chip" id="devPlanChip">—</span>
+  </span>
+  <button class="dev-btn" onclick="openDevModal()">🔄 Cambia piano di accesso</button>
+</div>
+
+<!-- DEV PLAN SWITCHER MODAL -->
+<div class="dev-modal-overlay" id="devModalOverlay">
+  <div class="dev-modal">
+    <div class="dev-modal-h">⚙️ Dev tools</div>
+    <div class="dev-modal-title">Cambia piano di accesso</div>
+
+    <div class="dev-option" id="devOpt-dma_full" onclick="selectDevPlan('dma_full')">
+      <span class="dev-option-code">GL-FULL-001</span>
+      <div class="dev-option-body">
+        <div class="dev-option-name">DMA + CSRD Completo</div>
+        <div class="dev-option-sub">Flusso completo: 6 moduli DMA + CSRD Reporting</div>
+      </div>
+    </div>
+
+    <div class="dev-option" id="devOpt-csrd_only" onclick="selectDevPlan('csrd_only')">
+      <span class="dev-option-code">GL-CSRD-001</span>
+      <div class="dev-option-body">
+        <div class="dev-option-name">Solo CSRD Reporting</div>
+        <div class="dev-option-sub">Selezione manuale topic + Disclosure Requirements</div>
+      </div>
+    </div>
+
+    <div class="dev-option" id="devOpt-stakeholder_only" onclick="selectDevPlan('stakeholder_only')">
+      <span class="dev-option-code">GL-STK-001</span>
+      <div class="dev-option-body">
+        <div class="dev-option-name">Solo Stakeholder Engagement</div>
+        <div class="dev-option-sub">Dashboard sessioni stakeholder, survey link</div>
+      </div>
+    </div>
+
+    <button class="dev-apply" id="devApplyBtn" onclick="applyDevPlan()" disabled>Applica e ricarica →</button>
+  </div>
+</div>
 
 <!-- DARK HERO SECTION -->
 <section class="dash-hero-dark" id="dashHeroDark" style="display:none">
@@ -582,6 +648,7 @@ async function init() {
   }
   const plan = session.user.user_metadata?.plan || 'dma_full';
   renderUser(session.user);
+  initDevBar(plan);
   // adaptToPlan is called inside renderUser → this ensures UI is adapted before data loads
   await loadAssessments(session.user.id, plan);
   document.getElementById('loadingScreen').style.display = 'none';
@@ -1049,6 +1116,55 @@ function selectProjectType(type, url) {
   window.location.href = url;
 }
 
+// ── Dev plan switcher ──
+let _devSelectedPlan = null;
+
+function initDevBar(plan) {
+  const bar  = document.getElementById('devBar');
+  const chip = document.getElementById('devPlanChip');
+  if (bar)  bar.style.display = 'flex';
+  if (chip) chip.textContent  = plan;
+  _devSelectedPlan = plan;
+}
+
+function openDevModal() {
+  // Mark current plan as active
+  ['dma_full','csrd_only','stakeholder_only'].forEach(p => {
+    const el = document.getElementById(`devOpt-${p}`);
+    if (el) el.classList.toggle('active', p === _currentPlan);
+  });
+  _devSelectedPlan = _currentPlan;
+  document.getElementById('devApplyBtn').disabled = true;
+  document.getElementById('devModalOverlay').classList.add('open');
+}
+
+function closeDevModal() {
+  document.getElementById('devModalOverlay').classList.remove('open');
+}
+
+function selectDevPlan(plan) {
+  _devSelectedPlan = plan;
+  ['dma_full','csrd_only','stakeholder_only'].forEach(p => {
+    const el = document.getElementById(`devOpt-${p}`);
+    if (el) el.classList.toggle('active', p === plan);
+  });
+  document.getElementById('devApplyBtn').disabled = (plan === _currentPlan);
+}
+
+async function applyDevPlan() {
+  if (!_devSelectedPlan || _devSelectedPlan === _currentPlan) return;
+  const btn = document.getElementById('devApplyBtn');
+  btn.disabled = true;
+  btn.textContent = 'Aggiornamento…';
+  try {
+    const { error } = await sb.auth.updateUser({ data: { plan: _devSelectedPlan } });
+    if (error) { alert('Errore: ' + error.message); btn.disabled = false; btn.textContent = 'Applica e ricarica →'; return; }
+    window.location.reload();
+  } catch(e) {
+    alert('Errore imprevisto.'); btn.disabled = false; btn.textContent = 'Applica e ricarica →';
+  }
+}
+
 // Close on overlay click
 document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('ptOverlay').addEventListener('click', function(e) {
@@ -1059,6 +1175,9 @@ document.addEventListener('DOMContentLoaded', () => {
   });
   document.getElementById('tsOverlay').addEventListener('click', function(e) {
     if (e.target === this) closeTsModal();
+  });
+  document.getElementById('devModalOverlay').addEventListener('click', function(e) {
+    if (e.target === this) closeDevModal();
   });
   document.getElementById('teamOverlay').addEventListener('click', function(e) {
     if (e.target === this) closeTeamModal();
