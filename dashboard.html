@@ -216,6 +216,70 @@ main{max-width:1200px;margin:0 auto;padding:44px 36px 80px;position:relative;z-i
 .tm-ok{background:var(--g50);border:1px solid var(--g200);border-radius:8px;padding:12px;font-size:.82rem;color:var(--g700);margin-top:12px;display:none}
 .tm-ok.show{display:block}
 
+/* ── PHASE CARDS (csrd_only) ── */
+.phase-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:32px;animation:fadeUp .4s .08s ease both}
+@media(max-width:680px){.phase-grid{grid-template-columns:1fr}}
+.phase-card{background:var(--white);border:1.5px solid var(--cd);border-radius:18px;padding:28px;transition:all .3s;position:relative;overflow:hidden}
+.phase-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--g700),var(--g600))}
+.phase-card.done-ph::before{background:linear-gradient(90deg,var(--g600),var(--g500))}
+.phase-card.locked{opacity:.5;cursor:not-allowed}
+.phase-card.ready{cursor:pointer}
+.phase-card.ready:hover{box-shadow:var(--sh2);transform:translateY(-2px);border-color:var(--g200)}
+.phase-num{font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--inkm);margin-bottom:12px}
+.phase-h{font-family:'Playfair Display',serif;font-size:1.05rem;font-weight:700;color:var(--g900);margin-bottom:6px}
+.phase-p{font-size:.78rem;color:var(--inkm);line-height:1.6;margin-bottom:16px}
+.phase-status{display:inline-flex;align-items:center;gap:6px;font-size:.72rem;font-weight:600;padding:4px 10px;border-radius:100px}
+.phase-status.todo{background:var(--cream);color:var(--inkm);border:1px solid var(--cdd)}
+.phase-status.done-ph{background:var(--g50);color:var(--g700);border:1px solid var(--g100)}
+.phase-status.ready-ph{background:var(--ambg);color:var(--amber);border:1px solid var(--ambb)}
+.phase-action{margin-top:16px}
+.phase-btn{display:inline-flex;align-items:center;gap:6px;padding:9px 18px;border-radius:9px;font-size:.82rem;font-weight:600;color:var(--g900);background:var(--g500);border:none;cursor:pointer;transition:all .2s}
+.phase-btn:hover{background:var(--g200)}
+.phase-btn.outline{background:transparent;color:var(--g700);border:1.5px solid var(--g200)}
+.phase-btn.outline:hover{background:var(--g50)}
+
+/* ── TOPIC SELECT MODAL (csrd_only) ── */
+.ts-overlay{display:none;position:fixed;inset:0;background:rgba(10,31,18,.75);backdrop-filter:blur(8px);z-index:600;align-items:flex-start;justify-content:center;padding:32px 20px;overflow-y:auto}
+.ts-overlay.open{display:flex}
+.ts-modal{background:#fff;border-radius:20px;padding:32px;max-width:600px;width:100%;box-shadow:0 40px 100px rgba(15,28,20,.2);animation:fadeUp .3s ease;position:relative}
+.ts-modal-h{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;color:var(--g900);margin-bottom:6px}
+.ts-modal-sub{font-size:.82rem;color:var(--inkm);margin-bottom:24px;line-height:1.5}
+.ts-group{margin-bottom:8px}
+.ts-group-h{font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--inkm);margin:16px 0 8px;padding-top:16px;border-top:1px solid var(--cd)}
+.ts-group-h:first-of-type{margin-top:0;padding-top:0;border-top:none}
+.ts-topic{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:10px;border:1.5px solid var(--cd);margin-bottom:6px;cursor:pointer;transition:all .15s;user-select:none}
+.ts-topic:hover{border-color:var(--g200);background:var(--g50)}
+.ts-topic.selected{border-color:var(--g700);background:var(--g50)}
+.ts-topic input[type=checkbox]{width:16px;height:16px;accent-color:var(--g700);cursor:pointer;flex-shrink:0}
+.ts-topic-emoji{width:32px;height:32px;border-radius:8px;background:var(--g50);display:flex;align-items:center;justify-content:center;font-size:.95rem;flex-shrink:0}
+.ts-topic.selected .ts-topic-emoji{background:var(--g100)}
+.ts-topic-info{flex:1}
+.ts-topic-id{font-size:.72rem;font-weight:700;color:var(--g700)}
+.ts-topic-name{font-size:.85rem;font-weight:600;color:var(--ink)}
+.ts-topic-sub{font-size:.72rem;color:var(--inkm);margin-top:1px}
+.ts-footer{display:flex;gap:10px;margin-top:20px;padding-top:20px;border-top:1px solid var(--cd)}
+.ts-confirm{flex:1;padding:11px;border-radius:9px;background:var(--g700);color:#fff;border:none;font-family:'DM Sans',sans-serif;font-size:.9rem;font-weight:600;cursor:pointer;transition:background .2s}
+.ts-confirm:hover{background:var(--g800)}
+.ts-cancel{padding:11px 18px;border-radius:9px;background:transparent;border:1.5px solid var(--cd);font-family:'DM Sans',sans-serif;font-size:.9rem;color:var(--inkm);cursor:pointer}
+.ts-cancel:hover{border-color:var(--cdd);background:var(--cream)}
+.ts-sel-count{font-size:.78rem;color:var(--g700);font-weight:600;display:flex;align-items:center;gap:4px}
+
+/* ── STAKEHOLDER SESSION CARDS ── */
+.stk-sess-card{background:var(--white);border:1px solid var(--cd);border-radius:14px;padding:18px 22px;display:flex;align-items:center;gap:16px;cursor:pointer;transition:all .25s;text-decoration:none;margin-bottom:10px}
+.stk-sess-card:hover{box-shadow:var(--sh2);border-color:var(--g200);transform:translateY(-1px)}
+.stk-sess-icon{width:40px;height:40px;border-radius:11px;background:var(--g50);border:1px solid var(--g100);display:flex;align-items:center;justify-content:center;color:var(--g700);flex-shrink:0}
+.stk-sess-body{flex:1;min-width:0}
+.stk-sess-name{font-size:.9rem;font-weight:600;color:var(--ink);margin-bottom:2px}
+.stk-sess-meta{font-size:.72rem;color:var(--inkm);display:flex;gap:10px;flex-wrap:wrap}
+.stk-overview{background:linear-gradient(135deg,var(--g900) 0%,#0D4D2E 100%);border-radius:18px;padding:28px;margin-bottom:24px;color:#fff;animation:fadeUp .4s ease}
+.stk-overview-h{font-family:'Playfair Display',serif;font-size:1.15rem;font-weight:700;color:#fff;margin-bottom:8px}
+.stk-overview-p{font-size:.82rem;color:rgba(255,255,255,.55);line-height:1.65;margin-bottom:20px}
+.stk-steps-row{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:20px}
+.stk-step-chip{display:flex;align-items:center;gap:7px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:8px;padding:8px 12px;font-size:.76rem;color:rgba(255,255,255,.75)}
+.stk-step-num{width:20px;height:20px;border-radius:50%;background:var(--g500);display:flex;align-items:center;justify-content:center;font-size:.65rem;font-weight:700;color:var(--g900);flex-shrink:0}
+.btn-new-sess{display:inline-flex;align-items:center;gap:7px;padding:10px 20px;border-radius:9px;font-size:.85rem;font-weight:600;color:var(--g900);background:var(--g500);border:none;cursor:pointer;transition:all .2s;box-shadow:0 4px 14px rgba(40,187,114,.3)}
+.btn-new-sess:hover{background:var(--g200);transform:translateY(-1px)}
+
 /* ── PROJECT TYPE MODAL ── */
 .pt-overlay{display:none;position:fixed;inset:0;background:rgba(10,31,18,.78);backdrop-filter:blur(8px);z-index:500;align-items:center;justify-content:center;padding:20px}
 .pt-overlay.open{display:flex}
@@ -389,6 +453,31 @@ main{max-width:1200px;margin:0 auto;padding:44px 36px 80px;position:relative;z-i
 
 </main>
 
+<!-- TOPIC SELECTION MODAL (csrd_only) -->
+<div class="ts-overlay" id="tsOverlay">
+  <div class="ts-modal">
+    <h3 class="ts-modal-h">Seleziona i Topic Materiali</h3>
+    <p class="ts-modal-sub">Indica quali temi ESG sono materiali per la tua azienda. Verranno attivate le corrispondenti Disclosure Requirements ESRS.</p>
+
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+      <span class="ts-sel-count" id="tsSelCount">0 topic selezionati</span>
+      <button style="font-size:.72rem;color:var(--g700);background:none;border:none;cursor:pointer;font-weight:600" onclick="tsSelectAll()">Seleziona tutti</button>
+    </div>
+
+    <div class="ts-group-h">🌱 Ambiente (E)</div>
+    <div id="ts-topics-E"></div>
+    <div class="ts-group-h">👥 Sociale (S)</div>
+    <div id="ts-topics-S"></div>
+    <div class="ts-group-h">⚖️ Governance (G)</div>
+    <div id="ts-topics-G"></div>
+
+    <div class="ts-footer">
+      <button class="ts-cancel" onclick="closeTsModal()">Annulla</button>
+      <button class="ts-confirm" onclick="confirmTopicSelection()">Conferma selezione →</button>
+    </div>
+  </div>
+</div>
+
 <!-- ONBOARDING MODAL -->
 <div class="ob-overlay" id="obOverlay">
   <div class="ob-modal">
@@ -491,8 +580,10 @@ async function init() {
     window.location.href = 'login.html';
     return;
   }
+  const plan = session.user.user_metadata?.plan || 'dma_full';
   renderUser(session.user);
-  await loadAssessments(session.user.id, session.user.user_metadata?.plan || 'dma_full');
+  // adaptToPlan is called inside renderUser → this ensures UI is adapted before data loads
+  await loadAssessments(session.user.id, plan);
   document.getElementById('loadingScreen').style.display = 'none';
   document.getElementById('mainContent').style.display = 'block';
 
@@ -537,82 +628,201 @@ function renderUser(user) {
 }
 
 function adaptToPlan(plan) {
-  const grid = document.getElementById('quickGrid');
-  if (!grid) return;
-
-  if (plan === 'stakeholder_only') {
-    grid.innerHTML = `
-      <div class="quick-card primary" style="cursor:pointer" onclick="openProjectModal()">
-        <div class="qc-icon">
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="7" cy="7" r="3" stroke="currentColor" stroke-width="1.6"/><circle cx="14" cy="7" r="3" stroke="currentColor" stroke-width="1.6"/><path d="M1 17c0-3 2.7-5 6-5M10 12c3.3 0 9 2 9 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
-        </div>
-        <div>
-          <div class="qc-h">Nuova sessione stakeholder</div>
-          <div class="qc-p">Avvia una raccolta opinioni per la materialità</div>
-        </div>
-        <svg class="qc-arr" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </div>
-      <div class="quick-card" onclick="document.getElementById('assessList').scrollIntoView({behavior:'smooth'})">
-        <div class="qc-icon">
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><rect x="3" y="4" width="14" height="3" rx="1.5" fill="currentColor" opacity=".3"/><rect x="3" y="9" width="10" height="3" rx="1.5" fill="currentColor" opacity=".5"/><rect x="3" y="14" width="7" height="3" rx="1.5" fill="currentColor"/></svg>
-        </div>
-        <div>
-          <div class="qc-h">Le mie sessioni</div>
-          <div class="qc-p">Visualizza e gestisci le sessioni salvate</div>
-        </div>
-        <svg class="qc-arr" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </div>
-      <div class="quick-card" style="cursor:default;opacity:.5">
-        <div class="qc-icon">
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M4 16L7 13H16V5H4V16Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
-        </div>
-        <div>
-          <div class="qc-h">Report risultati</div>
-          <div class="qc-p">Esporta i risultati — prossimamente</div>
-        </div>
-      </div>`;
-
-    // Update section labels
-    const secH2 = document.querySelector('#assessList .sec-hd h2');
-    if (secH2) secH2.textContent = 'Sessioni recenti';
-
-  } else if (plan === 'csrd_only') {
-    grid.innerHTML = `
-      <div class="quick-card primary" style="cursor:pointer" onclick="openProjectModal()">
-        <div class="qc-icon">
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 4v12M4 10h12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-        </div>
-        <div>
-          <div class="qc-h">Nuovo progetto CSRD</div>
-          <div class="qc-p">Avvia la rendicontazione ESRS per la tua azienda</div>
-        </div>
-        <svg class="qc-arr" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </div>
-      <div class="quick-card" onclick="document.getElementById('assessList').scrollIntoView({behavior:'smooth'})">
-        <div class="qc-icon">
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><rect x="3" y="4" width="14" height="3" rx="1.5" fill="currentColor" opacity=".3"/><rect x="3" y="9" width="10" height="3" rx="1.5" fill="currentColor" opacity=".5"/><rect x="3" y="14" width="7" height="3" rx="1.5" fill="currentColor"/></svg>
-        </div>
-        <div>
-          <div class="qc-h">I miei progetti CSRD</div>
-          <div class="qc-p">Riprendi o visualizza i report salvati</div>
-        </div>
-        <svg class="qc-arr" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </div>
-      <div class="quick-card" style="cursor:default;opacity:.5">
-        <div class="qc-icon">
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M4 16L7 13H16V5H4V16Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
-        </div>
-        <div>
-          <div class="qc-h">Team & Stakeholder</div>
-          <div class="qc-p">Gestione collaboratori — prossimamente</div>
-        </div>
-      </div>`;
-
-    const secH2 = document.querySelector('#assessList .sec-hd h2');
-    if (secH2) secH2.textContent = 'Progetti CSRD recenti';
-
+  if (plan === 'csrd_only') {
+    renderCsrdOnlyDashboard();
+  } else if (plan === 'stakeholder_only') {
+    renderStakeholderOnlyDashboard();
   }
-  // dma_full: HTML already in DOM from static markup
+  // dma_full: static DOM already correct
+}
+
+// ──────────────────────────────────────────
+//  CSRD-ONLY DASHBOARD
+// ──────────────────────────────────────────
+const ESRS_TOPICS = [
+  {id:'E1',name:'Cambiamenti climatici',   sub:'Mitigazione, adattamento, energia',       emoji:'🌡️',pillar:'E',color:'#1A7A4A',bg:'#ECFDF5'},
+  {id:'E2',name:'Inquinamento',            sub:'Aria, acqua, suolo',                       emoji:'🏭',pillar:'E',color:'#15803D',bg:'#F0FDF4'},
+  {id:'E3',name:'Risorse idriche',         sub:'Prelievo, consumo, ecosistemi marini',      emoji:'💧',pillar:'E',color:'#1D4ED8',bg:'#EFF6FF'},
+  {id:'E4',name:'Biodiversità',            sub:'Specie, habitat, uso del suolo',            emoji:'🌿',pillar:'E',color:'#4D7C0F',bg:'#F7FEE7'},
+  {id:'E5',name:'Economia circolare',      sub:'Materiali, rifiuti, prodotti a fine vita',  emoji:'♻️',pillar:'E',color:'#0E7490',bg:'#ECFEFF'},
+  {id:'S1',name:'Forza lavoro',            sub:'Dipendenti, salute, sicurezza, inclusione', emoji:'👷',pillar:'S',color:'#7C2D12',bg:'#FFF7ED'},
+  {id:'S2',name:'Lavoratori value chain',  sub:'Fornitori, catena del valore',              emoji:'🌐',pillar:'S',color:'#6B21A8',bg:'#FAF5FF'},
+  {id:'S3',name:'Comunità locali',         sub:'Territorio, impatti locali',                emoji:'🏘️',pillar:'S',color:'#0E7490',bg:'#ECFEFF'},
+  {id:'S4',name:'Consumatori e utenti',    sub:'Sicurezza prodotti, privacy, info',         emoji:'👤',pillar:'S',color:'#374151',bg:'#F9FAFB'},
+  {id:'G1',name:'Condotta aziendale',      sub:'Etica, anticorruzione, lobbying',           emoji:'⚖️',pillar:'G',color:'#374151',bg:'#F9FAFB'},
+];
+
+let tsSelected = new Set(); // selected topic IDs
+
+function renderCsrdOnlyDashboard() {
+  // Quick grid → CSRD workflow
+  const grid = document.getElementById('quickGrid');
+  if (grid) grid.innerHTML = `
+    <div class="quick-card primary" onclick="openTsModal()">
+      <div class="qc-icon">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M4 5h12M4 10h8M4 15h5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="16" cy="15" r="3" stroke="currentColor" stroke-width="1.5"/><path d="M15 15l.8.8 1.7-1.6" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <div>
+        <div class="qc-h">Seleziona Topic Materiali</div>
+        <div class="qc-p">Scegli quali temi ESRS sono rilevanti per la tua azienda</div>
+      </div>
+      <svg class="qc-arr" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <div class="quick-card" id="csrdPhase2Card" onclick="openCsrdReporting()" style="cursor:pointer">
+      <div class="qc-icon">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><rect x="3" y="3" width="14" height="14" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M7 10l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <div>
+        <div class="qc-h">CSRD Reporting</div>
+        <div class="qc-p" id="phase2Sub">Completa prima la selezione dei topic →</div>
+      </div>
+      <svg class="qc-arr" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <div class="quick-card" onclick="openTeamModal()">
+      <div class="qc-icon">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="7" cy="7" r="3" stroke="currentColor" stroke-width="1.6"/><circle cx="14" cy="7" r="3" stroke="currentColor" stroke-width="1.6"/><path d="M1 17c0-3 2.7-5 6-5M10 12c3.3 0 9 2 9 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+      </div>
+      <div>
+        <div class="qc-h">Invita collaboratore</div>
+        <div class="qc-p">Aggiungi membri del team</div>
+      </div>
+      <svg class="qc-arr" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>`;
+
+  // Restore saved selection if any
+  const saved = localStorage.getItem('gl_dma');
+  if (saved) {
+    try {
+      const d = JSON.parse(saved);
+      (d.materialTopics || []).filter(t => t.class !== 'none').forEach(t => tsSelected.add(t.id));
+    } catch(e) {}
+  }
+  updateCsrdPhase2Card();
+
+  const secH2 = document.querySelector('#assessList .sec-hd h2');
+  if (secH2) secH2.textContent = 'Progetti CSRD recenti';
+}
+
+function updateCsrdPhase2Card() {
+  const card = document.getElementById('csrdPhase2Card');
+  const sub  = document.getElementById('phase2Sub');
+  if (!card) return;
+  const n = tsSelected.size;
+  if (n > 0) {
+    card.style.opacity = '1';
+    card.style.cursor  = 'pointer';
+    if (sub) sub.textContent = `${n} topic selezionati — avvia il reporting →`;
+  } else {
+    card.style.opacity = '.45';
+    card.style.cursor  = 'not-allowed';
+    if (sub) sub.textContent = 'Completa prima la selezione dei topic →';
+  }
+}
+
+function openCsrdReporting() {
+  if (tsSelected.size === 0) { openTsModal(); return; }
+  // Build gl_dma payload
+  const payload = {
+    m1: {}, m4: {}, m3: {},
+    materialTopics: ESRS_TOPICS.map(t => ({
+      id: t.id, name: t.name, emoji: t.emoji, pillar: t.pillar, color: t.color, bg: t.bg,
+      impactScore:    tsSelected.has(t.id) ? 4.0 : 1.0,
+      financialScore: tsSelected.has(t.id) ? 4.0 : 1.0,
+      class: tsSelected.has(t.id) ? 'double' : 'none',
+    })),
+    exportedAt: new Date().toISOString(),
+  };
+  localStorage.setItem('gl_dma', JSON.stringify(payload));
+  window.open('greenledger-csrd.html', '_blank');
+}
+
+// ── Topic selection modal ──
+function openTsModal() {
+  ['E','S','G'].forEach(pillar => {
+    const el = document.getElementById(`ts-topics-${pillar}`);
+    if (!el) return;
+    el.innerHTML = ESRS_TOPICS.filter(t => t.pillar === pillar).map(t => `
+      <div class="ts-topic${tsSelected.has(t.id) ? ' selected' : ''}" id="tst-${t.id}" onclick="tsToggle('${t.id}')">
+        <input type="checkbox" id="tsc-${t.id}" ${tsSelected.has(t.id) ? 'checked' : ''} onclick="event.stopPropagation();tsToggle('${t.id}')">
+        <div class="ts-topic-emoji">${t.emoji}</div>
+        <div class="ts-topic-info">
+          <div class="ts-topic-id">${t.id}</div>
+          <div class="ts-topic-name">${t.name}</div>
+          <div class="ts-topic-sub">${t.sub}</div>
+        </div>
+      </div>`).join('');
+  });
+  tsUpdateCount();
+  document.getElementById('tsOverlay').classList.add('open');
+}
+
+function closeTsModal() { document.getElementById('tsOverlay').classList.remove('open'); }
+
+function tsToggle(id) {
+  if (tsSelected.has(id)) { tsSelected.delete(id); } else { tsSelected.add(id); }
+  const row = document.getElementById(`tst-${id}`);
+  const chk = document.getElementById(`tsc-${id}`);
+  if (row) row.classList.toggle('selected', tsSelected.has(id));
+  if (chk) chk.checked = tsSelected.has(id);
+  tsUpdateCount();
+}
+
+function tsSelectAll() {
+  ESRS_TOPICS.forEach(t => { tsSelected.add(t.id); });
+  ESRS_TOPICS.forEach(t => {
+    const row = document.getElementById(`tst-${t.id}`);
+    const chk = document.getElementById(`tsc-${t.id}`);
+    if (row) row.classList.add('selected');
+    if (chk) chk.checked = true;
+  });
+  tsUpdateCount();
+}
+
+function tsUpdateCount() {
+  const el = document.getElementById('tsSelCount');
+  if (el) el.textContent = `${tsSelected.size} topic selezionati`;
+}
+
+function confirmTopicSelection() {
+  if (tsSelected.size === 0) { alert('Seleziona almeno un topic materiale.'); return; }
+  openCsrdReporting();
+  closeTsModal();
+  updateCsrdPhase2Card();
+}
+
+// ──────────────────────────────────────────
+//  STAKEHOLDER-ONLY DASHBOARD
+// ──────────────────────────────────────────
+function renderStakeholderOnlyDashboard() {
+  // Replace quick-grid with overview card + new session button
+  const grid = document.getElementById('quickGrid');
+  if (grid) {
+    grid.style.display = 'none';
+    const overview = document.createElement('div');
+    overview.innerHTML = `
+      <div class="stk-overview">
+        <div class="stk-overview-h">Stakeholder Engagement</div>
+        <p class="stk-overview-p">Raccogli le opinioni degli stakeholder chiave per la tua Double Materiality Assessment. Ogni partecipante riceve un link univoco e può rispondere quando vuole.</p>
+        <div class="stk-steps-row">
+          <div class="stk-step-chip"><span class="stk-step-num">1</span>Crea sessione</div>
+          <div class="stk-step-chip"><span class="stk-step-num">2</span>Invia link agli stakeholder</div>
+          <div class="stk-step-chip"><span class="stk-step-num">3</span>Raccogli e visualizza risposte</div>
+        </div>
+        <button class="btn-new-sess" onclick="newStakeholderSession()">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 2v10M2 7h10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+          Inizia nuova sessione
+        </button>
+      </div>`;
+    grid.parentNode.insertBefore(overview, grid);
+  }
+
+  // Update assess-list header
+  const secH2 = document.querySelector('#assessList .sec-hd h2');
+  if (secH2) secH2.textContent = 'Le mie sessioni stakeholder';
+}
+
+function newStakeholderSession() {
+  selectProjectType('stakeholder_only', 'survey-manager.html');
 }
 
 // ── Audit log ──
@@ -648,7 +858,10 @@ function deadlineHtml(assessData) {
 }
 
 // ── Load assessments from Supabase ──
+let _currentPlan = 'dma_full'; // set by init()
+
 async function loadAssessments(userId, plan) {
+  _currentPlan = plan;
   const { data, error } = await sb
     .from('assessments')
     .select('id, company_name, created_at, updated_at, step, export_data, data')
@@ -700,8 +913,14 @@ async function loadAssessments(userId, plan) {
 
     if (isDone) done++; else if (step > 1) wip++;
 
+    const destUrl = plan === 'stakeholder_only'
+      ? `survey-manager.html?id=${encodeURIComponent(a.id)}`
+      : plan === 'csrd_only'
+        ? `greenledger-csrd.html`
+        : `greenledger.html?id=${encodeURIComponent(a.id)}`;
+
     return `
-      <div class="assess-card" onclick="window.location.href='greenledger.html?id=${encodeURIComponent(a.id)}'">
+      <div class="assess-card" onclick="window.location.href='${destUrl}'">
         <div class="ac-status ${statusClass}"></div>
         <div class="ac-body">
           <div class="ac-co">${escHtml(company)}</div>
@@ -797,6 +1016,8 @@ async function handleLogout() {
 
 function startTourFromDashboard() {
   localStorage.removeItem('gl_onboarded');
+  if (_currentPlan === 'stakeholder_only') { window.location.href = 'survey-manager.html'; return; }
+  if (_currentPlan === 'csrd_only')        { openTsModal(); return; }
   window.location.href = 'greenledger.html';
 }
 
@@ -835,6 +1056,9 @@ document.addEventListener('DOMContentLoaded', () => {
   });
   document.getElementById('obOverlay').addEventListener('click', function(e) {
     if (e.target === this) closeObModal();
+  });
+  document.getElementById('tsOverlay').addEventListener('click', function(e) {
+    if (e.target === this) closeTsModal();
   });
   document.getElementById('teamOverlay').addEventListener('click', function(e) {
     if (e.target === this) closeTeamModal();
