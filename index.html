@@ -234,7 +234,88 @@ footer{background:#060F09;border-top:1px solid rgba(255,255,255,.05)}
 .reveal-d1{transition-delay:.08s}.reveal-d2{transition-delay:.16s}.reveal-d3{transition-delay:.24s}
 .reveal-d4{transition-delay:.32s}.reveal-d5{transition-delay:.40s}.reveal-d6{transition-delay:.48s}
 
+/* ══ STAKEHOLDER SECTION ══ */
+.stk-section{background:#0A1F12;padding:100px 36px;position:relative;overflow:hidden}
+.stk-orb{position:absolute;width:700px;height:700px;border-radius:50%;background:radial-gradient(circle,rgba(34,164,99,.1) 0%,transparent 65%);top:50%;right:-120px;transform:translateY(-50%);filter:blur(60px);pointer-events:none}
+.stk-in{max-width:1200px;margin:0 auto;position:relative;z-index:1}
+.stk-intro{margin-bottom:56px}
+.stk-grid{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center}
+/* Feature list */
+.stk-features{display:flex;flex-direction:column;gap:32px}
+.stk-feat{display:flex;gap:16px;align-items:flex-start}
+.stk-feat-icon{width:40px;height:40px;border-radius:11px;background:rgba(168,219,191,.07);border:1px solid rgba(168,219,191,.12);display:flex;align-items:center;justify-content:center;color:var(--g200);flex-shrink:0;margin-top:2px}
+.stk-feat-h{font-size:.9rem;font-weight:700;color:rgba(255,255,255,.85);margin-bottom:5px}
+.stk-feat-p{font-size:.78rem;color:rgba(255,255,255,.38);line-height:1.7}
+/* Stakeholder mockup */
+.stk-mockup-wrap{position:relative}
+.stk-mockup{background:rgba(255,255,255,.04);border:1px solid rgba(168,219,191,.14);border-radius:18px;padding:24px;backdrop-filter:blur(16px);position:relative;overflow:hidden}
+.stk-mockup::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(168,219,191,.3),transparent)}
+.stk-mk-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+.stk-mk-title{font-size:.9rem;font-weight:700;color:rgba(255,255,255,.82);letter-spacing:-.01em}
+.stk-mk-badge{font-size:.62rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;background:rgba(40,187,114,.15);color:var(--g200);border:1px solid rgba(40,187,114,.25);border-radius:100px;padding:3px 10px}
+.stk-mk-sub{font-family:'DM Mono',monospace;font-size:.55rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:rgba(168,219,191,.35);margin-bottom:12px}
+.stk-mk-list{display:flex;flex-direction:column;gap:10px;margin-bottom:20px}
+.stk-mk-row{display:grid;grid-template-columns:12px 1fr auto 80px;gap:10px;align-items:center}
+.stk-mk-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;justify-self:center}
+.dot-green{background:#28BB72;box-shadow:0 0 6px rgba(40,187,114,.5)}
+.dot-yellow{background:#F59E0B;box-shadow:0 0 6px rgba(245,158,11,.4)}
+.stk-mk-name{font-size:.74rem;color:rgba(255,255,255,.65)}
+.stk-mk-cat{font-family:'DM Mono',monospace;font-size:.52rem;color:rgba(168,219,191,.35);white-space:nowrap}
+.stk-mk-prog-wrap{height:3px;background:rgba(255,255,255,.06);border-radius:100px;overflow:hidden}
+.stk-mk-prog{height:100%;border-radius:100px;background:linear-gradient(90deg,var(--g800),var(--g500))}
+.prog-part{background:linear-gradient(90deg,#92400E,#F59E0B)}
+.prog-empty{background:rgba(255,255,255,.1)}
+.stk-mk-footer{border-top:1px solid rgba(255,255,255,.06);padding-top:16px}
+.stk-mk-count{font-size:.72rem;color:rgba(255,255,255,.38);margin-bottom:8px}
+.stk-mk-total-wrap{height:4px;background:rgba(255,255,255,.06);border-radius:100px;overflow:hidden}
+.stk-mk-total-bar{height:100%;border-radius:100px;background:linear-gradient(90deg,var(--g800),var(--g500))}
+
+/* ══ CSRD SECTION ══ */
+.csrd-section{background:var(--cream);padding:100px 36px}
+.csrd-in{max-width:1200px;margin:0 auto}
+.csrd-intro{margin-bottom:56px}
+.csrd-sub{font-size:.92rem;color:var(--inks);line-height:1.75;max-width:580px}
+.csrd-grid{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center}
+/* CSRD mockup */
+.csrd-mockup-wrap{}
+.csrd-mockup{background:var(--white);border:1px solid var(--cd);border-radius:18px;overflow:hidden;box-shadow:var(--sh2)}
+.csrd-mk-tabs{display:flex;background:var(--cream);border-bottom:1px solid var(--cd);overflow-x:auto}
+.csrd-tab{padding:10px 16px;font-size:.72rem;font-weight:500;color:var(--inkm);white-space:nowrap;cursor:default;border-bottom:2px solid transparent;transition:all .2s}
+.csrd-tab.active{color:var(--g800);border-bottom-color:var(--g700);font-weight:700;background:var(--white)}
+.csrd-mk-topic{display:flex;align-items:center;gap:10px;padding:16px 20px;border-bottom:1px solid var(--cd)}
+.csrd-topic-code{font-family:'DM Mono',monospace;font-size:.75rem;font-weight:700;color:var(--g800);background:var(--g50);border:1px solid var(--g100);border-radius:6px;padding:3px 8px}
+.csrd-topic-name{font-size:.82rem;font-weight:600;color:var(--ink);flex:1}
+.csrd-topic-badge{font-size:.6rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;background:var(--g50);color:var(--g700);border:1px solid var(--g100);border-radius:100px;padding:3px 9px}
+.csrd-mk-drs{display:flex;flex-direction:column}
+.csrd-dr-row{display:grid;grid-template-columns:24px 44px 1fr auto;gap:10px;align-items:center;padding:11px 20px;border-bottom:1px solid var(--cream)}
+.csrd-dr-row--dim{opacity:.45}
+.csrd-dr-check{width:18px;height:18px;border-radius:5px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.check-done{background:var(--g50);border:1.5px solid var(--g200)}
+.check-half{background:#FFFBEB;border:1.5px solid #FCD34D}
+.check-empty{background:var(--cream);border:1.5px solid var(--cdd)}
+.csrd-dr-code{font-family:'DM Mono',monospace;font-size:.65rem;font-weight:700;color:var(--inkm)}
+.csrd-dr-label{font-size:.76rem;color:var(--inks)}
+.csrd-dr-status{font-size:.6rem;font-weight:600;letter-spacing:.05em;text-transform:uppercase;white-space:nowrap}
+.status-done{color:var(--g700)}
+.status-partial{color:#D97706}
+.status-empty{color:var(--inkm)}
+/* CSRD feature list */
+.csrd-features{display:flex;flex-direction:column;gap:32px}
+.csrd-feat{display:flex;gap:16px;align-items:flex-start}
+.csrd-feat-icon{width:40px;height:40px;border-radius:11px;background:var(--g50);border:1px solid var(--g100);display:flex;align-items:center;justify-content:center;color:var(--g700);flex-shrink:0;margin-top:2px}
+.csrd-feat-h{font-size:.9rem;font-weight:700;color:var(--ink);margin-bottom:5px}
+.csrd-feat-p{font-size:.78rem;color:var(--inks);line-height:1.7}
+
 /* ══ RESPONSIVE ══ */
+@media(max-width:768px){
+  .stk-grid,.csrd-grid{grid-template-columns:1fr;gap:40px}
+  .csrd-grid .csrd-mockup-wrap{order:2}
+  .csrd-grid .csrd-features{order:1}
+  .stk-section,.csrd-section{padding:72px 20px}
+  .csrd-mk-tabs{gap:0}
+  .csrd-tab{padding:8px 12px;font-size:.68rem}
+  .stk-mk-row{grid-template-columns:12px 1fr auto 60px}
+}
 @media(max-width:700px){
   .nav-links{display:none}
   .nav-in{padding:0 20px}
@@ -588,6 +669,193 @@ footer{background:#060F09;border-top:1px solid rgba(255,255,255,.05)}
         <text x="335" y="326" font-size="7.5" fill="#3A4D40">Non mat.</text>
       </svg>
     </div>
+  </div>
+</section>
+
+<!-- ══ STAKEHOLDER ENGAGEMENT ══ -->
+<section class="stk-section">
+  <div class="stk-orb"></div>
+  <div class="stk-in">
+
+    <div class="stk-intro reveal">
+      <div class="section-eyebrow-dark"><span class="ew-dot-g"></span>Modulo Stakeholder</div>
+      <h2 class="section-h2-dark">Coinvolgi chi conta davvero</h2>
+      <p class="section-sub-dark">La materialità non si valuta da soli. GreenLedger struttura il coinvolgimento degli stakeholder in un processo tracciabile, con link univoci e risultati aggregati automaticamente.</p>
+    </div>
+
+    <div class="stk-grid">
+      <!-- Left: feature list -->
+      <div class="stk-features reveal">
+        <div class="stk-feat">
+          <div class="stk-feat-icon">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M13 5a4 4 0 11-8 0 4 4 0 018 0z" stroke="currentColor" stroke-width="1.3"/><path d="M2 16c0-3.314 3.134-6 7-6s7 2.686 7 6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><path d="M14 10l2.5 2.5M14 12.5l2.5-2.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+          </div>
+          <div class="stk-feat-body">
+            <div class="stk-feat-h">Link univoci per stakeholder</div>
+            <p class="stk-feat-p">Ogni partecipante riceve un link personale; i dati arrivano direttamente in piattaforma senza account o registrazione.</p>
+          </div>
+        </div>
+        <div class="stk-feat">
+          <div class="stk-feat-icon">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="2" y="3" width="14" height="12" rx="2" stroke="currentColor" stroke-width="1.3"/><path d="M5 7h8M5 10h5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><circle cx="13" cy="10" r="1.5" fill="currentColor" opacity=".5"/></svg>
+          </div>
+          <div class="stk-feat-body">
+            <div class="stk-feat-h">Survey ESRS pre-configurata</div>
+            <p class="stk-feat-p">Domande calibrate sui topic ESRS, scala di valutazione standardizzata e campo commento opzionale per ogni tema.</p>
+          </div>
+        </div>
+        <div class="stk-feat">
+          <div class="stk-feat-icon">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="2" y="10" width="3" height="6" rx="1" stroke="currentColor" stroke-width="1.3"/><rect x="7.5" y="6" width="3" height="10" rx="1" stroke="currentColor" stroke-width="1.3"/><rect x="13" y="2" width="3" height="14" rx="1" stroke="currentColor" stroke-width="1.3"/><path d="M3.5 8l3-3 3 3 3-4" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round" opacity=".4"/></svg>
+          </div>
+          <div class="stk-feat-body">
+            <div class="stk-feat-h">Dashboard risultati aggregati</div>
+            <p class="stk-feat-p">Visualizza pesi e priorità degli stakeholder in tempo reale: le risposte entrano direttamente nella matrice di materialità.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: mockup -->
+      <div class="stk-mockup-wrap reveal reveal-d2">
+        <div class="stk-mockup">
+          <div class="stk-mk-hd">
+            <div class="stk-mk-title">Sessione DMA 2026</div>
+            <div class="stk-mk-badge">Attiva</div>
+          </div>
+          <div class="stk-mk-sub">Stakeholder invitati</div>
+          <div class="stk-mk-list">
+            <div class="stk-mk-row">
+              <div class="stk-mk-dot dot-green"></div>
+              <div class="stk-mk-name">Consiglio di Amministrazione</div>
+              <div class="stk-mk-cat">Governance</div>
+              <div class="stk-mk-prog-wrap"><div class="stk-mk-prog" style="width:100%"></div></div>
+            </div>
+            <div class="stk-mk-row">
+              <div class="stk-mk-dot dot-green"></div>
+              <div class="stk-mk-name">Responsabile HR</div>
+              <div class="stk-mk-cat">Dipendenti</div>
+              <div class="stk-mk-prog-wrap"><div class="stk-mk-prog" style="width:100%"></div></div>
+            </div>
+            <div class="stk-mk-row">
+              <div class="stk-mk-dot dot-green"></div>
+              <div class="stk-mk-name">Fornitori chiave</div>
+              <div class="stk-mk-cat">Supply chain</div>
+              <div class="stk-mk-prog-wrap"><div class="stk-mk-prog" style="width:100%"></div></div>
+            </div>
+            <div class="stk-mk-row">
+              <div class="stk-mk-dot dot-yellow"></div>
+              <div class="stk-mk-name">Partner finanziari</div>
+              <div class="stk-mk-cat">Investitori</div>
+              <div class="stk-mk-prog-wrap"><div class="stk-mk-prog prog-part" style="width:55%"></div></div>
+            </div>
+            <div class="stk-mk-row">
+              <div class="stk-mk-dot dot-yellow"></div>
+              <div class="stk-mk-name">Comunità locale</div>
+              <div class="stk-mk-cat">Territorio</div>
+              <div class="stk-mk-prog-wrap"><div class="stk-mk-prog prog-empty" style="width:0%"></div></div>
+            </div>
+          </div>
+          <div class="stk-mk-footer">
+            <div class="stk-mk-count">5 di 8 risposte ricevute</div>
+            <div class="stk-mk-total-wrap"><div class="stk-mk-total-bar" style="width:62.5%"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══ CSRD REPORTING ══ -->
+<section class="csrd-section">
+  <div class="csrd-in">
+
+    <div class="csrd-intro reveal">
+      <div class="section-eyebrow"><span class="ew-dot"></span>Modulo CSRD Reporting</div>
+      <h2 class="section-h2">Dal dato al disclosure, senza dispersione</h2>
+      <p class="csrd-sub">Per ogni topic materiale emerso dalla doppia materialità, GreenLedger mappa le Disclosure Requirements ESRS da rendicontare e guida la compilazione strutturata.</p>
+    </div>
+
+    <div class="csrd-grid">
+      <!-- Left: mockup -->
+      <div class="csrd-mockup-wrap reveal">
+        <div class="csrd-mockup">
+          <div class="csrd-mk-tabs">
+            <div class="csrd-tab active">Governance &amp; Policy</div>
+            <div class="csrd-tab">Azioni &amp; Piani</div>
+            <div class="csrd-tab">Target &amp; KPI</div>
+            <div class="csrd-tab">Metriche</div>
+          </div>
+          <div class="csrd-mk-topic">
+            <div class="csrd-topic-code">E1</div>
+            <div class="csrd-topic-name">Cambiamenti climatici</div>
+            <div class="csrd-topic-badge">Materiale</div>
+          </div>
+          <div class="csrd-mk-drs">
+            <div class="csrd-dr-row">
+              <div class="csrd-dr-check check-done">
+                <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5 3.5-4" stroke="#1A7A4A" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </div>
+              <div class="csrd-dr-code">E1-1</div>
+              <div class="csrd-dr-label">Piano di transizione climatica</div>
+              <div class="csrd-dr-status status-done">Completata</div>
+            </div>
+            <div class="csrd-dr-row">
+              <div class="csrd-dr-check check-half">
+                <svg width="10" height="10" viewBox="0 0 10 10"><rect x="2" y="4.25" width="6" height="1.5" rx=".75" fill="#D97706"/></svg>
+              </div>
+              <div class="csrd-dr-code">E1-4</div>
+              <div class="csrd-dr-label">Target di riduzione emissioni</div>
+              <div class="csrd-dr-status status-partial">In corso</div>
+            </div>
+            <div class="csrd-dr-row">
+              <div class="csrd-dr-check check-empty"></div>
+              <div class="csrd-dr-code">E1-6</div>
+              <div class="csrd-dr-label">Emissioni GHG Scope 1-2-3</div>
+              <div class="csrd-dr-status status-empty">Da compilare</div>
+            </div>
+            <div class="csrd-dr-row csrd-dr-row--dim">
+              <div class="csrd-dr-check check-empty"></div>
+              <div class="csrd-dr-code">E1-7</div>
+              <div class="csrd-dr-label">Rimozione e finanziamento carbonio</div>
+              <div class="csrd-dr-status status-empty">Da compilare</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: features -->
+      <div class="csrd-features reveal reveal-d2">
+        <div class="csrd-feat">
+          <div class="csrd-feat-icon">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="6.5" stroke="currentColor" stroke-width="1.3"/><path d="M9 5.5v4l2.5 2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><path d="M5 9h1M13 9h-1" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" opacity=".4"/></svg>
+          </div>
+          <div class="csrd-feat-body">
+            <div class="csrd-feat-h">Topic pre-selezionati dalla DMA</div>
+            <p class="csrd-feat-p">Solo i temi materiali emersi dall'assessment vengono attivati per la rendicontazione. Nessun rumore, nessuna DR irrilevante.</p>
+          </div>
+        </div>
+        <div class="csrd-feat">
+          <div class="csrd-feat-icon">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="2" y="3" width="14" height="12" rx="2" stroke="currentColor" stroke-width="1.3"/><path d="M5 7h8M5 10h6M5 13h3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+          </div>
+          <div class="csrd-feat-body">
+            <div class="csrd-feat-h">Disclosure Requirements per subtopic</div>
+            <p class="csrd-feat-p">Mappatura completa basata su EFRAG ID177: ogni topic materiale attiva automaticamente le DR corrispondenti da rendicontare.</p>
+          </div>
+        </div>
+        <div class="csrd-feat">
+          <div class="csrd-feat-icon">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="2" y="2" width="14" height="3" rx="1" stroke="currentColor" stroke-width="1.3"/><rect x="2" y="7.5" width="14" height="3" rx="1" stroke="currentColor" stroke-width="1.3" opacity=".5"/><rect x="2" y="13" width="14" height="3" rx="1" stroke="currentColor" stroke-width="1.3" opacity=".25"/></svg>
+          </div>
+          <div class="csrd-feat-body">
+            <div class="csrd-feat-h">Compilazione strutturata per tab</div>
+            <p class="csrd-feat-p">Governance, Azioni, Target e Metriche: ogni sezione è separata per consentire la compilazione progressiva e la revisione da parte del team.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
 </section>
 
