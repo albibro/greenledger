@@ -234,6 +234,43 @@ footer{background:#060F09;border-top:1px solid rgba(255,255,255,.05)}
 .reveal-d1{transition-delay:.08s}.reveal-d2{transition-delay:.16s}.reveal-d3{transition-delay:.24s}
 .reveal-d4{transition-delay:.32s}.reveal-d5{transition-delay:.40s}.reveal-d6{transition-delay:.48s}
 
+/* ══ BARS — viewport-driven (override CSS keyframe) ══ */
+.mb-bar-fill{animation:none!important;transition:width 900ms cubic-bezier(.25,.46,.45,.94)}
+.bar-E1,.bar-S1,.bar-G1,.bar-E3{width:0!important}
+
+/* ══ MARQUEE ══ */
+.std-bar-in{flex-wrap:nowrap}
+.std-marquee-container{flex:1;overflow:hidden;min-width:0}
+.std-marquee-track{display:flex;align-items:center;width:max-content;animation:marqueeScroll 28s linear infinite}
+.std-marquee-track .std-bar-items{flex-shrink:0;flex-wrap:nowrap!important;padding-right:40px}
+.std-marquee-container:hover .std-marquee-track{animation-play-state:paused}
+@keyframes marqueeScroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+
+/* ══ MODULI STAGGER ══ */
+.modulo-card{opacity:0;transform:translateY(40px) scale(.96);transition:opacity .5s ease,transform .5s ease}
+.modulo-card.card-visible{opacity:1;transform:translateY(0) scale(1)}
+
+/* ══ DM STICKY ══ */
+.dm-sticky-wrap{height:280vh;position:relative}
+.dm-sticky-inner{position:sticky;top:0;height:100vh;display:flex;align-items:center;justify-content:center;overflow:hidden;background:var(--cream)}
+.dm-section.has-sticky{padding:0}
+.dm-section.has-sticky .dm-in{max-width:1200px;width:100%;padding:0 36px;display:flex;align-items:center;position:relative;gap:0}
+.dm-section.has-sticky .dm-in>*:first-child{flex:0 0 50%;padding-right:48px;box-sizing:border-box}
+.dm-section.has-sticky .dm-diagram{position:absolute;will-change:transform,width,left;transition:none;box-sizing:border-box}
+.dm-section.has-sticky .reveal,.dm-section.has-sticky .reveal.visible{opacity:0!important;transform:none!important;transition:none!important}
+
+/* ══ DM MOBILE — sticky off ══ */
+@media(max-width:768px){
+  .dm-sticky-wrap{height:auto!important}
+  .dm-sticky-inner{position:static!important;height:auto!important;display:block!important;padding:72px 20px!important}
+  .dm-section.has-sticky{padding:0!important}
+  .dm-section.has-sticky .dm-in{display:grid!important;grid-template-columns:1fr!important;gap:32px!important;padding:0!important}
+  .dm-section.has-sticky .dm-in>*:first-child{flex:none!important;padding-right:0!important}
+  .dm-section.has-sticky .dm-diagram{position:static!important;width:100%!important;transform:none!important;left:auto!important;top:auto!important}
+  .dm-section.has-sticky .reveal{opacity:1!important;transform:none!important}
+  .dm-section.has-sticky .dm-para,.dm-section.has-sticky .dm-note{opacity:1!important;transform:none!important}
+}
+
 /* ══ RESPONSIVE ══ */
 @media(max-width:700px){
   .nav-links{display:none}
@@ -693,20 +730,220 @@ footer{background:#060F09;border-top:1px solid rgba(255,255,255,.05)}
 </footer>
 
 <script>
-// ── Nav scroll effect ──
+// ── 1. Nav scroll ──
 const navbar = document.getElementById('navbar');
 window.addEventListener('scroll', () => {
   navbar.classList.toggle('scrolled', window.scrollY > 40);
 }, { passive: true });
 
-// ── Scroll reveal ──
-const observer = new IntersectionObserver(entries => {
+// ── 2. Standards bar marquee ──
+(function() {
+  const itemsEl = document.querySelector('.std-bar-items');
+  if (!itemsEl) return;
+  const container = document.createElement('div');
+  container.className = 'std-marquee-container';
+  itemsEl.parentNode.insertBefore(container, itemsEl);
+  itemsEl.parentNode.removeChild(itemsEl);
+  const track = document.createElement('div');
+  track.className = 'std-marquee-track';
+  container.appendChild(track);
+  track.appendChild(itemsEl);
+  const clone = itemsEl.cloneNode(true);
+  clone.setAttribute('aria-hidden', 'true');
+  track.appendChild(clone);
+})();
+
+// ── 3. Hero bars — viewport triggered + numeric counter ──
+(function() {
+  const mockup = document.querySelector('.mockup');
+  if (!mockup) return;
+  const fills = [
+    { el: mockup.querySelector('.bar-E1'), target: 88 },
+    { el: mockup.querySelector('.bar-S1'), target: 64 },
+    { el: mockup.querySelector('.bar-G1'), target: 45 },
+    { el: mockup.querySelector('.bar-E3'), target: 31 },
+  ];
+  const valEls = Array.from(mockup.querySelectorAll('.mb-bar-val'));
+  valEls.forEach(v => { v.textContent = '0%'; });
+
+  let done = false;
+  function eio(t) { return t < 0.5 ? 2*t*t : -1+(4-2*t)*t; }
+
+  function runBar(fillEl, valEl, target) {
+    const start = performance.now(), dur = 900;
+    (function tick() {
+      const t = Math.min((performance.now() - start) / dur, 1);
+      const v = Math.round(eio(t) * target);
+      fillEl.style.width = v + '%';
+      if (valEl) valEl.textContent = v + '%';
+      if (t < 1) requestAnimationFrame(tick);
+      else { fillEl.style.width = target + '%'; if (valEl) valEl.textContent = target + '%'; }
+    })();
+  }
+
+  const obs = new IntersectionObserver(entries => {
+    if (!entries[0].isIntersecting || done) return;
+    done = true; obs.disconnect();
+    fills.forEach((b, i) => {
+      if (!b.el) return;
+      setTimeout(() => runBar(b.el, valEls[i] || null, b.target), 600 + i * 150);
+    });
+  }, { threshold: 0.3 });
+  obs.observe(mockup);
+})();
+
+// ── 4. Moduli stagger ──
+(function() {
+  const cards = Array.from(document.querySelectorAll('.modulo-card'));
+  if (!cards.length) return;
+  cards.forEach(c => c.classList.remove('reveal','reveal-d1','reveal-d2','reveal-d3','reveal-d4','reveal-d5','reveal-d6'));
+
+  let pending = [], timer = null;
+
+  function flush() {
+    pending.sort((a, b) => a - b);
+    pending.forEach((idx, pos) => {
+      setTimeout(() => {
+        const card = cards[idx];
+        card.classList.add('card-visible');
+        // Scale back the card that just became visible before this one
+        if (idx > 0) {
+          const prev = cards[idx - 1];
+          if (prev.classList.contains('card-visible')) {
+            prev.style.transform = 'scale(.98)';
+            setTimeout(() => { prev.style.transform = ''; }, 400);
+          }
+        }
+      }, pos * 120);
+    });
+    pending = [];
+  }
+
+  const mObs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (!e.isIntersecting) return;
+      pending.push(cards.indexOf(e.target));
+      mObs.unobserve(e.target);
+      clearTimeout(timer);
+      timer = setTimeout(flush, 50);
+    });
+  }, { threshold: 0.15 });
+  cards.forEach(c => mObs.observe(c));
+})();
+
+// ── 5. General reveal (excludes moduli grid and DM section on desktop) ──
+const revealObs = new IntersectionObserver(entries => {
   entries.forEach(e => {
-    if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }
+    if (e.isIntersecting) { e.target.classList.add('visible'); revealObs.unobserve(e.target); }
   });
 }, { threshold: 0.1, rootMargin: '0px 0px -48px 0px' });
 
-document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+document.querySelectorAll('.reveal').forEach(el => {
+  if (el.closest('.moduli-grid')) return;
+  if (el.closest('#materiali') && window.innerWidth >= 768) return;
+  revealObs.observe(el);
+});
+
+// ── 6. DM sticky cinematic scroll ──
+(function() {
+  if (window.innerWidth < 768) return;
+  const dmSec = document.getElementById('materiali');
+  if (!dmSec) return;
+
+  const dmIn = dmSec.querySelector('.dm-in');
+  const textCol = dmIn.children[0];
+  const matEl = dmSec.querySelector('.dm-diagram');
+  const paras = Array.from(dmSec.querySelectorAll('.dm-para'));
+  const noteEl = dmSec.querySelector('.dm-note');
+
+  // Inject sticky wrappers
+  dmSec.classList.add('has-sticky');
+  const wrap = document.createElement('div');
+  wrap.className = 'dm-sticky-wrap';
+  const inner = document.createElement('div');
+  inner.className = 'dm-sticky-inner';
+  dmSec.insertBefore(wrap, dmIn);
+  wrap.appendChild(inner);
+  inner.appendChild(dmIn);
+
+  let lerpP = 0, tgtP = 0, prevApplied = -1, rafId = null, vis = false;
+  function eio(t) { return t < 0.5 ? 2*t*t : -1+(4-2*t)*t; }
+
+  function apply(prog) {
+    if (Math.abs(prog - prevApplied) < 0.0005) return;
+    prevApplied = prog;
+    const totalW = dmIn.offsetWidth;
+    const pad = 36;
+    const innerW = totalW - pad * 2;
+
+    if (prog <= 0.4) {
+      const mw = innerW * 0.55;
+      matEl.style.width = mw + 'px';
+      matEl.style.left  = ((innerW - mw) / 2 + pad) + 'px';
+      matEl.style.top   = '50%';
+      matEl.style.transform = 'translateY(-50%)';
+      textCol.style.opacity   = '0';
+      textCol.style.transform = 'translateX(-30px)';
+      paras.forEach(p => { p.style.opacity='0'; p.style.transform='translateY(12px)'; });
+      if (noteEl) { noteEl.style.opacity='0'; noteEl.style.transform='translateY(10px)'; }
+    } else {
+      const t    = eio((prog - 0.4) / 0.6);
+      const mw55 = innerW * 0.55, mw42 = innerW * 0.42;
+      const mw   = mw55 - t * (mw55 - mw42);
+      const cl   = (innerW - mw55) / 2 + pad;      // center position
+      const rl   = innerW * 0.52 + pad;             // right-column position
+      matEl.style.width     = mw + 'px';
+      matEl.style.left      = (cl + t * (rl - cl)) + 'px';
+      matEl.style.top       = '50%';
+      matEl.style.transform = 'translateY(-50%)';
+      textCol.style.opacity   = String(t);
+      textCol.style.transform = `translateX(${-30 + t * 30}px)`;
+
+      const thrs = [0.45, 0.65, 0.82];
+      paras.forEach((p, i) => {
+        if (prog >= thrs[i]) {
+          const pt = eio(Math.min((prog - thrs[i]) / 0.12, 1));
+          p.style.opacity   = String(pt);
+          p.style.transform = `translateY(${(1 - pt) * 12}px)`;
+        } else {
+          p.style.opacity   = '0';
+          p.style.transform = 'translateY(12px)';
+        }
+      });
+      if (noteEl) {
+        if (prog >= 0.88) {
+          const nt = eio(Math.min((prog - 0.88) / 0.1, 1));
+          noteEl.style.opacity   = String(nt);
+          noteEl.style.transform = `translateY(${(1 - nt) * 10}px)`;
+        } else { noteEl.style.opacity='0'; noteEl.style.transform='translateY(10px)'; }
+      }
+    }
+  }
+
+  // Stop/start RAF based on section visibility
+  const sObs = new IntersectionObserver(e => {
+    vis = e[0].isIntersecting;
+    if (vis && !rafId) rafId = requestAnimationFrame(loop);
+    else if (!vis && rafId) { cancelAnimationFrame(rafId); rafId = null; }
+  }, { threshold: 0 });
+  sObs.observe(dmSec);
+
+  window.addEventListener('scroll', () => {
+    if (!vis) return;
+    const r   = dmSec.getBoundingClientRect();
+    const top = window.scrollY + r.top;
+    const h   = dmSec.offsetHeight;
+    tgtP = Math.max(0, Math.min(1, (window.scrollY - top) / (h - window.innerHeight)));
+  }, { passive: true });
+
+  function loop() {
+    lerpP += (tgtP - lerpP) * 0.1;
+    apply(lerpP);
+    rafId = vis ? requestAnimationFrame(loop) : null;
+  }
+
+  apply(0);
+})();
 </script>
 </body>
 </html>
