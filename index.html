@@ -74,7 +74,7 @@ nav.scrolled{background:rgba(10,31,18,.9);backdrop-filter:blur(20px);border-bott
 .hero-visual{padding:100px 0 80px;display:flex;align-items:center;justify-content:center}
 .mockup-wrap{position:relative;width:100%;max-width:440px}
 .mockup-glow{position:absolute;inset:-50px;background:radial-gradient(circle at 50% 50%,rgba(34,164,99,.18) 0%,transparent 70%);filter:blur(30px)}
-.mockup{background:rgba(255,255,255,.04);border:1px solid rgba(168,219,191,.13);border-radius:20px;padding:20px;backdrop-filter:blur(14px);position:relative;overflow:hidden}
+.mockup{background:rgba(255,255,255,.04);border:1px solid rgba(168,219,191,.13);border-radius:20px;padding:20px;backdrop-filter:blur(14px);position:relative;overflow:hidden;z-index:10}
 .mockup::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(168,219,191,.35),transparent)}
 .mockup-hd{display:flex;align-items:center;gap:8px;margin-bottom:16px}
 .mhd-dots{display:flex;gap:5px}
@@ -108,10 +108,10 @@ nav.scrolled{background:rgba(10,31,18,.9);backdrop-filter:blur(20px);border-bott
 .mm-sub{font-size:.46rem;color:rgba(255,255,255,.25);margin-top:2px}
 .mockup-pulse{position:absolute;bottom:16px;right:16px;width:7px;height:7px;border-radius:50%;background:var(--g500);animation:sonar 2.2s ease-out infinite}
 @keyframes sonar{0%{box-shadow:0 0 0 0 rgba(40,187,114,.5)}70%{box-shadow:0 0 0 11px rgba(40,187,114,0)}100%{box-shadow:0 0 0 0 rgba(40,187,114,0)}}
-.float-badge{position:absolute;background:rgba(10,31,18,.92);border:1px solid rgba(168,219,191,.18);border-radius:11px;padding:9px 13px;backdrop-filter:blur(14px);font-size:.7rem;font-weight:500;color:rgba(255,255,255,.75);display:flex;align-items:center;gap:7px;white-space:nowrap;animation:floatY 4s ease-in-out infinite}
+.float-badge{position:absolute;background:rgba(10,31,18,.92);border:1px solid rgba(168,219,191,.18);border-radius:11px;padding:9px 13px;backdrop-filter:blur(14px);font-size:.7rem;font-weight:500;color:rgba(255,255,255,.75);display:flex;align-items:center;gap:7px;white-space:nowrap;animation:floatY 4s ease-in-out infinite;z-index:20}
 @keyframes floatY{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
-.fb-1{bottom:60px;left:-36px;animation-delay:-2.2s}
-.fb-2{top:90px;right:-28px;animation-delay:-1s}
+.fb-1{bottom:-20px;left:-20px;animation-delay:-2.2s}
+.fb-2{top:60px;right:-20px;animation-delay:-1s}
 .fb-dot{width:7px;height:7px;border-radius:50%}
 
 /* ══ STANDARDS BAR ══ */
@@ -234,6 +234,49 @@ footer{background:#060F09;border-top:1px solid rgba(255,255,255,.05)}
 .reveal-d1{transition-delay:.08s}.reveal-d2{transition-delay:.16s}.reveal-d3{transition-delay:.24s}
 .reveal-d4{transition-delay:.32s}.reveal-d5{transition-delay:.40s}.reveal-d6{transition-delay:.48s}
 
+/* ══ PLATFORM OVERVIEW ══ */
+.platform-cols{display:grid;grid-template-columns:1.1fr 32px 1fr 32px 1fr;align-items:start}
+.pcol{background:rgba(255,255,255,.03);border:1px solid rgba(168,219,191,.15);border-radius:20px;padding:28px;transition:all .3s;position:relative;overflow:hidden}
+.pcol::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:rgba(168,219,191,.12)}
+.pcol.pcol-main{border-color:rgba(40,187,114,.28);background:rgba(40,187,114,.04)}
+.pcol.pcol-main::after{background:linear-gradient(90deg,var(--g800),var(--g500),var(--g200))}
+.pcol:hover{border-color:rgba(168,219,191,.28);background:rgba(255,255,255,.055);box-shadow:0 0 40px rgba(40,187,114,.07)}
+.pcol-arr{display:flex;align-items:flex-start;justify-content:center;padding-top:52px;color:rgba(168,219,191,.2)}
+.pcol-icon-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.pcol-icon{width:34px;height:34px;border-radius:9px;background:rgba(168,219,191,.07);border:1px solid rgba(168,219,191,.12);display:flex;align-items:center;justify-content:center;color:var(--g200);flex-shrink:0}
+.pcol-main .pcol-icon{background:rgba(40,187,114,.12);border-color:rgba(40,187,114,.22)}
+.pcol-title{font-size:.9rem;font-weight:700;color:rgba(255,255,255,.88);margin-bottom:5px}
+.pcol-badge{display:inline-block;font-family:'DM Mono',monospace;font-size:.54rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;padding:2px 8px;border-radius:4px;background:rgba(168,219,191,.07);color:rgba(168,219,191,.5);border:1px solid rgba(168,219,191,.1)}
+.pcol-main .pcol-badge{background:rgba(40,187,114,.1);color:var(--g200);border-color:rgba(40,187,114,.18)}
+.pcol-steps{display:flex;flex-direction:column;gap:6px;margin-top:16px}
+.pcol-step{display:flex;align-items:center;gap:8px;padding:6px 10px;border-radius:7px;background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.04)}
+.pcol-step-code{font-family:'DM Mono',monospace;font-size:.58rem;font-weight:700;color:rgba(168,219,191,.38);min-width:24px;flex-shrink:0}
+.pcol-step-txt{font-size:.74rem;color:rgba(255,255,255,.47);flex:1;line-height:1.35}
+.pcol-step-dot{width:4px;height:4px;border-radius:50%;background:rgba(168,219,191,.18);flex-shrink:0}
+.pcol-note{margin-top:14px;font-size:.69rem;color:rgba(255,255,255,.22);line-height:1.6;font-style:italic;padding-top:12px;border-top:1px solid rgba(255,255,255,.05)}
+
+/* ══ DM MODULES GRID ══ */
+.dm-mods-wrap{max-width:1200px;margin:56px auto 0}
+.dm-mods-label{font-family:'DM Mono',monospace;font-size:.64rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--inkm);margin-bottom:18px}
+.dm-mods-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.dm-mod{background:var(--white);border:1px solid var(--cd);border-radius:14px;padding:18px;transition:all .25s;cursor:default}
+.dm-mod:hover{border-color:var(--g200);box-shadow:0 4px 20px rgba(26,122,74,.08);transform:translateY(-2px)}
+.dm-mod-num{font-family:'DM Mono',monospace;font-size:1.6rem;font-weight:500;color:rgba(26,122,74,.18);line-height:1;margin-bottom:10px}
+.dm-mod-h{font-size:.8rem;font-weight:700;color:var(--ink);margin-bottom:4px}
+.dm-mod-p{font-size:.7rem;color:var(--inkm);line-height:1.6}
+
+/* ══ CSRD STATS ══ */
+.csrd-stats{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 32px}
+.csrd-stat{font-family:'DM Mono',monospace;font-size:.67rem;font-weight:600;padding:5px 12px;border-radius:6px;background:var(--g50);color:var(--g800);border:1px solid var(--g100);white-space:nowrap}
+
+/* ══ CSRD TAB PANELS ══ */
+.csrd-tab{cursor:pointer}
+.csrd-tab:not(.active):hover{color:var(--g900)}
+.csrd-tab-content{overflow:hidden}
+.csrd-panel{display:none}
+.csrd-panel.active{display:block;animation:tabFade .2s ease}
+@keyframes tabFade{from{opacity:0}to{opacity:1}}
+
 /* ══ STAKEHOLDER SECTION ══ */
 .stk-section{background:#0A1F12;padding:100px 36px;position:relative;overflow:hidden}
 .stk-orb{position:absolute;width:700px;height:700px;border-radius:50%;background:radial-gradient(circle,rgba(34,164,99,.1) 0%,transparent 65%);top:50%;right:-120px;transform:translateY(-50%);filter:blur(60px);pointer-events:none}
@@ -307,6 +350,14 @@ footer{background:#060F09;border-top:1px solid rgba(255,255,255,.05)}
 .csrd-feat-p{font-size:.78rem;color:var(--inks);line-height:1.7}
 
 /* ══ RESPONSIVE ══ */
+@media(max-width:900px){
+  .platform-cols{grid-template-columns:1fr}
+  .pcol-arr{display:none}
+  .dm-mods-grid{grid-template-columns:1fr 1fr}
+}
+@media(max-width:560px){
+  .dm-mods-grid{grid-template-columns:1fr}
+}
 @media(max-width:768px){
   .stk-grid,.csrd-grid{grid-template-columns:1fr;gap:40px}
   .csrd-grid .csrd-mockup-wrap{order:2}
@@ -372,7 +423,7 @@ footer{background:#060F09;border-top:1px solid rgba(255,255,255,.05)}
     <div class="hero-text">
       <div class="hero-badge">
         <span class="badge-dot"></span>
-        Conforme CSRD · EFRAG ESRS 2023
+        Conforme CSRD · EFRAG ESRS
       </div>
       <h1 class="hero-h1">Sostenibilità aziendale,<br><em>strutturata e audit-ready</em></h1>
       <p class="hero-sub">GreenLedger è la piattaforma che guida le aziende attraverso doppia materialità, stakeholder engagement e CSRD reporting — in un processo unico, tracciabile e conforme EFRAG ESRS.</p>
@@ -513,71 +564,87 @@ footer{background:#060F09;border-top:1px solid rgba(255,255,255,.05)}
   <div class="processo-orb"></div>
   <div class="processo-in">
     <div class="reveal">
-      <div class="section-eyebrow-dark"><span class="ew-dot-g"></span>Il processo</div>
-      <h2 class="section-h2-dark">Sei moduli. Un processo completo.</h2>
-      <p class="section-sub-dark">Dalla raccolta del contesto aziendale al report finale, GreenLedger struttura ogni fase della doppia materialità secondo la guida EFRAG IG1.</p>
+      <div class="section-eyebrow-dark"><span class="ew-dot-g"></span>La piattaforma</div>
+      <h2 class="section-h2-dark">Tutto ciò che serve per la sostenibilità aziendale</h2>
+      <p class="section-sub-dark">Tre aree integrate — Doppia Materialità, Stakeholder Engagement e CSRD Reporting — in un processo unico, tracciabile e audit-ready.</p>
     </div>
 
-    <div class="moduli-grid">
+    <div class="platform-cols">
 
-      <div class="modulo-card reveal reveal-d1">
-        <div class="modulo-num">M01</div>
-        <div class="modulo-icon">
-          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="2" y="8" width="14" height="8" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M5 8V6a4 4 0 018 0v2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><path d="M6 12h6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+      <!-- Colonna 1: Doppia Materialità -->
+      <div class="pcol pcol-main reveal">
+        <div class="pcol-hd">
+          <div class="pcol-icon-row">
+            <div class="pcol-icon">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="1" y="8" width="14" height="6" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M4 8V6a4 4 0 018 0v2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><path d="M4 11h8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" opacity=".5"/></svg>
+            </div>
+            <div>
+              <div class="pcol-title">Doppia Materialità</div>
+              <span class="pcol-badge">ESRS · EFRAG IG1</span>
+            </div>
+          </div>
         </div>
-        <div class="modulo-h">Contesto aziendale</div>
-        <p class="modulo-p">Codice NACE, dimensione CSRD Omnibus, aree geografiche operative, descrizione dell'attività e catena del valore.</p>
-        <span class="modulo-tag tag-setup">Setup</span>
+        <div class="pcol-steps">
+          <div class="pcol-step"><span class="pcol-step-code">M01</span><span class="pcol-step-txt">Contesto aziendale</span><span class="pcol-step-dot"></span></div>
+          <div class="pcol-step"><span class="pcol-step-code">M02</span><span class="pcol-step-txt">Valutazione IRO</span><span class="pcol-step-dot"></span></div>
+          <div class="pcol-step"><span class="pcol-step-code">M04</span><span class="pcol-step-txt">Matrice di materialità</span><span class="pcol-step-dot"></span></div>
+          <div class="pcol-step"><span class="pcol-step-code">M05</span><span class="pcol-step-txt">Narrative ESRS</span><span class="pcol-step-dot"></span></div>
+          <div class="pcol-step"><span class="pcol-step-code">M06</span><span class="pcol-step-txt">Output &amp; Export</span><span class="pcol-step-dot"></span></div>
+        </div>
       </div>
 
-      <div class="modulo-card reveal reveal-d2">
-        <div class="modulo-num">M02</div>
-        <div class="modulo-icon">
-          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="2" y="10" width="3" height="6" rx="1" stroke="currentColor" stroke-width="1.3"/><rect x="7.5" y="6" width="3" height="10" rx="1" stroke="currentColor" stroke-width="1.3"/><rect x="13" y="2" width="3" height="14" rx="1" stroke="currentColor" stroke-width="1.3"/></svg>
-        </div>
-        <div class="modulo-h">Valutazione IRO</div>
-        <p class="modulo-p">Libreria completa di impatti, rischi e opportunità per tutti i topic ESRS E1–E5, S1–S4, G1. Scoring a 5 livelli per impatto e materialità finanziaria.</p>
-        <span class="modulo-tag tag-assessment">Assessment</span>
+      <div class="pcol-arr">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M4 10h12M12 6l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </div>
 
-      <div class="modulo-card reveal reveal-d3">
-        <div class="modulo-num">M03</div>
-        <div class="modulo-icon">
-          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="5" cy="7" r="2.5" stroke="currentColor" stroke-width="1.3"/><circle cx="13" cy="7" r="2.5" stroke="currentColor" stroke-width="1.3"/><path d="M1 15c0-2 1.8-3.5 4-3.5M9 11.5c2.2 0 7 1.5 7 3.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><path d="M7 15c0-2 1-3.5 2-3.5s2 1.5 2 3.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+      <!-- Colonna 2: Stakeholder Engagement -->
+      <div class="pcol reveal reveal-d2">
+        <div class="pcol-hd">
+          <div class="pcol-icon-row">
+            <div class="pcol-icon">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="5" cy="5.5" r="2" stroke="currentColor" stroke-width="1.3"/><circle cx="11" cy="5.5" r="2" stroke="currentColor" stroke-width="1.3"/><path d="M1 13c0-1.8 1.8-3 4-3M9 10c2.2 0 6 1.2 6 3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+            </div>
+            <div>
+              <div class="pcol-title">Stakeholder Engagement</div>
+              <span class="pcol-badge">Integrato nella DMA</span>
+            </div>
+          </div>
         </div>
-        <div class="modulo-h">Stakeholder engagement</div>
-        <p class="modulo-p">Invio di link univoci per ogni partecipante, raccolta voti con scala 1–5, dashboard delle risposte aggregate e monitoraggio in tempo reale.</p>
-        <span class="modulo-tag tag-engagement">Engagement</span>
+        <div class="pcol-steps">
+          <div class="pcol-step"><span class="pcol-step-code">·</span><span class="pcol-step-txt">Generazione link univoci per stakeholder</span><span class="pcol-step-dot"></span></div>
+          <div class="pcol-step"><span class="pcol-step-code">·</span><span class="pcol-step-txt">Survey ESRS pre-configurata</span><span class="pcol-step-dot"></span></div>
+          <div class="pcol-step"><span class="pcol-step-code">·</span><span class="pcol-step-txt">Raccolta e aggregazione voti</span><span class="pcol-step-dot"></span></div>
+          <div class="pcol-step"><span class="pcol-step-code">·</span><span class="pcol-step-txt">Dashboard risultati in tempo reale</span><span class="pcol-step-dot"></span></div>
+          <div class="pcol-step"><span class="pcol-step-code">·</span><span class="pcol-step-txt">Pesi stakeholder nella matrice finale</span><span class="pcol-step-dot"></span></div>
+        </div>
+        <p class="pcol-note">Disponibile come modulo standalone o integrato nella DMA</p>
       </div>
 
-      <div class="modulo-card reveal reveal-d4">
-        <div class="modulo-num">M04</div>
-        <div class="modulo-icon">
-          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="2" y="2" width="6" height="6" rx="1.2" stroke="currentColor" stroke-width="1.3" opacity=".5"/><rect x="10" y="2" width="6" height="6" rx="1.2" stroke="currentColor" stroke-width="1.3"/><rect x="2" y="10" width="6" height="6" rx="1.2" stroke="currentColor" stroke-width="1.3" opacity=".25"/><rect x="10" y="10" width="6" height="6" rx="1.2" stroke="currentColor" stroke-width="1.3" opacity=".6"/><circle cx="13" cy="5" r="1.5" fill="currentColor"/></svg>
-        </div>
-        <div class="modulo-h">Matrice di doppia materialità</div>
-        <p class="modulo-p">Visualizzazione interattiva impatto vs finanziaria, soglia di materialità regolabile, classificazione automatica dei topic in 4 categorie.</p>
-        <span class="modulo-tag tag-analisi">Analisi</span>
+      <div class="pcol-arr">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M4 10h12M12 6l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </div>
 
-      <div class="modulo-card reveal reveal-d5">
-        <div class="modulo-num">M05</div>
-        <div class="modulo-icon">
-          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="3" y="2" width="12" height="14" rx="2" stroke="currentColor" stroke-width="1.3"/><path d="M6 6h6M6 9h6M6 12h3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+      <!-- Colonna 3: CSRD Reporting -->
+      <div class="pcol reveal reveal-d3">
+        <div class="pcol-hd">
+          <div class="pcol-icon-row">
+            <div class="pcol-icon">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="12" height="12" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M5 6h6M5 8.5h4M5 11h2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+            </div>
+            <div>
+              <div class="pcol-title">CSRD Reporting</div>
+              <span class="pcol-badge">EFRAG ID177</span>
+            </div>
+          </div>
         </div>
-        <div class="modulo-h">Narrative ESRS</div>
-        <p class="modulo-p">Testi auto-generati per ogni topic materiale basati sui dati inseriti. Editabili e personalizzabili dal team di sustainability reporting.</p>
-        <span class="modulo-tag tag-reportistica">Reportistica</span>
-      </div>
-
-      <div class="modulo-card reveal reveal-d6">
-        <div class="modulo-num">M06</div>
-        <div class="modulo-icon">
-          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 2v9M6 8l3 3 3-3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 13v2a1 1 0 001 1h10a1 1 0 001-1v-2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+        <div class="pcol-steps">
+          <div class="pcol-step"><span class="pcol-step-code">·</span><span class="pcol-step-txt">Selezione topic materiali da DMA</span><span class="pcol-step-dot"></span></div>
+          <div class="pcol-step"><span class="pcol-step-code">·</span><span class="pcol-step-txt">Mapping Disclosure Requirements per subtopic</span><span class="pcol-step-dot"></span></div>
+          <div class="pcol-step"><span class="pcol-step-code">·</span><span class="pcol-step-txt">Compilazione per tab (Governance, Azioni, Target, Metriche)</span><span class="pcol-step-dot"></span></div>
+          <div class="pcol-step"><span class="pcol-step-code">·</span><span class="pcol-step-txt">Verifica completezza</span><span class="pcol-step-dot"></span></div>
+          <div class="pcol-step"><span class="pcol-step-code">·</span><span class="pcol-step-txt">Export report audit-ready</span><span class="pcol-step-dot"></span></div>
         </div>
-        <div class="modulo-h">Output finale</div>
-        <p class="modulo-p">Report CSRD-ready, export PDF con copertina, metodologia e audit trail. Disclosure Requirements ESRS attivate automaticamente per ogni topic materiale.</p>
-        <span class="modulo-tag tag-export">Export</span>
+        <p class="pcol-note">Alimentato automaticamente dall'output della DMA</p>
       </div>
 
     </div>
@@ -595,15 +662,9 @@ footer{background:#060F09;border-top:1px solid rgba(255,255,255,.05)}
         <p class="dm-para">Si distinguono quindi due dimensioni: la <strong>materialità d'impatto</strong> (inside-out — l'azienda verso il mondo) e la <strong>materialità finanziaria</strong> (outside-in — il mondo verso l'azienda in termini di rischi e opportunità). Un topic è doppialmente materiale quando è rilevante su entrambe le dimensioni.</p>
         <p class="dm-para">L'analisi è <strong>obbligatoria per le aziende soggette a CSRD</strong> a partire dai bilanci 2024 e deve seguire la metodologia EFRAG IG1, che prevede il coinvolgimento degli stakeholder e la documentazione dell'intero processo di assessment.</p>
       </div>
-      <div class="dm-note">
-        <div class="dm-note-icon">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 2a6 6 0 100 12A6 6 0 008 2zM8 5v4M8 11v.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
-        </div>
-        <div class="dm-note-txt"><strong>Nota:</strong> GreenLedger è uno strumento di supporto operativo. Non sostituisce la consulenza di revisori o esperti ESG per le decisioni finali di reportistica.</div>
-      </div>
     </div>
 
-    <div class="dm-diagram reveal reveal-d2">
+    <div class="dm-diagram reveal reveal-d2" style="align-self:start">
       <svg viewBox="0 0 400 340" xmlns="http://www.w3.org/2000/svg" style="font-family:'DM Sans',sans-serif">
         <!-- Background -->
         <rect width="400" height="340" fill="#F7F4EE" rx="12"/>
@@ -671,6 +732,43 @@ footer{background:#060F09;border-top:1px solid rgba(255,255,255,.05)}
         <text x="335" y="326" font-size="7.5" fill="#3A4D40">Non mat.</text>
       </svg>
     </div>
+
+    <div class="dm-mods-wrap reveal">
+      <p class="dm-mods-label">I sei moduli del processo DMA</p>
+      <div class="dm-mods-grid">
+        <div class="dm-mod">
+          <div class="dm-mod-num">M01</div>
+          <div class="dm-mod-h">Contesto aziendale</div>
+          <p class="dm-mod-p">Codice NACE, dimensione CSRD Omnibus, aree geografiche operative e catena del valore.</p>
+        </div>
+        <div class="dm-mod">
+          <div class="dm-mod-num">M02</div>
+          <div class="dm-mod-h">Valutazione IRO</div>
+          <p class="dm-mod-p">Libreria completa di impatti, rischi e opportunità per tutti i topic ESRS. Scoring a 5 livelli.</p>
+        </div>
+        <div class="dm-mod">
+          <div class="dm-mod-num">M03</div>
+          <div class="dm-mod-h">Stakeholder engagement</div>
+          <p class="dm-mod-p">Link univoci per partecipanti, scala 1–5 per topic ESRS, monitoraggio in tempo reale.</p>
+        </div>
+        <div class="dm-mod">
+          <div class="dm-mod-num">M04</div>
+          <div class="dm-mod-h">Matrice di materialità</div>
+          <p class="dm-mod-p">Visualizzazione interattiva impatto vs finanziaria, soglia regolabile, classificazione automatica.</p>
+        </div>
+        <div class="dm-mod">
+          <div class="dm-mod-num">M05</div>
+          <div class="dm-mod-h">Narrative ESRS</div>
+          <p class="dm-mod-p">Testi auto-generati per ogni topic materiale, editabili dal team di sustainability reporting.</p>
+        </div>
+        <div class="dm-mod">
+          <div class="dm-mod-num">M06</div>
+          <div class="dm-mod-h">Output finale</div>
+          <p class="dm-mod-p">Export PDF con copertina, metodologia e audit trail. DR attivate per ogni topic materiale.</p>
+        </div>
+      </div>
+    </div>
+
   </div>
 </section>
 
@@ -773,55 +871,125 @@ footer{background:#060F09;border-top:1px solid rgba(255,255,255,.05)}
   <div class="csrd-in">
 
     <div class="csrd-intro reveal">
-      <div class="section-eyebrow"><span class="ew-dot"></span>Modulo CSRD Reporting</div>
-      <h2 class="section-h2">Dal dato al disclosure, senza dispersione</h2>
-      <p class="csrd-sub">Per ogni topic materiale emerso dalla doppia materialità, GreenLedger mappa le Disclosure Requirements ESRS da rendicontare e guida la compilazione strutturata.</p>
+      <div class="section-eyebrow"><span class="ew-dot"></span>CSRD Reporting</div>
+      <h2 class="section-h2">Compliance ESRS, senza lasciare nulla al caso</h2>
+      <p class="csrd-sub">GreenLedger mappa ogni Disclosure Requirement ESRS al tuo profilo di materialità. Sai esattamente cosa rendicontare, con quale struttura, e hai la traccia completa per l'auditor.</p>
+      <div class="csrd-stats">
+        <span class="csrd-stat">12 topic ESRS</span>
+        <span class="csrd-stat">80+ Disclosure Requirements mappate</span>
+        <span class="csrd-stat">100% EFRAG ID177</span>
+      </div>
     </div>
 
     <div class="csrd-grid">
       <!-- Left: mockup -->
       <div class="csrd-mockup-wrap reveal">
         <div class="csrd-mockup">
-          <div class="csrd-mk-tabs">
-            <div class="csrd-tab active">Governance &amp; Policy</div>
-            <div class="csrd-tab">Azioni &amp; Piani</div>
-            <div class="csrd-tab">Target &amp; KPI</div>
-            <div class="csrd-tab">Metriche</div>
+          <div class="csrd-mk-tabs" id="csrdTabs">
+            <div class="csrd-tab active" data-tab="gov">Governance &amp; Policy</div>
+            <div class="csrd-tab" data-tab="act">Azioni &amp; Piani</div>
+            <div class="csrd-tab" data-tab="tgt">Target &amp; KPI</div>
+            <div class="csrd-tab" data-tab="met">Metriche</div>
           </div>
           <div class="csrd-mk-topic">
             <div class="csrd-topic-code">E1</div>
             <div class="csrd-topic-name">Cambiamenti climatici</div>
             <div class="csrd-topic-badge">Materiale</div>
           </div>
-          <div class="csrd-mk-drs">
-            <div class="csrd-dr-row">
-              <div class="csrd-dr-check check-done">
-                <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5 3.5-4" stroke="#1A7A4A" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <div class="csrd-tab-content">
+
+            <div class="csrd-panel active" id="csrd-gov">
+              <div class="csrd-mk-drs">
+                <div class="csrd-dr-row">
+                  <div class="csrd-dr-check check-done"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5 3.5-4" stroke="#1A7A4A" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                  <div class="csrd-dr-code">E1-1</div>
+                  <div class="csrd-dr-label">Piano di transizione climatica</div>
+                  <div class="csrd-dr-status status-done">Completata</div>
+                </div>
+                <div class="csrd-dr-row">
+                  <div class="csrd-dr-check check-half"><svg width="10" height="10" viewBox="0 0 10 10"><rect x="2" y="4.25" width="6" height="1.5" rx=".75" fill="#D97706"/></svg></div>
+                  <div class="csrd-dr-code">E1-2</div>
+                  <div class="csrd-dr-label">Politiche gestione rischi climatici</div>
+                  <div class="csrd-dr-status status-partial">In corso</div>
+                </div>
+                <div class="csrd-dr-row">
+                  <div class="csrd-dr-check check-empty"></div>
+                  <div class="csrd-dr-code">S1-1</div>
+                  <div class="csrd-dr-label">Policy diversity &amp; inclusion</div>
+                  <div class="csrd-dr-status status-empty">Da compilare</div>
+                </div>
               </div>
-              <div class="csrd-dr-code">E1-1</div>
-              <div class="csrd-dr-label">Piano di transizione climatica</div>
-              <div class="csrd-dr-status status-done">Completata</div>
             </div>
-            <div class="csrd-dr-row">
-              <div class="csrd-dr-check check-half">
-                <svg width="10" height="10" viewBox="0 0 10 10"><rect x="2" y="4.25" width="6" height="1.5" rx=".75" fill="#D97706"/></svg>
+
+            <div class="csrd-panel" id="csrd-act">
+              <div class="csrd-mk-drs">
+                <div class="csrd-dr-row">
+                  <div class="csrd-dr-check check-done"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5 3.5-4" stroke="#1A7A4A" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                  <div class="csrd-dr-code">E1-3</div>
+                  <div class="csrd-dr-label">Azioni riduzione emissioni Scope 1</div>
+                  <div class="csrd-dr-status status-done">Completata</div>
+                </div>
+                <div class="csrd-dr-row">
+                  <div class="csrd-dr-check check-half"><svg width="10" height="10" viewBox="0 0 10 10"><rect x="2" y="4.25" width="6" height="1.5" rx=".75" fill="#D97706"/></svg></div>
+                  <div class="csrd-dr-code">E1-4</div>
+                  <div class="csrd-dr-label">Piano investimenti green</div>
+                  <div class="csrd-dr-status status-partial">In corso</div>
+                </div>
+                <div class="csrd-dr-row">
+                  <div class="csrd-dr-check check-empty"></div>
+                  <div class="csrd-dr-code">S1-4</div>
+                  <div class="csrd-dr-label">Piano formazione e sviluppo</div>
+                  <div class="csrd-dr-status status-empty">Da compilare</div>
+                </div>
               </div>
-              <div class="csrd-dr-code">E1-4</div>
-              <div class="csrd-dr-label">Target di riduzione emissioni</div>
-              <div class="csrd-dr-status status-partial">In corso</div>
             </div>
-            <div class="csrd-dr-row">
-              <div class="csrd-dr-check check-empty"></div>
-              <div class="csrd-dr-code">E1-6</div>
-              <div class="csrd-dr-label">Emissioni GHG Scope 1-2-3</div>
-              <div class="csrd-dr-status status-empty">Da compilare</div>
+
+            <div class="csrd-panel" id="csrd-tgt">
+              <div class="csrd-mk-drs">
+                <div class="csrd-dr-row">
+                  <div class="csrd-dr-check check-done"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5 3.5-4" stroke="#1A7A4A" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                  <div class="csrd-dr-code">E1-4</div>
+                  <div class="csrd-dr-label">Target -45% emissioni GHG al 2030</div>
+                  <div class="csrd-dr-status status-done">Definito</div>
+                </div>
+                <div class="csrd-dr-row">
+                  <div class="csrd-dr-check check-half"><svg width="10" height="10" viewBox="0 0 10 10"><rect x="2" y="4.25" width="6" height="1.5" rx=".75" fill="#D97706"/></svg></div>
+                  <div class="csrd-dr-code">E1-5</div>
+                  <div class="csrd-dr-label">Target energia rinnovabile 80%</div>
+                  <div class="csrd-dr-status status-partial">In corso</div>
+                </div>
+                <div class="csrd-dr-row">
+                  <div class="csrd-dr-check check-empty"></div>
+                  <div class="csrd-dr-code">S1-9</div>
+                  <div class="csrd-dr-label">Target parità retributiva di genere</div>
+                  <div class="csrd-dr-status status-empty">Da definire</div>
+                </div>
+              </div>
             </div>
-            <div class="csrd-dr-row csrd-dr-row--dim">
-              <div class="csrd-dr-check check-empty"></div>
-              <div class="csrd-dr-code">E1-7</div>
-              <div class="csrd-dr-label">Rimozione e finanziamento carbonio</div>
-              <div class="csrd-dr-status status-empty">Da compilare</div>
+
+            <div class="csrd-panel" id="csrd-met">
+              <div class="csrd-mk-drs">
+                <div class="csrd-dr-row">
+                  <div class="csrd-dr-check check-done"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5 3.5-4" stroke="#1A7A4A" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                  <div class="csrd-dr-code">E1-6</div>
+                  <div class="csrd-dr-label">Emissioni GHG Scope 1-2-3 (tCO₂e)</div>
+                  <div class="csrd-dr-status status-done">Inserito</div>
+                </div>
+                <div class="csrd-dr-row">
+                  <div class="csrd-dr-check check-half"><svg width="10" height="10" viewBox="0 0 10 10"><rect x="2" y="4.25" width="6" height="1.5" rx=".75" fill="#D97706"/></svg></div>
+                  <div class="csrd-dr-code">E1-7</div>
+                  <div class="csrd-dr-label">Energia da fonti rinnovabili (%)</div>
+                  <div class="csrd-dr-status status-partial">Parziale</div>
+                </div>
+                <div class="csrd-dr-row">
+                  <div class="csrd-dr-check check-empty"></div>
+                  <div class="csrd-dr-code">S1-6</div>
+                  <div class="csrd-dr-label">Ore formazione pro capite</div>
+                  <div class="csrd-dr-status status-empty">Da inserire</div>
+                </div>
+              </div>
             </div>
+
           </div>
         </div>
       </div>
@@ -977,6 +1145,22 @@ const observer = new IntersectionObserver(entries => {
 }, { threshold: 0.1, rootMargin: '0px 0px -48px 0px' });
 
 document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// ── CSRD interactive tabs ──
+(function() {
+  const tabs = document.querySelectorAll('#csrdTabs .csrd-tab');
+  const panels = document.querySelectorAll('.csrd-panel');
+  if (!tabs.length) return;
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(t => t.classList.remove('active'));
+      panels.forEach(p => p.classList.remove('active'));
+      tab.classList.add('active');
+      const panel = document.getElementById('csrd-' + tab.dataset.tab);
+      if (panel) panel.classList.add('active');
+    });
+  });
+})();
 </script>
 </body>
 </html>
