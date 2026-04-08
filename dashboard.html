@@ -306,7 +306,7 @@ main{max-width:1200px;margin:0 auto;padding:44px 36px 80px;position:relative;z-i
 /* ── PROJECT TYPE MODAL ── */
 .pt-overlay{display:none;position:fixed;inset:0;background:rgba(10,31,18,.78);backdrop-filter:blur(8px);z-index:500;align-items:center;justify-content:center;padding:20px}
 .pt-overlay.open{display:flex}
-.pt-modal{background:#0F2918;border:1px solid rgba(168,219,191,.15);border-radius:22px;padding:32px;width:560px;max-width:100%;box-shadow:0 40px 100px rgba(0,0,0,.5);animation:fadeUp .25s ease;position:relative}
+.pt-modal{background:#0F2918;border:1px solid rgba(168,219,191,.15);border-radius:22px;padding:32px;width:600px;max-width:100%;box-shadow:0 40px 100px rgba(0,0,0,.5);animation:fadeUp .25s ease;position:relative}
 .pt-modal-h{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;color:var(--white);margin-bottom:6px;letter-spacing:-.02em}
 .pt-modal-sub{font-size:.8rem;color:rgba(255,255,255,.4);margin-bottom:24px;line-height:1.6}
 .pt-cards{display:flex;flex-direction:column;gap:10px}
@@ -597,32 +597,62 @@ main{max-width:1200px;margin:0 auto;padding:44px 36px 80px;position:relative;z-i
     <p class="pt-modal-sub">Scegli il tipo di percorso da avviare per questa valutazione.</p>
     <div class="pt-cards">
 
-      <div class="pt-card" onclick="selectProjectType('dma_csrd','greenledger.html')">
-        <div class="pt-card-ic">🔄</div>
-        <div class="pt-card-body">
-          <div class="pt-card-h">DMA + CSRD Reporting <span class="pt-badge">Consigliato</span></div>
-          <div class="pt-card-p">Percorso completo: identifica i topic materiali con la Double Materiality Assessment, poi compila le disclosure quantitative CSRD per ogni topic emerso.</div>
-          <div class="pt-card-dur">⏱ Durata stimata: 3–4 ore</div>
+      <div class="pt-card" onclick="selectProjectType('dma_only','greenledger.html')">
+        <div class="pt-card-ic">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><rect x="2" y="2" width="7" height="7" rx="1.5" stroke="rgba(168,219,191,.7)" stroke-width="1.4"/><rect x="11" y="2" width="7" height="7" rx="1.5" stroke="rgba(168,219,191,.7)" stroke-width="1.4" opacity=".5"/><rect x="2" y="11" width="7" height="7" rx="1.5" stroke="rgba(168,219,191,.7)" stroke-width="1.4" opacity=".25"/><rect x="11" y="11" width="7" height="7" rx="1.5" stroke="rgba(168,219,191,.7)" stroke-width="1.4" opacity=".65"/><circle cx="14.5" cy="5.5" r="2" fill="rgba(40,187,114,.8)"/></svg>
         </div>
-        <svg class="pt-arr" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M7 3l4 4-4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </div>
-
-      <div class="pt-card" onclick="selectProjectType('csrd_only','greenledger-csrd.html')">
-        <div class="pt-card-ic">📊</div>
         <div class="pt-card-body">
-          <div class="pt-card-h">Solo CSRD Reporting</div>
-          <div class="pt-card-p">Salta la DMA e vai direttamente alla rendicontazione. Selezioni manualmente i topic materiali e compili le disclosure ESRS corrispondenti.</div>
-          <div class="pt-card-dur">⏱ Durata stimata: 2 ore</div>
+          <div class="pt-card-h">Solo DMA</div>
+          <div class="pt-card-p">Double Materiality Assessment completa: contesto aziendale, valutazione IRO, stakeholder engagement, matrice e narrative ESRS. Sei moduli guidati.</div>
+          <div class="pt-card-dur">
+            <svg width="11" height="11" viewBox="0 0 11 11" fill="none"><circle cx="5.5" cy="5.5" r="4.5" stroke="currentColor" stroke-width="1.2"/><path d="M5.5 3v2.5l1.5 1.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+            M01 → M02 → M03 → M04 → M05 → M06
+          </div>
         </div>
         <svg class="pt-arr" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M7 3l4 4-4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </div>
 
       <div class="pt-card" onclick="selectProjectType('stakeholder_only','survey-manager.html')">
-        <div class="pt-card-ic">👥</div>
+        <div class="pt-card-ic">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="7" cy="7" r="3" stroke="rgba(168,219,191,.7)" stroke-width="1.4"/><circle cx="14" cy="7" r="3" stroke="rgba(168,219,191,.7)" stroke-width="1.4" opacity=".6"/><path d="M1 18c0-3 2.7-5 6-5M11 13c3.3 0 8 2 8 5" stroke="rgba(168,219,191,.7)" stroke-width="1.4" stroke-linecap="round" opacity=".7"/></svg>
+        </div>
         <div class="pt-card-body">
           <div class="pt-card-h">Solo Stakeholder Engagement</div>
-          <div class="pt-card-p">Raccolta delle opinioni degli stakeholder chiave prima di avviare la valutazione di materialità completa. Partenza dal Modulo 3.</div>
-          <div class="pt-card-dur">⏱ Durata stimata: 1 ora</div>
+          <div class="pt-card-p">Raccogli le valutazioni degli stakeholder con link univoci e survey ESRS pre-configurata. Dashboard risposte aggregate in tempo reale.</div>
+          <div class="pt-card-dur">
+            <svg width="11" height="11" viewBox="0 0 11 11" fill="none"><circle cx="5.5" cy="5.5" r="4.5" stroke="currentColor" stroke-width="1.2"/><path d="M5.5 3v2.5l1.5 1.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+            Modulo M03 standalone
+          </div>
+        </div>
+        <svg class="pt-arr" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M7 3l4 4-4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+
+      <div class="pt-card" onclick="selectProjectType('csrd_only','greenledger-csrd.html')">
+        <div class="pt-card-ic">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><rect x="3" y="2" width="14" height="16" rx="2" stroke="rgba(168,219,191,.7)" stroke-width="1.4"/><path d="M6 7h8M6 10h6M6 13h3" stroke="rgba(168,219,191,.7)" stroke-width="1.4" stroke-linecap="round"/></svg>
+        </div>
+        <div class="pt-card-body">
+          <div class="pt-card-h">Solo CSRD Reporting</div>
+          <div class="pt-card-p">Selezione manuale dei topic materiali e compilazione delle Disclosure Requirements ESRS corrispondenti. Indicato se la DMA è già stata condotta.</div>
+          <div class="pt-card-dur">
+            <svg width="11" height="11" viewBox="0 0 11 11" fill="none"><circle cx="5.5" cy="5.5" r="4.5" stroke="currentColor" stroke-width="1.2"/><path d="M5.5 3v2.5l1.5 1.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+            Mapping DR · EFRAG ID177
+          </div>
+        </div>
+        <svg class="pt-arr" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M7 3l4 4-4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+
+      <div class="pt-card" onclick="selectProjectType('dma_full','greenledger.html')" style="border-color:rgba(40,187,114,.25);background:rgba(40,187,114,.04)">
+        <div class="pt-card-ic" style="background:rgba(40,187,114,.18);border-color:rgba(40,187,114,.3)">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 2l2 6h6l-5 3.5 2 6L10 14l-5 3.5 2-6L2 8h6l2-6z" stroke="rgba(40,187,114,.9)" stroke-width="1.4" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="pt-card-body">
+          <div class="pt-card-h">FULL — Completo totale <span class="pt-badge">Consigliato</span></div>
+          <div class="pt-card-p">DMA completa + Stakeholder Engagement integrato + CSRD Reporting. Il percorso end-to-end dalla valutazione al report audit-ready.</div>
+          <div class="pt-card-dur">
+            <svg width="11" height="11" viewBox="0 0 11 11" fill="none"><circle cx="5.5" cy="5.5" r="4.5" stroke="currentColor" stroke-width="1.2"/><path d="M5.5 3v2.5l1.5 1.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+            DMA · Stakeholder · CSRD Reporting
+          </div>
         </div>
         <svg class="pt-arr" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M7 3l4 4-4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </div>
